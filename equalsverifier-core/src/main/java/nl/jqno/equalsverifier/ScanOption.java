@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier;
 
 import java.util.function.Predicate;
 
+import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
+
 /**
  * Contains a number of options that can be set in {@link EqualsVerifier#forPackage(String, ScanOption...)}. These
  * options affect the way in which EqualsVerifier scans the given package.
@@ -14,7 +16,7 @@ public interface ScanOption {
      * @return The 'recursive' flag.
      */
     public static ScanOption recursive() {
-        return ScanOptions.O.RECURSIVE;
+        return PackageScanOptions.O.RECURSIVE;
     }
 
     /**
@@ -23,7 +25,7 @@ public interface ScanOption {
      * @return The 'ignore external jars' flag.
      */
     public static ScanOption ignoreExternalJars() {
-        return ScanOptions.O.IGNORE_EXTERNAL_JARS;
+        return PackageScanOptions.O.IGNORE_EXTERNAL_JARS;
     }
 
     /**
@@ -33,7 +35,7 @@ public interface ScanOption {
      * @return The 'mustExtend' flag with the associated type.
      */
     public static ScanOption mustExtend(Class<?> type) {
-        return new ScanOptions.MustExtend(type);
+        return new PackageScanOptions.MustExtend(type);
     }
 
     /**
@@ -44,7 +46,7 @@ public interface ScanOption {
      * @return The 'except' flag with the associated types.
      */
     public static ScanOption except(Class<?> type, Class<?>... more) {
-        return new ScanOptions.ExceptClasses(type, more);
+        return new PackageScanOptions.ExceptClasses(type, more);
     }
 
     /**
@@ -54,6 +56,6 @@ public interface ScanOption {
      * @return The 'except' flag with the associated Predicate.
      */
     public static ScanOption except(Predicate<Class<?>> exclusionPredicate) {
-        return new ScanOptions.ExclusionPredicate(exclusionPredicate);
+        return new PackageScanOptions.ExclusionPredicate(exclusionPredicate);
     }
 }

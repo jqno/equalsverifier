@@ -114,7 +114,7 @@ public final class EqualsVerifier {
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName, ScanOption... options) {
-        PackageScanOptions opts = ScanOptions.process(options);
+        PackageScanOptions opts = PackageScanOptions.process(options);
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
@@ -157,7 +157,7 @@ public final class EqualsVerifier {
     @CheckReturnValue
     @Deprecated
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {
-        PackageScanOptions opts = ScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
+        PackageScanOptions opts = PackageScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());

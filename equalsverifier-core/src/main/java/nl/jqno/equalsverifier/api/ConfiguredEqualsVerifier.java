@@ -8,6 +8,7 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.CheckReturnValue;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
@@ -157,7 +158,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      */
     @CheckReturnValue
     public MultipleTypeEqualsVerifierApi forPackage(String packageName, ScanOption... options) {
-        PackageScanOptions opts = ScanOptions.process(options);
+        PackageScanOptions opts = PackageScanOptions.process(options);
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, this);
@@ -200,7 +201,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @CheckReturnValue
     @Deprecated
     public MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {
-        PackageScanOptions opts = ScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
+        PackageScanOptions opts = PackageScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, this);
