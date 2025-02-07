@@ -121,49 +121,6 @@ public final class EqualsVerifier {
     }
 
     /**
-     * Factory method. For general use.
-     *
-     * <p>
-     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
-     * instead.
-     *
-     * @param packageName     A package for which each class's {@code equals} should be tested.
-     * @param scanRecursively true to scan all sub-packages
-     * @return A fluent API for EqualsVerifier.
-     * @deprecated Use {@link #forPackage(String, ScanOption...)} with {@link ScanOption#recursive()} instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public static MultipleTypeEqualsVerifierApi forPackage(String packageName, boolean scanRecursively) {
-        return scanRecursively ? forPackage(packageName, ScanOption.recursive()) : forPackage(packageName);
-    }
-
-    /**
-     * Factory method. For general use.
-     *
-     * <p>
-     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
-     * instead.
-     *
-     * <p>
-     * Also note that if {@code mustExtend} is given, and it exists within {@code packageName}, it will NOT be included.
-     *
-     * @param packageName A package for which each class's {@code equals} should be tested.
-     * @param mustExtend  if not null, returns only classes that extend or implement this class.
-     * @return A fluent API for EqualsVerifier.
-     * @deprecated Use {@link #forPackage(String, ScanOption...)} with {@link ScanOption#mustExtend(Class)}, and
-     *                 possibly {@link ScanOption#recursive()}, instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public static MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {
-        PackageScanOptions opts = PackageScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
-        List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
-        Validations.validatePackageContainsClasses(packageName, classes);
-        return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
-    }
-
-    /**
      * Factory method. Asks for a list of equal, but not identical, instances of T.
      *
      * <p>

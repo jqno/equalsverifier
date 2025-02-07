@@ -3,14 +3,14 @@ package nl.jqno.equalsverifier.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.util.ErrorMessage;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test for several types at once with a fluent API.
@@ -81,44 +81,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     public MultipleTypeEqualsVerifierApi withFieldnameToGetterConverter(Function<String, String> converter) {
         ev.withFieldnameToGetterConverter(converter);
         return this;
-    }
-
-    /**
-     * Removes the given type or types from the list of types to verify.
-     *
-     * @param type A type to remove from the list of types to verify.
-     * @param more More types to remove from the list of types to verify.
-     * @return {@code this}, for easy method chaining.
-     * @deprecated Use {@link EqualsVerifier#forPackage(String, ScanOption...)} with
-     *                 {@link ScanOption#except(Class, Class...)} instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public MultipleTypeEqualsVerifierApi except(Class<?> type, Class<?>... more) {
-        List<Class<?>> typesToRemove = ListBuilders.buildListOfAtLeastOne(type, more);
-        removeTypes(typesToRemove);
-        return this;
-    }
-
-    /**
-     * Removes all types matching the given Predicate.
-     *
-     * @param exclusionPredicate A Predicate matching classes to remove from the list of types to verify.
-     * @return {@code this}, for easy method chaining.
-     * @deprecated Use {@link EqualsVerifier#forPackage(String, ScanOption...)} with
-     *                 {@link ScanOption#except(Predicate)} instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public MultipleTypeEqualsVerifierApi except(Predicate<Class<?>> exclusionPredicate) {
-        List<Class<?>> typesToRemove = types.stream().filter(exclusionPredicate).collect(Collectors.toList());
-        removeTypes(typesToRemove);
-        return this;
-    }
-
-    private void removeTypes(List<Class<?>> typesToRemove) {
-        Validations.validateTypesAreKnown(typesToRemove, types);
-        types.removeAll(typesToRemove);
     }
 
     /**

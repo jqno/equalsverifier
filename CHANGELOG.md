@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `#withResetCaches()`, which was deprecated since version 3.16.2.
 - `Warning.ZERO_FIELDS`, which was deprecated since version 3.17.
+- `forPackage(String packageName, boolean scanRecursively)`, which was deprecated since version 3.19.
+- `forPackage(String packageName, Class<?> mustExtend)`, which was deprecated since version 3.19.
+- `forPackage(...).except(Class<?>... types)`, which was deprecated since version 3.19.
+- `forPackage(...).except(Predicate<Class<?>>... exclusionPredicate)`, which was deprecated since version 3.19.
 
 ## [3.19] - 2025-02-06
 
