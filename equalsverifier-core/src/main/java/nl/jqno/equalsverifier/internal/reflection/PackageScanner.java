@@ -4,17 +4,19 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 /** Scans a package for classes. */
 public final class PackageScanner {
 
-    /** Should not be instantiated. */
+    /**
+     * Do not instantiate.
+     */
     private PackageScanner() {}
 
     /**
@@ -22,53 +24,56 @@ public final class PackageScanner {
      *
      * Note that if {@code mustExtend} is given, and it exists within {@code packageName}, it will NOT be included.
      *
-     * @param packageName     The package to scan.
-     * @param mustExtend      if not null, returns only classes that extend or implement this class.
-     * @param scanRecursively true to scan all sub-packages
+     * @param packageName The package to scan.
+     * @param options     Modifications to the standard package scanning behaviour.
      * @return the classes contained in the given package.
      */
-    public static List<Class<?>> getClassesIn(String packageName, Class<?> mustExtend, boolean scanRecursively) {
-        return getDirs(packageName)
+    public static List<Class<?>> getClassesIn(String packageName, PackageScanOptions options) {
+        List<Class<?>> result = getDirs(packageName, options)
                 .stream()
-                .flatMap(d -> getClassesInDir(packageName, d, mustExtend, scanRecursively).stream())
+                .flatMap(d -> getClassesInDir(packageName, d, options).stream())
                 .collect(Collectors.toList());
+
+        Validations.validateTypesAreKnown(options.exceptClasses, result);
+        result.removeAll(options.exceptClasses);
+        result.removeIf(options.exclusionPredicate);
+        return result;
     }
 
-    private static List<File> getDirs(String packageName) {
+    private static List<File> getDirs(String packageName, PackageScanOptions options) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
         return rethrow(
             () -> Collections
                     .list(cl.getResources(path))
                     .stream()
-                    .map(r -> new File(getResourcePath(r)))
+                    .flatMap(r -> getResourcePath(r, options))
                     .collect(Collectors.toList()),
             e -> "Could not scan package " + packageName);
     }
 
-    private static String getResourcePath(URL r) {
+    private static Stream<File> getResourcePath(URL r, PackageScanOptions options) {
         String result = rethrow(() -> r.toURI().getPath(), e -> "Could not resolve resource path: " + e.getMessage());
         if (result == null) {
+            if (options.ignoreExternalJars) {
+                return Stream.empty();
+            }
             throw new ReflectionException("Could not resolve third-party resource " + r);
         }
-        return result;
+        return Stream.of(new File(result));
     }
 
-    private static List<Class<?>> getClassesInDir(
-            String packageName,
-            File dir,
-            Class<?> mustExtend,
-            boolean scanRecursively) {
+    private static List<Class<?>> getClassesInDir(String packageName, File dir, PackageScanOptions options) {
         if (!dir.exists()) {
             return Collections.emptyList();
         }
         return Arrays
                 .stream(dir.listFiles())
-                .filter(f -> (scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
+                .filter(f -> (options.scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
                 .flatMap(f -> {
                     List<Class<?>> classes;
                     if (f.isDirectory()) {
-                        classes = getClassesInDir(packageName + "." + f.getName(), f, mustExtend, scanRecursively);
+                        classes = getClassesInDir(packageName + "." + f.getName(), f, options);
                     }
                     else {
                         classes = List.of(fileToClass(packageName, f));
@@ -78,7 +83,9 @@ public final class PackageScanner {
                 .filter(c -> !c.isAnonymousClass())
                 .filter(c -> !c.isLocalClass())
                 .filter(c -> !c.getName().endsWith("Test"))
-                .filter(c -> mustExtend == null || (mustExtend.isAssignableFrom(c) && !mustExtend.equals(c)))
+                .filter(
+                    c -> options.mustExtend == null
+                            || (options.mustExtend.isAssignableFrom(c) && !options.mustExtend.equals(c)))
                 .collect(Collectors.toList());
     }
 

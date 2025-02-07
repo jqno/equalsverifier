@@ -89,8 +89,11 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      * @param type A type to remove from the list of types to verify.
      * @param more More types to remove from the list of types to verify.
      * @return {@code this}, for easy method chaining.
+     * @deprecated Use {@link EqualsVerifier#forPackage(String, ScanOption...)} with
+     *                 {@link ScanOption#except(Class, Class...)} instead.
      */
     @CheckReturnValue
+    @Deprecated
     public MultipleTypeEqualsVerifierApi except(Class<?> type, Class<?>... more) {
         List<Class<?>> typesToRemove = ListBuilders.buildListOfAtLeastOne(type, more);
         removeTypes(typesToRemove);
@@ -102,8 +105,11 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      *
      * @param exclusionPredicate A Predicate matching classes to remove from the list of types to verify.
      * @return {@code this}, for easy method chaining.
+     * @deprecated Use {@link EqualsVerifier#forPackage(String, ScanOption...)} with
+     *                 {@link ScanOption#except(Predicate)} instead.
      */
     @CheckReturnValue
+    @Deprecated
     public MultipleTypeEqualsVerifierApi except(Predicate<Class<?>> exclusionPredicate) {
         List<Class<?>> typesToRemove = types.stream().filter(exclusionPredicate).collect(Collectors.toList());
         removeTypes(typesToRemove);

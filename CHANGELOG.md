@@ -23,6 +23,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `#withResetCaches()`, which was deprecated since version 3.16.2.
 - `Warning.ZERO_FIELDS`, which was deprecated since version 3.17.
 
+## [3.19] - 2025-02-06
+
+### Added
+
+- `forPackage(String packageName, ScanOption... option)` overload. This provides a more consistent way to fine-tune the scanning of packages. `ScanOption` provides several features, which can be mixed and matched:
+  - `ScanOption.recursive()` to search recursively. This replaces `forPackage(String packageName, boolean scanRecursively)`.
+  - `ScanOption.mustExtend(Class<?> type)` to find only classes that extend or implement the given type. This replaces `forPackage(String packageName, Class<?> mustExtend)`. Note that this overload used to search recursively too; this is no longer the case. If you want a recursive search that also only matches subtypes, you have to combine `ScanOption.recursive()` and `ScanOption.mustExtend(Class<?> type)`.
+  - `ScanOption.except(Class<?>... types)` to find all classes except the given ones. This replaces `forPackage(...).except(Class<?>... types)`.
+  - `ScanOption.except(Predicate<Class<?>> exclusionPredicate)` to exclude all classes that match the given predicate. This replaces `forPackage(...).except(Predicate<Class<?>> exclusionPredicate)`.
+  - `ScanOption.ignoreExternalJars()` to not throw an exception when attempting to scan a package from a third-party jar file. This can be useful if you have a split package between a dependency and your own codebase. This is a new option. ([Issue 1040](https://github.com/jqno/equalsverifier/issues/1040))
+
+### Deprecated
+
+- `forPackage(String packageName, boolean scanRecursively)`: replaced by `ScanOption.recursive()`.
+- `forPackage(String packageName, Class<?> mustExtend)`: replaced by `ScanOption.mustExtend(Class<?> type)` combined with `ScanOption.recursive()`.
+- `forPackage(...).except(Class<?>... types)`: replaced by `ScanOption.except(Class<?>... type)`.
+- `forPackage(...).except(Predicate<Class<?>>... exclusionPredicate)`: replaced by `ScanOption.except(Predicate<Class<?>> exclusionPredicate)`.
+
 ## [3.18.2] - 2025-01-30
 
 ### Fixed
@@ -1316,7 +1334,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.18.2...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19...HEAD
+[3.19]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.18.2...equalsverifier-3.19
 [3.18.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.18.1...equalsverifier-3.18.2
 [3.18.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.18...equalsverifier-3.18.1
 [3.18]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17.5...equalsverifier-3.18

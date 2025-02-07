@@ -7,6 +7,7 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
+import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
@@ -49,17 +50,24 @@ class MultipleTypeEqualsVerifierTest {
 
     @Test
     void succeed_whenVerifyingACorrectPackageRecursively() {
-        EqualsVerifier.forPackage(CORRECT_PACKAGE, true).verify();
+        EqualsVerifier.forPackage(CORRECT_PACKAGE, ScanOption.recursive()).verify();
+    }
+
+    @Test
+    void fail_whenVerifyingAPackageWithASuperclass_ifSuperclassIsNull() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(null)).verify())
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     void succeed_whenVerifyingAPackageWithASuperclass() {
-        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperA.class).verify();
+        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(SuperA.class)).verify();
     }
 
     @Test
     void succeed_whenVerifyingAPackageWithASuperInterface_givenOneOfTheImplementationsIsAlsoAnInterface() {
-        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperI.class).verify();
+        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(SuperI.class)).verify();
     }
 
     @Test
@@ -68,6 +76,14 @@ class MultipleTypeEqualsVerifierTest {
                 .when(() -> EqualsVerifier.forPackage("org.junit").verify())
                 .assertThrows(ReflectionException.class)
                 .assertMessageContains("Could not resolve");
+    }
+
+    @Test
+    void failDifferently_whenVerifyingAThirdPartyPackage_givenScanOptionIgnoreExternalJars() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage("org.junit", ScanOption.ignoreExternalJars()).verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("org.junit", "doesn't contain any (non-Test) types");
     }
 
     @Test
@@ -119,7 +135,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenVerifyingAPackageRecursivelyWithFourIncorrectClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
+                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.recursive()).verify())
                 .assertFailure()
                 .assertMessageContains(
                     "EqualsVerifier found a problem in 4 classes.",
@@ -134,7 +150,10 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenVerifyingAPackageWithASuperclassWithFourIncorrectClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, Object.class).verify())
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(INCORRECT_PACKAGE, ScanOption.recursive(), ScanOption.mustExtend(Object.class))
+                            .verify())
                 .assertFailure()
                 .assertMessageContains(
                     "EqualsVerifier found a problem in 4 classes.",
@@ -157,7 +176,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenCallingForPackageRecursively_whenPackageHasNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", true))
+                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", ScanOption.recursive()))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
@@ -165,36 +184,43 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenCallingForPackageWithASuperclass_whenPackageHasNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class))
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage("nl.jqno.equalsverifier.doesnotexist", ScanOption.mustExtend(Object.class)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
 
     @Test
     void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
-        EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(IncorrectM.class, IncorrectN.class).verify();
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.except(IncorrectM.class, IncorrectN.class)).verify();
     }
 
     @Test
     void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, true)
-                .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
+                .forPackage(
+                    INCORRECT_PACKAGE,
+                    ScanOption.recursive(),
+                    ScanOption.except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class))
                 .verify();
     }
 
     @Test
     void succeed_whenCallingForPackageWithASuperclassOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, Object.class)
-                .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
+                .forPackage(
+                    INCORRECT_PACKAGE,
+                    ScanOption.recursive(),
+                    ScanOption.mustExtend(Object.class),
+                    ScanOption.except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class))
                 .verify();
     }
 
     @Test
     void fail_whenExceptingAClassThatDoesntExistInThePackage() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE).except(IncorrectM.class))
+                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, ScanOption.except(IncorrectM.class)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Unknown class(es) found", "IncorrectM");
     }
@@ -202,28 +228,34 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenExceptingAClassThatDoesntExistInThePackageAndSubPackages() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, true).except(IncorrectM.class))
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(CORRECT_PACKAGE, ScanOption.recursive(), ScanOption.except(IncorrectM.class)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Unknown class(es) found", "IncorrectM");
     }
 
     @Test
     void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
-        EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> c.getSimpleName().contains("Incorrect")).verify();
+        EqualsVerifier
+                .forPackage(INCORRECT_PACKAGE, ScanOption.except(c -> c.getSimpleName().contains("Incorrect")))
+                .verify();
     }
 
     @Test
     void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, true)
-                .except(c -> c.getSimpleName().contains("Incorrect"))
+                .forPackage(
+                    INCORRECT_PACKAGE,
+                    ScanOption.recursive(),
+                    ScanOption.except(c -> c.getSimpleName().contains("Incorrect")))
                 .verify();
     }
 
     @Test
     void fail_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> false).verify())
+                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.except(c -> false)).verify())
                 .assertFailure()
                 .assertMessageContains("EqualsVerifier found a problem in 2 classes");
     }
@@ -231,19 +263,31 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify())
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(INCORRECT_PACKAGE, ScanOption.recursive(), ScanOption.except(c -> false))
+                            .verify())
                 .assertFailure()
                 .assertMessageContains("EqualsVerifier found a problem in 4 classes");
     }
 
     @Test
-    void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
-        EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> true).verify();
+    void fail_whenCallingForPackageOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.except(c -> true)).verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(INCORRECT_PACKAGE, "doesn't contain any (non-Test) types");
     }
 
     @Test
-    void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
-        EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> true).verify();
+    void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(INCORRECT_PACKAGE, ScanOption.recursive(), ScanOption.except(c -> true))
+                            .verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(INCORRECT_PACKAGE, "doesn't contain any (non-Test) types");
     }
 
     @Test

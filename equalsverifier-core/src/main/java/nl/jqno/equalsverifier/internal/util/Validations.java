@@ -184,7 +184,7 @@ public final class Validations {
         validate(types.size() == 0, "package " + packageName + " doesn't contain any (non-Test) types.");
     }
 
-    public static void validateTypesAreKnown(List<Class<?>> types, List<Class<?>> knownTypes) {
+    public static void validateTypesAreKnown(Collection<Class<?>> types, List<Class<?>> knownTypes) {
         List<Class<?>> unknownTypes = types.stream().filter(t -> !knownTypes.contains(t)).collect(Collectors.toList());
         String message = "Unknown class(es) found: "
                 + unknownTypes.stream().map(t -> t.getCanonicalName()).collect(Collectors.joining(", "));
