@@ -67,7 +67,7 @@ public final class Validations {
         Class<?> redType = red.getClass();
         Class<?> blueType = blue.getClass();
         validate(!redType.equals(blueType), "values are of different types.");
-        validate(red.equals(blue), "both values of are equal.");
+        validate(red.equals(blue), "both values are equal.");
     }
 
     public static <T> void validateRedAndBluePrefabValues(Class<T> type, T red, T blue) {
