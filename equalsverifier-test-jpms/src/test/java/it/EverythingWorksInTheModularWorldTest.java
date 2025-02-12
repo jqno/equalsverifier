@@ -13,6 +13,7 @@ public class EverythingWorksInTheModularWorldTest {
     @Test
     void classCanBeVerified() {
         EqualsVerifier.forClass(ClassPoint.class).verify();
+        EqualsVerifier.forClass(ClassPoint.class).verify();
     }
 
     @Test

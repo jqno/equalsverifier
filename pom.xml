@@ -568,7 +568,6 @@
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
                 <module>equalsverifier-21</module>
-                <module>equalsverifier-test-jpms</module>
                 <module>equalsverifier-test-kotlin</module>
                 <module>equalsverifier-aggregator</module>
                 <module>equalsverifier-release-main</module>
@@ -586,6 +585,7 @@
             </activation>
 
             <modules>
+                <module>equalsverifier-test-jpms</module>
                 <module>equalsverifier-release-verify</module>
             </modules>
         </profile>
