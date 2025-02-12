@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `forExamples(T red, T blue)` as an alternative to `forClass()` or `forPackage()`. Give it two instances of a type, and it will test that type using the values already present in the fields of the instances. This way, you don't have to use `withPrefabValues` anymore.
+
 ### Changed
 
 - EqualsVerifier now requires Java 11.

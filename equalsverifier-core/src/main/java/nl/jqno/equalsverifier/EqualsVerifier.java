@@ -5,6 +5,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.api.*;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
+import nl.jqno.equalsverifier.internal.util.FieldToPrefabValues;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
@@ -74,6 +75,25 @@ public final class EqualsVerifier {
     @CheckReturnValue
     public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
         return new SingleTypeEqualsVerifierApi<>(type);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param red  An example of T.
+     * @param blue An example of T where all fields have different values than {@code red}.
+     * @param <T>  The type.
+     * @return A fluent API for EqualsVerifier.
+     */
+    @CheckReturnValue
+    @SuppressWarnings("unchecked")
+    public static <T> SingleTypeEqualsVerifierApi<T> forExamples(T red, T blue) {
+        Validations.validateRedAndBlueExamples(red, blue);
+
+        var type = (Class<T>) red.getClass();
+        var api = forClass(type);
+        FieldToPrefabValues.move(api, type, red, blue);
+        return api;
     }
 
     /**

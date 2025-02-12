@@ -14,6 +14,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
+import nl.jqno.equalsverifier.internal.util.FieldToPrefabValues;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
@@ -119,6 +120,25 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
                 objenesis,
                 usingGetClass,
                 fieldnameToGetter);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param red  An example of T.
+     * @param blue An example of T where all fields have different values than {@code red}.
+     * @param <T>  The type.
+     * @return A fluent API for EqualsVerifier.
+     */
+    @CheckReturnValue
+    @SuppressWarnings("unchecked")
+    public <T> SingleTypeEqualsVerifierApi<T> forExamples(T red, T blue) {
+        Validations.validateRedAndBlueExamples(red, blue);
+
+        var type = (Class<T>) red.getClass();
+        var api = forClass(type);
+        FieldToPrefabValues.move(api, type, red, blue);
+        return api;
     }
 
     /**

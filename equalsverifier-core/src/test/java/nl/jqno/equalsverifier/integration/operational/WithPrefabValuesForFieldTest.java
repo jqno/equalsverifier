@@ -100,7 +100,7 @@ class WithPrefabValuesForFieldTest {
                             .forClass(SinglePrecondition.class)
                             .withPrefabValuesForField("point", pRed, pRed))
                 .assertThrows(IllegalStateException.class)
-                .assertMessageContains("Precondition", "both prefab values of type FinalPoint are equal");
+                .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
     }
 
     @Test
@@ -114,7 +114,7 @@ class WithPrefabValuesForFieldTest {
                             .forClass(SinglePrecondition.class)
                             .withPrefabValuesForField("point", red1, red2))
                 .assertThrows(IllegalStateException.class)
-                .assertMessageContains("Precondition", "both prefab values of type FinalPoint are equal");
+                .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
     }
 
     @Test
