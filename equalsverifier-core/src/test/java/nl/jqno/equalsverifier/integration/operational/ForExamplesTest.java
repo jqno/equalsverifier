@@ -23,6 +23,13 @@ public class ForExamplesTest {
         run(red, blue);
     }
 
+    @Test
+    void staticValueCanBeNull() {
+        var red = new StaticContainer(42);
+        var blue = new StaticContainer(1337);
+        run(red, blue);
+    }
+
     private void run(Object red, Object blue) {
         assertThat(true)
                 .satisfies(
@@ -54,6 +61,30 @@ public class ForExamplesTest {
                 throw new IllegalStateException("red and blue can't be equal! (" + red + ")");
             }
             return Objects.hash(red, blue);
+        }
+    }
+
+    static final class StaticContainer {
+        public static Object lock = null;
+
+        private final int i;
+
+        public StaticContainer(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof StaticContainer)) {
+                return false;
+            }
+            StaticContainer other = (StaticContainer) obj;
+            return i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
         }
     }
 }

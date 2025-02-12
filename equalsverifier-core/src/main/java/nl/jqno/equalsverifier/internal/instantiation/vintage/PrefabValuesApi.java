@@ -40,7 +40,6 @@ public final class PrefabValuesApi {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> void addPrefabValuesForField(
             FieldCache fieldCache,
             Objenesis objenesis,
@@ -48,7 +47,7 @@ public final class PrefabValuesApi {
             String fieldName,
             T red,
             T blue) {
-        Validations.validateRedAndBluePrefabValues((Class<T>) red.getClass(), red, blue);
+        Validations.validateRedAndBluePrefabValues(fieldName, red, blue);
         Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
 
         if (red.getClass().isArray()) {

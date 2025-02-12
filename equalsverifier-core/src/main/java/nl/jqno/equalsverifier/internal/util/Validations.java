@@ -74,7 +74,15 @@ public final class Validations {
         validateNotNull(type, "prefab value type is null.");
         validateNotNull(red, "red prefab value of type " + type.getSimpleName() + " is null.");
         validateNotNull(blue, "blue prefab value of type " + type.getSimpleName() + " is null.");
-        validate(red.equals(blue), "both prefab values of type " + type.getSimpleName() + " are equal.");
+        validate(Objects.equals(red, blue), "both prefab values of type " + type.getSimpleName() + " are equal.");
+    }
+
+    public static <T> void validateRedAndBluePrefabValues(String fieldName, T red, T blue) {
+        String fieldDescription =
+                red == null ? "`" + fieldName + "`" : "`" + red.getClass().getSimpleName() + " " + fieldName + "`";
+        validateNotNull(red, "red prefab value for field " + fieldDescription + " is null.");
+        validateNotNull(blue, "blue prefab value for field " + fieldDescription + " is null.");
+        validate(Objects.equals(red, blue), "both prefab values for field " + fieldDescription + " are equal.");
     }
 
     public static <T> void validateFieldTypeMatches(Class<T> container, String fieldName, Class<?> fieldType) {

@@ -13,7 +13,7 @@ public final class FieldToPrefabValues {
             value = "RV_RETURN_VALUE_IGNORED",
             justification = "We intentionally call api.withPrefabValues for its side-effect; we don't need its fluent API here.")
     public static <T> void move(SingleTypeEqualsVerifierApi<T> api, Class<T> type, T red, T blue) {
-        for (FieldProbe probe : FieldIterable.of(type)) {
+        for (FieldProbe probe : FieldIterable.ofIgnoringStatic(type)) {
             Object fRed = probe.getValue(red);
             Object fBlue = probe.getValue(blue);
             api.withPrefabValuesForField(probe.getName(), fRed, fBlue);
