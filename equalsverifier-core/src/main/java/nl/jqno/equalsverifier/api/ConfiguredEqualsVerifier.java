@@ -133,7 +133,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @CheckReturnValue
     @SuppressWarnings("unchecked")
     public <T> SingleTypeEqualsVerifierApi<T> forExamples(T red, T blue) {
-        Validations.validateRedAndBlueValues(red, blue);
+        Validations.validateRedAndBlueExamples(red, blue);
 
         var type = (Class<T>) red.getClass();
         var api = forClass(type);

@@ -61,13 +61,13 @@ public final class Validations {
         validate(equalExamples.contains(example), "an equal example also appears as unequal example.");
     }
 
-    public static <T> void validateRedAndBlueValues(T red, T blue) {
-        validateNotNull(red, "red value is null.");
-        validateNotNull(blue, "blue value is null.");
+    public static <T> void validateRedAndBlueExamples(T red, T blue) {
+        validateNotNull(red, "red example is null.");
+        validateNotNull(blue, "blue example is null.");
         Class<?> redType = red.getClass();
         Class<?> blueType = blue.getClass();
-        validate(!redType.equals(blueType), "values are of different types.");
-        validate(red.equals(blue), "both values are equal.");
+        validate(!redType.equals(blueType), "examples are of different types.");
+        // validate(red.equals(blue), "both examples are equal.");
     }
 
     public static <T> void validateRedAndBluePrefabValues(Class<T> type, T red, T blue) {

@@ -88,7 +88,7 @@ public final class EqualsVerifier {
     @CheckReturnValue
     @SuppressWarnings("unchecked")
     public static <T> SingleTypeEqualsVerifierApi<T> forExamples(T red, T blue) {
-        Validations.validateRedAndBlueValues(red, blue);
+        Validations.validateRedAndBlueExamples(red, blue);
 
         var type = (Class<T>) red.getClass();
         var api = forClass(type);

@@ -20,28 +20,28 @@ public class ForExamplesPreconditionsTest {
     void redShouldNotBeNull() {
         assertThatThrownBy(() -> EqualsVerifier.forExamples(null, v))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "red value is null");
+                .hasMessageContaining("Precondition", "red example is null");
     }
 
     @Test
     void blueShouldNotBeIsNull() {
         assertThatThrownBy(() -> EqualsVerifier.forExamples(v, null))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "blue value is null");
+                .hasMessageContaining("Precondition", "blue example is null");
     }
 
     @Test
     void valuesShouldBeOfSameType() {
         assertThatThrownBy(() -> EqualsVerifier.forExamples(v, "string"))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Precondition", "values are of different types");
+                .hasMessageContaining("Precondition", "examples are of different types");
     }
 
     @Test
     void valuesShouldNotBeEqual() {
         assertThatThrownBy(() -> EqualsVerifier.forExamples(v, v))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Precondition", "both values are equal");
+                .hasMessageContaining("Precondition", "both examples are equal");
     }
 
     @Test
