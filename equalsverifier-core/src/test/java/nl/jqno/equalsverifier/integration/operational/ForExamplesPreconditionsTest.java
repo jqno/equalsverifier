@@ -18,61 +18,59 @@ public class ForExamplesPreconditionsTest {
 
     @Test
     void redShouldNotBeNull() {
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(null, v))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "red example is null");
+        run(null, v, NullPointerException.class, "Precondition", "red example is null");
     }
 
     @Test
     void blueShouldNotBeIsNull() {
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(v, null))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "blue example is null");
+        run(v, null, NullPointerException.class, "Precondition", "blue example is null");
     }
 
     @Test
     void valuesShouldBeOfSameType() {
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(v, "string"))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Precondition", "examples are of different types");
+        run(v, "string", IllegalStateException.class, "Precondition", "examples are of different types");
     }
 
     @Test
     void valuesShouldNotBeEqual() {
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(v, v))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Precondition", "both examples are equal");
+        run(v, v, IllegalStateException.class, "Precondition", "both examples are equal");
     }
 
     @Test
     void redFieldShouldNotBeNull() {
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(nullV, v))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "red prefab value for field `v` is null");
+        run(nullV, v, NullPointerException.class, "Precondition", "red prefab value for field `v` is null");
     }
 
     @Test
     void blueFieldShouldNotBeNull() {
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(v, nullV))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "blue prefab value for field `String v` is null");
+        run(v, nullV, NullPointerException.class, "Precondition", "blue prefab value for field `String v` is null");
     }
 
     @Test
     void fieldShouldNotBeEqual() {
         Value helloV = new Value("hello", "planet");
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(v, helloV))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Precondition", "both prefab values for field `String v` are equal");
+        run(
+            v,
+            helloV,
+            IllegalStateException.class,
+            "Precondition",
+            "both prefab values for field `String v` are equal");
     }
 
     @Test
     void superFieldsShouldBeConsidered() {
         Sub s1 = new Sub("s1");
         Sub s2 = new Sub(null);
-        assertThatThrownBy(() -> EqualsVerifier.forExamples(s1, s2))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Precondition", "blue prefab value for field `String s` is null");
+        run(s1, s2, NullPointerException.class, "Precondition", "blue prefab value for field `String s` is null");
+    }
+
+    private void run(Object red, Object blue, Class<? extends Throwable> exception, String... fragments) {
+        assertThatThrownBy(() -> EqualsVerifier.forExamples(red, blue))
+                .isInstanceOf(exception)
+                .hasMessageContainingAll(fragments);
+        assertThatThrownBy(() -> EqualsVerifier.simple().forExamples(red, blue))
+                .isInstanceOf(exception)
+                .hasMessageContainingAll(fragments);
     }
 
     static final class Value {
