@@ -24,6 +24,13 @@ public class ForExamplesTest {
     }
 
     @Test
+    void valuesPerField_record() {
+        var red = new MultiStringRecord("red", "blue");
+        var blue = new MultiStringRecord("green", "yellow");
+        run(red, blue);
+    }
+
+    @Test
     void staticValueCanBeNull() {
         var red = new StaticContainer(42);
         var blue = new StaticContainer(1337);
@@ -61,6 +68,14 @@ public class ForExamplesTest {
                 throw new IllegalStateException("red and blue can't be equal! (" + red + ")");
             }
             return Objects.hash(red, blue);
+        }
+    }
+
+    record MultiStringRecord(String red, String blue) {
+        public MultiStringRecord {
+            if (Objects.equals(red, blue)) {
+                throw new IllegalStateException("red and blue can't be equal! (" + red + ")");
+            }
         }
     }
 
