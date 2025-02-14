@@ -22,7 +22,6 @@
   </scm>
 
     <properties>
-        <maven.compiler.release>9</maven.compiler.release>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
 
@@ -168,13 +167,7 @@
         </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-16</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-17</artifactId>
+            <artifactId>equalsverifier-21</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

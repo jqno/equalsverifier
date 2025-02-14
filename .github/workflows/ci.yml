@@ -15,12 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - title: "Supported JDK 11"
-            experimental: false
-            cache-id: "jdk11"
-            java: 11
-            dist: temurin
-            flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 17"
             experimental: false
             cache-id: "jdk17"

@@ -8,6 +8,6 @@ public final class RecordsHelper {
     private RecordsHelper() {}
 
     public static boolean isRecord(Class<?> type) {
-        return false;
+        return type.isRecord();
     }
 }

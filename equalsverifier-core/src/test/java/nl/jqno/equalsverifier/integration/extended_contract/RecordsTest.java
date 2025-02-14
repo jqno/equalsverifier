@@ -157,34 +157,43 @@ class RecordsTest {
     }
 
     record BrokenInvariantIntFieldRecord(int intField, String stringField) {
+
         public BrokenInvariantIntFieldRecord(int intField, String stringField) {
             this.intField = intField + 1;
             this.stringField = stringField;
         }
+
     }
 
     record BrokenInvariantStringFieldRecord(int intField, String stringField) {
+
         public BrokenInvariantStringFieldRecord(int intField, String stringField) {
             this.intField = intField;
             this.stringField = stringField + "x";
         }
+
     }
 
     record BrokenInvariantBothRecord(int intField, String stringField) {
+
         public BrokenInvariantBothRecord(int intField, String stringField) {
             this.intField = intField + 1;
             this.stringField = stringField + "x";
         }
+
     }
 
     record EqualsRecord(int i, String s) {
+
         @Override
         public boolean equals(Object obj) {
             return defaultEquals(this, obj);
         }
+
     }
 
     record NotAllFieldsRecord(int i, String s) {
+
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof NotAllFieldsRecord)) {
@@ -197,6 +206,7 @@ class RecordsTest {
         public int hashCode() {
             return i;
         }
+
     }
 
     record ThrowingConstructorRecord(int i, String s) {
@@ -212,6 +222,7 @@ class RecordsTest {
     }
 
     record ThrowingAccessorRecord(int i, String s) {
+
         public ThrowingAccessorRecord(int i, String s) {
             this.i = i;
             this.s = s + "x";
@@ -220,9 +231,11 @@ class RecordsTest {
         public int i() {
             throw new IllegalStateException();
         }
+
     }
 
     record NullAccessorRecord(String s, String t) {
+
         public NullAccessorRecord(String s, String t) {
             this.s = s;
             this.t = t + "x";
@@ -231,9 +244,11 @@ class RecordsTest {
         public String s() {
             throw new NullPointerException();
         }
+
     }
 
     record StaticFieldRecord(int i, String s) {
+
         private static final int X = 0;
     }
 
