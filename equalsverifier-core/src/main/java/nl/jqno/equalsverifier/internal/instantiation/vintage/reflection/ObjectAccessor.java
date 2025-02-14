@@ -4,7 +4,6 @@ import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
 import org.objenesis.Objenesis;
 
 /**
@@ -45,7 +44,7 @@ public abstract class ObjectAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
-        if (RecordsHelper.isRecord(type)) {
+        if (type.isRecord()) {
             return new RecordObjectAccessor<T>(object, type);
         }
         return new InPlaceObjectAccessor<>(object, type);

@@ -27,10 +27,15 @@ class ClassProbeTest {
         assertThat(pointProbe.getType()).isSameAs(PointContainer.class);
     }
 
-    /* Tests the false case. The true case is tested in {@link ClassProbeCompilerTest}. */
+    @Test
+    void isNotRecord() {
+        assertThat(pointProbe.isRecord()).isFalse();
+    }
+
     @Test
     void isRecord() {
-        assertThat(pointProbe.isRecord()).isFalse();
+        record SimpleRecord(int i) {}
+        assertThat(SimpleRecord.class.isRecord()).isTrue();
     }
 
     /* Tests the false case. The true case is tested in {@link ClassProbeSealedTest}. */

@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,16 +8,9 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
 import org.junit.jupiter.api.Test;
 
 class RecordsTest {
-
-    @Test
-    void sanityCheckForRecordsHelper() {
-        assertThat(RecordsHelper.isRecord(SimpleRecord.class)).isTrue();
-        assertThat(RecordsHelper.isRecord(String.class)).isFalse();
-    }
 
     @Test
     void succeed_whenClassIsARecord() {

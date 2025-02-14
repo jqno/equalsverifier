@@ -5,7 +5,6 @@ import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.jpms.model.*;
 import nl.jqno.equalsverifier.jpms.model.Records.RecordPoint;
 import nl.jqno.equalsverifier.jpms.model.Records.RecordPointContainer;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class EverythingWorksInTheModularWorldTest {
@@ -21,17 +20,11 @@ public class EverythingWorksInTheModularWorldTest {
     }
 
     @Test
-    @Disabled("It's impossble to load `equalsverifier-16` in the module world "
-            + "because it creates a split path. We can enable this test again "
-            + "when EqualsVerifier's baseline becomes Java 17")
     void recordCanBeVerified() {
         EqualsVerifier.forClass(RecordPoint.class).verify();
     }
 
     @Test
-    @Disabled("It's impossble to load `equalsverifier-16` in the module world "
-            + "because it creates a split path. We can enable this test again "
-            + "when EqualsVerifier's baseline becomes Java 17")
     void recordContainingRecordCanBeVerified() {
         EqualsVerifier.forClass(RecordPointContainer.class).verify();
     }
@@ -49,9 +42,7 @@ public class EverythingWorksInTheModularWorldTest {
     @Test
     void forPackageWorks() {
         EqualsVerifier
-                .forPackage(
-                    "nl.jqno.equalsverifier.jpms.model",
-                    ScanOption.except(c -> Records.class.equals(c.getEnclosingClass()) || Records.class.equals(c)))
+                .forPackage("nl.jqno.equalsverifier.jpms.model", ScanOption.except(Records.class::equals))
                 .verify();
     }
 }
