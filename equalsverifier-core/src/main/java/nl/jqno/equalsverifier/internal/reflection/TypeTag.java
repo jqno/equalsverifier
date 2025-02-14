@@ -60,29 +60,25 @@ public final record TypeTag(Class<?> type, List<TypeTag> genericTypes) {
             TypeTag enclosingType,
             boolean shortCircuitRecursiveTypeBound) {
         var nestedTags = new ArrayList<TypeTag>();
-        if (type instanceof Class) {
-            return processClass((Class<?>) type, nestedTags);
+        if (type instanceof Class<?> cls) {
+            return processClass(cls, nestedTags);
         }
-        if (type instanceof ParameterizedType) {
+        if (type instanceof ParameterizedType parameterizedType) {
             return processParameterizedType(
-                (ParameterizedType) type,
+                parameterizedType,
                 typeAsClass,
                 enclosingType,
                 nestedTags,
                 shortCircuitRecursiveTypeBound);
         }
-        if (type instanceof GenericArrayType) {
-            return processGenericArray((GenericArrayType) type, typeAsClass, enclosingType);
+        if (type instanceof GenericArrayType arrayType) {
+            return processGenericArray(arrayType, typeAsClass, enclosingType);
         }
-        if (type instanceof WildcardType) {
-            return processWildcard((WildcardType) type, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
+        if (type instanceof WildcardType wildcardType) {
+            return processWildcard(wildcardType, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
-        if (type instanceof TypeVariable) {
-            return processTypeVariable(
-                (TypeVariable<?>) type,
-                typeAsClass,
-                enclosingType,
-                shortCircuitRecursiveTypeBound);
+        if (type instanceof TypeVariable<?> variable) {
+            return processTypeVariable(variable, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
         throw new EqualsVerifierInternalBugException(
                 "Failed to tag type " + type.toString() + " (" + type.getClass() + ")");

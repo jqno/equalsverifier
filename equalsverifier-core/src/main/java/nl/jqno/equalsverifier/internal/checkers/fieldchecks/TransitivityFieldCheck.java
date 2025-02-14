@@ -27,14 +27,12 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
         boolean z = a1.equals(b2);
 
         if (countFalses(x, y, z) == 1) {
-            fail(
-                Formatter
-                        .of(
-                            "Transitivity: two of these three instances are equal to each other,"
-                                    + " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
-                            a1,
-                            b1,
-                            b2));
+            fail(Formatter.of("""
+                    Transitivity: two of these three instances are equal to each other,\
+                     so the third one should be, too:
+                    -  %%
+                    -  %%
+                    -  %%""", a1, b1, b2));
         }
     }
 

@@ -59,12 +59,16 @@ public class RecordProbe<T> {
 
         String msg = prefix;
         if (hasZeros) {
-            msg += "\n  If the record does not accept 0 or false as a value for its constructor parameters,"
-                    + " consider suppressing Warning.ZERO_FIELDS.";
+            msg += """
+
+                     If the record does not accept 0 or false as a value for its constructor parameters,\
+                    consider suppressing Warning.ZERO_FIELDS.""";
         }
         if (hasSomethingElse) {
-            msg += "\n  If the record does not accept any of the given values for its constructor parameters,"
-                    + " consider providing prefab values for the types of those fields.";
+            msg += """
+
+                     If the record does not accept any of the given values for its constructor parameters,\
+                    consider providing prefab values for the types of those fields.""";
         }
         return msg;
     }

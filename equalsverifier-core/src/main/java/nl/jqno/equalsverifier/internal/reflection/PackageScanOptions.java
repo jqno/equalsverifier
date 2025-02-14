@@ -73,16 +73,13 @@ public class PackageScanOptions {
             if (option.equals(O.IGNORE_EXTERNAL_JARS)) {
                 result.ignoreExternalJars = true;
             }
-            if (option instanceof MustExtend) {
-                MustExtend me = (MustExtend) option;
+            if (option instanceof MustExtend me) {
                 result.mustExtend = me.type;
             }
-            if (option instanceof ExceptClasses) {
-                ExceptClasses ec = (ExceptClasses) option;
+            if (option instanceof ExceptClasses ec) {
                 result.exceptClasses.addAll(ec.types);
             }
-            if (option instanceof ExclusionPredicate) {
-                ExclusionPredicate ep = (ExclusionPredicate) option;
+            if (option instanceof ExclusionPredicate ep) {
                 result.exclusionPredicate = ep.exclusionPredicate;
             }
         }

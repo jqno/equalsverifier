@@ -117,14 +117,12 @@ public final class Validations {
         boolean usesWithOnlyTheseFields = !includedFields.isEmpty();
         boolean usesWithIgnoredFields = !excludedFields.isEmpty();
 
-        validate(
-            hasSurrogateKey && usesWithOnlyTheseFields,
-            "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.\n"
-                    + "You can remove withOnlyTheseFields.");
-        validate(
-            hasSurrogateKey && usesWithIgnoredFields,
-            "you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.\n"
-                    + "You can remove withIgnoredFields.");
+        validate(hasSurrogateKey && usesWithOnlyTheseFields, """
+                you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.
+                You can remove withOnlyTheseFields.""");
+        validate(hasSurrogateKey && usesWithIgnoredFields, """
+                you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.
+                You can remove withIgnoredFields.""");
     }
 
     public static void validateGivenAnnotations(Class<?>... givenAnnotations) {
@@ -192,9 +190,10 @@ public final class Validations {
             includedFields.contains(p.getName())
                     && cache.hasFieldAnnotation(type, p.getName(), SupportedAnnotations.ID)
                     && !warnings.contains(Warning.SURROGATE_OR_BUSINESS_KEY),
-            "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n"
-                    + "Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields "
-                    + "if you want to use only the @Id or @EmbeddedId fields in equals.");
+            """
+                    you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.
+                    Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields \
+                    if you want to use only the @Id or @EmbeddedId fields in equals.""");
     }
 
     public static void validatePackageContainsClasses(String packageName, List<Class<?>> types) {

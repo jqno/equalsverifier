@@ -29,7 +29,7 @@ class FinalityTest {
                 .assertMessageContains(
                     SUBCLASS,
                     "equals is not final",
-                    String.format(SUPPLY_AN_INSTANCE, "equals"),
+                    SUPPLY_AN_INSTANCE.formatted("equals"),
                     "if equals cannot be final");
     }
 
@@ -60,7 +60,7 @@ class FinalityTest {
                 .assertMessageContains(
                     SUBCLASS,
                     "hashCode is not final",
-                    String.format(SUPPLY_AN_INSTANCE, "hashCode"),
+                    SUPPLY_AN_INSTANCE.formatted("hashCode"),
                     "if hashCode cannot be final");
     }
 

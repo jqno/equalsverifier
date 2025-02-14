@@ -172,8 +172,7 @@ public class AnnotationCacheBuilder {
     }
 
     private void addEnumProperties(Object val, String name, AnnotationProperties props) {
-        if (val instanceof EnumerationDescription) {
-            EnumerationDescription e = (EnumerationDescription) val;
+        if (val instanceof EnumerationDescription e) {
             props.putEnumValue(name, e.getValue());
         }
     }
@@ -183,8 +182,8 @@ public class AnnotationCacheBuilder {
             Object[] array = (Object[]) val;
             var values = new HashSet<String>();
             for (Object obj : array) {
-                if (obj instanceof TypeDescription) {
-                    values.add(((TypeDescription) obj).getName());
+                if (obj instanceof TypeDescription description) {
+                    values.add(description.getName());
                 }
                 else {
                     values.add(obj.toString());
