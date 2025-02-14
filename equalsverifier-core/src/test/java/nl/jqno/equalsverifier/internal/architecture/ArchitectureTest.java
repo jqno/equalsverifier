@@ -55,15 +55,6 @@ public final class ArchitectureTest {
     @ArchTest
     public static final ArchRule AWT = dontAllowImports_outsideFactoryProvidersAndTests_from("java.awt.common..");
 
-    @ArchTest
-    public static final ArchRule GUAVA = dontAllowImports_outsideFactoryProvidersAndTests_from("com.google.common..");
-
-    @ArchTest
-    public static final ArchRule JAVAFX = dontAllowImports_outsideFactoryProvidersAndTests_from("javafx..");
-
-    @ArchTest
-    public static final ArchRule JODA = dontAllowImports_outsideFactoryProvidersAndTests_from("org.joda..");
-
     private static final String FACTORYPROVIDER_PATTERN =
             "nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders..";
     private static final String TEST_CLASS_PATTERN = ".*Test(\\$.*)?$";

@@ -7,9 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.common.collect.ImmutableList;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -112,17 +110,6 @@ class RecursionTest {
     @Test
     void succeed_whenFieldIsARecursiveTypeInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(TreeContainer.class).withPrefabValues(Tree.class, redTree, blueTree).verify();
-    }
-
-    @Test
-    void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
-        ExpectedException
-                .when(() -> EqualsVerifier.forClass(ImmutableListTree.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                    RECURSIVE_DATASTRUCTURE,
-                    ImmutableListTree.class.getSimpleName(),
-                    new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString());
     }
 
     @Test
@@ -232,25 +219,6 @@ class RecursionTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
-        }
-    }
-
-    static final class ImmutableListTree {
-
-        final ImmutableList<ImmutableListTree> tree;
-
-        public ImmutableListTree(ImmutableList<ImmutableListTree> tree) {
-            this.tree = tree;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
-        }
-
-        @Override
-        public int hashCode() {
             return defaultHashCode(this);
         }
     }

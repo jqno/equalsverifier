@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Built-in prefab values for Google Guava, Joda-Time and Javafx.
 - `#withResetCaches()`, which was deprecated since version 3.16.2.
 - `Warning.ZERO_FIELDS`, which was deprecated since version 3.17.
 - `forPackage(String packageName, boolean scanRecursively)`, which was deprecated since version 3.19.

@@ -50,15 +50,8 @@ import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelpe
         justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
 
-    private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
-    private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
-    private static final String GUAVA_PACKAGE = "com.google.common.collect.";
-    private static final String JODA_PACKAGE = "org.joda.time.";
     private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactoryProvider");
-    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>("JavaFxFactoryProvider");
     private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactoryProvider");
-    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactoryProvider");
-    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactoryProvider");
     private static final ExternalFactory<?> RMI_FACTORY = new ExternalFactory<>("RmiFactoryProvider");
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
@@ -101,16 +94,7 @@ public final class JavaApiPrefabValues {
         addReflectionClasses();
         addAtomicClasses();
         addAncientJavaApiClasses();
-        addJavaFxClasses();
         addJavaxApiClasses();
-        addGoogleGuavaMultisetCollectionsClasses();
-        addGoogleGuavaMultimapCollectionsClasses();
-        addGoogleGuavaBiMapCollectionsClasses();
-        addGoogleGuavaTableCollectionClasses();
-        addGoogleGuavaRegularCollectionsClasses();
-        addGoogleGuavaImmutableClasses();
-        addNewGoogleGuavaClasses();
-        addJodaTimeClasses();
     }
 
     @SuppressFBWarnings(
@@ -521,98 +505,9 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.rmi.server.UID", RMI_FACTORY);
     }
 
-    private void addJavaFxClasses() {
-        addLazyFactory(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "BooleanProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "DoubleProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "FloatProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "IntegerProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "ListProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "LongProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "MapProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "ObjectProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "SetProperty", JAVAFX_FACTORY);
-        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "StringProperty", JAVAFX_FACTORY);
-    }
-
     private void addJavaxApiClasses() {
         addLazyFactory("javax.naming.Reference", JAVAX_FACTORY);
         addLazyFactory("javax.swing.tree.DefaultMutableTreeNode", JAVAX_FACTORY);
-    }
-
-    private void addGoogleGuavaMultisetCollectionsClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "Multiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "SortedMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "HashMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "TreeMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ConcurrentHashMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "EnumMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableMultiset", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedMultiset", GUAVA_FACTORY);
-    }
-
-    private void addGoogleGuavaMultimapCollectionsClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "Multimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ListMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "SetMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "SortedSetMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ArrayListMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "HashMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "LinkedListMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "TreeMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableListMultimap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableSetMultimap", GUAVA_FACTORY);
-    }
-
-    private void addGoogleGuavaBiMapCollectionsClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "BiMap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "HashBiMap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "EnumHashBiMap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableBiMap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "EnumBiMap", GUAVA_FACTORY);
-    }
-
-    private void addGoogleGuavaTableCollectionClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "Table", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "HashBasedTable", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "TreeBasedTable", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ArrayTable", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableTable", GUAVA_FACTORY);
-    }
-
-    private void addGoogleGuavaRegularCollectionsClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "EvictingQueue", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "MinMaxPriorityQueue", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableRangeSet", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "TreeRangeSet", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "RangeSet", GUAVA_FACTORY);
-    }
-
-    private void addGoogleGuavaImmutableClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableCollection", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableList", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableMap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableSet", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedMap", GUAVA_FACTORY);
-        addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedSet", GUAVA_FACTORY);
-    }
-
-    private void addNewGoogleGuavaClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "Range", GUAVA_FACTORY);
-        addLazyFactory("com.google.common.base.Optional", GUAVA_FACTORY);
-        addLazyFactory("com.google.common.reflect.TypeToken", GUAVA_FACTORY);
-    }
-
-    private void addJodaTimeClasses() {
-        addLazyFactory(JODA_PACKAGE + "Chronology", JODA_FACTORY);
-        addLazyFactory(JODA_PACKAGE + "DateTimeZone", JODA_FACTORY);
-        addLazyFactory(JODA_PACKAGE + "PeriodType", JODA_FACTORY);
-        addLazyFactory(JODA_PACKAGE + "YearMonth", JODA_FACTORY);
-        addLazyFactory(JODA_PACKAGE + "MonthDay", JODA_FACTORY);
     }
 
     private <T> void addValues(Class<T> type, T red, T blue, T redCopy) {
