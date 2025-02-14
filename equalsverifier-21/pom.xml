@@ -17,12 +17,6 @@
     </properties>
 
     <dependencies>
-        <!-- Note: list `equalsverifier-16` first, so it's classes get loaded instead of `equalsverifier-core`'s -->
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-16</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier-core</artifactId>

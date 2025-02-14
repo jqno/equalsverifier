@@ -145,7 +145,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             blue.put(valueProvider.giveBlue(keyTag), valueProvider.giveBlue(valueTag));
             redCopy.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
 
-            return Tuple.of(red, blue, redCopy);
+            return new Tuple<>(red, blue, redCopy);
         }
     }
 
@@ -182,7 +182,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
                         valueProvider.giveRed(rowTag),
                         valueProvider.giveBlue(valueTag));
 
-            return Tuple.of(red, blue, redCopy);
+            return new Tuple<>(red, blue, redCopy);
         }
     }
 }

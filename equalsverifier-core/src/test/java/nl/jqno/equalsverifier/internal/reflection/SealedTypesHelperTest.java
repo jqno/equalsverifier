@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.versionspecific;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +10,7 @@ class SealedTypesHelperTest {
 
     @Test
     void twoLevels() {
-        var actual = SealedTypesHelper.findInstantiableSubclass(TwoLevelParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(TwoLevelParent.class);
         assertThat(actual.get()).isEqualTo(TwoLevelChild.class);
     }
 
@@ -20,7 +20,7 @@ class SealedTypesHelperTest {
 
     @Test
     void fourLevels() {
-        var actual = SealedTypesHelper.findInstantiableSubclass(FourLevelParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(FourLevelParent.class);
         assertThat(actual.get()).isEqualTo(FourLevelChild.class);
     }
 
@@ -34,7 +34,7 @@ class SealedTypesHelperTest {
 
     @Test
     void allConcrete() {
-        var actual = SealedTypesHelper.findInstantiableSubclass(AllConcreteParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(AllConcreteParent.class);
         assertThat(actual.get()).isEqualTo(AllConcreteMiddle.class);
     }
 
@@ -46,7 +46,7 @@ class SealedTypesHelperTest {
 
     @Test
     void nonSealedAtTheBottom() {
-        var actual = SealedTypesHelper.findInstantiableSubclass(NonSealedAtTheBottomParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(NonSealedAtTheBottomParent.class);
         assertThat(actual.get()).isEqualTo(NonSealedAtTheBottomChild.class);
     }
 
@@ -56,7 +56,7 @@ class SealedTypesHelperTest {
 
     @Test
     void notSealed() {
-        var actual = SealedTypesHelper.findInstantiableSubclass(Object.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(Object.class);
         assertThat(actual).isEqualTo(Optional.empty());
     }
 }

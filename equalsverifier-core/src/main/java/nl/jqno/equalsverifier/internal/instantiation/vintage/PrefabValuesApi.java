@@ -51,15 +51,15 @@ public final class PrefabValuesApi {
         Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
 
         if (red.getClass().isArray()) {
-            fieldCache.put(fieldName, Tuple.of(red, blue, red));
+            fieldCache.put(fieldName, new Tuple<>(red, blue, red));
         }
         else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                fieldCache.put(fieldName, Tuple.of(red, blue, redCopy));
+                fieldCache.put(fieldName, new Tuple<>(red, blue, redCopy));
             }
             catch (InaccessibleObjectException ignored) {
-                fieldCache.put(fieldName, Tuple.of(red, blue, red));
+                fieldCache.put(fieldName, new Tuple<>(red, blue, red));
             }
         }
     }

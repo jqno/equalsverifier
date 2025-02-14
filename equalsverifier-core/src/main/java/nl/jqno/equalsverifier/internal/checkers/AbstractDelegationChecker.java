@@ -62,8 +62,8 @@ public class AbstractDelegationChecker<T> implements Checker {
             TypeTag tag = TypeTag.of(probe.getField(), typeTag);
             Tuple<?> tuple = safelyGetTuple(tag);
             if (tuple != null) {
-                Object instance = tuple.getRed();
-                Object copy = tuple.getBlue();
+                Object instance = tuple.red();
+                Object copy = tuple.blue();
                 checkAbstractMethods(tag.getType(), instance, copy, true);
             }
         }

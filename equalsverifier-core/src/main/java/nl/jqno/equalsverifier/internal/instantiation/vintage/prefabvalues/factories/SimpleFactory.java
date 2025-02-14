@@ -14,7 +14,7 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
     private final Tuple<T> tuple;
 
     public SimpleFactory(T red, T blue, T redCopy) {
-        this.tuple = Tuple.of(red, blue, redCopy);
+        this.tuple = new Tuple<>(red, blue, redCopy);
     }
 
     @Override

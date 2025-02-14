@@ -344,9 +344,7 @@ class SuperclassTest {
 
         @Override
         public boolean newCanEqual(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper obj) {
-            if (obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSub) {
-                SymmetryBrokenForNullIdWithIncorrectCanEqualSub other =
-                        (SymmetryBrokenForNullIdWithIncorrectCanEqualSub) obj;
+            if (obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSub other) {
                 return Objects.equals(name, other.name);
             }
             return false;

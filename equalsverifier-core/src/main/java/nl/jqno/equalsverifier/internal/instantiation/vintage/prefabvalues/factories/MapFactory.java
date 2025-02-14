@@ -46,6 +46,6 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
         T redCopy = createEmpty.get();
         redCopy.put(redKey, blueValue);
 
-        return Tuple.of(red, blue, redCopy);
+        return new Tuple<>(red, blue, redCopy);
     }
 }

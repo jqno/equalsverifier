@@ -12,7 +12,6 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import nl.jqno.equalsverifier.internal.versionspecific.SealedTypesHelper;
 import org.objenesis.Objenesis;
 import org.objenesis.instantiator.ObjectInstantiator;
 
@@ -47,8 +46,8 @@ public final class Instantiator<T> {
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type, Objenesis objenesis) {
-        if (SealedTypesHelper.isSealed(type)) {
-            Class<T> concrete = SealedTypesHelper.findInstantiableSubclass(type).get();
+        if (type.isSealed()) {
+            Class<T> concrete = SealedTypesFinder.findInstantiableSubclass(type).get();
             return Instantiator.of(concrete, objenesis);
         }
         if (Modifier.isAbstract(type.getModifiers())) {

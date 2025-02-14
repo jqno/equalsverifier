@@ -23,10 +23,7 @@ public class JarAsserter {
     }
 
     public void assertPresenceOfMultiReleaseClasses() {
-        assertPresenceOf(
-            "/META-INF/versions/16" + EV + "/internal/versionspecific/RecordsHelper.class",
-            "/META-INF/versions/17" + EV + "/internal/versionspecific/SealedTypesHelper.class",
-            "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class");
+        assertPresenceOf("/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class");
     }
 
     public void assertPresenceOfEmbeddedDepedencies() {
@@ -74,13 +71,7 @@ public class JarAsserter {
         // See https://javaalmanac.io/bytecode/versions/
         assertThat(true)
                 .satisfies(
-                    b -> assertVersionOfClassFile(55, EV + "/EqualsVerifier.class"),
-                    b -> assertVersionOfClassFile(
-                        60,
-                        "/META-INF/versions/16" + EV + "/internal/versionspecific/RecordsHelper.class"),
-                    b -> assertVersionOfClassFile(
-                        61,
-                        "/META-INF/versions/17" + EV + "/internal/versionspecific/SealedTypesHelper.class"),
+                    b -> assertVersionOfClassFile(61, EV + "/EqualsVerifier.class"),
                     b -> assertVersionOfClassFile(
                         65,
                         "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class"));

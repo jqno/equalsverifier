@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class WithPrefabValuesForFieldTest {
@@ -28,14 +29,41 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    @Disabled("There's still a bug that will be fixed s👀n")
+    void fail_whenClassHasSinglePrecondition_record() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePreconditionRecord.class)
+                            .suppress(Warning.NULL_FIELDS)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("x coordinate must be");
+    }
+
+    @Test
     void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField() {
         EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("point", pRed, pBlue).verify();
+    }
+
+    @Test
+    void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField_record() {
+        EqualsVerifier.forClass(SinglePreconditionRecord.class).withPrefabValuesForField("point", pRed, pBlue).verify();
     }
 
     @Test
     void fail_whenClassHasDualPrecondition() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
+                .assertFailure()
+                .assertMessageContains("x must be between");
+    }
+
+    @Test
+    @Disabled("There's still a bug that will be fixed s👀n")
+    void fail_whenClassHasDualPrecondition_record() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(DualPreconditionRecord.class).verify())
                 .assertFailure()
                 .assertMessageContains("x must be between");
     }
@@ -53,9 +81,31 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    @Disabled("There's still a bug that will be fixed s👀n")
+    void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField_record() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(DualPreconditionRecord.class)
+                            .withPrefabValuesForField("x", iRed, iBlue)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("y must be between");
+    }
+
+    @Test
     void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields() {
         EqualsVerifier
                 .forClass(DualPrecondition.class)
+                .withPrefabValuesForField("x", iRed, iBlue)
+                .withPrefabValuesForField("y", 505, 555)
+                .verify();
+    }
+
+    @Test
+    void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields_record() {
+        EqualsVerifier
+                .forClass(DualPreconditionRecord.class)
                 .withPrefabValuesForField("x", iRed, iBlue)
                 .withPrefabValuesForField("y", 505, 555)
                 .verify();
@@ -185,6 +235,14 @@ class WithPrefabValuesForFieldTest {
         }
     }
 
+    record SinglePreconditionRecord(FinalPoint point) {
+        public SinglePreconditionRecord {
+            if (point == null || point.getX() != 3) {
+                throw new IllegalArgumentException("x coordinate must be 3! But was " + point);
+            }
+        }
+    }
+
     static final class DualPrecondition {
 
         private final int x;
@@ -213,6 +271,17 @@ class WithPrefabValuesForFieldTest {
         @Override
         public int hashCode() {
             return Objects.hash(x, y);
+        }
+    }
+
+    record DualPreconditionRecord(int x, int y) {
+        public DualPreconditionRecord {
+            if (x < 100 || x > 200) {
+                throw new IllegalArgumentException("x must be between 100 and 200! But was " + x);
+            }
+            if (y < 500 || y > 600) {
+                throw new IllegalArgumentException("y must be between 500 and 600! But was " + y);
+            }
         }
     }
 

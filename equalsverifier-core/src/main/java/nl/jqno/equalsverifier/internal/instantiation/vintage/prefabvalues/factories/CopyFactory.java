@@ -27,6 +27,6 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
         S blueSource = valueProvider.giveBlue(sourceTag);
         S redCopySource = valueProvider.giveRedCopy(sourceTag);
 
-        return Tuple.of(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
+        return new Tuple<>(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
     }
 }

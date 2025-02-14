@@ -122,10 +122,9 @@ public class ExamplesChecker<T> implements Checker {
     private void checkTypeCheck(T reference) {
         SomethingElse somethingElse = new SomethingElse();
         try {
-            Formatter f = Formatter
-                    .of(
-                        "Type-check: equals returns true for an unrelated type.\n"
-                                + "Add an instanceof or getClass() check.");
+            Formatter f = Formatter.of("""
+                    Type-check: equals returns true for an unrelated type.
+                    Add an instanceof or getClass() check.""");
             assertFalse(f, reference.equals(somethingElse));
         }
         catch (AssertionException e) {

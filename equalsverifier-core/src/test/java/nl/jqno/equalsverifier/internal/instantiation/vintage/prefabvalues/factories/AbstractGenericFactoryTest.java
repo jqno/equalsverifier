@@ -27,7 +27,7 @@ class AbstractGenericFactoryTest {
                     TypeTag tag,
                     VintageValueProvider valueProvider,
                     LinkedHashSet<TypeTag> typeStack) {
-                return Tuple.of("red", "blue", new String("red"));
+                return new Tuple<>("red", "blue", new String("red"));
             }
         };
     }

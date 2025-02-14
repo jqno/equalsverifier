@@ -27,6 +27,6 @@ public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
         Map blue = Map.of(valueProvider.giveBlue(keyTag), valueProvider.giveBlue(valueTag));
         Map redCopy = Map.of(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
 
-        return Tuple.of(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
+        return new Tuple<>(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }
 }

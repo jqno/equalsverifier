@@ -44,6 +44,6 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         T blue = useEmpty && emptyFactory != null ? emptyFactory.get() : factory.apply(blueValues);
         T redCopy = factory.apply(redValues);
 
-        return Tuple.of(red, blue, redCopy);
+        return new Tuple<>(red, blue, redCopy);
     }
 }

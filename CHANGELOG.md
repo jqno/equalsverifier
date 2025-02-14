@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- EqualsVerifier now requires Java 11.
+- EqualsVerifier now requires Java 17.
 - EqualsVerifier is now properly modularized according to the JPMS.
 
 ### Removed

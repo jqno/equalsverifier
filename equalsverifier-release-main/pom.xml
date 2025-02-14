@@ -168,14 +168,7 @@
         </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-16</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-17</artifactId>
+            <artifactId>equalsverifier-21</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
             <optional>true</optional>

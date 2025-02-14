@@ -84,13 +84,14 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Tuple<?> tuple =
                 prefabbedFields.contains(fieldName) ? fieldCache.get(fieldName) : valueProvider.provideOrThrow(tag);
 
-        Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
-        Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());
+        Object left = subjectCreator.withFieldSetTo(field, tuple.red());
+        Object right = subjectCreator.withFieldSetTo(field, tuple.redCopy());
 
         Formatter f = Formatter
                 .of(
-                    "Reflexivity: == used instead of .equals() on field: %%"
-                            + "\nIf this is intentional, consider suppressing Warning.%%",
+                    """
+                            Reflexivity: == used instead of .equals() on field: %%
+                            If this is intentional, consider suppressing Warning.%%""",
                     probe.getName(),
                     Warning.REFERENCE_EQUALITY.toString());
         assertEquals(f, left, right);
@@ -127,8 +128,10 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             if (isEntity) {
                 Formatter f = Formatter
                         .of(
-                            "Reflexivity: entity does not equal an identical copy of itself:\n  %%"
-                                    + "\nIf this is intentional, consider suppressing Warning.%%.",
+                            """
+                                    Reflexivity: entity does not equal an identical copy of itself:
+                                      %%
+                                    If this is intentional, consider suppressing Warning.%%.""",
                             left,
                             Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString());
                 assertEquals(f, left, right);
@@ -136,8 +139,10 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             else {
                 Formatter f = Formatter
                         .of(
-                            "Reflexivity: object does not equal an identical copy of itself:\n  %%"
-                                    + "\nIf this is intentional, consider suppressing Warning.%%.",
+                            """
+                                    Reflexivity: object does not equal an identical copy of itself:
+                                      %%
+                                    If this is intentional, consider suppressing Warning.%%.""",
                             left,
                             Warning.IDENTICAL_COPY.toString());
                 assertEquals(f, left, right);

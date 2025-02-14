@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -522,29 +522,6 @@
         </profile>
 
         <profile>
-            <id>modules-jdk11</id>
-            <activation>
-                <jdk>[11,16)</jdk>
-            </activation>
-
-            <modules>
-                <module>equalsverifier-core</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>modules-jdk16</id>
-            <activation>
-                <jdk>[16,17)</jdk>
-            </activation>
-
-            <modules>
-                <module>equalsverifier-core</module>
-                <module>equalsverifier-16</module>
-            </modules>
-        </profile>
-
-        <profile>
             <id>modules-jdk17</id>
             <activation>
                 <jdk>[17,21)</jdk>
@@ -552,8 +529,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-16</module>
-                <module>equalsverifier-17</module>
             </modules>
         </profile>
 
@@ -565,8 +540,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-16</module>
-                <module>equalsverifier-17</module>
                 <module>equalsverifier-21</module>
                 <module>equalsverifier-test-kotlin</module>
                 <module>equalsverifier-aggregator</module>

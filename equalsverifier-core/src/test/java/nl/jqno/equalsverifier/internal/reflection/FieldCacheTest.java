@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 class FieldCacheTest {
 
     private final String stringField = "string";
-    private final Tuple<String> stringValues = Tuple.of("red", "blue", "red");
+    private final Tuple<String> stringValues = new Tuple<>("red", "blue", "red");
 
     private final String intField = "int";
-    private final Tuple<Integer> intValues = Tuple.of(1, 2, 1);
+    private final Tuple<Integer> intValues = new Tuple<>(1, 2, 1);
 
     private final FieldCache cache = new FieldCache();
 

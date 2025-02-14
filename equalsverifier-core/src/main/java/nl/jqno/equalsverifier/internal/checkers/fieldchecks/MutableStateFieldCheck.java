@@ -32,8 +32,9 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
         boolean equalAfter = reference.equals(changed);
 
         if (equalBefore && !equalAfter && !fieldProbe.isFinal()) {
-            String message = "Mutability: equals depends on mutable field %%.\n"
-                    + "Make the field final, suppress Warning.NONFINAL_FIELDS or use EqualsVerifier.simple()";
+            String message = """
+                    Mutability: equals depends on mutable field %%.
+                    Make the field final, suppress Warning.NONFINAL_FIELDS or use EqualsVerifier.simple()""";
             fail(Formatter.of(message, fieldProbe.getName()));
         }
     }

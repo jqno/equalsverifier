@@ -1,17 +1,13 @@
-package nl.jqno.equalsverifier.internal.versionspecific;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Modifier;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 
-public final class SealedTypesHelper {
+public final class SealedTypesFinder {
 
-    private SealedTypesHelper() {}
-
-    public static boolean isSealed(Class<?> type) {
-        return type.isSealed();
-    }
+    private SealedTypesFinder() {}
 
     public static <T, U extends T> Optional<Class<U>> findInstantiableSubclass(Class<T> type) {
         return findInstantiablePermittedClass(type, false);
