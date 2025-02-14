@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class TupleTest {
 
-    private final Tuple<String> tuple = Tuple.of("red", "blue", new String("red"));
+    private final Tuple<String> tuple = new Tuple<>("red", "blue", new String("red"));
 
     @Test
     void equalsAndHashCode() {
@@ -16,22 +16,7 @@ class TupleTest {
     }
 
     @Test
-    void getRed() {
-        assertThat(tuple.getRed()).isEqualTo("red");
-    }
-
-    @Test
-    void getBlue() {
-        assertThat(tuple.getBlue()).isEqualTo("blue");
-    }
-
-    @Test
-    void getRedCopy() {
-        assertThat(tuple.getRedCopy()).isEqualTo("red");
-    }
-
-    @Test
     void redAndRedCopyInvariant() {
-        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed()).isNotSameAs(tuple.getRed());
+        assertThat(tuple.redCopy()).isEqualTo(tuple.red()).isNotSameAs(tuple.red());
     }
 }

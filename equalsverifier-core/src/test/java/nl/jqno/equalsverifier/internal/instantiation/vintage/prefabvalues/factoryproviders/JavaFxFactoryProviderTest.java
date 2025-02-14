@@ -38,9 +38,9 @@ class JavaFxFactoryProviderTest {
         var factory = new PropertyFactory<GenericContainer>(GenericContainer.class.getName(), List.class);
         Tuple<GenericContainer> tuple = factory.createValues(tag, valueProvider, null);
 
-        assertThat(tuple.getRed().t).isEqualTo(valueProvider.giveRed(listTag));
-        assertThat(tuple.getBlue().t).isEqualTo(valueProvider.giveBlue(listTag));
-        assertThat(tuple.getRed().t.get(0).getClass()).isEqualTo(String.class);
+        assertThat(tuple.red().t).isEqualTo(valueProvider.giveRed(listTag));
+        assertThat(tuple.blue().t).isEqualTo(valueProvider.giveBlue(listTag));
+        assertThat(tuple.red().t.get(0).getClass()).isEqualTo(String.class);
     }
 
     @Test
@@ -51,10 +51,10 @@ class JavaFxFactoryProviderTest {
         var factory = new PropertyFactory<GenericMultiContainer>(GenericMultiContainer.class.getName(), Map.class);
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, valueProvider, null);
 
-        assertThat(tuple.getRed().t).isEqualTo(valueProvider.giveRed(mapTag));
-        assertThat(tuple.getBlue().t).isEqualTo(valueProvider.giveBlue(mapTag));
+        assertThat(tuple.red().t).isEqualTo(valueProvider.giveRed(mapTag));
+        assertThat(tuple.blue().t).isEqualTo(valueProvider.giveBlue(mapTag));
 
-        Map.Entry next = (Map.Entry) tuple.getRed().t.entrySet().iterator().next();
+        Map.Entry next = (Map.Entry) tuple.red().t.entrySet().iterator().next();
         assertThat(next.getKey().getClass()).isEqualTo(String.class);
         assertThat(next.getValue().getClass()).isEqualTo(Point.class);
     }

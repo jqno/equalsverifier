@@ -35,8 +35,8 @@ class SealedTypesFallbackFactoryTest {
     void redCopyHasTheSameValuesAsRed_whenSutIsAbstractSealedAndPermittedTypeAddsField() {
         Tuple<?> tuple = factory.createValues(new TypeTag(SealedParentWithFinalChild.class), valueProvider, typeStack);
 
-        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
-        assertThat(tuple.getRedCopy()).isNotSameAs(tuple.getRed());
+        assertThat(tuple.redCopy()).isEqualTo(tuple.red());
+        assertThat(tuple.redCopy()).isNotSameAs(tuple.red());
     }
 
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {

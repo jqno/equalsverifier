@@ -123,7 +123,7 @@ public class SubjectCreator<T> {
         if (FieldProbe.of(field).isStatic()) {
             return plain();
         }
-        Object value = valuesFor(field).getBlue();
+        Object value = valuesFor(field).blue();
         return createInstance(with(field, value));
     }
 
@@ -136,7 +136,7 @@ public class SubjectCreator<T> {
         Map<Field, Object> values = empty();
         for (FieldProbe p : fields()) {
             Field f = p.getField();
-            Object value = valuesFor(f).getBlue();
+            Object value = valuesFor(f).blue();
             values.put(f, value);
         }
         return createInstance(values);
@@ -152,7 +152,7 @@ public class SubjectCreator<T> {
         Map<Field, Object> values = empty();
         for (FieldProbe p : nonSuperFields()) {
             Field f = p.getField();
-            Object value = valuesFor(f).getBlue();
+            Object value = valuesFor(f).blue();
             values.put(f, value);
         }
         return createInstance(values);
@@ -207,7 +207,7 @@ public class SubjectCreator<T> {
             boolean fieldIsAbsent = !values.containsKey(f);
             boolean fieldCannotBeNull = values.get(f) == null && !p.canBeDefault(config);
             if (fieldIsAbsent || fieldCannotBeNull) {
-                Object value = valuesFor(f).getRed();
+                Object value = valuesFor(f).red();
                 values.put(f, value);
             }
         }

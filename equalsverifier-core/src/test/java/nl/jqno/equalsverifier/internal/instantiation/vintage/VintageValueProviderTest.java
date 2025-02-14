@@ -38,15 +38,15 @@ class VintageValueProviderTest {
     @Test
     void sanityTestFactoryIncreasesStringLength() {
         AppendingStringTestFactory f = new AppendingStringTestFactory();
-        assertThat(f.createValues(null, null, null).getRed()).isEqualTo("r");
-        assertThat(f.createValues(null, null, null).getRed()).isEqualTo("rr");
-        assertThat(f.createValues(null, null, null).getRed()).isEqualTo("rrr");
+        assertThat(f.createValues(null, null, null).red()).isEqualTo("r");
+        assertThat(f.createValues(null, null, null).red()).isEqualTo("rr");
+        assertThat(f.createValues(null, null, null).red()).isEqualTo("rrr");
     }
 
     @Test
     void provide() {
         Optional<Tuple<Point>> actual = vp.provide(POINT_TAG);
-        assertThat(actual).contains(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
+        assertThat(actual).contains(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
     }
 
     @Test
@@ -149,7 +149,7 @@ class VintageValueProviderTest {
         factoryCache
                 .put(
                     ThrowingInitializer.class.getName(),
-                    (t, p, ts) -> Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
+                    (t, p, ts) -> new Tuple<>(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
         vp = new VintageValueProvider(factoryCache, objenesis);
 
         // Should throw, because `giveRed` does instantiate objects:
@@ -204,7 +204,7 @@ class VintageValueProviderTest {
                 LinkedHashSet<TypeTag> typeStack) {
             red += "r";
             blue += "b";
-            return Tuple.of(red, blue, new String(red));
+            return new Tuple<>(red, blue, new String(red));
         }
     }
 
@@ -216,13 +216,13 @@ class VintageValueProviderTest {
                 TypeTag tag,
                 VintageValueProvider valueProvider,
                 LinkedHashSet<TypeTag> typeStack) {
-            TypeTag subtag = tag.getGenericTypes().get(0);
+            TypeTag subtag = tag.genericTypes().get(0);
 
             List red = List.of(valueProvider.<Object>giveRed(subtag));
             List blue = List.of(valueProvider.<Object>giveBlue(subtag));
             List redCopy = List.of(valueProvider.<Object>giveRed(subtag));
 
-            return Tuple.of(red, blue, redCopy);
+            return new Tuple<>(red, blue, redCopy);
         }
     }
 

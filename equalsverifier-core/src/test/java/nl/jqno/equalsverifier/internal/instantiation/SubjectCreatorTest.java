@@ -201,10 +201,10 @@ class SubjectCreatorTest {
         @SuppressWarnings("unchecked")
         public <T> Optional<Tuple<T>> provide(TypeTag tag) {
             if (int.class.equals(tag.getType())) {
-                return Optional.of((Tuple<T>) Tuple.of(I_RED, I_BLUE, I_RED));
+                return Optional.of((Tuple<T>) new Tuple<>(I_RED, I_BLUE, I_RED));
             }
             if (String.class.equals(tag.getType())) {
-                return Optional.of((Tuple<T>) Tuple.of(S_RED, S_BLUE, new String(S_RED)));
+                return Optional.of((Tuple<T>) new Tuple<>(S_RED, S_BLUE, new String(S_RED)));
             }
             return Optional.empty();
         }

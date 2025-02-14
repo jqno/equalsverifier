@@ -479,15 +479,13 @@ public final class JavaApiPrefabValues {
         addFactory(AtomicReference.class, simple(AtomicReference::new, null));
         addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
         addFactory(AtomicReferenceArray.class, (tag, pv, stack) -> {
-            TypeTag y = tag.getGenericTypes().get(0);
+            TypeTag y = tag.genericTypes().get(0);
             Object[] red = new Object[] { pv.giveRed(y) };
             Object[] blue = new Object[] { pv.giveBlue(y) };
             Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
-            return Tuple
-                    .of(
-                        new AtomicReferenceArray(red),
-                        new AtomicReferenceArray(blue),
-                        new AtomicReferenceArray(redCopy));
+            return new Tuple(new AtomicReferenceArray(red),
+                    new AtomicReferenceArray(blue),
+                    new AtomicReferenceArray(redCopy));
         });
 
         DoubleAdder redDoubleAdder = new DoubleAdder();

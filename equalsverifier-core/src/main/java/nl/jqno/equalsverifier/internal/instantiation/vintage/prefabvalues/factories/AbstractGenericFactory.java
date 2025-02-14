@@ -25,7 +25,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     }
 
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
-        var genericTypes = source.getGenericTypes();
+        var genericTypes = source.genericTypes();
         return new TypeTag(type, genericTypes.toArray(new TypeTag[genericTypes.size()]));
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     }
 
     protected TypeTag determineActualTypeTagFor(int n, TypeTag typeTag) {
-        List<TypeTag> genericTypes = typeTag.getGenericTypes();
+        List<TypeTag> genericTypes = typeTag.genericTypes();
         if (genericTypes.size() <= n) {
             return OBJECT_TYPE_TAG;
         }

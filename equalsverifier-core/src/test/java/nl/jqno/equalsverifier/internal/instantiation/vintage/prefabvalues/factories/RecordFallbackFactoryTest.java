@@ -34,8 +34,8 @@ class RecordFallbackFactoryTest {
     void redCopyHasTheSameValuesAsRed_whenSutContainsGenericValueThatNeedsToBeIdenticalInRedAndRedCopy() {
         Tuple<?> tuple = factory.createValues(new TypeTag(GenericRecordContainer.class), valueProvider, typeStack);
 
-        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
-        assertThat(tuple.getRedCopy()).isNotSameAs(tuple.getRed());
+        assertThat(tuple.redCopy()).isEqualTo(tuple.red());
+        assertThat(tuple.redCopy()).isNotSameAs(tuple.red());
     }
 
     record GenericRecord<T>(T t) {}

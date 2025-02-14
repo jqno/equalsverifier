@@ -57,7 +57,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRed();
+        return this.<T>giveTuple(tag).red();
     }
 
     /**
@@ -71,7 +71,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "blue" prefabricated value.
      */
     public <T> T giveBlue(TypeTag tag) {
-        return this.<T>giveTuple(tag).getBlue();
+        return this.<T>giveTuple(tag).blue();
     }
 
     /**
@@ -85,7 +85,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRedCopy();
+        return this.<T>giveTuple(tag).redCopy();
     }
 
     /**
@@ -105,24 +105,24 @@ public class VintageValueProvider implements ValueProvider {
         }
 
         Tuple<T> tuple = giveTuple(tag, typeStack);
-        if (tuple.getRed() == null) {
+        if (tuple.red() == null) {
             return null;
         }
-        if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
-            return tuple.getBlue();
+        if (type.isArray() && arraysAreDeeplyEqual(tuple.red(), value)) {
+            return tuple.blue();
         }
         if (!type.isArray() && value != null) {
             try {
                 // red's equals can potentially call an abstract method
-                if (tuple.getRed().equals(value)) {
-                    return tuple.getBlue();
+                if (tuple.red().equals(value)) {
+                    return tuple.blue();
                 }
             }
             catch (AbstractMethodError e) {
-                return tuple.getRed();
+                return tuple.red();
             }
         }
-        return tuple.getRed();
+        return tuple.red();
     }
 
     // CHECKSTYLE ON: CyclomaticComplexity

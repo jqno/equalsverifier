@@ -52,28 +52,28 @@ class SimpleGenericFactoryTest {
     @Test
     void createOptionalsOfMapOfString() {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(STRINGOPTIONAL_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(Optional.of(redString));
-        assertThat(tuple.getBlue()).isEqualTo(Optional.of(blueString));
+        assertThat(tuple.red()).isEqualTo(Optional.of(redString));
+        assertThat(tuple.blue()).isEqualTo(Optional.of(blueString));
     }
 
     @Test
     void createOptionalsOfWildcard() {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(WILDCARDOPTIONAL_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(Optional.of(redObject));
-        assertThat(tuple.getBlue()).isEqualTo(Optional.of(blueObject));
+        assertThat(tuple.red()).isEqualTo(Optional.of(redObject));
+        assertThat(tuple.blue()).isEqualTo(Optional.of(blueObject));
     }
 
     @Test
     void createRawOptionals() {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(RAWOPTIONAL_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(Optional.of(redObject));
-        assertThat(tuple.getBlue()).isEqualTo(Optional.of(blueObject));
+        assertThat(tuple.red()).isEqualTo(Optional.of(redObject));
+        assertThat(tuple.blue()).isEqualTo(Optional.of(blueObject));
     }
 
     @Test
     void createSomethingWithMoreThanOneTypeParameter() {
         Tuple<Pair> tuple = PAIR_FACTORY.createValues(PAIR_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(new Pair<>(redString, redInt));
-        assertThat(tuple.getBlue()).isEqualTo(new Pair<>(blueString, blueInt));
+        assertThat(tuple.red()).isEqualTo(new Pair<>(redString, redInt));
+        assertThat(tuple.blue()).isEqualTo(new Pair<>(blueString, blueInt));
     }
 }

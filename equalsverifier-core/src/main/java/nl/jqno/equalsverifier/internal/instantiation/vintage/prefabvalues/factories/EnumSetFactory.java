@@ -31,6 +31,6 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
         Collection blue = Set.of(valueProvider.<T>giveBlue(entryTag));
         Collection redCopy = Set.of(valueProvider.<T>giveRed(entryTag));
 
-        return Tuple.of(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
+        return new Tuple<>(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }
 }

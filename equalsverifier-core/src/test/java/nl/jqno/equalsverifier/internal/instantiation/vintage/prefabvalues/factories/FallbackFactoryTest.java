@@ -58,8 +58,8 @@ class FallbackFactoryTest {
     @Test
     void giveArray() {
         Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
-        assertThat((int[]) tuple.getRed()).containsExactly(new int[] { 42 });
-        assertThat((int[]) tuple.getBlue()).containsExactly(new int[] { 1337 });
+        assertThat((int[]) tuple.red()).containsExactly(new int[] { 42 });
+        assertThat((int[]) tuple.blue()).containsExactly(new int[] { 1337 });
     }
 
     @Test
@@ -74,7 +74,7 @@ class FallbackFactoryTest {
     void redCopyIsNotSameAsRed() {
         Tuple<?> tuple = factory.createValues(new TypeTag(IntContainer.class), valueProvider, typeStack);
 
-        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed()).isNotSameAs(tuple.getRed());
+        assertThat(tuple.redCopy()).isEqualTo(tuple.red()).isNotSameAs(tuple.red());
     }
 
     @Test
@@ -101,9 +101,9 @@ class FallbackFactoryTest {
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {
         Tuple<?> tuple = factory.createValues(new TypeTag(type), valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(expectedRed);
-        assertThat(tuple.getBlue()).isEqualTo(expectedBlue);
-        assertThat(tuple.getRedCopy()).isEqualTo(expectedRed);
+        assertThat(tuple.red()).isEqualTo(expectedRed);
+        assertThat(tuple.blue()).isEqualTo(expectedBlue);
+        assertThat(tuple.redCopy()).isEqualTo(expectedRed);
     }
 
     private static final class IntContainer {

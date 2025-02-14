@@ -10,17 +10,17 @@ class SimpleFactoryTest {
 
     @Test
     void createRed() {
-        assertThat(factory.createValues(null, null, null).getRed()).isEqualTo("red");
+        assertThat(factory.createValues(null, null, null).red()).isEqualTo("red");
     }
 
     @Test
     void createBlue() {
-        assertThat(factory.createValues(null, null, null).getBlue()).isEqualTo("blue");
+        assertThat(factory.createValues(null, null, null).blue()).isEqualTo("blue");
     }
 
     @Test
     void redCopy() {
-        String redCopy = factory.createValues(null, null, null).getRedCopy();
+        String redCopy = factory.createValues(null, null, null).redCopy();
         assertThat(redCopy).isEqualTo("red").isNotSameAs("red");
     }
 }

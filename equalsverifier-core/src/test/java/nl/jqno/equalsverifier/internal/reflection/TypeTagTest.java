@@ -41,7 +41,7 @@ class TypeTagTest {
     void getGenericTypes() {
         List<TypeTag> expected =
                 Arrays.asList(new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
-        assertThat(SOME_LONG_TYPETAG.getGenericTypes()).isEqualTo(expected);
+        assertThat(SOME_LONG_TYPETAG.genericTypes()).isEqualTo(expected);
     }
 
     @Test
