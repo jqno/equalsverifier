@@ -199,7 +199,7 @@ class SubjectCreatorTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
             if (int.class.equals(tag.getType())) {
                 return Optional.of((Tuple<T>) Tuple.of(I_RED, I_BLUE, I_RED));
             }
@@ -213,7 +213,7 @@ class SubjectCreatorTest {
     static class NoValueProvider implements ValueProvider {
 
         @Override
-        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
             return Optional.empty();
         }
     }
