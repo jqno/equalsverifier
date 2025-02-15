@@ -40,16 +40,4 @@ public interface ValueProvider {
     default <T> Tuple<T> provideOrThrow(TypeTag tag, String fieldName) {
         return this.<T>provide(tag, fieldName).orElseThrow(() -> new NoValueException(tag));
     }
-
-    /**
-     * Returns a tuple of prefabricated values of the specified type, or, if none exists, throws a NoValueException.
-     *
-     * @param <T> The returned tuple will have this generic type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return A tuple of two different values of the given type, or an empty Optional if none could be found.
-     * @throws NoValueException if no value could be found for the given tag.
-     */
-    default <T> Tuple<T> provideOrThrow(TypeTag tag) {
-        return provideOrThrow(tag, null);
-    }
 }

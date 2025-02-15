@@ -62,7 +62,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             classProbe.hasMethod(getterName));
 
         TypeTag sub = new TypeTag(throwingGetterCreator(getterName));
-        Tuple<T> tuple = valueProvider.<T>provideOrThrow(sub);
+        Tuple<T> tuple = valueProvider.<T>provideOrThrow(sub, null);
         T red1 = tuple.getRed();
         T red2 = tuple.getRedCopy();
 

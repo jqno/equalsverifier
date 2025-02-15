@@ -60,7 +60,7 @@ public class AbstractDelegationChecker<T> implements Checker {
     private void checkAbstractDelegationInFields() {
         for (FieldProbe probe : FieldIterable.of(type)) {
             TypeTag tag = TypeTag.of(probe.getField(), typeTag);
-            Tuple<?> tuple = safelyGetTuple(tag);
+            Tuple<?> tuple = safelyGetTuple(tag, probe.getName());
             if (tuple != null) {
                 Object instance = tuple.getRed();
                 Object copy = tuple.getBlue();
@@ -69,9 +69,9 @@ public class AbstractDelegationChecker<T> implements Checker {
         }
     }
 
-    private <U> Tuple<U> safelyGetTuple(TypeTag tag) {
+    private <U> Tuple<U> safelyGetTuple(TypeTag tag, String fieldName) {
         try {
-            return valueProvider.provideOrThrow(tag);
+            return valueProvider.provideOrThrow(tag, fieldName);
         }
         catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.

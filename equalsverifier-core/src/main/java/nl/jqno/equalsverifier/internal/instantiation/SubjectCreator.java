@@ -239,7 +239,7 @@ public class SubjectCreator<T> {
         }
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
-            Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag);
+            Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag, fieldName);
             fieldCache.put(fieldName, tuple);
             return tuple;
         }
