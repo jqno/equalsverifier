@@ -8,7 +8,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class WithPrefabValuesForFieldTest {
@@ -61,7 +60,6 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    @Disabled
     void succeed_whenClassHasStringPrecondition_givenPrefabValueForField() {
         EqualsVerifier
                 .forClass(StringPrecondition.class)
