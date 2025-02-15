@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Bug in `withPrefabValueForField` where in some cases the prefab value is not used.
+
 ## [3.19] - 2025-02-06
 
 ### Added
