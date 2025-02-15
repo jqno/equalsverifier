@@ -21,7 +21,6 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
-    private final FieldCache fieldCache;
     private final Objenesis objenesis;
     private final InstanceCreator<T> instanceCreator;
 
@@ -30,21 +29,15 @@ public class SubjectCreator<T> {
      *
      * @param config        A configuration object.
      * @param valueProvider To provide values for the fields of the subject.
-     * @param fieldCache    Prepared values for the fields of the subject.
      * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
-    public SubjectCreator(
-            Configuration<T> config,
-            ValueProvider valueProvider,
-            FieldCache fieldCache,
-            Objenesis objenesis) {
+    public SubjectCreator(Configuration<T> config, ValueProvider valueProvider, Objenesis objenesis) {
         this.typeTag = config.getTypeTag();
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;
         this.classProbe = ClassProbe.of(type);
-        this.fieldCache = fieldCache;
         this.objenesis = objenesis;
         this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
     }
@@ -234,14 +227,9 @@ public class SubjectCreator<T> {
 
     private Tuple<?> valuesFor(Field f) {
         String fieldName = f.getName();
-        if (fieldCache.contains(fieldName)) {
-            return fieldCache.get(fieldName);
-        }
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
-            Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag, fieldName);
-            fieldCache.put(fieldName, tuple);
-            return tuple;
+            return valueProvider.provideOrThrow(fieldTag, fieldName);
         }
         catch (ModuleException e) {
             throw new ModuleException("Field " + f.getName() + " of type " + f.getType().getName()

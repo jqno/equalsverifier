@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -27,9 +26,8 @@ class SubjectCreatorTest {
 
     private final Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
     private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
-    private final FieldCache fieldCache = new FieldCache();
     private final Objenesis objenesis = new ObjenesisStd();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, fieldCache, objenesis);
+    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis);
 
     private Field fieldX;
     private Field fieldI;
@@ -188,7 +186,7 @@ class SubjectCreatorTest {
 
     @Test
     void noValueFound() {
-        sut = new SubjectCreator<>(config, new NoValueProvider(), fieldCache, objenesis);
+        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
 
         ExpectedException.when(() -> sut.plain()).assertThrows(NoValueException.class).assertDescriptionContains("int");
 

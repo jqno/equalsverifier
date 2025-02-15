@@ -33,7 +33,7 @@ public final class Context<T> {
         VintageValueProvider vintage = new VintageValueProvider(cache, objenesis);
         CachingValueProvider caching = new CachingValueProvider(fieldCache, vintage);
         this.valueProvider = caching;
-        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
+        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 
     public Class<T> getType() {
