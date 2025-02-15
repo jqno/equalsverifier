@@ -38,6 +38,12 @@ public class CachingValueProviderTest {
         assertThat(sut.provide(new TypeTag(String.class), "somethingElse")).isEmpty();
     }
 
+    @Test
+    void dontUseCachedValueForNullField() {
+        cache.put(null, Tuple.of("a", "b", "a"));
+        assertThat(sut.provide(new TypeTag(String.class), null)).isEmpty();
+    }
+
     private static final class Fallback implements ValueProvider {
 
         @Override
