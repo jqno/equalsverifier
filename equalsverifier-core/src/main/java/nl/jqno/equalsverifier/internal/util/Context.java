@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
@@ -32,8 +30,10 @@ public final class Context<T> {
         this.fieldCache = fieldCache;
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        this.valueProvider = new VintageValueProvider(cache, objenesis);
-        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
+        VintageValueProvider vintage = new VintageValueProvider(cache, objenesis);
+        CachingValueProvider caching = new CachingValueProvider(fieldCache, vintage);
+        this.valueProvider = caching;
+        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 
     public Class<T> getType() {

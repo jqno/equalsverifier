@@ -60,6 +60,14 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void succeed_whenClassHasStringPrecondition_givenPrefabValueForField() {
+        EqualsVerifier
+                .forClass(StringPrecondition.class)
+                .withPrefabValuesForField("s", "precondition:red", "precondition:blue")
+                .verify();
+    }
+
+    @Test
     void throw_whenFieldDoesNotExistInClass() {
         ExpectedException
                 .when(
@@ -211,6 +219,32 @@ class WithPrefabValuesForFieldTest {
         @Override
         public int hashCode() {
             return Objects.hash(x, y);
+        }
+    }
+
+    static final class StringPrecondition {
+
+        private final String s;
+
+        public StringPrecondition(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (s != null && !s.startsWith("precondition:")) {
+                throw new IllegalArgumentException("bad precondition: " + s);
+            }
+            if (!(obj instanceof StringPrecondition)) {
+                return false;
+            }
+            StringPrecondition other = (StringPrecondition) obj;
+            return Objects.equals(s, other.s);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(s);
         }
     }
 
