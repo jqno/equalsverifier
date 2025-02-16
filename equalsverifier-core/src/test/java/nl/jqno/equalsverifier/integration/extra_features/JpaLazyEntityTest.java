@@ -155,6 +155,22 @@ class JpaLazyEntityTest {
         EqualsVerifier.forClass(FinalEntity.class).verify();
     }
 
+    @Test
+    void unmetPreconditionThrowsError() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(PreconditionJpaEntity.class).suppress(Warning.NULL_FIELDS).verify())
+                .assertFailure()
+                .assertMessageContains("Unmet precondition");
+    }
+
+    @Test
+    void metPreconditionThrowsNoError() {
+        EqualsVerifier
+                .forClass(PreconditionJpaEntity.class)
+                .withPrefabValuesForField("basic", "precondition:red", "precondition:blue")
+                .verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
@@ -722,6 +738,34 @@ class JpaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getId());
+        }
+    }
+
+    @Entity
+    static class PreconditionJpaEntity {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String basic;
+
+        public String getBasic() {
+            return basic;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (getBasic() != null && !getBasic().startsWith("precondition:")) {
+                throw new IllegalStateException("Unmet precondition: " + getBasic());
+            }
+            if (!(obj instanceof PreconditionJpaEntity)) {
+                return false;
+            }
+            PreconditionJpaEntity other = (PreconditionJpaEntity) obj;
+            return Objects.equals(getBasic(), other.getBasic());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getBasic());
         }
     }
 }
