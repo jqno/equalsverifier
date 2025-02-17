@@ -242,6 +242,7 @@ public final class JavaApiPrefabValues {
 
     private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
+        addValues(HexFormat.class, HexFormat.ofDelimiter(","), HexFormat.ofDelimiter("."), HexFormat.ofDelimiter(","));
 
         // Constructing java.sql.* classes reflectively, because they reside in a different module
         // which causes trouble when running EqualsVerifier on the modulepath.

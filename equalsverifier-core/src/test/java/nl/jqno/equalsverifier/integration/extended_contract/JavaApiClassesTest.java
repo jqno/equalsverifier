@@ -445,6 +445,7 @@ class JavaApiClassesTest {
         private final Charset charset;
         private final Semaphore semaphore;
         private final ReentrantLock reentrantLock;
+        private final HexFormat hexFormat;
         private final PrintStream printStream;
 
         public CommonClassesContainer(
@@ -475,6 +476,7 @@ class JavaApiClassesTest {
                 Charset charset,
                 Semaphore semaphore,
                 ReentrantLock reentrantLock,
+                HexFormat hexFormat,
                 PrintStream printStream) {
             this.string = string;
             this.integer = integer;
@@ -503,6 +505,7 @@ class JavaApiClassesTest {
             this.charset = charset;
             this.semaphore = semaphore;
             this.reentrantLock = reentrantLock;
+            this.hexFormat = hexFormat;
             this.printStream = printStream;
         }
 
