@@ -154,16 +154,14 @@ public class HierarchyChecker<T> implements Checker {
 
         if (config.isUsingGetClass()) {
             Formatter formatter = Formatter.of("""
-                    Subclass: object is equal to an instance of a trivial subclass with\
-                     equal fields:
+                    Subclass: object is equal to an instance of a trivial subclass with equal fields:
                       %%
                     This should not happen when using getClass().""", reference);
             assertFalse(formatter, reference.equals(equalSub));
         }
         else {
             Formatter formatter = Formatter.of("""
-                    Subclass: object is not equal to an instance of a trivial subclass\
-                     with equal fields:
+                    Subclass: object is not equal to an instance of a trivial subclass with equal fields:
                       %%
                     Maybe you forgot to add usingGetClass(). Otherwise, consider\
                      making the class final or use EqualsVerifier.simple().""", reference);

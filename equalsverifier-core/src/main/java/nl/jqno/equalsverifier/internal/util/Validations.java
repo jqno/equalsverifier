@@ -192,8 +192,8 @@ public final class Validations {
                     && !warnings.contains(Warning.SURROGATE_OR_BUSINESS_KEY),
             """
                     you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.
-                    Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields \
-                    if you want to use only the @Id or @EmbeddedId fields in equals.""");
+                    Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields\
+                     if you want to use only the @Id or @EmbeddedId fields in equals.""");
     }
 
     public static void validatePackageContainsClasses(String packageName, List<Class<?>> types) {
