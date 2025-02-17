@@ -157,6 +157,26 @@ class JakartaLazyEntityTest {
         EqualsVerifier.forClass(FinalEntity.class).verify();
     }
 
+    @Test
+    void unmetPreconditionThrowsError() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(PreconditionJakartaEntity.class)
+                            .suppress(Warning.NULL_FIELDS)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Unmet precondition");
+    }
+
+    @Test
+    void metPreconditionThrowsNoError() {
+        EqualsVerifier
+                .forClass(PreconditionJakartaEntity.class)
+                .withPrefabValuesForField("basic", "precondition:red", "precondition:blue")
+                .verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
@@ -704,6 +724,34 @@ class JakartaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getId());
+        }
+    }
+
+    @Entity
+    static class PreconditionJakartaEntity {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String basic;
+
+        public String getBasic() {
+            return basic;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (getBasic() != null && !getBasic().startsWith("precondition:")) {
+                throw new IllegalStateException("Unmet precondition: " + getBasic());
+            }
+            if (!(obj instanceof PreconditionJakartaEntity)) {
+                return false;
+            }
+            PreconditionJakartaEntity other = (PreconditionJakartaEntity) obj;
+            return Objects.equals(getBasic(), other.getBasic());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getBasic());
         }
     }
 }
