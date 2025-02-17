@@ -11,8 +11,9 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -22,7 +23,6 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
-    private final ValueProvider valueProvider;
     private final Class<T> type;
     private final ClassProbe<T> classProbe;
     private final AnnotationCache annotationCache;
@@ -31,7 +31,6 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     public JpaLazyGetterFieldCheck(Context<T> context) {
         this.subjectCreator = context.getSubjectCreator();
-        this.valueProvider = context.getValueProvider();
         this.type = context.getType();
         this.classProbe = context.getClassProbe();
 
@@ -61,10 +60,10 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                         fieldName),
             classProbe.hasMethod(getterName));
 
-        TypeTag sub = new TypeTag(throwingGetterCreator(getterName));
-        Tuple<T> tuple = valueProvider.<T>provideOrThrow(sub);
-        T red1 = tuple.red();
-        T red2 = tuple.redCopy();
+        Class<? extends T> sub = throwingGetterCreator(getterName);
+        T original = subjectCreator.plain();
+        T red1 = subjectCreator.copyIntoSubclass(original, sub);
+        T red2 = subjectCreator.copyIntoSubclass(original, sub);
 
         boolean equalsExceptionCaught = false;
         try {

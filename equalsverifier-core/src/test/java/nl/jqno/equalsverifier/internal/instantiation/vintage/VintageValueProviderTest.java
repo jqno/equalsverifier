@@ -45,7 +45,7 @@ class VintageValueProviderTest {
 
     @Test
     void provide() {
-        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG);
+        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG, null);
         assertThat(actual).contains(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
     }
 

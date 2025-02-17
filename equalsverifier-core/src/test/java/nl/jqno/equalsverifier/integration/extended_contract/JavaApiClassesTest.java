@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -443,6 +444,7 @@ class JavaApiClassesTest {
         private final EventObject eventObject;
         private final Charset charset;
         private final Semaphore semaphore;
+        private final ReentrantLock reentrantLock;
         private final PrintStream printStream;
 
         public CommonClassesContainer(
@@ -472,6 +474,7 @@ class JavaApiClassesTest {
                 EventObject eventObject,
                 Charset charset,
                 Semaphore semaphore,
+                ReentrantLock reentrantLock,
                 PrintStream printStream) {
             this.string = string;
             this.integer = integer;
@@ -499,6 +502,7 @@ class JavaApiClassesTest {
             this.eventObject = eventObject;
             this.charset = charset;
             this.semaphore = semaphore;
+            this.reentrantLock = reentrantLock;
             this.printStream = printStream;
         }
 

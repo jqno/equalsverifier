@@ -21,21 +21,23 @@ public interface ValueProvider {
     /**
      * Returns a tuple of two different prefabricated values of the specified type.
      *
-     * @param <T> The returned tuple will have this generic type.
-     * @param tag A description of the desired type, including generic parameters.
+     * @param <T>       The returned tuple will have this generic type.
+     * @param tag       A description of the desired type, including generic parameters.
+     * @param fieldName The field that the provided values must be linked to.
      * @return A tuple of two different values of the given type, or an empty Optional if none could be found.
      */
-    <T> Optional<Tuple<T>> provide(TypeTag tag);
+    <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName);
 
     /**
      * Returns a tuple of prefabricated values of the specified type, or, if none exists, throws a NoValueException.
      *
-     * @param <T> The returned tuple will have this generic type.
-     * @param tag A description of the desired type, including generic parameters.
+     * @param <T>       The returned tuple will have this generic type.
+     * @param tag       A description of the desired type, including generic parameters.
+     * @param fieldName The field that the provided values must be linked to.
      * @return A tuple of two different values of the given type, or an empty Optional if none could be found.
      * @throws NoValueException if no value could be found for the given tag.
      */
-    default <T> Tuple<T> provideOrThrow(TypeTag tag) {
-        return this.<T>provide(tag).orElseThrow(() -> new NoValueException(tag));
+    default <T> Tuple<T> provideOrThrow(TypeTag tag, String fieldName) {
+        return this.<T>provide(tag, fieldName).orElseThrow(() -> new NoValueException(tag));
     }
 }

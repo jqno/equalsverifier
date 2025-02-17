@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -168,6 +169,9 @@ public final class JavaApiPrefabValues {
         Semaphore redSemaphore = new Semaphore(1);
         Semaphore blueSemaphore = new Semaphore(1);
         addValues(Semaphore.class, redSemaphore, blueSemaphore, redSemaphore);
+        ReentrantLock redReentrantLock = new ReentrantLock();
+        ReentrantLock blueReentrantLock = new ReentrantLock();
+        addValues(ReentrantLock.class, redReentrantLock, blueReentrantLock, redReentrantLock);
         DoubleSummaryStatistics redDoubleStats = new DoubleSummaryStatistics();
         DoubleSummaryStatistics blueDoubleStats = new DoubleSummaryStatistics();
         addValues(DoubleSummaryStatistics.class, redDoubleStats, blueDoubleStats, redDoubleStats);
