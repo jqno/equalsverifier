@@ -13,7 +13,6 @@ public final class Context<T> {
     private final Class<T> type;
     private final Configuration<T> configuration;
     private final ClassProbe<T> classProbe;
-    private final FieldCache fieldCache;
 
     private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
@@ -27,11 +26,10 @@ public final class Context<T> {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = ClassProbe.of(configuration.getType());
-        this.fieldCache = fieldCache;
 
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        VintageValueProvider vintage = new VintageValueProvider(cache, objenesis);
-        CachingValueProvider caching = new CachingValueProvider(fieldCache, vintage);
+        var cache = JavaApiPrefabValues.build().merge(factoryCache);
+        var vintage = new VintageValueProvider(cache, objenesis);
+        var caching = new CachingValueProvider(fieldCache, vintage);
         this.valueProvider = caching;
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
@@ -46,11 +44,6 @@ public final class Context<T> {
 
     public ClassProbe<T> getClassProbe() {
         return classProbe;
-    }
-
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable")
-    public FieldCache getFieldCache() {
-        return fieldCache;
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "VintageValueProvider can use a mutable cache.")

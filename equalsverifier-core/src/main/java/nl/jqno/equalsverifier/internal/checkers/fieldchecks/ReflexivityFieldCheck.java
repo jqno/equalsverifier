@@ -26,7 +26,6 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> nonnullFields;
     private final Set<String> prefabbedFields;
     private final AnnotationCache annotationCache;
-    private final FieldCache fieldCache;
 
     public ReflexivityFieldCheck(Context<T> context) {
         this.subjectCreator = context.getSubjectCreator();
@@ -38,7 +37,6 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         this.nonnullFields = config.getNonnullFields();
         this.prefabbedFields = config.getPrefabbedFields();
         this.annotationCache = config.getAnnotationCache();
-        this.fieldCache = context.getFieldCache();
     }
 
     @Override
@@ -81,9 +79,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Field field = probe.getField();
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Tuple<?> tuple = prefabbedFields.contains(fieldName)
-                ? fieldCache.get(fieldName)
-                : valueProvider.provideOrThrow(tag, fieldName);
+        Tuple<?> tuple = valueProvider.provideOrThrow(tag, fieldName);
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.red());
         Object right = subjectCreator.withFieldSetTo(field, tuple.redCopy());

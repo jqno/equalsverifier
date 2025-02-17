@@ -35,7 +35,7 @@ public class CachingValueProvider implements ValueProvider {
             return Optional.of(fieldCache.get(fieldName));
         }
 
-        Optional<Tuple<T>> result = fallback.provide(tag, fieldName);
+        var result = fallback.<T>provide(tag, fieldName);
         result.ifPresent(tuple -> fieldCache.put(fieldName, tuple));
         return result;
     }

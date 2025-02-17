@@ -10,7 +10,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class WithPrefabValuesForFieldTest {
@@ -29,7 +28,6 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    @Disabled("There's still a bug that will be fixed s👀n")
     void fail_whenClassHasSinglePrecondition_record() {
         ExpectedException
                 .when(
@@ -38,7 +36,8 @@ class WithPrefabValuesForFieldTest {
                             .suppress(Warning.NULL_FIELDS)
                             .verify())
                 .assertFailure()
-                .assertMessageContains("x coordinate must be");
+                .assertMessageContains("Record: failed to run constructor for record")
+                .assertCauseMessageContains("x coordinate must be");
     }
 
     @Test
@@ -60,12 +59,12 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    @Disabled("There's still a bug that will be fixed s👀n")
     void fail_whenClassHasDualPrecondition_record() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(DualPreconditionRecord.class).verify())
                 .assertFailure()
-                .assertMessageContains("x must be between");
+                .assertMessageContains("Record: failed to run constructor for record")
+                .assertCauseMessageContains("x must be between");
     }
 
     @Test
@@ -81,7 +80,6 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    @Disabled("There's still a bug that will be fixed s👀n")
     void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField_record() {
         ExpectedException
                 .when(
@@ -90,7 +88,8 @@ class WithPrefabValuesForFieldTest {
                             .withPrefabValuesForField("x", iRed, iBlue)
                             .verify())
                 .assertFailure()
-                .assertMessageContains("y must be between");
+                .assertMessageContains("Record: failed to run constructor for record")
+                .assertCauseMessageContains("y must be between");
     }
 
     @Test
