@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Prefab value for `java.util.concurrent.locks.ReentrantLock`. ([Issue 981](https://github.com/jqno/equalsverifier/issues/981))
+
 ### Fixed
 
 - Bug in `withPrefabValueForField` where in some cases the prefab value is not used.
