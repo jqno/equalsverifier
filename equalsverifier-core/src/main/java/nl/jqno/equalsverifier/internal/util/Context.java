@@ -29,7 +29,8 @@ public final class Context<T> {
 
         var cache = JavaApiPrefabValues.build().merge(factoryCache);
         var vintage = new VintageValueProvider(cache, objenesis);
-        var caching = new CachingValueProvider(fieldCache, vintage);
+        var chain = new ChainedValueProvider(vintage);
+        var caching = new CachingValueProvider(fieldCache, chain);
         this.valueProvider = caching;
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
