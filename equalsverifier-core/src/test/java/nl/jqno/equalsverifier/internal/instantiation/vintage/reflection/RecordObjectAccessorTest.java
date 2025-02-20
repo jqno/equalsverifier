@@ -9,6 +9,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -20,6 +21,7 @@ import org.objenesis.ObjenesisStd;
 class RecordObjectAccessorTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
+    private BuiltinPrefabValueProvider builtinPrefabs;
     private Objenesis objenesis;
     private Object recordInstance;
 
@@ -27,6 +29,7 @@ class RecordObjectAccessorTest {
     void setUp() throws Exception {
         Constructor<?> constructor = SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
         constructor.setAccessible(true);
+        builtinPrefabs = new BuiltinPrefabValueProvider();
         objenesis = new ObjenesisStd();
         recordInstance = constructor.newInstance(42, "hello");
     }
@@ -67,7 +70,7 @@ class RecordObjectAccessorTest {
     void fail_whenConstructorThrowsOnSomethingElse() {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class, objenesis).instantiate();
 
-        VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build(), objenesis);
+        VintageValueProvider vp = new VintageValueProvider(builtinPrefabs, JavaApiPrefabValues.build(), objenesis);
         ExpectedException
                 .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
                 .assertThrows(ReflectionException.class)

@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -22,6 +23,7 @@ class ClassAccessorTest {
 
     private LinkedHashSet<TypeTag> empty;
     private Objenesis objenesis;
+    private BuiltinPrefabValueProvider builtinPrefabs;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
     private ClassAccessor<PointContainer> pointContainerAccessor;
@@ -30,8 +32,9 @@ class ClassAccessorTest {
     void setup() {
         empty = new LinkedHashSet<>();
         objenesis = new ObjenesisStd();
+        builtinPrefabs = new BuiltinPrefabValueProvider();
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(builtinPrefabs, factoryCache, objenesis);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
     }
 
@@ -99,7 +102,7 @@ class ClassAccessorTest {
     @Test
     void instantiateRecursiveTypeUsingPrefabValue() {
         factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(builtinPrefabs, factoryCache, objenesis);
         ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
     }
 

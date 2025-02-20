@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -25,17 +26,23 @@ public class VintageValueProvider implements ValueProvider {
     // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
     private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
 
+    private final BuiltinPrefabValueProvider builtinProvider;
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
      *
-     * @param factoryCache The factories that can be used to create values.
-     * @param objenesis    To instantiate non-record classes.
+     * @param builtinProvider A provider for built-in prefab values.
+     * @param factoryCache    The factories that can be used to create values.
+     * @param objenesis       To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public VintageValueProvider(FactoryCache factoryCache, Objenesis objenesis) {
+    public VintageValueProvider(
+            BuiltinPrefabValueProvider builtinProvider,
+            FactoryCache factoryCache,
+            Objenesis objenesis) {
+        this.builtinProvider = builtinProvider;
         this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
@@ -163,6 +170,11 @@ public class VintageValueProvider implements ValueProvider {
     private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (typeStack.contains(tag)) {
             throw new RecursionException(typeStack);
+        }
+
+        var builtin = builtinProvider.<T>provide(tag, null);
+        if (builtin.isPresent()) {
+            return builtin.get();
         }
 
         Class<T> type = tag.getType();
