@@ -98,16 +98,12 @@ public final class JavaApiPrefabValues {
     private void addCommonClasses() {
         addValues(Charset.class, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
         addValues(File.class, new File(""), new File("/"), new File(""));
-        addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
-        addValues(Locale.class, new Locale("nl"), new Locale("hu"), new Locale("nl"));
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
-        addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
         addValues(StringBuilder.class, new StringBuilder("one"), new StringBuilder("two"), new StringBuilder("three"));
         addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
-        addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
         addValues(PrintStream.class, System.out, System.err, System.out);
 
         rethrow(
@@ -120,15 +116,7 @@ public final class JavaApiPrefabValues {
 
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
-        addValues(OptionalDouble.class, OptionalDouble.of(0.5), OptionalDouble.of(1.0), OptionalDouble.of(0.5));
-        addValues(OptionalInt.class, OptionalInt.of(1), OptionalInt.of(2), OptionalInt.of(1));
-        addValues(OptionalLong.class, OptionalLong.of(1), OptionalLong.of(2), OptionalLong.of(1));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
-        addValues(
-            Currency.class,
-            Currency.getInstance("USD"),
-            Currency.getInstance("EUR"),
-            Currency.getInstance("JPY"));
 
         Semaphore redSemaphore = new Semaphore(1);
         Semaphore blueSemaphore = new Semaphore(1);
@@ -136,27 +124,12 @@ public final class JavaApiPrefabValues {
         ReentrantLock redReentrantLock = new ReentrantLock();
         ReentrantLock blueReentrantLock = new ReentrantLock();
         addValues(ReentrantLock.class, redReentrantLock, blueReentrantLock, redReentrantLock);
-        DoubleSummaryStatistics redDoubleStats = new DoubleSummaryStatistics();
-        DoubleSummaryStatistics blueDoubleStats = new DoubleSummaryStatistics();
-        addValues(DoubleSummaryStatistics.class, redDoubleStats, blueDoubleStats, redDoubleStats);
-        IntSummaryStatistics redIntStats = new IntSummaryStatistics();
-        IntSummaryStatistics blueIntStats = new IntSummaryStatistics();
-        addValues(IntSummaryStatistics.class, redIntStats, blueIntStats, redIntStats);
-        LongSummaryStatistics redLongStats = new LongSummaryStatistics();
-        LongSummaryStatistics blueLongStats = new LongSummaryStatistics();
-        addValues(LongSummaryStatistics.class, redLongStats, blueLongStats, redLongStats);
     }
 
     // CHECKSTYLE ON: ExecutableStatementCount
 
     private void addDateTimeClasses() {
-        addValues(
-            Calendar.class,
-            new GregorianCalendar(2010, Calendar.AUGUST, 4),
-            new GregorianCalendar(2010, Calendar.AUGUST, 5),
-            new GregorianCalendar(2010, Calendar.AUGUST, 4));
         addValues(Clock.class, Clock.systemUTC(), Clock.system(ZoneId.of("-10")), Clock.systemUTC());
-        addValues(Date.class, new Date(0), new Date(1), new Date(0));
         addValues(
             DateFormat.class,
             DateFormat.getTimeInstance(),
@@ -168,11 +141,6 @@ public final class JavaApiPrefabValues {
             DateTimeFormatter.ISO_DATE,
             DateTimeFormatter.ISO_TIME);
         addValues(Duration.class, Duration.ZERO, Duration.ofDays(1L), Duration.ZERO);
-        addValues(
-            GregorianCalendar.class,
-            new GregorianCalendar(2010, Calendar.AUGUST, 4),
-            new GregorianCalendar(2010, Calendar.AUGUST, 5),
-            new GregorianCalendar(2010, Calendar.AUGUST, 4));
         addValues(Instant.class, Instant.MIN, Instant.MAX, Instant.MIN);
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
         addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);

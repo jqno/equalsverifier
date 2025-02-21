@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.OptionalInt;
 
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,12 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsAJavaMathValue() {
         var tag = new TypeTag(BigDecimal.class);
+        assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
+    }
+
+    @Test
+    void returnsAJavaUtilValue() {
+        var tag = new TypeTag(OptionalInt.class);
         assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
     }
 }

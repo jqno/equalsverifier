@@ -25,6 +25,7 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
         return switch (type.getPackageName()) {
         case "java.lang" -> new JavaLangValueSupplier<>(type).get();
         case "java.math" -> new JavaMathValueSupplier<>(type).get();
+        case "java.util" -> new JavaUtilValueSupplier<>(type).get();
         default -> Optional.empty();
         };
     }
