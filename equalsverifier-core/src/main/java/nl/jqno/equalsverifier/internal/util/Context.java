@@ -4,6 +4,7 @@ import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import org.objenesis.Objenesis;
@@ -28,10 +29,15 @@ public final class Context<T> {
         this.configuration = configuration;
         this.classProbe = ClassProbe.of(configuration.getType());
 
+        var builtinPrefabs = new BuiltinPrefabValueProvider();
+
+        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs);
         var cache = JavaApiPrefabValues.build().merge(factoryCache);
-        var vintage = new VintageValueProvider(userPrefabs, cache, objenesis);
-        var chain = new ChainedValueProvider(userPrefabs, vintage);
-        var caching = new CachingValueProvider(fieldCache, chain);
+        var vintage = new VintageValueProvider(vintageChain, cache, objenesis);
+
+        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, vintage);
+        var caching = new CachingValueProvider(fieldCache, mainChain);
+
         this.valueProvider = caching;
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }

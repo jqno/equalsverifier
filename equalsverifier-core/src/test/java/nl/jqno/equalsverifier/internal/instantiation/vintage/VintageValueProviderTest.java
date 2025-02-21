@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +34,7 @@ class VintageValueProviderTest {
     @BeforeEach
     void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
-        factoryCache.put(int.class, values(42, 1337, 42));
+        prefabs.register(int.class, 42, 1337, 42);
         vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
     }
 

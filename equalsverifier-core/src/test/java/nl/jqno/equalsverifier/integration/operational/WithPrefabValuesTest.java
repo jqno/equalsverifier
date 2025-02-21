@@ -13,6 +13,12 @@ class WithPrefabValuesTest {
     private final FinalPoint blue = new FinalPoint(2, 3);
 
     @Test
+    void succeed_userPrefabsComeBeforeBuiltinPrefabs() {
+        ExpectedException.when(() -> EqualsVerifier.forClass(Thrower.class).verify()).assertFailure();
+        EqualsVerifier.forClass(Thrower.class).withPrefabValues(int.class, 42, 1337).verify();
+    }
+
+    @Test
     void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
         EqualsVerifier.forClass(FinalPoint.class).withPrefabValues(FinalPoint.class, red, blue).verify();
     }
@@ -75,5 +81,13 @@ class WithPrefabValuesTest {
                 .forClass(FinalPoint.class)
                 .withPrefabValues(LocalDate.class, LocalDate.of(2018, 12, 24), LocalDate.of(2018, 12, 25))
                 .verify();
+    }
+
+    record Thrower(int i) {
+        public Thrower {
+            if (i == 1) {
+                throw new IllegalStateException("i = " + i);
+            }
+        }
     }
 }

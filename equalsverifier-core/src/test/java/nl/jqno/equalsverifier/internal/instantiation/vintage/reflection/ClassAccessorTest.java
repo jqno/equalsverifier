@@ -5,10 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
 
+import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -32,9 +34,10 @@ class ClassAccessorTest {
     void setup() {
         empty = new LinkedHashSet<>();
         prefabs = new UserPrefabValueProvider();
+        var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
         factoryCache = JavaApiPrefabValues.build();
         objenesis = new ObjenesisStd();
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(chain, factoryCache, objenesis);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
     }
 

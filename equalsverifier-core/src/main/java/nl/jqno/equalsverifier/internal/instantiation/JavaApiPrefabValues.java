@@ -11,8 +11,6 @@ import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
@@ -59,10 +57,6 @@ public final class JavaApiPrefabValues {
 
     private final FactoryCache factoryCache;
 
-    private enum Dummy {
-        RED, BLUE
-    }
-
     /** Private constructor. Use {@link #build()}. */
     private JavaApiPrefabValues(FactoryCache factoryCache) {
         this.factoryCache = factoryCache;
@@ -80,7 +74,6 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJavaClasses() {
-        addPrimitiveClasses();
         addCommonClasses();
         addDateTimeClasses();
         addUncommonClasses();
@@ -98,40 +91,11 @@ public final class JavaApiPrefabValues {
         addJavaxApiClasses();
     }
 
-    @SuppressFBWarnings(
-            value = { "DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR", "DM_STRING_CTOR" },
-            justification = "We really do need a separate instances with the same value")
-    private void addPrimitiveClasses() {
-        addValues(boolean.class, true, false, true);
-        addValues(byte.class, (byte) 1, (byte) 2, (byte) 1);
-        addValues(char.class, 'a', 'b', 'a');
-        addValues(double.class, 0.5D, 1.0D, 0.5D);
-        addValues(float.class, 0.5F, 1.0F, 0.5F);
-        addValues(int.class, 1, 2, 1);
-        addValues(long.class, 1L, 2L, 1L);
-        addValues(short.class, (short) 1, (short) 2, (short) 1);
-
-        addValues(Boolean.class, true, false, true);
-        addValues(Byte.class, (byte) 1, (byte) 2, (byte) 1);
-        addValues(Character.class, 'α', 'ω', Character.valueOf('α'));
-        addValues(Double.class, 0.5D, 1.0D, Double.valueOf(0.5D));
-        addValues(Float.class, 0.5F, 1.0F, Float.valueOf(0.5F));
-        addValues(Integer.class, 1000, 2000, Integer.valueOf(1000));
-        addValues(Long.class, 1000L, 2000L, Long.valueOf(1000L));
-        addValues(Short.class, (short) 1000, (short) 2000, Short.valueOf((short) 1000));
-
-        addValues(Object.class, new Object(), new Object(), new Object());
-        addValues(String.class, "one", "two", new String("one"));
-        addValues(Enum.class, Dummy.RED, Dummy.BLUE, Dummy.RED);
-    }
-
     // CHECKSTYLE OFF: ExecutableStatementCount
     @SuppressFBWarnings(
             value = { "DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD" },
             justification = "We just need an instance of File and Thread; they're not for actual use.")
     private void addCommonClasses() {
-        addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
-        addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
         addValues(Charset.class, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
         addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
