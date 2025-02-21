@@ -11,18 +11,28 @@ class JavaLangValueSupplier<T> extends ValueSupplier<T> {
     }
 
     @SuppressFBWarnings(
-            value = "DM_STRING_CTOR",
-            justification = "We really do need a separate instance with the same value")
+            value = { "DM_STRING_CTOR", "DM_USELESS_THREAD" },
+            justification = "We really do need a separate String instance with the same value and a Thread instance that we don't use.")
     public Optional<Tuple<T>> get() {
         if (is(Object.class)) {
             var red = new Object();
             return val(red, new Object(), red);
         }
+
+        if (is(Enum.class)) {
+            return val(Dummy.RED, Dummy.BLUE, Dummy.RED);
+        }
         if (is(String.class)) {
             return val("one", "two", new String("one"));
         }
-        if (is(Enum.class)) {
-            return val(Dummy.RED, Dummy.BLUE, Dummy.RED);
+        if (is(StringBuilder.class)) {
+            return val(new StringBuilder("one"), new StringBuilder("two"), new StringBuilder("three"));
+        }
+        if (is(Thread.class)) {
+            return val(new Thread("one"), new Thread("two"), new Thread("one"));
+        }
+        if (is(Throwable.class)) {
+            return val(new Throwable(), new Throwable(), new Throwable());
         }
 
         return Optional.empty();

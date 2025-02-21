@@ -93,16 +93,13 @@ public final class JavaApiPrefabValues {
 
     // CHECKSTYLE OFF: ExecutableStatementCount
     @SuppressFBWarnings(
-            value = { "DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD" },
-            justification = "We just need an instance of File and Thread; they're not for actual use.")
+            value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
+            justification = "We just need an instance of File; they're not for actual use.")
     private void addCommonClasses() {
         addValues(Charset.class, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
         addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
-        addValues(StringBuilder.class, new StringBuilder("one"), new StringBuilder("two"), new StringBuilder("three"));
-        addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
-        addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
         addValues(PrintStream.class, System.out, System.err, System.out);
 
