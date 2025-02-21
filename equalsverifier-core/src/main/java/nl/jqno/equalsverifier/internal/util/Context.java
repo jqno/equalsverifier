@@ -20,6 +20,7 @@ public final class Context<T> {
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "FieldCache is inherently mutable")
     public Context(
             Configuration<T> configuration,
+            UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,
             FieldCache fieldCache,
             Objenesis objenesis) {
@@ -28,8 +29,8 @@ public final class Context<T> {
         this.classProbe = ClassProbe.of(configuration.getType());
 
         var cache = JavaApiPrefabValues.build().merge(factoryCache);
-        var vintage = new VintageValueProvider(cache, objenesis);
-        var chain = new ChainedValueProvider(vintage);
+        var vintage = new VintageValueProvider(userPrefabs, cache, objenesis);
+        var chain = new ChainedValueProvider(userPrefabs, vintage);
         var caching = new CachingValueProvider(fieldCache, chain);
         this.valueProvider = caching;
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);

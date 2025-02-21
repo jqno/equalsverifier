@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
@@ -30,6 +31,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
+    private UserPrefabValueProvider userPrefabs = new UserPrefabValueProvider();
     private FactoryCache factoryCache = new FactoryCache();
     private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
@@ -68,6 +70,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param type               The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
+     * @param userPrefabs        Prefab values provided by the user.
      * @param factoryCache       Factories that can be used to create values.
      * @param objenesis          To instantiate non-record classes.
      * @param usingGetClass      Whether {@code getClass} is used in the implementation of the {@code
@@ -77,12 +80,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /* package protected */ SingleTypeEqualsVerifierApi(
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
+            UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,
             Objenesis objenesis,
             boolean usingGetClass,
             Function<String, String> converter) {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+        this.userPrefabs = userPrefabs;
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
@@ -112,7 +117,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -398,7 +403,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        var context = new Context<T>(config, factoryCache, fieldCache, objenesis);
+        var context = new Context<T>(config, userPrefabs, factoryCache, fieldCache, objenesis);
         Validations
                 .validateProcessedAnnotations(
                     type,

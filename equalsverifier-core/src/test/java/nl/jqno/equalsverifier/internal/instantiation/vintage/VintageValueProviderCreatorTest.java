@@ -4,6 +4,8 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
@@ -28,15 +30,17 @@ class VintageValueProviderCreatorTest {
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
     private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
-    private Objenesis objenesis;
+    private ValueProvider prefabs;
     private FactoryCache factoryCache;
+    private Objenesis objenesis;
     private VintageValueProvider valueProvider;
 
     @BeforeEach
     void setup() {
-        objenesis = new ObjenesisStd();
+        prefabs = new UserPrefabValueProvider();
         factoryCache = FactoryCacheFactory.withPrimitiveFactories();
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        objenesis = new ObjenesisStd();
+        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
     }
 
     @Test
@@ -76,7 +80,7 @@ class VintageValueProviderCreatorTest {
     @Test
     void oneStepRecursiveType() {
         factoryCache.put(Node.class, values(new Node(), new Node(), new Node()));
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(NODE_TAG);
     }
 
@@ -88,7 +92,7 @@ class VintageValueProviderCreatorTest {
     @Test
     void oneStepRecursiveArrayType() {
         factoryCache.put(NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -100,7 +104,7 @@ class VintageValueProviderCreatorTest {
     @Test
     void addTwoStepRecursiveType() {
         factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -115,7 +119,7 @@ class VintageValueProviderCreatorTest {
                 .put(
                     TwoStepNodeArrayB.class,
                     values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 

@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -40,7 +41,9 @@ class SimpleGenericFactoryTest {
 
     @BeforeEach
     void setUp() {
-        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
+        valueProvider = new VintageValueProvider(new UserPrefabValueProvider(),
+                JavaApiPrefabValues.build(),
+                new ObjenesisStd());
         redString = valueProvider.giveRed(STRING_TYPETAG);
         blueString = valueProvider.giveBlue(STRING_TYPETAG);
         redInt = valueProvider.giveRed(INTEGER_TYPETAG);

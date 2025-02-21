@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -67,7 +68,8 @@ class RecordObjectAccessorTest {
     void fail_whenConstructorThrowsOnSomethingElse() {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class, objenesis).instantiate();
 
-        VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build(), objenesis);
+        VintageValueProvider vp =
+                new VintageValueProvider(new UserPrefabValueProvider(), JavaApiPrefabValues.build(), objenesis);
         ExpectedException
                 .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
                 .assertThrows(ReflectionException.class)

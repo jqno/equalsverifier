@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
@@ -23,6 +24,7 @@ import org.objenesis.ObjenesisStd;
 public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     private final EnumSet<Warning> warningsToSuppress;
+    private final UserPrefabValueProvider userPrefabs;
     private final FactoryCache factoryCache;
     private boolean usingGetClass;
     private Function<String, String> fieldnameToGetter;
@@ -30,16 +32,18 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     /** Constructor. */
     public ConfiguredEqualsVerifier() {
-        this(EnumSet.noneOf(Warning.class), new FactoryCache(), false, null);
+        this(EnumSet.noneOf(Warning.class), new UserPrefabValueProvider(), new FactoryCache(), false, null);
     }
 
     /** Private constructor. For internal use only. */
     private ConfiguredEqualsVerifier(
             EnumSet<Warning> warningsToSuppress,
+            UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,
             boolean usingGetClass,
             Function<String, String> fieldnameToGetter) {
         this.warningsToSuppress = warningsToSuppress;
+        this.userPrefabs = userPrefabs;
         this.factoryCache = factoryCache;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = fieldnameToGetter;
@@ -52,7 +56,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      */
     @CheckReturnValue
     public ConfiguredEqualsVerifier copy() {
-        return new ConfiguredEqualsVerifier(EnumSet.copyOf(warningsToSuppress),
+        return new ConfiguredEqualsVerifier(EnumSet.copyOf(warningsToSuppress), //
+                userPrefabs.copy(),
                 factoryCache.copy(),
                 usingGetClass,
                 fieldnameToGetter);
@@ -70,7 +75,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @Override
     @CheckReturnValue
     public <S> ConfiguredEqualsVerifier withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -116,6 +121,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     public <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
         return new SingleTypeEqualsVerifierApi<>(type,
                 EnumSet.copyOf(warningsToSuppress),
+                userPrefabs.copy(),
                 factoryCache.copy(),
                 objenesis,
                 usingGetClass,

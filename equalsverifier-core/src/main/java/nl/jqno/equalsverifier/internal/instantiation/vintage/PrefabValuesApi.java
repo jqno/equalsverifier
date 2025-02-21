@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.simple;
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 
 import java.lang.reflect.InaccessibleObjectException;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
@@ -19,7 +19,7 @@ public final class PrefabValuesApi {
     private PrefabValuesApi() {}
 
     public static <T> void addPrefabValues(
-            FactoryCache factoryCache,
+            UserPrefabValueProvider userPrefabs,
             Objenesis objenesis,
             Class<T> otherType,
             T red,
@@ -27,15 +27,15 @@ public final class PrefabValuesApi {
         Validations.validateRedAndBluePrefabValues(otherType, red, blue);
 
         if (red.getClass().isArray()) {
-            factoryCache.put(otherType, values(red, blue, red));
+            userPrefabs.register(otherType, red, blue, red);
         }
         else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                factoryCache.put(otherType, values(red, blue, redCopy));
+                userPrefabs.register(otherType, red, blue, redCopy);
             }
             catch (InaccessibleObjectException ignored) {
-                factoryCache.put(otherType, values(red, blue, red));
+                userPrefabs.register(otherType, red, blue, red);
             }
         }
     }

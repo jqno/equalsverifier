@@ -6,8 +6,11 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -24,15 +27,16 @@ class VintageValueProviderTest {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
-    private final Objenesis objenesis = new ObjenesisStd();
+    private final UserPrefabValueProvider prefabs = new UserPrefabValueProvider();
     private final FactoryCache factoryCache = new FactoryCache();
+    private final Objenesis objenesis = new ObjenesisStd();
     private VintageValueProvider vp;
 
     @BeforeEach
     void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         factoryCache.put(int.class, values(42, 1337, 42));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
     }
 
     @Test
@@ -109,7 +113,7 @@ class VintageValueProviderTest {
     @Test
     void stringListIsSeparateFromIntegerList() {
         factoryCache.put(List.class, new ListTestFactory());
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
 
         List<String> strings = vp.giveRed(new TypeTag(List.class, STRING_TAG));
         List<Integer> ints = vp.giveRed(new TypeTag(List.class, INT_TAG));
@@ -125,8 +129,8 @@ class VintageValueProviderTest {
 
     @Test
     void addingATypeTwiceOverrulesTheExistingOne() {
-        factoryCache.put(int.class, values(-1, -2, -1));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        prefabs.register(int.class, -1, -2, -1);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
         assertThat((int) vp.giveRed(INT_TAG)).isEqualTo(-1);
         assertThat((int) vp.giveBlue(INT_TAG)).isEqualTo(-2);
     }
@@ -134,8 +138,8 @@ class VintageValueProviderTest {
     @Test
     void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
-        factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        prefabs.register(Lazy.class, Lazy.X, Lazy.Y, Lazy.X);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
         assertThat(vp.<Lazy>giveRed(lazyTag)).isEqualTo(Lazy.X);
         assertThat(vp.<Lazy>giveBlue(lazyTag)).isEqualTo(Lazy.Y);
         assertThat(vp.<Lazy>giveRedCopy(lazyTag)).isEqualTo(Lazy.X);
@@ -145,12 +149,12 @@ class VintageValueProviderTest {
     void addLazyFactoryIsLazy() {
         TypeTag throwingInitializerTag = new TypeTag(ThrowingInitializer.class);
 
-        // Shouldn't throw, because constructing PrefabValues doesn't instantiate objects:
+        // Shouldn't throw, because declaring Factories doesn't instantiate objects:
         factoryCache
                 .put(
                     ThrowingInitializer.class.getName(),
                     (t, p, ts) -> new Tuple<>(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {

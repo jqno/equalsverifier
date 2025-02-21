@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -17,13 +17,15 @@ import org.objenesis.ObjenesisStd;
 class RecordObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
+    private UserPrefabValueProvider prefabs;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
 
     @BeforeEach
     void setup() throws Exception {
+        prefabs = new UserPrefabValueProvider();
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider = new VintageValueProvider(factoryCache, new ObjenesisStd());
+        valueProvider = new VintageValueProvider(prefabs, factoryCache, new ObjenesisStd());
     }
 
     @Test
@@ -37,13 +39,12 @@ class RecordObjectAccessorScramblingTest {
     @Test
     void scramble() throws Exception {
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
-        factoryCache
-                .put(
+        prefabs
+                .register(
                     Point.class,
-                    values(
-                        constructor.newInstance(1, 2),
-                        constructor.newInstance(2, 3),
-                        constructor.newInstance(1, 2)));
+                    (Point) constructor.newInstance(1, 2),
+                    (Point) constructor.newInstance(2, 3),
+                    (Point) constructor.newInstance(1, 2));
         Object original = constructor.newInstance(1, 2);
 
         Object scrambled = doScramble(original);
