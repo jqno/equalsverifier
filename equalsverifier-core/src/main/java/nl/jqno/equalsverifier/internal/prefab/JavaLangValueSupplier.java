@@ -20,6 +20,9 @@ class JavaLangValueSupplier<T> extends ValueSupplier<T> {
             return val(red, new Object(), red);
         }
 
+        if (is(Class.class)) {
+            return val(Class.class, Object.class, Class.class);
+        }
         if (is(Enum.class)) {
             return val(Dummy.RED, Dummy.BLUE, Dummy.RED);
         }

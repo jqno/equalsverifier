@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.prefab;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -32,6 +33,11 @@ public class BuiltinPrefabValueProviderTest {
     }
 
     @Test
+    void returnsExceptionalClass() {
+        check(Class.class);
+    }
+
+    @Test
     void returnsAPrimitiveValue() {
         check(int.class);
     }
@@ -44,6 +50,11 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsAJavaLangValue() {
         check(String.class);
+    }
+
+    @Test
+    void returnsAJavaLangReflectValue() {
+        check(Field.class);
     }
 
     @Test

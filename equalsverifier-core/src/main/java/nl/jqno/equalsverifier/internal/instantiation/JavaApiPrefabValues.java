@@ -3,12 +3,8 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.*;
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
-import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.beans.PropertyChangeSupport;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -75,7 +71,6 @@ public final class JavaApiPrefabValues {
         addQueues();
         SequencedCollectionsHelper.add(factoryCache);
         addExceptions();
-        addReflectionClasses();
         addAtomicClasses();
         addAncientJavaApiClasses();
         addJavaxApiClasses();
@@ -243,46 +238,6 @@ public final class JavaApiPrefabValues {
         RuntimeException redRuntimeException = new RuntimeException();
         RuntimeException blueRuntimeException = new RuntimeException();
         addValues(RuntimeException.class, redRuntimeException, blueRuntimeException, redRuntimeException);
-    }
-
-    @SuppressWarnings("unused")
-    private static class JavaApiReflectionClassesContainer {
-
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "These fields are accessed through reflection")
-        Object a;
-
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "These fields are accessed through reflection")
-        Object b;
-
-        public JavaApiReflectionClassesContainer() {}
-
-        public JavaApiReflectionClassesContainer(Object o) {}
-
-        void m1() {}
-
-        void m2() {}
-    }
-
-    private void addReflectionClasses() {
-        addValues(Class.class, Class.class, Object.class, Class.class);
-
-        rethrow(() -> {
-            Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
-            Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
-            addValues(Field.class, f1, f2, f1);
-        }, e -> "Can't add prefab values for java.lang.reflect.Field");
-
-        rethrow(() -> {
-            Constructor<?> c1 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
-            Constructor<?> c2 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
-            addValues(Constructor.class, c1, c2, c1);
-        }, e -> "Can't add prefab values for java.lang.reflect.Constructor");
-
-        rethrow(() -> {
-            Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
-            Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
-            addValues(Method.class, m1, m2, m1);
-        }, e -> "Can't add prefab values for java.lang.reflect.Method");
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
