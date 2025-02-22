@@ -14,9 +14,6 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
-import java.nio.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.text.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -83,7 +80,6 @@ public final class JavaApiPrefabValues {
         addSets();
         addQueues();
         SequencedCollectionsHelper.add(factoryCache);
-        addNioBuffers();
         addExceptions();
         addReflectionClasses();
         addAtomicClasses();
@@ -96,7 +92,6 @@ public final class JavaApiPrefabValues {
             value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
             justification = "We just need an instance of File; they're not for actual use.")
     private void addCommonClasses() {
-        addValues(Charset.class, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
         addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
@@ -283,45 +278,6 @@ public final class JavaApiPrefabValues {
         addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
         addFactory(PriorityBlockingQueue.class, collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
         addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
-    }
-
-    private void addNioBuffers() {
-        addValues(
-            Buffer.class,
-            ByteBuffer.wrap(new byte[] { 0 }),
-            ByteBuffer.wrap(new byte[] { 1 }),
-            ByteBuffer.wrap(new byte[] { 0 }));
-        addValues(
-            ByteBuffer.class,
-            ByteBuffer.wrap(new byte[] { 0 }),
-            ByteBuffer.wrap(new byte[] { 1 }),
-            ByteBuffer.wrap(new byte[] { 0 }));
-        addValues(CharBuffer.class, CharBuffer.wrap("a"), CharBuffer.wrap("b"), CharBuffer.wrap("a"));
-        addValues(
-            DoubleBuffer.class,
-            DoubleBuffer.wrap(new double[] { 0.0 }),
-            DoubleBuffer.wrap(new double[] { 1.0 }),
-            DoubleBuffer.wrap(new double[] { 0.0 }));
-        addValues(
-            FloatBuffer.class,
-            FloatBuffer.wrap(new float[] { 0.0f }),
-            FloatBuffer.wrap(new float[] { 1.0f }),
-            FloatBuffer.wrap(new float[] { 0.0f }));
-        addValues(
-            IntBuffer.class,
-            IntBuffer.wrap(new int[] { 0 }),
-            IntBuffer.wrap(new int[] { 1 }),
-            IntBuffer.wrap(new int[] { 0 }));
-        addValues(
-            LongBuffer.class,
-            LongBuffer.wrap(new long[] { 0 }),
-            LongBuffer.wrap(new long[] { 1 }),
-            LongBuffer.wrap(new long[] { 0 }));
-        addValues(
-            ShortBuffer.class,
-            ShortBuffer.wrap(new short[] { 0 }),
-            ShortBuffer.wrap(new short[] { 1 }),
-            ShortBuffer.wrap(new short[] { 0 }));
     }
 
     private void addExceptions() {

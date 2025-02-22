@@ -3,6 +3,8 @@ package nl.jqno.equalsverifier.internal.prefab;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.OptionalInt;
 
@@ -28,25 +30,36 @@ public class BuiltinPrefabValueProviderTest {
 
     @Test
     void returnsAPrimitiveValue() {
-        var tag = new TypeTag(int.class);
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
+        check(int.class);
     }
 
     @Test
     void returnsAJavaLangValue() {
-        var tag = new TypeTag(String.class);
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
+        check(String.class);
     }
 
     @Test
     void returnsAJavaMathValue() {
-        var tag = new TypeTag(BigDecimal.class);
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
+        check(BigDecimal.class);
+    }
+
+    @Test
+    void returnsAJavaNioValue() {
+        check(ByteBuffer.class);
+    }
+
+    @Test
+    void returnsAJavaNioCharsetValue() {
+        check(Charset.class);
     }
 
     @Test
     void returnsAJavaUtilValue() {
-        var tag = new TypeTag(OptionalInt.class);
+        check(OptionalInt.class);
+    }
+
+    private void check(Class<?> type) {
+        var tag = new TypeTag(type);
         assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
     }
 }
