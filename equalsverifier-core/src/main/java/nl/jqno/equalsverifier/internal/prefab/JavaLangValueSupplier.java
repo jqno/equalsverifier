@@ -10,6 +10,7 @@ class JavaLangValueSupplier<T> extends ValueSupplier<T> {
         super(type);
     }
 
+    @Override
     @SuppressFBWarnings(
             value = { "DM_STRING_CTOR", "DM_USELESS_THREAD" },
             justification = "We really do need a separate String instance with the same value and a Thread instance that we don't use.")

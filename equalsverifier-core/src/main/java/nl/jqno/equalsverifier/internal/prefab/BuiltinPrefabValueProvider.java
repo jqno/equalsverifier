@@ -27,6 +27,7 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
             return new PrimitiveValueSupplier<>(type).get();
         }
         return switch (type.getPackageName()) {
+        case "java.io" -> new JavaIoValueSupplier<>(type).get();
         case "java.lang" -> new JavaLangValueSupplier<>(type).get();
         case "java.math" -> new JavaMathValueSupplier<>(type).get();
         case "java.nio" -> new JavaNioValueSupplier<>(type).get();

@@ -6,8 +6,6 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -88,15 +86,10 @@ public final class JavaApiPrefabValues {
     }
 
     // CHECKSTYLE OFF: ExecutableStatementCount
-    @SuppressFBWarnings(
-            value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
-            justification = "We just need an instance of File; they're not for actual use.")
     private void addCommonClasses() {
-        addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
-        addValues(PrintStream.class, System.out, System.err, System.out);
 
         rethrow(
             () -> addValues(
