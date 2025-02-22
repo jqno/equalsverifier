@@ -13,7 +13,6 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 import java.text.*;
-import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
@@ -114,7 +113,6 @@ public final class JavaApiPrefabValues {
     // CHECKSTYLE ON: ExecutableStatementCount
 
     private void addDateTimeClasses() {
-        addValues(Clock.class, Clock.systemUTC(), Clock.system(ZoneId.of("-10")), Clock.systemUTC());
         addValues(
             DateFormat.class,
             DateFormat.getTimeInstance(),
@@ -125,15 +123,6 @@ public final class JavaApiPrefabValues {
             DateTimeFormatter.ISO_TIME,
             DateTimeFormatter.ISO_DATE,
             DateTimeFormatter.ISO_TIME);
-        addValues(Duration.class, Duration.ZERO, Duration.ofDays(1L), Duration.ZERO);
-        addValues(Instant.class, Instant.MIN, Instant.MAX, Instant.MIN);
-        addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
-        addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
-        addValues(LocalTime.class, LocalTime.MIN, LocalTime.MAX, LocalTime.MIN);
-        addValues(MonthDay.class, MonthDay.of(1, 1), MonthDay.of(12, 31), MonthDay.of(1, 1));
-        addValues(OffsetDateTime.class, OffsetDateTime.MIN, OffsetDateTime.MAX, OffsetDateTime.MIN);
-        addValues(OffsetTime.class, OffsetTime.MIN, OffsetTime.MAX, OffsetTime.MIN);
-        addValues(Period.class, Period.ZERO, Period.of(1, 1, 1), Period.ZERO);
         addValues(DecimalFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
         addValues(NumberFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
         addValues(
@@ -141,20 +130,6 @@ public final class JavaApiPrefabValues {
             new SimpleDateFormat("yMd"),
             new SimpleDateFormat("dMy"),
             new SimpleDateFormat("yMd"));
-        addValues(
-            TimeZone.class,
-            TimeZone.getTimeZone("GMT+1"),
-            TimeZone.getTimeZone("GMT+2"),
-            TimeZone.getTimeZone("GMT+1"));
-        addValues(Year.class, Year.of(2000), Year.of(2010), Year.of(2000));
-        addValues(YearMonth.class, YearMonth.of(2000, 1), YearMonth.of(2010, 12), YearMonth.of(2000, 1));
-        addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
-        addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));
-        addValues(
-            ZonedDateTime.class,
-            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
-            ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
-            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"));
     }
 
     private void addUncommonClasses() {
