@@ -7,7 +7,7 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-public class JavaIoValueSupplier<T> extends ValueSupplier<T> {
+class JavaIoValueSupplier<T> extends ValueSupplier<T> {
     public JavaIoValueSupplier(Class<T> type) {
         super(type);
     }

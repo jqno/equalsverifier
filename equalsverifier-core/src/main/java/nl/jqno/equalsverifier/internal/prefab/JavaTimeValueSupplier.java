@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
 
-public class JavaTimeValueSupplier<T> extends ValueSupplier<T> {
+class JavaTimeValueSupplier<T> extends ValueSupplier<T> {
     public JavaTimeValueSupplier(Class<T> type) {
         super(type);
     }
