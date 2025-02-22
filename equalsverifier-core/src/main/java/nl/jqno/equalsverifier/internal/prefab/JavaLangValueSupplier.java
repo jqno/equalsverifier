@@ -5,6 +5,8 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
+// CHECKSTYLE OFF: NPathComplexity
+
 class JavaLangValueSupplier<T> extends ValueSupplier<T> {
     public JavaLangValueSupplier(Class<T> type) {
         super(type);
@@ -26,6 +28,14 @@ class JavaLangValueSupplier<T> extends ValueSupplier<T> {
         if (is(Enum.class)) {
             return val(Dummy.RED, Dummy.BLUE, Dummy.RED);
         }
+        if (is(Exception.class)) {
+            var red = new Exception();
+            return val(red, new Exception(), red);
+        }
+        if (is(RuntimeException.class)) {
+            var red = new RuntimeException();
+            return val(red, new RuntimeException(), red);
+        }
         if (is(String.class)) {
             return val("one", "two", new String("one"));
         }
@@ -36,7 +46,8 @@ class JavaLangValueSupplier<T> extends ValueSupplier<T> {
             return val(new Thread("one"), new Thread("two"), new Thread("one"));
         }
         if (is(Throwable.class)) {
-            return val(new Throwable(), new Throwable(), new Throwable());
+            var red = new Throwable();
+            return val(red, new Throwable(), red);
         }
 
         return Optional.empty();

@@ -70,7 +70,6 @@ public final class JavaApiPrefabValues {
         addSets();
         addQueues();
         SequencedCollectionsHelper.add(factoryCache);
-        addExceptions();
         addAtomicClasses();
         addAncientJavaApiClasses();
         addJavaxApiClasses();
@@ -224,20 +223,6 @@ public final class JavaApiPrefabValues {
         addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
         addFactory(PriorityBlockingQueue.class, collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
         addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
-    }
-
-    private void addExceptions() {
-        Throwable redThrowable = new Throwable();
-        Throwable blueThrowable = new Throwable();
-        addValues(Throwable.class, redThrowable, blueThrowable, redThrowable);
-
-        Exception redException = new Exception();
-        Exception blueException = new Exception();
-        addValues(Exception.class, redException, blueException, redException);
-
-        RuntimeException redRuntimeException = new RuntimeException();
-        RuntimeException blueRuntimeException = new RuntimeException();
-        addValues(RuntimeException.class, redRuntimeException, blueRuntimeException, redRuntimeException);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
