@@ -8,6 +8,8 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
+// CHECKSTYLE OFF: CyclomaticComplexity
+
 /**
  * A ValueProvider for non-generic, built-in prefab values.
  */
@@ -30,6 +32,7 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
         case "java.io" -> new JavaIoValueSupplier<>(type).get();
         case "java.lang" -> new JavaLangValueSupplier<>(type).get();
         case "java.math" -> new JavaMathValueSupplier<>(type).get();
+        case "java.net" -> new JavaNetValueSupplier<>(type).get();
         case "java.nio" -> new JavaNioValueSupplier<>(type).get();
         case "java.nio.charset" -> new JavaNioValueSupplier<>(type).get();
         case "java.time" -> new JavaTimeValueSupplier<>(type).get();

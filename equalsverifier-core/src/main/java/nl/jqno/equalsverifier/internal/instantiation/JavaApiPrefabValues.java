@@ -9,9 +9,6 @@ import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URL;
 import java.text.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -88,15 +85,6 @@ public final class JavaApiPrefabValues {
     private void addCommonClasses() {
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
-        addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
-
-        rethrow(
-            () -> addValues(
-                URL.class,
-                new URL("http://example.com"),
-                new URL("http://localhost"),
-                new URL("http://example.com")),
-            e -> "Can't add prefab values for java.net.URL");
 
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
@@ -158,11 +146,6 @@ public final class JavaApiPrefabValues {
             sqlTimestamp.instantiate(classes(long.class), objects(1337)));
 
         addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
-        addValues(
-            InetSocketAddress.class,
-            InetSocketAddress.createUnresolved("localhost", 8080),
-            InetSocketAddress.createUnresolved("127.0.0.1", 8080),
-            InetSocketAddress.createUnresolved("localhost", 8080));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception
         // otherwise.

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.time.Instant;
@@ -48,6 +49,11 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsAJavaMathValue() {
         check(BigDecimal.class);
+    }
+
+    @Test
+    void returnsAJavaNetValue() {
+        check(URI.class);
     }
 
     @Test
