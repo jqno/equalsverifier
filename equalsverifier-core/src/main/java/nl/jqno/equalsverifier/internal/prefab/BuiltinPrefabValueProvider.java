@@ -42,6 +42,9 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
         case "java.nio.charset" -> new JavaNioValueSupplier<>(type).get();
         case "java.time" -> new JavaTimeValueSupplier<>(type).get();
         case "java.util" -> new JavaUtilValueSupplier<>(type).get();
+        case "java.util.concurrent" -> new JavaUtilConcurrentValueSupplier<>(type).get();
+        case "java.util.concurrent.atomic" -> new JavaUtilConcurrentValueSupplier<>(type).get();
+        case "java.util.concurrent.locks" -> new JavaUtilConcurrentValueSupplier<>(type).get();
         default -> Optional.empty();
         };
     }

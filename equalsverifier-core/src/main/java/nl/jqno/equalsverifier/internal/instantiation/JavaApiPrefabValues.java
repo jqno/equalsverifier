@@ -10,8 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -78,18 +76,10 @@ public final class JavaApiPrefabValues {
     // CHECKSTYLE OFF: ExecutableStatementCount
     private void addCommonClasses() {
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
-        addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
 
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
-
-        Semaphore redSemaphore = new Semaphore(1);
-        Semaphore blueSemaphore = new Semaphore(1);
-        addValues(Semaphore.class, redSemaphore, blueSemaphore, redSemaphore);
-        ReentrantLock redReentrantLock = new ReentrantLock();
-        ReentrantLock blueReentrantLock = new ReentrantLock();
-        addValues(ReentrantLock.class, redReentrantLock, blueReentrantLock, redReentrantLock);
     }
 
     // CHECKSTYLE ON: ExecutableStatementCount
@@ -227,19 +217,6 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addAtomicClasses() {
-        addValues(AtomicBoolean.class, new AtomicBoolean(true), new AtomicBoolean(false), new AtomicBoolean(true));
-        addValues(AtomicInteger.class, new AtomicInteger(1), new AtomicInteger(2), new AtomicInteger(1));
-        addValues(
-            AtomicIntegerArray.class,
-            new AtomicIntegerArray(new int[] { 1 }),
-            new AtomicIntegerArray(new int[] { 2 }),
-            new AtomicIntegerArray(new int[] { 1 }));
-        addValues(AtomicLong.class, new AtomicLong(1L), new AtomicLong(2L), new AtomicLong(1L));
-        addValues(
-            AtomicLongArray.class,
-            new AtomicLongArray(new long[] { 1L }),
-            new AtomicLongArray(new long[] { 2L }),
-            new AtomicLongArray(new long[] { 1L }));
         addFactory(AtomicMarkableReference.class, simple(r -> new AtomicMarkableReference(r, true), null));
         addFactory(AtomicReference.class, simple(AtomicReference::new, null));
         addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
@@ -252,19 +229,6 @@ public final class JavaApiPrefabValues {
                     new AtomicReferenceArray(blue),
                     new AtomicReferenceArray(redCopy));
         });
-
-        DoubleAdder redDoubleAdder = new DoubleAdder();
-        DoubleAdder blueDoubleAdder = new DoubleAdder();
-        addValues(DoubleAdder.class, redDoubleAdder, blueDoubleAdder, redDoubleAdder);
-        DoubleAccumulator redDoubleAccumulator = new DoubleAccumulator((a, b) -> a + b, 0.0);
-        DoubleAccumulator blueDoubleAccumulator = new DoubleAccumulator((a, b) -> a * b, 1.0);
-        addValues(DoubleAccumulator.class, redDoubleAccumulator, blueDoubleAccumulator, redDoubleAccumulator);
-        LongAdder redLongAdder = new LongAdder();
-        LongAdder blueLongAdder = new LongAdder();
-        addValues(LongAdder.class, redLongAdder, blueLongAdder, redLongAdder);
-        LongAccumulator redLongAccumulator = new LongAccumulator((a, b) -> a + b, 0);
-        LongAccumulator blueLongAccumulator = new LongAccumulator((a, b) -> a * b, 1);
-        addValues(LongAccumulator.class, redLongAccumulator, blueLongAccumulator, redLongAccumulator);
     }
 
     private void addAncientJavaApiClasses() {
