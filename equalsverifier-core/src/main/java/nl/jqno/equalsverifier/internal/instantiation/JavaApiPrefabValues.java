@@ -4,14 +4,11 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
-import java.beans.PropertyChangeSupport;
 import java.text.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
@@ -75,8 +72,6 @@ public final class JavaApiPrefabValues {
 
     // CHECKSTYLE OFF: ExecutableStatementCount
     private void addCommonClasses() {
-        addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
-
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
@@ -90,11 +85,6 @@ public final class JavaApiPrefabValues {
             DateFormat.getTimeInstance(),
             DateFormat.getDateInstance(),
             DateFormat.getTimeInstance());
-        addValues(
-            DateTimeFormatter.class,
-            DateTimeFormatter.ISO_TIME,
-            DateTimeFormatter.ISO_DATE,
-            DateTimeFormatter.ISO_TIME);
         addValues(DecimalFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
         addValues(NumberFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
         addValues(
@@ -238,13 +228,6 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
         addLazyFactory("java.awt.Font", AWT_FACTORY);
         addLazyFactory("java.awt.Image", AWT_FACTORY);
-
-        addFactory(
-            PropertyChangeSupport.class,
-            values(
-                new PropertyChangeSupport("this"),
-                new PropertyChangeSupport("that"),
-                new PropertyChangeSupport("this")));
 
         addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
         addLazyFactory("java.rmi.server.UID", RMI_FACTORY);

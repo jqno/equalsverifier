@@ -14,6 +14,7 @@ import java.util.OptionalInt;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.StampedLock;
+import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,11 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsExceptionalClass() {
         check(Class.class);
+    }
+
+    @Test
+    void returnsValueFromOtherPackage() {
+        check(Pattern.class);
     }
 
     @Test
