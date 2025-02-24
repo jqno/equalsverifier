@@ -88,6 +88,11 @@ public class BuiltinPrefabValueProviderTest {
     }
 
     @Test
+    void returnsAJavaSqlValue() {
+        check(java.sql.Date.class);
+    }
+
+    @Test
     void returnsAJavaTextValue() {
         check(DateFormat.class);
     }
