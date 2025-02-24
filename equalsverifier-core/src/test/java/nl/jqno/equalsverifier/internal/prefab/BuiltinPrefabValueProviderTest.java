@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
 import java.time.Instant;
 import java.util.List;
 import java.util.OptionalInt;
@@ -84,6 +85,11 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsAJavaNioCharsetValue() {
         check(Charset.class);
+    }
+
+    @Test
+    void returnsAJavaTextValue() {
+        check(DateFormat.class);
     }
 
     @Test

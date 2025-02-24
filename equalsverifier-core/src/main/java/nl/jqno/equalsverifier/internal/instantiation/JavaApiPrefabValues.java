@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
-import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -57,7 +56,6 @@ public final class JavaApiPrefabValues {
 
     private void addJavaClasses() {
         addCommonClasses();
-        addDateTimeClasses();
         addUncommonClasses();
         addCollection();
         addLists();
@@ -75,23 +73,6 @@ public final class JavaApiPrefabValues {
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
-    }
-
-    // CHECKSTYLE ON: ExecutableStatementCount
-
-    private void addDateTimeClasses() {
-        addValues(
-            DateFormat.class,
-            DateFormat.getTimeInstance(),
-            DateFormat.getDateInstance(),
-            DateFormat.getTimeInstance());
-        addValues(DecimalFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
-        addValues(NumberFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
-        addValues(
-            SimpleDateFormat.class,
-            new SimpleDateFormat("yMd"),
-            new SimpleDateFormat("dMy"),
-            new SimpleDateFormat("yMd"));
     }
 
     private void addUncommonClasses() {

@@ -40,6 +40,7 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
         case "java.net" -> new JavaNetValueSupplier<>(type);
         case "java.nio" -> new JavaNioValueSupplier<>(type);
         case "java.nio.charset" -> new JavaNioValueSupplier<>(type);
+        case "java.text" -> new JavaTextValueSupplier<>(type);
         case "java.time" -> new JavaTimeValueSupplier<>(type);
         case "java.util" -> new JavaUtilValueSupplier<>(type);
         case "java.util.concurrent" -> new JavaUtilConcurrentValueSupplier<>(type);
