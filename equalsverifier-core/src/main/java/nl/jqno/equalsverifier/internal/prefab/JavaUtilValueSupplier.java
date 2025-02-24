@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
+// CHECKSTYLE OFF: ExecutableStatementCount
 
 class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
     public JavaUtilValueSupplier(Class<T> type) {
@@ -31,6 +32,9 @@ class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
             var blueDoubleStats = new DoubleSummaryStatistics();
             return val(redDoubleStats, blueDoubleStats, redDoubleStats);
         }
+        if (is(EventObject.class)) {
+            return val(new EventObject(1), new EventObject(2), new EventObject(1));
+        }
         if (is(Formatter.class)) {
             return val(new Formatter(), new Formatter(), new Formatter());
         }
@@ -39,6 +43,9 @@ class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
                 new GregorianCalendar(2010, Calendar.AUGUST, 4),
                 new GregorianCalendar(2010, Calendar.AUGUST, 5),
                 new GregorianCalendar(2010, Calendar.AUGUST, 4));
+        }
+        if (is(HexFormat.class)) {
+            return val(HexFormat.ofDelimiter(","), HexFormat.ofDelimiter("."), HexFormat.ofDelimiter(","));
         }
         if (is(IntSummaryStatistics.class)) {
             var redIntStats = new IntSummaryStatistics();

@@ -77,7 +77,6 @@ public final class JavaApiPrefabValues {
 
     private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
-        addValues(HexFormat.class, HexFormat.ofDelimiter(","), HexFormat.ofDelimiter("."), HexFormat.ofDelimiter(","));
 
         // Constructing java.sql.* classes reflectively, because they reside in a different module
         // which causes trouble when running EqualsVerifier on the modulepath.
@@ -99,8 +98,6 @@ public final class JavaApiPrefabValues {
             sqlTimestamp.instantiate(classes(long.class), objects(1337)),
             sqlTimestamp.instantiate(classes(long.class), objects(42)),
             sqlTimestamp.instantiate(classes(long.class), objects(1337)));
-
-        addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception
         // otherwise.
