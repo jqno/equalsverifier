@@ -45,14 +45,11 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         Class<T> type = tag.getType();
         T[] enumConstants = type.getEnumConstants();
 
-        switch (enumConstants.length) {
-        case 0:
-            return new Tuple<>(null, null, null);
-        case 1:
-            return new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
-        default:
-            return new Tuple<>(enumConstants[0], enumConstants[1], enumConstants[0]);
-        }
+        return switch (enumConstants.length) {
+            case 0 -> new Tuple<>(null, null, null);
+            case 1 -> new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
+            default -> new Tuple<>(enumConstants[0], enumConstants[1], enumConstants[0]);
+        };
     }
 
     @SuppressWarnings("unchecked")
