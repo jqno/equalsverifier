@@ -33,21 +33,21 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
             return new PrimitiveValueSupplier<>(type).get();
         }
         var supplier = switch (type.getPackageName()) {
-        case "java.io" -> new JavaIoValueSupplier<>(type);
-        case "java.lang" -> new JavaLangValueSupplier<>(type);
-        case "java.lang.reflect" -> new JavaLangReflectValueSupplier<>(type);
-        case "java.math" -> new JavaMathValueSupplier<>(type);
-        case "java.net" -> new JavaNetValueSupplier<>(type);
-        case "java.nio" -> new JavaNioValueSupplier<>(type);
-        case "java.nio.charset" -> new JavaNioValueSupplier<>(type);
-        case "java.sql" -> new JavaSqlValueSupplier<>(type);
-        case "java.text" -> new JavaTextValueSupplier<>(type);
-        case "java.time" -> new JavaTimeValueSupplier<>(type);
-        case "java.util" -> new JavaUtilValueSupplier<>(type);
-        case "java.util.concurrent" -> new JavaUtilConcurrentValueSupplier<>(type);
-        case "java.util.concurrent.atomic" -> new JavaUtilConcurrentValueSupplier<>(type);
-        case "java.util.concurrent.locks" -> new JavaUtilConcurrentValueSupplier<>(type);
-        default -> new OthersValueSupplier<>(type);
+            case "java.io" -> new JavaIoValueSupplier<>(type);
+            case "java.lang" -> new JavaLangValueSupplier<>(type);
+            case "java.lang.reflect" -> new JavaLangReflectValueSupplier<>(type);
+            case "java.math" -> new JavaMathValueSupplier<>(type);
+            case "java.net" -> new JavaNetValueSupplier<>(type);
+            case "java.nio" -> new JavaNioValueSupplier<>(type);
+            case "java.nio.charset" -> new JavaNioValueSupplier<>(type);
+            case "java.sql" -> new JavaSqlValueSupplier<>(type);
+            case "java.text" -> new JavaTextValueSupplier<>(type);
+            case "java.time" -> new JavaTimeValueSupplier<>(type);
+            case "java.util" -> new JavaUtilValueSupplier<>(type);
+            case "java.util.concurrent" -> new JavaUtilConcurrentValueSupplier<>(type);
+            case "java.util.concurrent.atomic" -> new JavaUtilConcurrentValueSupplier<>(type);
+            case "java.util.concurrent.locks" -> new JavaUtilConcurrentValueSupplier<>(type);
+            default -> new OthersValueSupplier<>(type);
         };
         return supplier.get();
     }
