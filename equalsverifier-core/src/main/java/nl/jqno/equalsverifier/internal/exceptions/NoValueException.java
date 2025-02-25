@@ -1,20 +1,15 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 @SuppressFBWarnings(value = "SE_BAD_FIELD", justification = "EqualsVerifier doesn't serialize.")
 public class NoValueException extends MessagingException {
 
-    private final TypeTag tag;
-
-    public NoValueException(TypeTag tag) {
-        super();
-        this.tag = tag;
+    public NoValueException(String description) {
+        super(description);
     }
 
-    @Override
-    public String getDescription() {
-        return "Could not find a value for " + tag + ". Please add prefab values for this type.";
+    public NoValueException(String description, Throwable cause) {
+        super(description, cause);
     }
 }

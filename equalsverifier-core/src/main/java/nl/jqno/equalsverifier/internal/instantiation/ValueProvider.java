@@ -38,6 +38,10 @@ public interface ValueProvider {
      * @throws NoValueException if no value could be found for the given tag.
      */
     default <T> Tuple<T> provideOrThrow(TypeTag tag, String fieldName) {
-        return this.<T>provide(tag, fieldName).orElseThrow(() -> new NoValueException(tag));
+        return this
+                .<T>provide(tag, fieldName)
+                .orElseThrow(
+                    () -> new NoValueException(
+                            "Could not find a value for " + tag + ". Please add prefab values for this type."));
     }
 }
