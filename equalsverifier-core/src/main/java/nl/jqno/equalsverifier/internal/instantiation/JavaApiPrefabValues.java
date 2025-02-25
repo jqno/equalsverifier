@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.*;
-import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
-import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -13,7 +11,6 @@ import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.*;
-import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
@@ -77,27 +74,6 @@ public final class JavaApiPrefabValues {
 
     private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
-
-        // Constructing InetAddress reflectively, because it might throw an awkward exception
-        // otherwise.
-        ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
-        ConditionalInstantiator inet4Address = new ConditionalInstantiator("java.net.Inet4Address");
-        ConditionalInstantiator inet6Address = new ConditionalInstantiator("java.net.Inet6Address");
-        addValues(
-            inetAddress.resolve(),
-            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
-        addValues(
-            inet4Address.resolve(),
-            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
-        addValues(
-            inet6Address.resolve(),
-            inet6Address.callFactory("getByName", classes(String.class), objects("::1")),
-            inet6Address.callFactory("getByName", classes(String.class), objects("::")),
-            inet6Address.callFactory("getByName", classes(String.class), objects("::1")));
     }
 
     @SuppressWarnings("unchecked")
