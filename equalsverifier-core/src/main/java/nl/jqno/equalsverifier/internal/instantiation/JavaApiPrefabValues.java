@@ -27,9 +27,7 @@ import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelpe
         justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
 
-    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactoryProvider");
     private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactoryProvider");
-    private static final ExternalFactory<?> RMI_FACTORY = new ExternalFactory<>("RmiFactoryProvider");
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
@@ -61,7 +59,6 @@ public final class JavaApiPrefabValues {
         addQueues();
         SequencedCollectionsHelper.add(factoryCache);
         addAtomicClasses();
-        addAncientJavaApiClasses();
         addJavaxApiClasses();
     }
 
@@ -152,18 +149,6 @@ public final class JavaApiPrefabValues {
                     new AtomicReferenceArray(blue),
                     new AtomicReferenceArray(redCopy));
         });
-    }
-
-    private void addAncientJavaApiClasses() {
-        addLazyFactory("java.awt.Color", AWT_FACTORY);
-        addLazyFactory("java.awt.color.ColorSpace", AWT_FACTORY);
-        addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
-        addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
-        addLazyFactory("java.awt.Font", AWT_FACTORY);
-        addLazyFactory("java.awt.Image", AWT_FACTORY);
-
-        addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
-        addLazyFactory("java.rmi.server.UID", RMI_FACTORY);
     }
 
     private void addJavaxApiClasses() {

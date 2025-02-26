@@ -2,12 +2,16 @@ package nl.jqno.equalsverifier.internal.prefab;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.awt.Color;
+import java.awt.color.ColorSpace;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.rmi.dgc.VMID;
+import java.rmi.server.UID;
 import java.text.DateFormat;
 import java.time.Instant;
 import java.util.List;
@@ -53,7 +57,17 @@ public class BuiltinPrefabValueProviderTest {
     }
 
     @Test
-    void returnsAJavaIo() {
+    void returnsAJavaAwtValue() {
+        check(Color.class);
+    }
+
+    @Test
+    void returnAJavaAwtColorValue() {
+        check(ColorSpace.class);
+    }
+
+    @Test
+    void returnsAJavaIoValue() {
         check(File.class);
     }
 
@@ -85,6 +99,16 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsAJavaNioCharsetValue() {
         check(Charset.class);
+    }
+
+    @Test
+    void returnsAJavaRmiDgcValue() {
+        check(VMID.class);
+    }
+
+    @Test
+    void returnsAJavaRmiServerValue() {
+        check(UID.class);
     }
 
     @Test

@@ -33,6 +33,8 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
             return new PrimitiveValueSupplier<>(type).get();
         }
         var supplier = switch (type.getPackageName()) {
+            case "java.awt" -> new JavaAwtValueSupplier<>(type);
+            case "java.awt.color" -> new JavaAwtValueSupplier<>(type);
             case "java.io" -> new JavaIoValueSupplier<>(type);
             case "java.lang" -> new JavaLangValueSupplier<>(type);
             case "java.lang.reflect" -> new JavaLangReflectValueSupplier<>(type);
@@ -40,6 +42,8 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
             case "java.net" -> new JavaNetValueSupplier<>(type);
             case "java.nio" -> new JavaNioValueSupplier<>(type);
             case "java.nio.charset" -> new JavaNioValueSupplier<>(type);
+            case "java.rmi.dgc" -> new JavaRmiValueSupplier<>(type);
+            case "java.rmi.server" -> new JavaRmiValueSupplier<>(type);
             case "java.sql" -> new JavaSqlValueSupplier<>(type);
             case "java.text" -> new JavaTextValueSupplier<>(type);
             case "java.time" -> new JavaTimeValueSupplier<>(type);
