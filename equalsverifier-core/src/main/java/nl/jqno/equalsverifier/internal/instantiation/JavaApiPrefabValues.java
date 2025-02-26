@@ -27,8 +27,6 @@ import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelpe
         justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
 
-    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactoryProvider");
-
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
     private final FactoryCache factoryCache;
@@ -59,7 +57,6 @@ public final class JavaApiPrefabValues {
         addQueues();
         SequencedCollectionsHelper.add(factoryCache);
         addAtomicClasses();
-        addJavaxApiClasses();
     }
 
     // CHECKSTYLE OFF: ExecutableStatementCount
@@ -145,16 +142,7 @@ public final class JavaApiPrefabValues {
         });
     }
 
-    private void addJavaxApiClasses() {
-        addLazyFactory("javax.naming.Reference", JAVAX_FACTORY);
-        addLazyFactory("javax.swing.tree.DefaultMutableTreeNode", JAVAX_FACTORY);
-    }
-
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         factoryCache.put(type, factory);
-    }
-
-    private <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
-        factoryCache.put(typeName, factory);
     }
 }

@@ -53,6 +53,8 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
             case "java.util.concurrent" -> new JavaUtilConcurrentValueSupplier<>(type);
             case "java.util.concurrent.atomic" -> new JavaUtilConcurrentValueSupplier<>(type);
             case "java.util.concurrent.locks" -> new JavaUtilConcurrentValueSupplier<>(type);
+            case "javax.naming" -> new JavaxNamingValueSupplier<>(type);
+            case "javax.swing.tree" -> new JavaxSwingValueSupplier<>(type);
             default -> new OthersValueSupplier<>(type);
         };
         return supplier.get();

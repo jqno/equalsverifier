@@ -20,6 +20,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.StampedLock;
 import java.util.regex.Pattern;
+import javax.naming.Reference;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
@@ -144,6 +146,16 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsAJavaUtilConcurrentLocksValue() {
         check(StampedLock.class);
+    }
+
+    @Test
+    void returnsAJavaxNamingValue() {
+        check(Reference.class);
+    }
+
+    @Test
+    void returnsAJavaxSwingTreeValue() {
+        check(DefaultMutableTreeNode.class);
     }
 
     private void check(Class<?> type) {
