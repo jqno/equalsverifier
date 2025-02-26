@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.prefab;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.SynchronousQueue;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -17,7 +18,8 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  */
 public class BuiltinPrefabValueProvider implements ValueProvider {
 
-    private static final Set<Class<?>> EXCEPTIONAL_GENERIC_TYPES = Set.of(Class.class, Constructor.class);
+    private static final Set<Class<?>> EXCEPTIONAL_GENERIC_TYPES =
+            Set.of(Class.class, Constructor.class, SynchronousQueue.class);
 
     /** {@inheritDoc}} */
     @Override

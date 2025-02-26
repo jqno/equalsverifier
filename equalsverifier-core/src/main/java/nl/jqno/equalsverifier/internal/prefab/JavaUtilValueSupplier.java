@@ -15,6 +15,12 @@ class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
 
     @Override
     public Optional<Tuple<T>> get() {
+        if (is(BitSet.class)) {
+            return val(
+                BitSet.valueOf(new byte[] { 0 }),
+                BitSet.valueOf(new byte[] { 1 }),
+                BitSet.valueOf(new byte[] { 0 }));
+        }
         if (is(Calendar.class)) {
             return val(
                 new GregorianCalendar(2010, Calendar.AUGUST, 4),

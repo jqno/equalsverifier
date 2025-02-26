@@ -114,11 +114,6 @@ public final class JavaApiPrefabValues {
         addFactory(HashSet.class, collection(HashSet::new));
         addFactory(TreeSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
         addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
-        addValues(
-            BitSet.class,
-            BitSet.valueOf(new byte[] { 0 }),
-            BitSet.valueOf(new byte[] { 1 }),
-            BitSet.valueOf(new byte[] { 0 }));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -132,7 +127,6 @@ public final class JavaApiPrefabValues {
         addFactory(DelayQueue.class, collection(DelayQueue::new));
         addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
         addFactory(PriorityBlockingQueue.class, collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
-        addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -154,10 +148,6 @@ public final class JavaApiPrefabValues {
     private void addJavaxApiClasses() {
         addLazyFactory("javax.naming.Reference", JAVAX_FACTORY);
         addLazyFactory("javax.swing.tree.DefaultMutableTreeNode", JAVAX_FACTORY);
-    }
-
-    private <T> void addValues(Class<T> type, T red, T blue, T redCopy) {
-        factoryCache.put(type, values(red, blue, redCopy));
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
