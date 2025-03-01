@@ -99,7 +99,7 @@ public class JarAsserter {
                 .satisfies(
                     m -> m.assertName("nl.jqno.equalsverifier"),
                     m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
-                    m -> m.assertRequires("net.bytebuddy", ""),
+                    m -> m.assertRequires("net.bytebuddy", "transitive"),
                     m -> m.assertRequires("org.objenesis", ""));
     }
 

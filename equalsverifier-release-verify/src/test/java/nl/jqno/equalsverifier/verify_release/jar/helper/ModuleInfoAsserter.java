@@ -67,16 +67,16 @@ public class ModuleInfoAsserter {
         public void visitRequire(String module, int access, String version) {
             var modifiers = "";
             if ((access & Opcodes.ACC_TRANSITIVE) != 0) {
-                modifiers += "transitive ";
+                modifiers += "transitive";
             }
             if ((access & Opcodes.ACC_STATIC_PHASE) != 0) {
-                modifiers += "static ";
+                modifiers += "static";
             }
             if ((access & Opcodes.ACC_SYNTHETIC) != 0) {
-                modifiers += "synthetic ";
+                modifiers += "synthetic";
             }
             if ((access & Opcodes.ACC_MANDATED) != 0) {
-                modifiers += "mandated ";
+                modifiers += "mandated";
             }
             asserter.requires.put(module, modifiers);
         }

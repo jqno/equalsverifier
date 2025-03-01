@@ -5,7 +5,7 @@ module nl.jqno.equalsverifier {
     exports nl.jqno.equalsverifier.api;
 
     // Direct dependencies
-    requires net.bytebuddy;
+    requires transitive net.bytebuddy;
     requires org.objenesis;
 
     // Built-in prefab values

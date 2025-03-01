@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - EqualsVerifier now requires Java 17.
 - EqualsVerifier is now properly modularized according to the JPMS.
+- When using EqualsVerifier as a module, it's no longer needed to `requires net.bytebuddy` (this is now a proper transitive requirement).
 - Improved error message when ClassCastException is encountered.
 
 ### Removed
