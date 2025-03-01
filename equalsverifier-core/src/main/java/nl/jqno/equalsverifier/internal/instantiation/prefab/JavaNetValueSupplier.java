@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.prefab;
+package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 

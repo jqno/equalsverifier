@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.prefab;
+package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import java.time.*;
 import java.util.Optional;
