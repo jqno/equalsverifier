@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 
 /** Contains a cache of factories, for {@link VintageValueProvider}. */
 public class FactoryCache {

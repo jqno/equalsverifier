@@ -6,8 +6,8 @@ import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.FallbackFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.FallbackFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -25,17 +25,20 @@ public class VintageValueProvider implements ValueProvider {
     // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
     private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
 
+    private final ValueProvider prefabs;
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
      *
+     * @param prefabs      Types that are already known and don't need to be constructed here.
      * @param factoryCache The factories that can be used to create values.
      * @param objenesis    To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public VintageValueProvider(FactoryCache factoryCache, Objenesis objenesis) {
+    public VintageValueProvider(ValueProvider prefabs, FactoryCache factoryCache, Objenesis objenesis) {
+        this.prefabs = prefabs;
         this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
@@ -165,6 +168,13 @@ public class VintageValueProvider implements ValueProvider {
             throw new RecursionException(typeStack);
         }
 
+        var userPrefab = prefabs.provide(tag, null); // Prefabs aren't linked to a field, so null is fine
+        if (userPrefab.isPresent()) {
+            @SuppressWarnings("unchecked")
+            var result = (Tuple<T>) userPrefab.get();
+            return result;
+        }
+
         Class<T> type = tag.getType();
         if (factoryCache.contains(type)) {
             PrefabValueFactory<T> factory = factoryCache.get(type);
@@ -172,7 +182,7 @@ public class VintageValueProvider implements ValueProvider {
         }
 
         @SuppressWarnings("unchecked")
-        Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
+        var result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
         return result;
     }
 }

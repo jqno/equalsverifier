@@ -2,8 +2,8 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.SimpleFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.SimpleFactory;
 import org.junit.jupiter.api.Test;
 
 class FactoryCacheTest {

@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.AttributedString;
@@ -8,7 +8,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
+import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -31,10 +34,12 @@ class InPlaceObjectAccessorScramblingTest {
 
     @BeforeEach
     void setup() {
+        var prefabs = new UserPrefabValueProvider();
+        var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
-        valueProviderTest = new VintageValueProvider(factoryCache, objenesis);
+        valueProviderTest = new VintageValueProvider(chain, factoryCache, objenesis);
     }
 
     @Test

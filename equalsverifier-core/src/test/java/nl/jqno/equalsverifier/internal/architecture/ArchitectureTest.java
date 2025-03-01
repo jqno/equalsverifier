@@ -5,6 +5,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.FieldModifier;
@@ -21,6 +22,7 @@ public final class ArchitectureTest {
             .and()
             .doNotBelongToAnyOf(
                 JavaApiPrefabValues.class,
+                PrefabValuesApi.class,
                 // 👇 Test classes
                 FactoryCacheFactory.class)
             .should()
