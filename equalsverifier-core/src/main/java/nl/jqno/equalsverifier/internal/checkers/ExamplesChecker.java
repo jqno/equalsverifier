@@ -98,10 +98,10 @@ public class ExamplesChecker<T> implements Checker {
                 reference);
         }
         catch (ClassCastException e) {
-            Formatter f = Formatter
-                    .of(
-                        "Generics: ClassCastException was thrown. Consider using"
-                                + " withGenericPrefabValues for the type that triggered the exception.");
+            Formatter f = Formatter.of("""
+                    Generics: ClassCastException was thrown.
+                    Consider using withPrefabValuesForField, withGenericPrefabValues, or forExamples \
+                    for the type that triggered the exception.""");
             fail(f, e);
         }
     }
