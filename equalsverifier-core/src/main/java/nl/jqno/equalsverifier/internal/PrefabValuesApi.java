@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation.vintage;
+package nl.jqno.equalsverifier.internal;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.simple;
 
@@ -7,6 +7,7 @@ import java.lang.reflect.InaccessibleObjectException;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
