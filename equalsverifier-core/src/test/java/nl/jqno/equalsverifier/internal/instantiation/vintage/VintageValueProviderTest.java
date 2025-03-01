@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;

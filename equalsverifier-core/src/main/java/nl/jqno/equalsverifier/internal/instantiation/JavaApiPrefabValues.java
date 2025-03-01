@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.collection;
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.map;
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.simple;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.collection;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.map;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.simple;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.EnumMapFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.EnumSetFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumMapFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;

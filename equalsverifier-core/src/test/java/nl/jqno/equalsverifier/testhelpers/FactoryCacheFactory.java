@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.testhelpers;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 

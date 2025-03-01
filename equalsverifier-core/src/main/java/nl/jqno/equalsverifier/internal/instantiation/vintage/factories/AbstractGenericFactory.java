@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
+package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

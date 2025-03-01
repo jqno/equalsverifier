@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
+package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

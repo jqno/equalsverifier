@@ -1,6 +1,6 @@
-package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
+package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;

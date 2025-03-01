@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;

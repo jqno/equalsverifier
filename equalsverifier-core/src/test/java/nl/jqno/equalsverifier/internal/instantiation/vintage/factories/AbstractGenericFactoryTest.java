@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
+package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
