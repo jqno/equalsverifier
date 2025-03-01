@@ -1,16 +1,19 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.*;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.collection;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.map;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.simple;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.Supplier;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.*;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.EnumMapFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.EnumSetFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
@@ -22,9 +25,6 @@ import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelpe
  * Contains hand-made instances of well-known Java API classes that cannot be instantiated dynamically because of an
  * internal infinite recursion of types, or other issues.
  */
-@SuppressFBWarnings(
-        value = "SIC_INNER_SHOULD_BE_STATIC_ANON",
-        justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
@@ -48,8 +48,7 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJavaClasses() {
-        addCommonClasses();
-        addUncommonClasses();
+        addNonCollectionClasses();
         addCollection();
         addLists();
         addMaps();
@@ -59,14 +58,10 @@ public final class JavaApiPrefabValues {
         addAtomicClasses();
     }
 
-    // CHECKSTYLE OFF: ExecutableStatementCount
-    private void addCommonClasses() {
+    private void addNonCollectionClasses() {
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
-    }
-
-    private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
     }
 
