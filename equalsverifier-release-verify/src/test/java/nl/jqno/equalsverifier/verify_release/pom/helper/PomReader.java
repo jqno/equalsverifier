@@ -40,6 +40,11 @@ public class PomReader {
 
     public void assertNodeSize(int expectedLength, String expression) {
         var nodes = (NodeList) getValue(expression, XPathConstants.NODESET);
+        for (int i = 0; i < nodes.getLength(); i++) {
+            // CHECKSTYLE OFF: Regexp
+            System.out.println(">>> dep " + i + ": " + nodes.item(i).getTextContent());
+        }
+
         assertThat(nodes.getLength())
                 .as(
                     "Expected node to have " + expectedLength + " nodes, but it has " + nodes.getLength()
