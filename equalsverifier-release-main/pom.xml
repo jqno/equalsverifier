@@ -198,6 +198,18 @@
             <artifactId>byte-buddy</artifactId>
             <version>${version.bytebuddy}</version>
         </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${version.joda-time}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${version.guava}</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>
 

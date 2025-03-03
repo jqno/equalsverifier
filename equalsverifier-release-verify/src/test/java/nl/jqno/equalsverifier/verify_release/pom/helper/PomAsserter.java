@@ -46,9 +46,6 @@ public class PomAsserter {
 
     public void assertDependencyIsOptional(int idx) {
         var prefix = "/project/dependencies/dependency[" + idx + "]";
-        assertThat(reader)
-                .satisfies(
-                    r -> r.assertNode(prefix + "/optional", "true"),
-                    r -> r.assertNode(prefix + "/scope", "provided"));
+        assertThat(reader).satisfies(r -> r.assertNode(prefix + "/optional", "true"));
     }
 }
