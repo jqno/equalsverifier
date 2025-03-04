@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.verify_release.pom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomAsserter;
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomReader;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,6 +30,16 @@ class NodepPomTest {
 
     @Test
     void noDependencies() {
-        pom.assertNumberOfDependencies(0);
+        assertThat(pom)
+                .satisfies(
+                    p -> p.assertNumberOfDependencies(6),
+                    p -> p.assertDependencyIsOptional(1),
+                    p -> p.assertDependencyIsOptional(2),
+                    p -> p.assertDependencyIsOptional(3),
+                    p -> p.assertDependencyIsOptional(4),
+                    p -> p.assertDependency(5, "joda-time", "joda-time"),
+                    p -> p.assertDependencyIsOptional(5),
+                    p -> p.assertDependency(6, "com.google.guava", "guava"),
+                    p -> p.assertDependencyIsOptional(6));
     }
 }
