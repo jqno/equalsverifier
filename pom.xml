@@ -99,7 +99,7 @@
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
-        <version.flatten-maven-plugin>1.6.0</version.flatten-maven-plugin>
+        <version.flatten-maven-plugin>1.7.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.12</version.jacoco>
         <version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
@@ -207,33 +207,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <!-- Main dependencies -->
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>${version.objenesis}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>${version.bytebuddy}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${version.joda-time}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${version.guava}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>
