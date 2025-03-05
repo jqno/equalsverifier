@@ -76,7 +76,7 @@
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <outputDirectory>${project.basedir}/target</outputDirectory>
-                    <flattenMode>fatjar</flattenMode>
+                    <flattenMode>clean</flattenMode>
                     <pomElements>
                         <name />
                         <description />
@@ -164,12 +164,14 @@
             <artifactId>equalsverifier-core</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier-21</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>
