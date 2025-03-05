@@ -32,14 +32,15 @@ class NodepPomTest {
     void noDependencies() {
         assertThat(pom)
                 .satisfies(
-                    p -> p.assertNumberOfDependencies(6),
+                    p -> p.assertNumberOfDependencies(7),
                     p -> p.assertDependencyIsOptional(1),
                     p -> p.assertDependencyIsOptional(2),
                     p -> p.assertDependencyIsOptional(3),
                     p -> p.assertDependencyIsOptional(4),
-                    p -> p.assertDependency(5, "joda-time", "joda-time"),
                     p -> p.assertDependencyIsOptional(5),
-                    p -> p.assertDependency(6, "com.google.guava", "guava"),
-                    p -> p.assertDependencyIsOptional(6));
+                    p -> p.assertDependency(6, "joda-time", "joda-time"),
+                    p -> p.assertDependencyIsOptional(6),
+                    p -> p.assertDependency(7, "com.google.guava", "guava"),
+                    p -> p.assertDependencyIsOptional(7));
     }
 }
