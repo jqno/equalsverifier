@@ -4,9 +4,9 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
-import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
+import nl.jqno.equalsverifier_testhelpers.annotations.Immutable;
+import nl.jqno.equalsverifier_testhelpers.types.ImmutableCanEqualPoint;
+import nl.jqno.equalsverifier_testhelpers.types.MutableCanEqualColorPoint;
 import org.junit.jupiter.api.Test;
 
 class AnnotationImmutableTest {

@@ -28,7 +28,7 @@ import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber

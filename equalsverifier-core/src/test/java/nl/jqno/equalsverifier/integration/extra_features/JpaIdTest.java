@@ -7,10 +7,10 @@ import java.util.UUID;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.EmbeddedId;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
-import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
+import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.EmbeddedId;
+import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Entity;
+import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Id;
+import nl.jqno.equalsverifier_testhelpers.annotations.org.hibernate.annotations.NaturalId;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
@@ -789,7 +789,7 @@ class JpaIdTest {
 
     static class NonJpaIdBusinessKeyPerson {
 
-        @nl.jqno.equalsverifier.testhelpers.annotations.Id
+        @nl.jqno.equalsverifier_testhelpers.annotations.Id
         private final UUID id;
 
         private final String socialSecurity;
@@ -825,7 +825,7 @@ class JpaIdTest {
         @Id
         private final UUID id;
 
-        @nl.jqno.equalsverifier.testhelpers.annotations.NaturalId
+        @nl.jqno.equalsverifier_testhelpers.annotations.NaturalId
         private final String socialSecurity;
 
         private final String name;

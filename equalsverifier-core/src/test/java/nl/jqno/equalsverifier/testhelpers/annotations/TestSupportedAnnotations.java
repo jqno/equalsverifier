@@ -5,6 +5,10 @@ import java.util.Set;
 import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationProperties;
+import nl.jqno.equalsverifier_testhelpers.annotations.FieldAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier_testhelpers.annotations.MethodAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier_testhelpers.annotations.TypeAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier_testhelpers.annotations.TypeUseAnnotationRuntimeRetention;
 
 public enum TestSupportedAnnotations implements Annotation {
     TYPE_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention"),

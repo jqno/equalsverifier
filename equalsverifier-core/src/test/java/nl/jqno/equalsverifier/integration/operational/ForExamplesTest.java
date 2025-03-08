@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveType;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.RecursiveType;
 import org.junit.jupiter.api.Test;
 
 public class ForExamplesTest {

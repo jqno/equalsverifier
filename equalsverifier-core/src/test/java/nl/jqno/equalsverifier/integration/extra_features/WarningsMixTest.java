@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.types.Color;
-import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
+import nl.jqno.equalsverifier_testhelpers.types.Color;
+import nl.jqno.equalsverifier_testhelpers.types.MutablePoint;
 import org.junit.jupiter.api.Test;
 
 class WarningsMixTest {

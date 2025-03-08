@@ -4,6 +4,9 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Embeddable;
+import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Entity;
+import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.MappedSuperclass;
 import org.junit.jupiter.api.Test;
 
 class JpaEntityTest {
@@ -71,7 +74,7 @@ class JpaEntityTest {
                 .assertMessageContains("Subclass");
     }
 
-    @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity
+    @Entity
     static class EntityByJpaAnnotation {
 
         private int i;
@@ -102,7 +105,7 @@ class JpaEntityTest {
 
     static class SubclassEntityByJpaAnnotation extends EntityByJpaAnnotation {}
 
-    @nl.jqno.equalsverifier.testhelpers.annotations.Entity
+    @nl.jqno.equalsverifier_testhelpers.annotations.Entity
     static class EntityByNonJpaAnnotation {
 
         private int i;
@@ -131,7 +134,7 @@ class JpaEntityTest {
         }
     }
 
-    @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Embeddable
+    @Embeddable
     static class EmbeddableByJpaAnnotation {
 
         private int i;
@@ -162,7 +165,7 @@ class JpaEntityTest {
 
     static class SubclassEmbeddableByJpaAnnotation extends EmbeddableByJpaAnnotation {}
 
-    @nl.jqno.equalsverifier.testhelpers.annotations.Embeddable
+    @nl.jqno.equalsverifier_testhelpers.annotations.Embeddable
     static class EmbeddableByNonJpaAnnotation {
 
         private int i;
@@ -191,7 +194,7 @@ class JpaEntityTest {
         }
     }
 
-    @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.MappedSuperclass
+    @MappedSuperclass
     abstract static class MappedSuperclassByJpaAnnotation {
 
         private int i;
@@ -222,7 +225,7 @@ class JpaEntityTest {
 
     static class SubclassMappedSuperclassByJpaAnnotation extends MappedSuperclassByJpaAnnotation {}
 
-    @nl.jqno.equalsverifier.testhelpers.annotations.MappedSuperclass
+    @nl.jqno.equalsverifier_testhelpers.annotations.MappedSuperclass
     abstract static class MappedSuperclassByNonJpaAnnotation {
 
         private int i;

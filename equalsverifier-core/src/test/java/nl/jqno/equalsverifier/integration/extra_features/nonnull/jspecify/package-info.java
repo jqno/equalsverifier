@@ -2,4 +2,4 @@
 @NullMarked
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jspecify;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.org.jspecify.annotations.NullMarked;
+import nl.jqno.equalsverifier_testhelpers.annotations.org.jspecify.annotations.NullMarked;

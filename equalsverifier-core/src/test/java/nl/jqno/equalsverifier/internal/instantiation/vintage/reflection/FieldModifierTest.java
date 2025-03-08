@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ObjectContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrimitiveContainer;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.ObjectContainer;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.PrimitiveContainer;
 import org.junit.jupiter.api.Test;
 
 class FieldModifierTest {

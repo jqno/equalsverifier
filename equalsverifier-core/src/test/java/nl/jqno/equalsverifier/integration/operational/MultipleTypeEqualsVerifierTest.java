@@ -10,15 +10,15 @@ import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
-import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
-import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
-import nl.jqno.equalsverifier.testhelpers.packages.subclasses.SuperA;
-import nl.jqno.equalsverifier.testhelpers.packages.subclasses.SuperI;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectM;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectN;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.subpackage.IncorrectO;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.subpackage.IncorrectP;
+import nl.jqno.equalsverifier_testhelpers.packages.correct.A;
+import nl.jqno.equalsverifier_testhelpers.packages.correct.B;
+import nl.jqno.equalsverifier_testhelpers.packages.correct.C;
+import nl.jqno.equalsverifier_testhelpers.packages.subclasses.SuperA;
+import nl.jqno.equalsverifier_testhelpers.packages.subclasses.SuperI;
+import nl.jqno.equalsverifier_testhelpers.packages.twoincorrect.IncorrectM;
+import nl.jqno.equalsverifier_testhelpers.packages.twoincorrect.IncorrectN;
+import nl.jqno.equalsverifier_testhelpers.packages.twoincorrect.subpackage.IncorrectO;
+import nl.jqno.equalsverifier_testhelpers.packages.twoincorrect.subpackage.IncorrectP;
 import org.junit.jupiter.api.Test;
 
 class MultipleTypeEqualsVerifierTest {

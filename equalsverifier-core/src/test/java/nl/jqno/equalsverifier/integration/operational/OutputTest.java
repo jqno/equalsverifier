@@ -4,9 +4,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
+import nl.jqno.equalsverifier_testhelpers.types.MutablePoint;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.Node;
 import org.junit.jupiter.api.Test;
 
 class OutputTest {

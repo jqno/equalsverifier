@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.coverage;
 
-import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier_testhelpers.types.Color;
 
 // CHECKSTYLE OFF: LocalFinalVariableName
 // CHECKSTYLE OFF: NeedBraces

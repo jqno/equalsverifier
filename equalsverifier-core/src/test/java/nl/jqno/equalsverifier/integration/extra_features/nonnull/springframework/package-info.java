@@ -2,4 +2,4 @@
 @NonNullFields
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.springframework;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.org.springframework.lang.NonNullFields;
+import nl.jqno.equalsverifier_testhelpers.annotations.org.springframework.lang.NonNullFields;

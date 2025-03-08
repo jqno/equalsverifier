@@ -4,5 +4,5 @@
 @DefaultAnnotation(NonNull.class)
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
-import nl.jqno.equalsverifier.testhelpers.annotations.edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import nl.jqno.equalsverifier_testhelpers.annotations.NonNull;
+import nl.jqno.equalsverifier_testhelpers.annotations.edu.umd.cs.findbugs.annotations.DefaultAnnotation;

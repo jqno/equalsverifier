@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.stream.Stream;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier_testhelpers.types.Color;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

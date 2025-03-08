@@ -7,7 +7,7 @@ import java.util.UUID;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
+import nl.jqno.equalsverifier_testhelpers.annotations.org.hibernate.annotations.NaturalId;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
@@ -756,7 +756,7 @@ class JakartaIdTest {
         @jakarta.persistence.Id
         private final UUID id;
 
-        @nl.jqno.equalsverifier.testhelpers.annotations.NaturalId
+        @nl.jqno.equalsverifier_testhelpers.annotations.NaturalId
         private final String socialSecurity;
 
         private final String name;

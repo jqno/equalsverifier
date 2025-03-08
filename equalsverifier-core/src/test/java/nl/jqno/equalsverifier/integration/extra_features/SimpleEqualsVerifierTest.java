@@ -6,7 +6,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier_testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 
 class SimpleEqualsVerifierTest {
