@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -90,7 +90,7 @@ class FallbackFactoryTest {
         ExpectedException
                 .when(() -> factory.createValues(new TypeTag(TwoStepNodeA.class), valueProvider, typeStack))
                 .assertThrows(RecursionException.class)
-                .assertDescriptionContains("TwoStepNodeA", "TwoStepNodeB");
+                .assertMessageContains("TwoStepNodeA", "TwoStepNodeB");
     }
 
     @Test

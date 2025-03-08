@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.api.ConfiguredEqualsVerifier;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier_testhelpers.types.MutablePoint;
 import nl.jqno.equalsverifier_testhelpers.types.PointContainer;

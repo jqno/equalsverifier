@@ -9,9 +9,9 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -188,7 +188,7 @@ class SubjectCreatorTest {
     void noValueFound() {
         sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
 
-        ExpectedException.when(() -> sut.plain()).assertThrows(NoValueException.class).assertDescriptionContains("int");
+        ExpectedException.when(() -> sut.plain()).assertThrows(NoValueException.class).assertMessageContains("int");
 
         assertThat(actual).isEqualTo(expected);
     }

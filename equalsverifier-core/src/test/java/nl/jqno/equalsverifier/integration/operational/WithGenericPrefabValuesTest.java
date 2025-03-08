@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.DoubleGenericContainer;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.DoubleGenericContainerContainer;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SingleGenericContainer;

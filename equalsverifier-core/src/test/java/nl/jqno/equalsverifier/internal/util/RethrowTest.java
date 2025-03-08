@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.util.Rethrow.ThrowingRunnable;
 import nl.jqno.equalsverifier.internal.util.Rethrow.ThrowingSupplier;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 class RethrowTest {

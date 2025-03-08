@@ -31,7 +31,6 @@ class ReportTest {
         assertThat(report.getMessage())
                 .startsWith("EqualsVerifier found a problem in class nl.jqno.equalsverifier_testhelpers.types.Point");
         assertThat(report.getCause().getClass()).isEqualTo(AssertionException.class);
-        assertThat(report.getCause().getMessage()).isNull();
     }
 
     @Test

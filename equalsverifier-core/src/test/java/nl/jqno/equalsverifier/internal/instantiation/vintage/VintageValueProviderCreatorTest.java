@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
@@ -139,8 +139,8 @@ class VintageValueProviderCreatorTest {
         ExpectedException
                 .when(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
                 .assertThrows(RecursionException.class)
-                .assertDescriptionContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
-                .assertDescriptionDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
+                .assertMessageContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+                .assertMessageDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
     }
 
     @Test
@@ -148,7 +148,7 @@ class VintageValueProviderCreatorTest {
         ExpectedException
                 .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
                 .assertThrows(RecursionException.class)
-                .assertDescriptionContains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
+                .assertMessageContains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
     }
 
     @Test

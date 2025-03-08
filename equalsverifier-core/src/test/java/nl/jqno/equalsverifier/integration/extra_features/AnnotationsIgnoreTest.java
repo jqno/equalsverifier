@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.annotations.DefaultNonnullJavax;
 import nl.jqno.equalsverifier_testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier_testhelpers.annotations.javax.annotation.Nonnull;

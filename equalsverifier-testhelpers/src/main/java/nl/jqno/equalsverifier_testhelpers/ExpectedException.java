@@ -1,7 +1,6 @@
-package nl.jqno.equalsverifier.internal.testhelpers;
+package nl.jqno.equalsverifier_testhelpers;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @SuppressFBWarnings(value = "NM_CLASS_NOT_EXCEPTION", justification = "Only called in test code, not production.")
 public final class ExpectedException {
@@ -123,34 +122,6 @@ public final class ExpectedException {
         for (String fragment : fragments) {
             if (message.contains(fragment)) {
                 fail("Message [" + message + "] contains [" + fragment + "]");
-            }
-        }
-        return this;
-    }
-
-    public ExpectedException assertDescriptionContains(String... fragments) {
-        if (!(e instanceof MessagingException)) {
-            fail("Exception " + e.getClass().getSimpleName() + " is not a MessagingException.");
-        }
-        MessagingException me = (MessagingException) e;
-        String description = me.getDescription();
-        for (String fragment : fragments) {
-            if (!description.contains(fragment)) {
-                fail("Description [" + description + "] does not contain [" + fragment + "]");
-            }
-        }
-        return this;
-    }
-
-    public ExpectedException assertDescriptionDoesNotContain(String... fragments) {
-        if (!(e instanceof MessagingException)) {
-            fail("Exception " + e.getClass().getSimpleName() + " is not a MessagingException.");
-        }
-        MessagingException me = (MessagingException) e;
-        String description = me.getDescription();
-        for (String fragment : fragments) {
-            if (description.contains(fragment)) {
-                fail("Description [" + description + "] contains [" + fragment + "]");
             }
         }
         return this;

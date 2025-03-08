@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier_testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier_testhelpers.types.MutableCanEqualColorPoint;
