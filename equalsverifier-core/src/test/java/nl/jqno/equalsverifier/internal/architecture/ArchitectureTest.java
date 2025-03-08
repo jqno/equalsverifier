@@ -10,7 +10,6 @@ import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
@@ -20,11 +19,7 @@ public final class ArchitectureTest {
             .that()
             .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.instantiation.vintage..")
             .and()
-            .doNotBelongToAnyOf(
-                JavaApiPrefabValues.class,
-                PrefabValuesApi.class,
-                // 👇 Test classes
-                FactoryCacheFactory.class)
+            .doNotBelongToAnyOf(JavaApiPrefabValues.class, PrefabValuesApi.class)
             .should()
             .accessClassesThat()
             .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues..")
