@@ -22,5 +22,10 @@
             <artifactId>spotbugs-annotations</artifactId>
             <version>${version.spotbugs}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${version.jsr305}</version>
+        </dependency>
     </dependencies>
 </project>
