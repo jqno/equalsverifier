@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.api.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier_testhelpers.packages.correct.A;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier_testhelpers.types.*;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.RecursiveType;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.RecursiveTypeContainer;

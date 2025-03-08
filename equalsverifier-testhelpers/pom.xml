@@ -12,6 +12,10 @@
     <artifactId>equalsverifier-testhelpers</artifactId>
     <name>EqualsVerifier | testhelpers</name>
 
+    <properties>
+        <spotbugs.skip>true</spotbugs.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.spotbugs</groupId>

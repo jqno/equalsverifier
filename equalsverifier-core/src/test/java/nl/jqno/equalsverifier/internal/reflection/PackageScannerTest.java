@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier_testhelpers.packages.correct.A;
-import nl.jqno.equalsverifier_testhelpers.packages.correct.B;
-import nl.jqno.equalsverifier_testhelpers.packages.correct.C;
-import nl.jqno.equalsverifier_testhelpers.packages.subclasses.*;
-import nl.jqno.equalsverifier_testhelpers.packages.subclasses.subpackage.SubA3;
-import nl.jqno.equalsverifier_testhelpers.packages.correct.subpackage.subpackage.D;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.D;
+import nl.jqno.equalsverifier.testhelpers.packages.subclasses.*;
+import nl.jqno.equalsverifier.testhelpers.packages.subclasses.subpackage.SubA3;
 import org.junit.jupiter.api.Test;
 
 class PackageScannerTest {
@@ -59,10 +59,10 @@ class PackageScannerTest {
                                 A.class,
                                 B.class,
                                 C.class,
-                                nl.jqno.equalsverifier_testhelpers.packages.correct.subpackage.A.class,
-                                nl.jqno.equalsverifier_testhelpers.packages.correct.subpackage.B.class,
-                                nl.jqno.equalsverifier_testhelpers.packages.correct.subpackage.subpackage.A.class,
-                                nl.jqno.equalsverifier_testhelpers.packages.correct.subpackage.subpackage.B.class,
+                                nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.A.class,
+                                nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.B.class,
+                                nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.A.class,
+                                nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.B.class,
                                 D.class));
     }
 
@@ -130,7 +130,7 @@ class PackageScannerTest {
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.anonymous", opts);
 
-        assertThat(classes).isEqualTo(List.of(nl.jqno.equalsverifier_testhelpers.packages.anonymous.A.class));
+        assertThat(classes).isEqualTo(List.of(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
     }
 
     @Test

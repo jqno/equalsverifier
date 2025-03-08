@@ -11,15 +11,15 @@ import nl.jqno.equalsverifier_testhelpers.annotations.TypeAnnotationRuntimeReten
 import nl.jqno.equalsverifier_testhelpers.annotations.TypeUseAnnotationRuntimeRetention;
 
 public enum TestSupportedAnnotations implements Annotation {
-    TYPE_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention"),
-    TYPE_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention"),
-    FIELD_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention"),
-    FIELD_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention"),
+    TYPE_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.TypeAnnotationRuntimeRetention"),
+    TYPE_CLASS_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.TypeAnnotationClassRetention"),
+    FIELD_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.FieldAnnotationRuntimeRetention"),
+    FIELD_CLASS_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.FieldAnnotationClassRetention"),
     TYPEUSE_RUNTIME_RETENTION(false,
-            "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationRuntimeRetention"),
-    TYPEUSE_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationClassRetention"),
-    METHOD_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationRuntimeRetention"),
-    METHOD_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationClassRetention"),
+            "nl.jqno.equalsverifier_testhelpers.annotations.TypeUseAnnotationRuntimeRetention"),
+    TYPEUSE_CLASS_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.TypeUseAnnotationClassRetention"),
+    METHOD_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.MethodAnnotationRuntimeRetention"),
+    METHOD_CLASS_RETENTION(false, "nl.jqno.equalsverifier_testhelpers.annotations.MethodAnnotationClassRetention"),
 
     TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeAnnotationRuntimeRetention"),
     TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),

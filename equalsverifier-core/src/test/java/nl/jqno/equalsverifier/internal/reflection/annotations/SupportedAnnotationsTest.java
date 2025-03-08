@@ -15,7 +15,7 @@ class SupportedAnnotationsTest {
     @Test
     void jsr305DefaultReturnsTrue_whenAnnotationHasNonnullAnnotation() {
         AnnotationProperties props =
-                new AnnotationProperties("nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax");
+                new AnnotationProperties("nl.jqno.equalsverifier_testhelpers.annotations.DefaultNonnullJavax");
         boolean actual = SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL
                 .validate(props, ANNOTATION_CACHE, NO_IGNORED_ANNOTATIONS);
         assertThat(actual).isTrue();
