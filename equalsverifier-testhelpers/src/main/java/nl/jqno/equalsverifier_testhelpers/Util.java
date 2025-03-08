@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.testhelpers;
+package nl.jqno.equalsverifier_testhelpers;
 
 import java.lang.reflect.Constructor;
 

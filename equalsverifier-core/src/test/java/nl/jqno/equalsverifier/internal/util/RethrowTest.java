@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
 
 import java.io.IOException;
 

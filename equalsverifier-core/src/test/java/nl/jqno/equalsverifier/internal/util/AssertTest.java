@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;

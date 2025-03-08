@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
