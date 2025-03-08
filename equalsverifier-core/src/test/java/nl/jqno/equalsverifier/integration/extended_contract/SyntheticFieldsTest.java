@@ -1,15 +1,11 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Comparator;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-// because of the use of defaultEquals and defaultHashCode
 @SuppressWarnings("unused")
 class SyntheticFieldsTest {
 
@@ -81,12 +77,12 @@ class SyntheticFieldsTest {
 
             @Override
             public boolean equals(Object obj) {
-                return defaultEquals(this, obj);
+                return obj instanceof Inner other && Objects.equals(foo, other.foo);
             }
 
             @Override
             public int hashCode() {
-                return defaultHashCode(this);
+                return Objects.hash(foo);
             }
         }
 
@@ -96,12 +92,12 @@ class SyntheticFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof Outer other && Objects.equals(inner, other.inner);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(inner);
         }
     }
 
@@ -156,7 +152,7 @@ class SyntheticFieldsTest {
         @Override
         public int hashCode() {
             __cobertura_counters[0] += 1;
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 

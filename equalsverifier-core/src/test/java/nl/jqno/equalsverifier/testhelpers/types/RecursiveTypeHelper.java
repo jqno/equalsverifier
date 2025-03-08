@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 public class RecursiveTypeHelper {
 
@@ -71,12 +70,16 @@ public class RecursiveTypeHelper {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof RecursiveType)) {
+                return false;
+            }
+            var other = (RecursiveType) obj;
+            return Objects.equals(recurse, other.recurse);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(recurse);
         }
     }
 
@@ -90,12 +93,16 @@ public class RecursiveTypeHelper {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof RecursiveTypeContainer)) {
+                return false;
+            }
+            var other = (RecursiveTypeContainer) obj;
+            return Objects.equals(recurse, other.recurse);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(recurse);
         }
     }
 }

@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 import java.util.UUID;
 
@@ -192,7 +190,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(id);
         }
     }
 
@@ -378,7 +376,7 @@ class VersionedEntityTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(id);
         }
     }
 

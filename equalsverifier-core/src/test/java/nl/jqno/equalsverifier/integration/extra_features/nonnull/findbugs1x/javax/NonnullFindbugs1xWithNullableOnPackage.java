@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 public final class NonnullFindbugs1xWithNullableOnPackage {
 
@@ -25,6 +25,6 @@ public final class NonnullFindbugs1xWithNullableOnPackage {
 
     @Override
     public int hashCode() {
-        return defaultHashCode(this);
+        return Objects.hash(o, p);
     }
 }

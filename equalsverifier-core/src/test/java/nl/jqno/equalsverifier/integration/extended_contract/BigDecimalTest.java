@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -73,7 +71,7 @@ class BigDecimalTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(bd);
         }
     }
 
@@ -159,7 +157,7 @@ class BigDecimalTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(bd);
         }
     }
 

@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -72,12 +71,12 @@ class AnnotationsIgnoreTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof ImmutableByAnnotation other && Objects.equals(i, other.i);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -101,7 +100,7 @@ class AnnotationsIgnoreTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -125,7 +124,7 @@ class AnnotationsIgnoreTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 }

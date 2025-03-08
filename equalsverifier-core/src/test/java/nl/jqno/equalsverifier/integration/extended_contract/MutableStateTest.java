@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Arrays;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -119,7 +117,6 @@ class MutableStateTest {
         }
     }
 
-    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class ObjectMutableField {
 
         private Object field;
@@ -130,16 +127,15 @@ class MutableStateTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof ObjectMutableField other && Objects.equals(field, other.field);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(field);
         }
     }
 
-    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class EnumMutableField {
 
         public enum Enum {
@@ -154,12 +150,12 @@ class MutableStateTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof EnumMutableField other && Objects.equals(field, other.field);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(field);
         }
     }
 

@@ -1,25 +1,20 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-// because of the use of defaultEquals and defaultHashCode
-@SuppressWarnings("unused")
 class BalancedAbstractnessTest {
 
-    private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String BOTH_ARE_ABSTRACT = "equals and hashCode methods are both abstract";
     private static final String EQUALS_IS_ABSTRACT = "equals method is abstract";
     private static final String HASHCODE_IS_ABSTRACT = "hashCode method is abstract";
     private static final String EQUALS_IS_NOT = "but equals is not";
     private static final String HASHCODE_IS_NOT = "but hashCode is not";
     private static final String BOTH_SHOULD_BE_CONCRETE = "Both should be concrete";
-    private static final String BOTH_SHOULD_BE_SAME = "Both should be either abstract or concrete";
 
     @Test
     void fail_whenBothEqualsAndHashCodeAreAbstract() {
@@ -103,7 +98,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -117,7 +112,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof AbstractHashCode other && Objects.equals(i, other.i);
         }
 
         @Override
@@ -134,12 +129,12 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SubclassOfAbstractBoth other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -159,12 +154,12 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SubclassOfAbstractEqualsButNotHashCode other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -184,12 +179,12 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SubclassOfAbstractHashCodeButNotEquals other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -205,12 +200,12 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SubclassOfSubclassOfAbstractBoth other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 }

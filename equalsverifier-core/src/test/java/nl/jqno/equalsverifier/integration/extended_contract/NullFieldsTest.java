@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -9,8 +8,6 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 
-// because of the use of defaultEquals and defaultHashCode
-@SuppressWarnings("unused")
 class NullFieldsTest {
 
     private static final String NON_NULLITY = "Non-nullity";
@@ -156,7 +153,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(color);
         }
     }
 
@@ -179,7 +176,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(color);
         }
     }
 
@@ -198,7 +195,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return -1;
         }
     }
 
@@ -212,7 +209,7 @@ class NullFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof HashCodeThrowsNpe other && Objects.equals(color, other.color);
         }
 
         @Override
@@ -237,12 +234,12 @@ class NullFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof CheckedDeepNullA other && Objects.equals(b, other.b);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(b);
         }
     }
 
@@ -260,12 +257,12 @@ class NullFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof DeepNullA other && Objects.equals(b, other.b);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(b);
         }
     }
 
@@ -283,12 +280,12 @@ class NullFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof DeepNullB other && Objects.equals(o, other.o);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -303,12 +300,12 @@ class NullFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof ConstantFieldIsNull other && Objects.equals(o, other.o);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -336,7 +333,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p);
         }
 
         @Override

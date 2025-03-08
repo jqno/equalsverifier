@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -104,7 +104,7 @@ class FinalityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -127,7 +127,7 @@ class FinalityTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 

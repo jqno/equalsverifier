@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
@@ -10,12 +8,8 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-// because of the use of defaultEquals and defaultHashCode
-@SuppressWarnings("unused")
 class OriginalStateTest {
 
-    private static final String INSTANCE_1 = "instance 1";
-    private static final String INSTANCE_2 = "instance 2";
     private static final String STATIC = "static";
     private static final String STATIC_FINAL = "static final";
 
@@ -75,12 +69,12 @@ class OriginalStateTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof CorrectEquals other && Objects.equals(instanceValue, other.instanceValue);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(instanceValue);
         }
     }
 
@@ -94,12 +88,12 @@ class OriginalStateTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof CorrectEqualsContainer other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -113,12 +107,12 @@ class OriginalStateTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof CorrectEqualsContainerContainer other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -144,7 +138,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -165,12 +159,12 @@ class OriginalStateTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof FailingEqualsContainerContainer other && Objects.equals(foo, other.foo);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 }

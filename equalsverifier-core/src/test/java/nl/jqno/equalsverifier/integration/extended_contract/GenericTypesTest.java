@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.Supplier;
@@ -198,7 +195,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(optional, supplier, atomicReferenceArray);
         }
 
         @Override
@@ -239,7 +236,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(list);
         }
 
         @Override
@@ -278,7 +275,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(set);
         }
 
         @Override
@@ -320,7 +317,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(map);
         }
 
         @Override
@@ -361,7 +358,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(list);
         }
 
         @Override
@@ -481,7 +478,7 @@ class GenericTypesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SparseArrayHashCodeContainer other && Objects.equals(sparseArray, other.sparseArray);
         }
 
         @Override
@@ -506,12 +503,12 @@ class GenericTypesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SparseArrayToStringContainer other && Objects.equals(sparseArray, other.sparseArray);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(sparseArray);
         }
 
         @Override
@@ -554,7 +551,6 @@ class GenericTypesTest {
         }
     }
 
-    @SuppressWarnings("unused")
     static final class TypeVariableExtendsContainer<I extends Comparable<I>> {
 
         private final I id;
@@ -563,18 +559,18 @@ class GenericTypesTest {
             this.id = id;
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof TypeVariableExtendsContainer other && Objects.equals(id, other.id);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(id);
         }
     }
 
-    @SuppressWarnings("unused")
     static final class TypeVariableExtendsWithSuperContainer<I extends Comparable<? super I>> {
 
         private final I id;
@@ -583,14 +579,15 @@ class GenericTypesTest {
             this.id = id;
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof TypeVariableExtendsWithSuperContainer other && Objects.equals(id, other.id);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(id);
         }
     }
 

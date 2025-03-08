@@ -1,16 +1,11 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-// because of the use of defaultEquals and defaultHashCode
-@SuppressWarnings("unused")
 class AbstractDelegationTest {
 
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
@@ -221,7 +216,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -244,7 +239,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -275,7 +270,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -315,7 +310,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -390,7 +385,7 @@ class AbstractDelegationTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
 
         @Override
@@ -438,7 +433,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -466,12 +461,12 @@ class AbstractDelegationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof AbstractDelegator other && Objects.equals(i, other.i);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 
@@ -509,7 +504,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(delegator, i);
         }
     }
 
@@ -525,7 +520,9 @@ class AbstractDelegationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof HashCodeDelegatesToAbstractMethodInField other
+                    && Objects.equals(delegator, other.delegator)
+                    && Objects.equals(i, other.i);
         }
 
         @Override
@@ -533,7 +530,7 @@ class AbstractDelegationTest {
             if (delegator != null) {
                 delegator.abstractDelegation();
             }
-            return defaultHashCode(this);
+            return Objects.hash(delegator, i);
         }
     }
 
@@ -549,12 +546,14 @@ class AbstractDelegationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof ToStringDelegatesToAbstractMethodInField other
+                    && Objects.equals(delegator, other.delegator)
+                    && Objects.equals(i, other.i);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(delegator, i);
         }
 
         @Override
@@ -585,7 +584,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(delegator);
         }
     }
 
@@ -599,7 +598,8 @@ class AbstractDelegationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof HashCodeInFieldDelegatesToAbstractMethod other
+                    && Objects.equals(delegator, other.delegator);
         }
 
         @Override
@@ -618,12 +618,13 @@ class AbstractDelegationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof ToStringInFieldDelegatesToAbstractMethod other
+                    && Objects.equals(delegator, other.delegator);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(delegator);
         }
 
         @Override
@@ -647,7 +648,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 

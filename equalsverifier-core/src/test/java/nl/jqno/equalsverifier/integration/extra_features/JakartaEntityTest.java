@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -74,7 +72,7 @@ class JakartaEntityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i, s);
         }
     }
 
@@ -105,7 +103,7 @@ class JakartaEntityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i, s);
         }
     }
 
@@ -136,7 +134,7 @@ class JakartaEntityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i, s);
         }
     }
 

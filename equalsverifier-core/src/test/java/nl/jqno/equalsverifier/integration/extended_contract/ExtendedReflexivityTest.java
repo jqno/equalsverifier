@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -128,7 +125,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(s);
         }
     }
 
@@ -151,7 +148,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(stringField);
         }
     }
 
@@ -174,7 +171,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(characterField);
         }
     }
 
@@ -197,7 +194,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(integerField);
         }
     }
 
@@ -220,7 +217,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(longField);
         }
     }
 
@@ -243,13 +240,12 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(shortField);
         }
     }
 
     static final class FieldHasNoEquals {
 
-        @SuppressWarnings("unused")
         private final NoEquals field;
 
         public FieldHasNoEquals(NoEquals field) {
@@ -258,12 +254,12 @@ class ExtendedReflexivityTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof FieldHasNoEquals other && Objects.equals(field, other.field);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(field);
         }
 
         static final class NoEquals {}
@@ -271,7 +267,6 @@ class ExtendedReflexivityTest {
 
     static final class FieldIsInterface {
 
-        @SuppressWarnings("unused")
         private final Interface field;
 
         public FieldIsInterface(Interface field) {
@@ -280,12 +275,12 @@ class ExtendedReflexivityTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof FieldIsInterface other && Objects.equals(field, other.field);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(field);
         }
 
         interface Interface {}
@@ -293,7 +288,6 @@ class ExtendedReflexivityTest {
 
     static final class FieldIsInterfaceWithEquals {
 
-        @SuppressWarnings("unused")
         private final InterfaceWithEquals field;
 
         public FieldIsInterfaceWithEquals(InterfaceWithEquals field) {
@@ -302,12 +296,12 @@ class ExtendedReflexivityTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof FieldIsInterfaceWithEquals other && Objects.equals(field, other.field);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(field);
         }
 
         interface InterfaceWithEquals {

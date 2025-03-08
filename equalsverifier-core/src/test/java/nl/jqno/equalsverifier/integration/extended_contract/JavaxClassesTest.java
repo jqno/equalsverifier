@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
+import java.util.Objects;
 import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -18,7 +16,6 @@ class JavaxClassesTest {
         EqualsVerifier.forClass(JavaxContainer.class).verify();
     }
 
-    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class JavaxContainer {
 
         private final Reference ref;
@@ -31,12 +28,14 @@ class JavaxClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof JavaxContainer other
+                    && Objects.equals(ref, other.ref)
+                    && Objects.equals(node, other.node);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(ref, node);
         }
     }
 }

@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -382,7 +379,7 @@ class SignificantFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof ConstantHashCode other && Objects.equals(x, other.x) && Objects.equals(y, other.y);
         }
 
         @Override
@@ -723,7 +720,7 @@ class SignificantFieldsTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i, statelessField);
         }
     }
 

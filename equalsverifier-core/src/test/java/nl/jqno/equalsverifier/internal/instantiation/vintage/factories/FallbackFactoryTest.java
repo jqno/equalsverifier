@@ -1,11 +1,10 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
@@ -128,12 +127,14 @@ class FallbackFactoryTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof IntContainer other
+                    && Objects.equals(finalI, other.finalI)
+                    && Objects.equals(i, other.i);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(finalI, i);
         }
     }
 }

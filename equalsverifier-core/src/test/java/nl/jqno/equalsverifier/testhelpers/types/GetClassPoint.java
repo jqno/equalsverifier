@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 public class GetClassPoint {
 
@@ -23,6 +23,6 @@ public class GetClassPoint {
 
     @Override
     public int hashCode() {
-        return defaultHashCode(this);
+        return Objects.hash(x, y);
     }
 }

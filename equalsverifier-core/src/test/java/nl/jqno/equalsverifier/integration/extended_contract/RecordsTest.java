@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -179,7 +177,7 @@ class RecordsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof EqualsRecord other && Objects.equals(i, other.i) && Objects.equals(s, other.s);
         }
 
     }

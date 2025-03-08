@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -130,7 +128,7 @@ class ReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(one, two, unused);
         }
     }
 
@@ -168,7 +166,7 @@ class ReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(a);
         }
     }
 
@@ -194,7 +192,7 @@ class ReflexivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 

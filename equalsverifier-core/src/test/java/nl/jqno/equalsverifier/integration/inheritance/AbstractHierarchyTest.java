@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -81,7 +81,7 @@ class AbstractHierarchyTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(x, y);
         }
     }
 
@@ -110,7 +110,7 @@ class AbstractHierarchyTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(x, y);
         }
     }
 
@@ -139,7 +139,7 @@ class AbstractHierarchyTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return 53 * super.hashCode() + Objects.hash(color);
         }
     }
 
@@ -161,7 +161,7 @@ class AbstractHierarchyTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(color);
         }
     }
 

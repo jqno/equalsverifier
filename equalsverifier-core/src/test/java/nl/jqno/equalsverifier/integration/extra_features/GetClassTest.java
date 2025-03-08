@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -106,7 +106,7 @@ class GetClassTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(x, y);
         }
     }
 
@@ -130,7 +130,7 @@ class GetClassTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return 53 * super.hashCode() + Objects.hash(color);
         }
     }
 
@@ -154,7 +154,7 @@ class GetClassTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return 53 * super.hashCode() + Objects.hash(color);
         }
     }
 }

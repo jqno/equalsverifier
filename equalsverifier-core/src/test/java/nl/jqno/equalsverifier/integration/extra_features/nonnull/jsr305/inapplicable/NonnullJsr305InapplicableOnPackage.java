@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 public final class NonnullJsr305InapplicableOnPackage {
 
@@ -21,6 +21,6 @@ public final class NonnullJsr305InapplicableOnPackage {
 
     @Override
     public int hashCode() {
-        return defaultHashCode(this);
+        return Objects.hash(o);
     }
 }

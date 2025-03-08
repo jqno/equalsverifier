@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -149,7 +147,7 @@ class TransitivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(f, g);
         }
     }
 
@@ -201,7 +199,7 @@ class TransitivityTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(f, g, h);
         }
     }
 

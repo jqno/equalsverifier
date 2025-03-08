@@ -1,11 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -116,7 +111,6 @@ class EnumTest {
         }
     }
 
-    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class SingletonUser {
 
         private final Singleton singleton;
@@ -127,12 +121,12 @@ class EnumTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SingletonUser other && Objects.equals(singleton, other.singleton);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(singleton);
         }
     }
 
@@ -146,7 +140,7 @@ class EnumTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof NullThrowingSingletonUser other && Objects.equals(singleton, other.singleton);
         }
 
         @Override
@@ -165,12 +159,13 @@ class EnumTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SingletonCollectionContainer other
+                    && Objects.equals(singletonSet, other.singletonSet);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(singletonSet);
         }
     }
 
@@ -184,12 +179,13 @@ class EnumTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SingletonKeyMapContainer other
+                    && Objects.equals(singletonKeyMap, other.singletonKeyMap);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(singletonKeyMap);
         }
     }
 
@@ -203,12 +199,13 @@ class EnumTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof SingletonOptionalContainer other
+                    && Objects.equals(singletonOptional, other.singletonOptional);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(singletonOptional);
         }
     }
 }

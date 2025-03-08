@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -136,7 +133,7 @@ class RecursionTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(node);
         }
     }
 
@@ -166,7 +163,7 @@ class RecursionTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(node);
         }
     }
 
@@ -196,7 +193,7 @@ class RecursionTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(innerTrees);
         }
     }
 
@@ -219,7 +216,7 @@ class RecursionTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(tree);
         }
     }
 
@@ -235,12 +232,12 @@ class RecursionTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof StaticFinalNodeContainer other && Objects.equals(i, other.i);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
     }
 }

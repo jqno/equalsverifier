@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
+import java.util.Objects;
 
 public class Pair<T, U> {
 
@@ -15,12 +14,17 @@ public class Pair<T, U> {
 
     @Override
     public boolean equals(Object obj) {
-        return defaultEquals(this, obj);
+        if (!(obj instanceof Pair)) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        var other = (Pair<T, U>) obj;
+        return Objects.equals(left, other.left) && Objects.equals(right, other.right);
     }
 
     @Override
     public int hashCode() {
-        return defaultHashCode(this);
+        return Objects.hash(left, right);
     }
 
     @Override

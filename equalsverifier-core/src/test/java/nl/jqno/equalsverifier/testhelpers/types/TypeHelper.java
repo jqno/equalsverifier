@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -297,16 +294,19 @@ public class TypeHelper {
             if (string != null) {
                 String s = string.t;
             }
-            return defaultEquals(this, obj);
+            if (!(obj instanceof SingleGenericContainerContainer)) {
+                return false;
+            }
+            var other = (SingleGenericContainerContainer) obj;
+            return Objects.equals(string, other.string) && Objects.equals(integer, other.integer);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(string, integer);
         }
     }
 
-    @SuppressWarnings("unused")
     public static final class SingleGenericContainer<T> {
 
         private final SingleGenericContainer<Void> justToMakeItRecursiveAndForcePrefabValues = null;
@@ -319,12 +319,19 @@ public class TypeHelper {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof SingleGenericContainer)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            var other = (SingleGenericContainer<T>) obj;
+            return Objects
+                    .equals(justToMakeItRecursiveAndForcePrefabValues, other.justToMakeItRecursiveAndForcePrefabValues)
+                    && Objects.equals(t, other.t);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(justToMakeItRecursiveAndForcePrefabValues, t);
         }
     }
 
@@ -346,16 +353,19 @@ public class TypeHelper {
             if (stringBoolean != null) {
                 String s = stringBoolean.t;
             }
-            return defaultEquals(this, obj);
+            if (!(obj instanceof DoubleGenericContainerContainer)) {
+                return false;
+            }
+            var other = (DoubleGenericContainerContainer) obj;
+            return Objects.equals(stringBoolean, other.stringBoolean) && Objects.equals(integerByte, other.integerByte);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(stringBoolean, integerByte);
         }
     }
 
-    @SuppressWarnings("unused")
     public static final class DoubleGenericContainer<T, U> {
 
         private final DoubleGenericContainer<Void, Void> justToMakeItRecursiveAndForcePrefabValues = null;
@@ -370,12 +380,20 @@ public class TypeHelper {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof DoubleGenericContainer)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            var other = (DoubleGenericContainer<T, U>) obj;
+            return Objects
+                    .equals(justToMakeItRecursiveAndForcePrefabValues, other.justToMakeItRecursiveAndForcePrefabValues)
+                    && Objects.equals(t, other.t)
+                    && Objects.equals(u, other.u);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(justToMakeItRecursiveAndForcePrefabValues, t, u);
         }
     }
 

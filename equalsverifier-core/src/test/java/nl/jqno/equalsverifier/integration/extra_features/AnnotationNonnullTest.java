@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
+import java.util.Objects;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -265,7 +264,7 @@ class AnnotationNonnullTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p, q);
         }
     }
 
@@ -304,7 +303,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, noAnnotation, q);
         }
     }
 
@@ -328,7 +327,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -352,7 +351,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -376,7 +375,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -400,7 +399,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -424,7 +423,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -448,7 +447,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -474,7 +473,7 @@ class AnnotationNonnullTest {
 
             @Override
             public int hashCode() {
-                return defaultHashCode(this);
+                return Objects.hash(o);
             }
         }
 
@@ -499,7 +498,7 @@ class AnnotationNonnullTest {
 
                 @Override
                 public int hashCode() {
-                    return defaultHashCode(this);
+                    return Objects.hash(o);
                 }
             }
         }
@@ -529,7 +528,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -557,7 +556,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p);
         }
     }
 
@@ -586,7 +585,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p);
         }
     }
 
@@ -610,7 +609,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -634,7 +633,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -658,7 +657,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o);
         }
     }
 
@@ -684,7 +683,7 @@ class AnnotationNonnullTest {
 
             @Override
             public int hashCode() {
-                return defaultHashCode(this);
+                return Objects.hash(o);
             }
         }
 
@@ -709,7 +708,7 @@ class AnnotationNonnullTest {
 
                 @Override
                 public int hashCode() {
-                    return defaultHashCode(this);
+                    return Objects.hash(o);
                 }
             }
         }
@@ -739,7 +738,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p);
         }
     }
 
@@ -767,7 +766,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p);
         }
     }
 
@@ -796,7 +795,7 @@ class AnnotationNonnullTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(o, p);
         }
     }
 }

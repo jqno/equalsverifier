@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -78,7 +75,7 @@ class NullFieldsWithExceptionsTest {
 
         @Override
         public final int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(foo);
         }
     }
 
@@ -118,7 +115,7 @@ class NullFieldsWithExceptionsTest {
 
         @Override
         public final boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof HashCodeThrower other && Objects.equals(foo, other.foo);
         }
 
         @Override
