@@ -36,6 +36,11 @@ class MainClassesJarTest {
     }
 
     @Test
+    void assertAbsenceOfTesthelpers() {
+        jar.assertAbsenceOfTesthelpers();
+    }
+
+    @Test
     void assertAbsenceOfEmbeddedDependencies() {
         jar.assertAbsenceOfEmbeddedDepedencies();
     }

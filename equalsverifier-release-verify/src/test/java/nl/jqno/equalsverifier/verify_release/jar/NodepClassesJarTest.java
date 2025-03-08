@@ -34,6 +34,11 @@ class NodepClassesJarTest {
     }
 
     @Test
+    void assertAbsenceOfTesthelpers() {
+        jar.assertAbsenceOfTesthelpers();
+    }
+
+    @Test
     void assertPresenceOfEmbeddedDependencies() {
         jar.assertPresenceOfEmbeddedDepedencies();
     }

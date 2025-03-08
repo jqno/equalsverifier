@@ -26,6 +26,10 @@ public class JarAsserter {
         assertPresenceOf("/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class");
     }
 
+    public void assertAbsenceOfTesthelpers() {
+        assertAbsenceOf(EV + "-testhelpers/Util.class", EV + "-testhelpers/ExpectedException.class");
+    }
+
     public void assertPresenceOfEmbeddedDepedencies() {
         assertPresenceOf(
             EV + "/internal/lib/bytebuddy/ByteBuddy.class",
