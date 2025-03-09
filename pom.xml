@@ -496,6 +496,7 @@
             <modules>
                 <module>equalsverifier-core</module>
                 <module>equalsverifier-testhelpers</module>
+                <module>equalsverifier-test</module>
             </modules>
         </profile>
 
@@ -508,6 +509,7 @@
             <modules>
                 <module>equalsverifier-core</module>
                 <module>equalsverifier-testhelpers</module>
+                <module>equalsverifier-test</module>
                 <module>equalsverifier-21</module>
                 <module>equalsverifier-test-kotlin</module>
                 <module>equalsverifier-aggregator</module>

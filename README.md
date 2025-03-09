@@ -101,6 +101,7 @@ Here's a description of the modules:
 | docs                          | project's Jekyll website                                              |
 | equalsverifier-core           | the actual EqualsVerifier code                                        |
 | equalsverifier-testhelpers    | shared types and helpers for use in tests                             |
+| equalsverifier-test           | integration tests                                                     |
 | equalsverifier-21             | tests for record pattern matching                                     |
 | equalsverifier-aggregator     | generic release assembly description, and shared jacoco configuration |
 | equalsverifier-release-main   | release assembly for jar with dependencies                            |
