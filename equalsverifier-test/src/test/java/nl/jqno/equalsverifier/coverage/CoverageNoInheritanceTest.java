@@ -21,7 +21,8 @@ class CoverageNoInheritanceTest {
                     Arguments.of(IntelliJGetClassPoint.class),
                     Arguments.of(IntelliJInstanceOfPoint.class),
                     Arguments.of(LombokInstanceOfPoint.class),
-                    Arguments.of(NetBeansGetClassPoint.class));
+                    Arguments.of(NetBeansGetClassPoint.class),
+                    Arguments.of(PatternMatchInstanceofPoint.class));
     }
 
     @ParameterizedTest
