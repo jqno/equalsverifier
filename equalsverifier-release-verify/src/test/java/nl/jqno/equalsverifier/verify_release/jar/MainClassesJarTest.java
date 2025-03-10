@@ -36,6 +36,11 @@ class MainClassesJarTest {
     }
 
     @Test
+    void absenceOfMetainfStuff() {
+        jar.assertAbsenceOfMetainfStuff();
+    }
+
+    @Test
     void assertAbsenceOfTesthelpers() {
         jar.assertAbsenceOfTesthelpers();
     }

@@ -163,6 +163,9 @@
                 <version>${version.maven-jar-plugin}</version>
                 <configuration>
                     <skipIfEmpty>true</skipIfEmpty>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
                 </configuration>
             </plugin>
 
