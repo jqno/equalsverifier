@@ -515,9 +515,6 @@
                 <module>equalsverifier-test</module>
                 <module>equalsverifier-21</module>
                 <module>equalsverifier-test-kotlin</module>
-                <module>equalsverifier-aggregator</module>
-                <module>equalsverifier-release-main</module>
-                <module>equalsverifier-release-nodep</module>
             </modules>
         </profile>
 
@@ -532,6 +529,9 @@
 
             <modules>
                 <module>equalsverifier-test-jpms</module>
+                <module>equalsverifier-aggregator</module>
+                <module>equalsverifier-release-main</module>
+                <module>equalsverifier-release-nodep</module>
                 <module>equalsverifier-release-verify</module>
             </modules>
         </profile>
