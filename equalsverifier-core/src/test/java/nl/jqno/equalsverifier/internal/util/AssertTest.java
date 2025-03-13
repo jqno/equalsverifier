@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 class AssertTest {
@@ -27,7 +27,7 @@ class AssertTest {
         ExpectedException
                 .when(() -> Assert.assertEquals(FAIL, "one", "two"))
                 .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+                .assertMessageContains("fail");
     }
 
     @Test
@@ -40,7 +40,7 @@ class AssertTest {
         ExpectedException
                 .when(() -> Assert.assertFalse(FAIL, true))
                 .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+                .assertMessageContains("fail");
     }
 
     @Test
@@ -53,7 +53,7 @@ class AssertTest {
         ExpectedException
                 .when(() -> Assert.assertTrue(FAIL, false))
                 .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+                .assertMessageContains("fail");
     }
 
     @Test
@@ -61,6 +61,6 @@ class AssertTest {
         ExpectedException
                 .when(() -> Assert.fail(FAIL))
                 .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+                .assertMessageContains("fail");
     }
 }

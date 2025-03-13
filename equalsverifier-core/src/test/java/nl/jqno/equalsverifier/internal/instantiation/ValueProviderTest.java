@@ -6,7 +6,7 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class ValueProviderTest {
@@ -17,7 +17,7 @@ public class ValueProviderTest {
         ExpectedException
                 .when(() -> sut.provideOrThrow(tag, ""))
                 .assertThrows(NoValueException.class)
-                .assertDescriptionContains("Could not find a value for ArrayList");
+                .assertMessageContains("Could not find a value for ArrayList");
     }
 
     private static final class EmptyValueProvider implements ValueProvider {

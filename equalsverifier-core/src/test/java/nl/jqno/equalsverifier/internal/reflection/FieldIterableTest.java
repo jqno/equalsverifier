@@ -6,7 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 import java.lang.reflect.Field;
 import java.util.*;
 
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 
 class FieldIterableTest {

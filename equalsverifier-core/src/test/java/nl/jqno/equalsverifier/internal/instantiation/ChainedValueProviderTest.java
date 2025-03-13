@@ -7,7 +7,7 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class ChainedValueProviderTest {
@@ -39,7 +39,7 @@ public class ChainedValueProviderTest {
         ExpectedException
                 .when(() -> sut.provideOrThrow(INT, SOME_FIELDNAME))
                 .assertThrows(NoValueException.class)
-                .assertDescriptionContains("Could not find a value for int");
+                .assertMessageContains("Could not find a value for int");
     }
 
     @Test

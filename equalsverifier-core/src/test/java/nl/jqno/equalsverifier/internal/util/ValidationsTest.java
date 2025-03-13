@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.util.*;
 
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 class ValidationsTest {

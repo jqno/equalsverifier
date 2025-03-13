@@ -2,12 +2,12 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
-import nl.jqno.equalsverifier.testhelpers.types.Point3D;
-import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.NoFieldsSubWithFields;
+import nl.jqno.equalsverifier_testhelpers.types.ColorPoint3D;
+import nl.jqno.equalsverifier_testhelpers.types.Point3D;
+import nl.jqno.equalsverifier_testhelpers.types.PointContainer;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.Empty;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.NoFieldsSubWithFields;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

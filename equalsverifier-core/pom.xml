@@ -69,13 +69,6 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>repo-for-signedjar-dependency</id>
-            <url>file://${basedir}/lib</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <!-- Main dependencies -->
         <dependency>
@@ -91,6 +84,12 @@
 
         <!-- Shared test dependencies -->
         <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-testhelpers</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${version.junit-jupiter}</version>
@@ -100,52 +99,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${version.assertj}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${version.commons-lang3}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>${version.spotbugs}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Third party dependencies that should be supported -->
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>${version.jcip-annotations}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>${version.jakarta-annotation-api}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jdt</groupId>
-            <artifactId>org.eclipse.jdt.annotation</artifactId>
-            <version>${version.eclipse-annotation}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>${version.jakarta-persistence-api}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Signed-jar dependency -->
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-signedjar-test</artifactId>
-            <version>${version.equalsverifier-signedjar-test}</version>
             <scope>test</scope>
         </dependency>
 

@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.D;
 import nl.jqno.equalsverifier.testhelpers.packages.subclasses.*;
 import nl.jqno.equalsverifier.testhelpers.packages.subclasses.subpackage.SubA3;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ class PackageScannerTest {
                                 nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.B.class,
                                 nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.A.class,
                                 nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.B.class,
-                                nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.D.class));
+                                D.class));
     }
 
     @Test

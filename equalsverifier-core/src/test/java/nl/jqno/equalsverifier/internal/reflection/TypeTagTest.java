@@ -10,7 +10,7 @@ import java.util.Map;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class TypeTagTest {

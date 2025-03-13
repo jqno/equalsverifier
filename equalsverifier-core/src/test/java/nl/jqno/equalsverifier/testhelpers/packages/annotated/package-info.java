@@ -2,4 +2,4 @@
 @PackageAnnotation
 package nl.jqno.equalsverifier.testhelpers.packages.annotated;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.PackageAnnotation;
+import nl.jqno.equalsverifier_testhelpers.annotations.PackageAnnotation;

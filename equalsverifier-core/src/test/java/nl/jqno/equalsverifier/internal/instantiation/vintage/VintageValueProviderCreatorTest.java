@@ -7,13 +7,12 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.Enum;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -38,7 +37,7 @@ class VintageValueProviderCreatorTest {
     @BeforeEach
     void setup() {
         prefabs = new UserPrefabValueProvider();
-        factoryCache = FactoryCacheFactory.withPrimitiveFactories();
+        factoryCache = cacheWithPrimitiveFactories();
         objenesis = new ObjenesisStd();
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
     }
@@ -140,8 +139,8 @@ class VintageValueProviderCreatorTest {
         ExpectedException
                 .when(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
                 .assertThrows(RecursionException.class)
-                .assertDescriptionContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
-                .assertDescriptionDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
+                .assertMessageContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+                .assertMessageDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
     }
 
     @Test
@@ -149,7 +148,7 @@ class VintageValueProviderCreatorTest {
         ExpectedException
                 .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
                 .assertThrows(RecursionException.class)
-                .assertDescriptionContains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
+                .assertMessageContains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
     }
 
     @Test
@@ -160,5 +159,18 @@ class VintageValueProviderCreatorTest {
     static class StaticFinalContainer {
 
         public static final StaticFinalContainer X = new StaticFinalContainer();
+    }
+
+    public static FactoryCache cacheWithPrimitiveFactories() {
+        FactoryCache factoryCache = new FactoryCache();
+        factoryCache.put(boolean.class, values(true, false, true));
+        factoryCache.put(byte.class, values((byte) 1, (byte) 2, (byte) 1));
+        factoryCache.put(char.class, values('a', 'b', 'a'));
+        factoryCache.put(double.class, values(0.5D, 1.0D, 0.5D));
+        factoryCache.put(float.class, values(0.5F, 1.0F, 0.5F));
+        factoryCache.put(int.class, values(1, 2, 1));
+        factoryCache.put(long.class, values(1L, 2L, 1L));
+        factoryCache.put(short.class, values((short) 1, (short) 2, (short) 1));
+        return factoryCache;
     }
 }

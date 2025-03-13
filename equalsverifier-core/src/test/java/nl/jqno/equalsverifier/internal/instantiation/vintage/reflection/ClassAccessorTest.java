@@ -12,10 +12,10 @@ import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValuePr
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.PointContainer;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;

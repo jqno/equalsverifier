@@ -93,11 +93,13 @@
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.checkstyle>10.21.4</version.checkstyle>
 
+        <version.arcmutate>2.1.0</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
         <version.flatten-maven-plugin>1.7.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.12</version.jacoco>
+        <version.jsr305>3.0.2</version.jsr305>
         <version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.14.0</version.maven-compiler-plugin>
@@ -107,7 +109,6 @@
         <version.maven-shade-plugin>3.6.0</version.maven-shade-plugin>
         <version.maven-source-plugin>3.3.1</version.maven-source-plugin>
         <version.maven-surefire-plugin>3.5.2</version.maven-surefire-plugin>
-        <version.pitest.github>0.1.0</version.pitest.github>
         <version.pitest.junit5>1.2.2</version.pitest.junit5>
         <version.pitest.maven>1.18.2</version.pitest.maven>
         <version.spotbugs.maven>4.8.6.6</version.spotbugs.maven>
@@ -162,6 +163,9 @@
                 <version>${version.maven-jar-plugin}</version>
                 <configuration>
                     <skipIfEmpty>true</skipIfEmpty>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
                 </configuration>
             </plugin>
 
@@ -301,17 +305,17 @@
                             provides the pitest-git:aggregate goal to aggregate json files to be
                             stored as artifact when accepting PRs from untrusted forks
                         -->
-                        <groupId>com.groupcdg</groupId>
+                        <groupId>com.arcmutate</groupId>
                         <artifactId>pitest-git-maven-plugin</artifactId>
-                        <version>${version.pitest.github}</version>
+                        <version>${version.arcmutate}</version>
                     </plugin>
                     <plugin>
                         <!--
                             provides direct integration with github when accepting PRs from trusted branches
                         -->
-                        <groupId>com.groupcdg</groupId>
+                        <groupId>com.arcmutate</groupId>
                         <artifactId>pitest-github-maven-plugin</artifactId>
-                        <version>${version.pitest.github}</version>
+                        <version>${version.arcmutate}</version>
                     </plugin>
                     <plugin>
                         <groupId>org.pitest</groupId>
@@ -324,9 +328,9 @@
                                 <version>${version.pitest.junit5}</version>
                             </dependency>
                             <dependency>
-                                <groupId>com.groupcdg</groupId>
+                                <groupId>com.arcmutate</groupId>
                                 <artifactId>pitest-git-plugin</artifactId>
-                                <version>${version.pitest.github}</version>
+                                <version>${version.arcmutate}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
@@ -494,6 +498,8 @@
 
             <modules>
                 <module>equalsverifier-core</module>
+                <module>equalsverifier-testhelpers</module>
+                <module>equalsverifier-test</module>
             </modules>
         </profile>
 
@@ -505,11 +511,10 @@
 
             <modules>
                 <module>equalsverifier-core</module>
+                <module>equalsverifier-testhelpers</module>
+                <module>equalsverifier-test</module>
                 <module>equalsverifier-21</module>
                 <module>equalsverifier-test-kotlin</module>
-                <module>equalsverifier-aggregator</module>
-                <module>equalsverifier-release-main</module>
-                <module>equalsverifier-release-nodep</module>
             </modules>
         </profile>
 
@@ -524,6 +529,9 @@
 
             <modules>
                 <module>equalsverifier-test-jpms</module>
+                <module>equalsverifier-aggregator</module>
+                <module>equalsverifier-release-main</module>
+                <module>equalsverifier-release-nodep</module>
                 <module>equalsverifier-release-verify</module>
             </modules>
         </profile>

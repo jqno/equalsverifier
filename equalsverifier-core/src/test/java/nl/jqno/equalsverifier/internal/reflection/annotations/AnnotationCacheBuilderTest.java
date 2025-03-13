@@ -10,9 +10,10 @@ import javax.annotation.Nonnull;
 
 import net.bytebuddy.description.modifier.Visibility;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.testhelpers.annotations.*;
+import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.packages.annotated.AnnotatedPackage;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.annotations.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
@@ -248,7 +249,7 @@ class AnnotationCacheBuilderTest {
 
         var annotations = annotation.properties.getArrayValues("annotations");
         assertThat(annotations).contains("javax.annotation.Nonnull");
-        assertThat(annotations).contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull");
+        assertThat(annotations).contains("nl.jqno.equalsverifier_testhelpers.annotations.NotNull");
     }
 
     @Test

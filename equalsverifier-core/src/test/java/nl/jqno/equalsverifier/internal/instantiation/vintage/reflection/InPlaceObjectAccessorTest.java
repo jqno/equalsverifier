@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class InPlaceObjectAccessorTest {
