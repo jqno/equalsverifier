@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
@@ -85,18 +86,21 @@ public final class Validations {
         validate(Objects.equals(red, blue), "both prefab values for field " + fieldDescription + " are equal.");
     }
 
-    public static <T> void validateFieldTypeMatches(Class<T> container, String fieldName, Class<?> fieldType) {
-        try {
-            Field f = container.getDeclaredField(fieldName);
+    public static <T> Field validateFieldTypeMatches(Class<T> container, String fieldName, Class<?> fieldType) {
+        Optional<Field> opt = ClassProbe.of(container).findField(fieldName);
+        if (opt.isPresent()) {
+            Field f = opt.get();
             boolean typeCompatible = f.getType().isAssignableFrom(fieldType);
             boolean wrappingCompatible = fieldType.equals(PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(f.getType()));
             validate(
                 !typeCompatible && !wrappingCompatible,
                 "Prefab values for field " + fieldName + " should be of type " + f.getType().getSimpleName()
                         + " but are " + fieldType.getSimpleName() + ".");
+            return f;
         }
-        catch (NoSuchFieldException e) {
-            validate(false, "Class " + container.getSimpleName() + " has no field named " + fieldName + ".");
+        else {
+            validate(true, "Class " + container.getSimpleName() + " has no field named " + fieldName + ".");
+            return null;
         }
     }
 

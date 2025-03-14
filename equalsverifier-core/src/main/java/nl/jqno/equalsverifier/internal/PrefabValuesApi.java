@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.simple;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
 
 import nl.jqno.equalsverifier.Func.Func1;
@@ -12,6 +13,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabVal
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
 
@@ -49,18 +51,19 @@ public final class PrefabValuesApi {
             T red,
             T blue) {
         Validations.validateRedAndBluePrefabValues(fieldName, red, blue);
-        Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        Field f = Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        TypeTag tag = TypeTag.of(f, new TypeTag(type));
 
         if (red.getClass().isArray()) {
-            fieldCache.put(fieldName, new Tuple<>(red, blue, red));
+            fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, red));
         }
         else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                fieldCache.put(fieldName, new Tuple<>(red, blue, redCopy));
+                fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, redCopy));
             }
             catch (InaccessibleObjectException ignored) {
-                fieldCache.put(fieldName, new Tuple<>(red, blue, red));
+                fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, red));
             }
         }
     }

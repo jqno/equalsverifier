@@ -10,50 +10,70 @@ import org.junit.jupiter.api.Test;
 class FieldCacheTest {
 
     private final String stringField = "string";
+    private final TypeTag stringTag = new TypeTag(String.class);
     private final Tuple<String> stringValues = new Tuple<>("red", "blue", "red");
 
     private final String intField = "int";
+    private final TypeTag intTag = new TypeTag(int.class);
     private final Tuple<Integer> intValues = new Tuple<>(1, 2, 1);
 
     private final FieldCache cache = new FieldCache();
 
     @Test
     void putAndGetTuple() {
-        cache.put(stringField, stringValues);
-        assertThat(cache.get(stringField)).isEqualTo(stringValues);
+        cache.put(stringField, stringTag, stringValues);
+        assertThat(cache.get(stringField, stringTag)).isEqualTo(stringValues);
+    }
+
+    @Test
+    void putAndGetDifferentTypeAndGetNothingBack() {
+        cache.put(stringField, stringTag, stringValues);
+        assertThat(cache.get(stringField, intTag)).isNull();
     }
 
     @Test
     void putTwiceAndGetBoth() {
-        cache.put(stringField, stringValues);
-        cache.put(intField, intValues);
+        cache.put(stringField, stringTag, stringValues);
+        cache.put(intField, intTag, intValues);
 
-        assertThat(cache.get(intField)).isEqualTo(intValues);
-        assertThat(cache.get(stringField)).isEqualTo(stringValues);
+        assertThat(cache.get(intField, intTag)).isEqualTo(intValues);
+        assertThat(cache.get(stringField, stringTag)).isEqualTo(stringValues);
     }
 
     @Test
-    void putNullAndGetNothingBack() {
-        cache.put(null, stringValues);
-        assertThat(cache.get(null)).isNull();
+    void putNullNameAndGetNothingBack() {
+        cache.put(null, stringTag, stringValues);
+        assertThat(cache.get(null, stringTag)).isNull();
+    }
+
+    @Test
+    void putNullTypeAndGetNothingBack() {
+        cache.put(stringField, null, stringValues);
+        assertThat(cache.get(stringField, null)).isNull();
     }
 
     @Test
     void contains() {
-        cache.put(stringField, stringValues);
-        assertThat(cache.contains(stringField)).isTrue();
+        cache.put(stringField, stringTag, stringValues);
+        assertThat(cache.contains(stringField, stringTag)).isTrue();
     }
 
     @Test
-    void doesntContain() {
-        assertThat(cache.contains(stringField)).isFalse();
+    void doesntContainFieldName() {
+        assertThat(cache.contains(stringField, stringTag)).isFalse();
+    }
+
+    @Test
+    void doesntContainFieldType() {
+        cache.put(stringField, stringTag, stringValues);
+        assertThat(cache.contains(stringField, intTag)).isFalse();
     }
 
     @Test
     void getFieldNames() {
         assertThat(cache.getFieldNames()).isEqualTo(Collections.emptySet());
 
-        cache.put(stringField, stringValues);
+        cache.put(stringField, stringTag, stringValues);
         var expected = Set.of(stringField);
         assertThat(cache.getFieldNames()).isEqualTo(expected);
     }

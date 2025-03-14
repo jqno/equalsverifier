@@ -215,6 +215,11 @@ class WithPrefabValuesForFieldTest {
                 .verify();
     }
 
+    @Test
+    void succeed_whenClassHasSinglePrecondition_givenFieldExistsInSuperclass() {
+        EqualsVerifier.forClass(SubPrecondition.class).withPrefabValuesForField("point", pRed, pBlue).verify();
+    }
+
     static final class SinglePrecondition {
 
         private final FinalPoint point;
@@ -412,6 +417,39 @@ class WithPrefabValuesForFieldTest {
         @Override
         public int hashCode() {
             return Objects.hash(list);
+        }
+    }
+
+    static class SuperPrecondition {
+
+        protected final FinalPoint point;
+
+        public SuperPrecondition(FinalPoint point) {
+            this.point = point;
+        }
+    }
+
+    static final class SubPrecondition extends SuperPrecondition {
+
+        public SubPrecondition(FinalPoint point) {
+            super(point);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (point == null || point.getX() != 3) {
+                throw new IllegalArgumentException("x coordinate must be 3! But was " + point);
+            }
+            if (!(obj instanceof SubPrecondition)) {
+                return false;
+            }
+            SubPrecondition other = (SubPrecondition) obj;
+            return Objects.equals(point, other.point);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(point);
         }
     }
 }

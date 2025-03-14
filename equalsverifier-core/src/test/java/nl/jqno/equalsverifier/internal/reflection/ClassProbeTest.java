@@ -130,6 +130,36 @@ class ClassProbeTest {
     }
 
     @Test
+    void findField() {
+        ClassProbe<?> accessor = ClassProbe.of(FieldContainer.class);
+        assertThat(accessor.findField("f")).isNotEmpty();
+    }
+
+    @Test
+    void findProtectedField() {
+        ClassProbe<?> accessor = ClassProbe.of(FieldContainer.class);
+        assertThat(accessor.findField("f_protected")).isNotEmpty();
+    }
+
+    @Test
+    void findFieldInSuper() {
+        ClassProbe<?> accessor = ClassProbe.of(ChildOfFieldContainer.class);
+        assertThat(accessor.findField("f")).isNotEmpty();
+    }
+
+    @Test
+    void findProtectedFieldInSuper() {
+        ClassProbe<?> accessor = ClassProbe.of(ChildOfFieldContainer.class);
+        assertThat(accessor.findField("f_protected")).isNotEmpty();
+    }
+
+    @Test
+    void doesNotHaveField() {
+        ClassProbe<?> accessor = ClassProbe.of(FieldContainer.class);
+        assertThat(accessor.findField("doesNotExist")).isEmpty();
+    }
+
+    @Test
     void getSuperAccessorForPojo() {
         ClassProbe<? super PointContainer> superAccessor = pointProbe.getSuperProbe();
         assertThat(superAccessor.getType()).isEqualTo(Object.class);
@@ -150,4 +180,15 @@ class ClassProbeTest {
     }
 
     static class ChildOfMethodContainer extends MethodContainer {}
+
+    @SuppressWarnings("unused")
+    static class FieldContainer {
+
+        private int f;
+
+        // CHECKSTYLE OFF: MemberName
+        protected int f_protected;
+    }
+
+    static class ChildOfFieldContainer extends FieldContainer {}
 }
