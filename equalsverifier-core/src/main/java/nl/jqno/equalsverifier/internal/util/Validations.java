@@ -82,7 +82,7 @@ public final class Validations {
             return f;
         }
         else {
-            validate(false, "Class " + container.getSimpleName() + " has no field named " + fieldName + ".");
+            validate(true, "Class " + container.getSimpleName() + " has no field named " + fieldName + ".");
             return null;
         }
     }
