@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Exception when superclass of class under test has field with the same name but different type. ([Issue 1056](https://github.com/jqno/equalsverifier/issues/1056))
+
 ## [3.19.1] - 2025-02-17
 
 ### Added

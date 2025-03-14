@@ -82,7 +82,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
         Tuple<?> tuple = prefabbedFields.contains(fieldName)
-                ? fieldCache.get(fieldName)
+                ? fieldCache.get(fieldName, tag)
                 : valueProvider.provideOrThrow(tag, fieldName);
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());

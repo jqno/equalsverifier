@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 
 public class CachingValueProviderTest {
     private static final String SOME_FIELD = "someFieldname";
+    private static final TypeTag SOME_TAG = new TypeTag(String.class);
+    private static final TypeTag FALLBACK_TAG = new TypeTag(int.class);
+    private static final TypeTag OTHER_TAG = new TypeTag(short.class);
 
     private FieldCache cache = new FieldCache();
     private ValueProvider fallback = new Fallback();
@@ -18,30 +21,42 @@ public class CachingValueProviderTest {
 
     @Test
     void noValueAvailable() {
-        assertThat(sut.provide(new TypeTag(String.class), SOME_FIELD)).isEmpty();
+        assertThat(sut.provide(SOME_TAG, SOME_FIELD)).isEmpty();
     }
 
     @Test
     void useFallbackValueAndCheckCache() {
-        assertThat(sut.provide(new TypeTag(int.class), SOME_FIELD)).contains(Tuple.of(42, 1337, 42));
+        assertThat(sut.provide(FALLBACK_TAG, SOME_FIELD)).contains(Tuple.of(42, 1337, 42));
     }
 
     @Test
     void useCachedValue() {
-        cache.put(SOME_FIELD, Tuple.of(1, 2, 1));
-        assertThat(sut.provide(new TypeTag(int.class), SOME_FIELD)).contains(Tuple.of(1, 2, 1));
+        cache.put(SOME_FIELD, SOME_TAG, Tuple.of(1, 2, 1));
+        assertThat(sut.provide(SOME_TAG, SOME_FIELD)).contains(Tuple.of(1, 2, 1));
     }
 
     @Test
     void dontUseCachedValueForOtherField() {
-        cache.put(SOME_FIELD, Tuple.of("a", "b", "a"));
-        assertThat(sut.provide(new TypeTag(String.class), "somethingElse")).isEmpty();
+        cache.put(SOME_FIELD, SOME_TAG, Tuple.of("a", "b", "a"));
+        assertThat(sut.provide(SOME_TAG, "somethingElse")).isEmpty();
     }
 
     @Test
-    void dontUseCachedValueForNullField() {
-        cache.put(null, Tuple.of("a", "b", "a"));
-        assertThat(sut.provide(new TypeTag(String.class), null)).isEmpty();
+    void dontUseCachedValueForSameFieldNameButDifferentType() {
+        cache.put(SOME_FIELD, SOME_TAG, Tuple.of("a", "b", "a"));
+        assertThat(sut.provide(OTHER_TAG, SOME_FIELD)).isEmpty();
+    }
+
+    @Test
+    void dontUseCachedValueForNullFieldName() {
+        cache.put(null, SOME_TAG, Tuple.of("a", "b", "a"));
+        assertThat(sut.provide(SOME_TAG, null)).isEmpty();
+    }
+
+    @Test
+    void dontUseCachedValueForNullFieldType() {
+        cache.put(SOME_FIELD, null, Tuple.of("a", "b", "a"));
+        assertThat(sut.provide(SOME_TAG, null)).isEmpty();
     }
 
     private static final class Fallback implements ValueProvider {

@@ -3,12 +3,15 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.simple;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 
+import java.lang.reflect.Field;
+
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
 
@@ -48,19 +51,20 @@ public final class PrefabValuesApi {
             T red,
             T blue) {
         Validations.validateRedAndBluePrefabValues((Class<T>) red.getClass(), red, blue);
-        Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        Field f = Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        TypeTag tag = TypeTag.of(f, new TypeTag(type));
 
         if (red.getClass().isArray()) {
-            fieldCache.put(fieldName, Tuple.of(red, blue, red));
+            fieldCache.put(f.getName(), tag, Tuple.of(red, blue, red));
         }
         else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                fieldCache.put(fieldName, Tuple.of(red, blue, redCopy));
+                fieldCache.put(f.getName(), tag, Tuple.of(red, blue, redCopy));
             }
             catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                fieldCache.put(fieldName, Tuple.of(red, blue, red));
+                fieldCache.put(f.getName(), tag, Tuple.of(red, blue, red));
             }
         }
     }
