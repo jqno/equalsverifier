@@ -2,7 +2,9 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SealedTypesHelper;
@@ -135,6 +137,27 @@ public final class ClassProbe<T> {
             i = i.getSuperProbe();
         }
         return true;
+    }
+
+    public Optional<Field> findField(String name) {
+        Class<?> t = type;
+        while (t != null) {
+            Field f = getField(t, name);
+            if (f != null) {
+                return Optional.of(f);
+            }
+            t = t.getSuperclass();
+        }
+        return Optional.empty();
+    }
+
+    private static Field getField(Class<?> type, String name) {
+        try {
+            return type.getDeclaredField(name);
+        }
+        catch (NoSuchFieldException e) {
+            return null;
+        }
     }
 
     /**

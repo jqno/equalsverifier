@@ -131,6 +131,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      */
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue) {
+        Validations.validateFieldNamesExist(type, Arrays.asList(fieldName), actualFields);
         PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
         return withNonnullFields(fieldName);
     }
