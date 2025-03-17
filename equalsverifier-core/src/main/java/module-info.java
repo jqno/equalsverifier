@@ -8,6 +8,9 @@ module nl.jqno.equalsverifier {
     requires transitive net.bytebuddy;
     requires org.objenesis;
 
+    // Optional dependencies
+    requires static org.mockito;
+
     // Built-in prefab values
     requires static java.desktop;
     requires static java.naming;

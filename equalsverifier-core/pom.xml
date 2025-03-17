@@ -82,6 +82,14 @@
             <version>${version.bytebuddy}</version>
         </dependency>
 
+        <!-- Optional dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${version.mockito}</version>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Shared test dependencies -->
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
