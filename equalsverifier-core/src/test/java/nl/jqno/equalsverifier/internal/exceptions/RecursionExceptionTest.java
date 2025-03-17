@@ -17,7 +17,7 @@ class RecursionExceptionTest {
         stack.add(new TypeTag(Point.class));
         stack.add(new TypeTag(Object.class));
 
-        String message = new RecursionException(stack).getMessage();
+        String message = new RecursionException(stack).getDescription();
 
         for (TypeTag tag : stack) {
             assertThat(message).contains(tag.toString());

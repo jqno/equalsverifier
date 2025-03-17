@@ -1,13 +1,14 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class ChainedValueProviderTest {
@@ -36,10 +37,11 @@ public class ChainedValueProviderTest {
     @Test
     public void throwsExceptionIfNoMatch() {
         sut = new ChainedValueProvider(stringProvider);
-        ExpectedException
-                .when(() -> sut.provideOrThrow(INT, SOME_FIELDNAME))
-                .assertThrows(NoValueException.class)
-                .assertMessageContains("Could not find a value for int");
+        assertThatThrownBy(() -> sut.provideOrThrow(INT, SOME_FIELDNAME))
+                .isInstanceOf(NoValueException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("Could not find a value for int");
     }
 
     @Test

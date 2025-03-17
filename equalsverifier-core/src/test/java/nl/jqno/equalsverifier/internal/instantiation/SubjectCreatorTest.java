@@ -1,17 +1,18 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
-import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -188,7 +189,11 @@ class SubjectCreatorTest {
     void noValueFound() {
         sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
 
-        ExpectedException.when(() -> sut.plain()).assertThrows(NoValueException.class).assertMessageContains("int");
+        assertThatThrownBy(() -> sut.plain())
+                .isInstanceOf(NoValueException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("int");
 
         assertThat(actual).isEqualTo(expected);
     }

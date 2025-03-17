@@ -2,10 +2,12 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
 
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
@@ -87,10 +89,12 @@ class FallbackFactoryTest {
 
     @Test
     void dontGiveTwoStepRecursiveClass() {
-        ExpectedException
-                .when(() -> factory.createValues(new TypeTag(TwoStepNodeA.class), valueProvider, typeStack))
-                .assertThrows(RecursionException.class)
-                .assertMessageContains("TwoStepNodeA", "TwoStepNodeB");
+        assertThatThrownBy(() -> factory.createValues(new TypeTag(TwoStepNodeA.class), valueProvider, typeStack))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("TwoStepNodeA")
+                .contains("TwoStepNodeB");
     }
 
     @Test

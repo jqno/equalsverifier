@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.checkers.*;
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
@@ -346,6 +347,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         try {
             performVerification();
         }
+        catch (MessagingException e) {
+            throw new AssertionError(buildErrorMessage(e.getDescription(), true), e);
+        }
         catch (Throwable e) {
             throw new AssertionError(buildErrorMessage(e.getMessage(), true), e);
         }
@@ -374,6 +378,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         try {
             performVerification();
             return EqualsVerifierReport.success(type);
+        }
+        catch (MessagingException e) {
+            return EqualsVerifierReport.failure(type, buildErrorMessage(e.getDescription(), showUrl), e);
         }
         catch (Throwable e) {
             return EqualsVerifierReport.failure(type, buildErrorMessage(e.getMessage(), showUrl), e);

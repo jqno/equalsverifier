@@ -10,6 +10,8 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 @SuppressFBWarnings(value = "SE_BAD_FIELD", justification = "EqualsVerifier doesn't serialize.")
 public class RecursionException extends MessagingException {
 
+    private final LinkedHashSet<TypeTag> typeStack;
+
     /**
      * Constructor.
      *
@@ -19,10 +21,13 @@ public class RecursionException extends MessagingException {
             value = "EI_EXPOSE_REP2",
             justification = "There's no such thing as an UnmodifiableLinkedHashSet and we need the ordering.")
     public RecursionException(LinkedHashSet<TypeTag> typeStack) {
-        super(buildDescription(typeStack));
+        super();
+        this.typeStack = typeStack;
     }
 
-    private static String buildDescription(LinkedHashSet<TypeTag> typeStack) {
+    /** {@inheritDoc} */
+    @Override
+    public String getDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append("Recursive datastructure.\nAdd prefab values for one of the following types: ");
         Iterator<TypeTag> i = typeStack.iterator();

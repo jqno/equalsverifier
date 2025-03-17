@@ -2,7 +2,9 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -136,19 +138,21 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void recursiveWithAnotherFieldFirst() {
-        ExpectedException
-                .when(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
-                .assertThrows(RecursionException.class)
-                .assertMessageContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
-                .assertMessageDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
+        assertThatThrownBy(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+                .doesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
     }
 
     @Test
     void exceptionMessage() {
-        ExpectedException
-                .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
-                .assertThrows(RecursionException.class)
-                .assertMessageContains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
+        assertThatThrownBy(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
     }
 
     @Test

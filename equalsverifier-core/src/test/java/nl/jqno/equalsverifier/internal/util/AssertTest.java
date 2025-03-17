@@ -1,9 +1,10 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier_testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import org.junit.jupiter.api.Test;
 
 class AssertTest {
@@ -24,10 +25,11 @@ class AssertTest {
 
     @Test
     void assertEqualsObjectFailure() {
-        ExpectedException
-                .when(() -> Assert.assertEquals(FAIL, "one", "two"))
-                .assertThrows(AssertionException.class)
-                .assertMessageContains("fail");
+        assertThatThrownBy(() -> Assert.assertEquals(FAIL, "one", "two"))
+                .isInstanceOf(AssertionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("fail");
     }
 
     @Test
@@ -37,10 +39,11 @@ class AssertTest {
 
     @Test
     void assertFalseFailure() {
-        ExpectedException
-                .when(() -> Assert.assertFalse(FAIL, true))
-                .assertThrows(AssertionException.class)
-                .assertMessageContains("fail");
+        assertThatThrownBy(() -> Assert.assertFalse(FAIL, true))
+                .isInstanceOf(AssertionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("fail");
     }
 
     @Test
@@ -50,17 +53,19 @@ class AssertTest {
 
     @Test
     void assertTrueFailure() {
-        ExpectedException
-                .when(() -> Assert.assertTrue(FAIL, false))
-                .assertThrows(AssertionException.class)
-                .assertMessageContains("fail");
+        assertThatThrownBy(() -> Assert.assertTrue(FAIL, false))
+                .isInstanceOf(AssertionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("fail");
     }
 
     @Test
     void failFailure() {
-        ExpectedException
-                .when(() -> Assert.fail(FAIL))
-                .assertThrows(AssertionException.class)
-                .assertMessageContains("fail");
+        assertThatThrownBy(() -> Assert.fail(FAIL))
+                .isInstanceOf(AssertionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("fail");
     }
 }
