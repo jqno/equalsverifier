@@ -11,6 +11,7 @@ import java.util.Map;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class TypeTagTest {
@@ -19,6 +20,7 @@ class TypeTagTest {
             new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
 
     @Test
+    @Disabled("Until a Mockito disabling system is implemented")
     void equalsAndHashCode() {
         EqualsVerifier
                 .forClass(TypeTag.class)

@@ -10,19 +10,26 @@ import nl.jqno.equalsverifier.internal.reflection.Util;
 
 public class MockitoValueProvider implements ValueProvider {
 
+    private final boolean mockitoIsAvailable;
+
+    public MockitoValueProvider() {
+        this.mockitoIsAvailable = Util.classForName("org.mockito.Mockito") != null;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+        if (!mockitoIsAvailable) {
+            return Optional.empty();
+        }
+
         Class<T> type = tag.getType();
         var red = mock(type);
         var blue = mock(type);
         if (!red.equals(blue)) {
             return Optional.of((Tuple<T>) new Tuple<>(red, blue, red));
         }
-        return Optional.empty();
-    }
 
-    public static boolean mockitoIsAvailable() {
-        return Util.classForName("org.mockito.Mockito") != null;
+        return Optional.empty();
     }
 }

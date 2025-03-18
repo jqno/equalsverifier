@@ -30,12 +30,13 @@ public final class Context<T> {
         this.classProbe = ClassProbe.of(configuration.getType());
 
         var builtinPrefabs = new BuiltinPrefabValueProvider();
+        var mockito = new MockitoValueProvider();
 
-        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs);
+        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito);
         var cache = JavaApiPrefabValues.build().merge(factoryCache);
         var vintage = new VintageValueProvider(vintageChain, cache, objenesis);
 
-        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, vintage);
+        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito, vintage);
         var caching = new CachingValueProvider(fieldCache, mainChain);
 
         this.valueProvider = caching;
