@@ -12,6 +12,10 @@
     <artifactId>equalsverifier-test-mockito</artifactId>
     <name>EqualsVerifier | test Mockito</name>
 
+    <properties>
+        <argline.mockito>-javaagent:${org.mockito:mockito-core:jar}</argline.mockito>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>

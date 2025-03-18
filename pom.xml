@@ -66,6 +66,7 @@
 
         <argline.preview />
         <argline.experimental />
+        <argline.mockito />
         <argline.full>${argline.preview} ${argline.experimental}</argline.full>
 
         <analysis.jacoco.threshold>0.95</analysis.jacoco.threshold>
@@ -151,7 +152,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
                 <configuration>
-                    <argLine>@{argline.full}</argLine>
+                    <argLine>@{argline.full} ${argline.mockito}</argLine>
                     <useModulePath>false</useModulePath>
                     <trimStackTrace>false</trimStackTrace>
                     <useSystemClassLoader>false</useSystemClassLoader>
@@ -198,6 +199,19 @@
                         <phase>package</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>properties</goal>
                         </goals>
                     </execution>
                 </executions>
