@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -23,6 +24,7 @@ public final class Configuration<T> {
     private final Class<? extends T> redefinedSubclass;
     private final boolean usingGetClass;
     private final EnumSet<Warning> warningsToSuppress;
+    private final Set<Mode> modes;
     private final Function<String, String> fieldnameToGetter;
     private final boolean isKotlin;
 
@@ -46,6 +48,7 @@ public final class Configuration<T> {
             Class<? extends T> redefinedSubclass,
             boolean usingGetClass,
             EnumSet<Warning> warningsToSuppress,
+            Set<Mode> modes,
             Function<String, String> fieldnameToGetter,
             boolean isKotlin,
             List<T> equalExamples,
@@ -61,6 +64,7 @@ public final class Configuration<T> {
         this.redefinedSubclass = redefinedSubclass;
         this.usingGetClass = usingGetClass;
         this.warningsToSuppress = warningsToSuppress;
+        this.modes = modes;
         this.fieldnameToGetter = fieldnameToGetter;
         this.isKotlin = isKotlin;
         this.equalExamples = equalExamples;
@@ -78,6 +82,7 @@ public final class Configuration<T> {
             Class<? extends T> redefinedSubclass,
             boolean usingGetClass,
             EnumSet<Warning> warningsToSuppress,
+            Set<Mode> modes,
             Function<String, String> fieldnameToGetter,
             Set<String> ignoredAnnotationClassNames,
             Set<String> actualFields,
@@ -107,6 +112,7 @@ public final class Configuration<T> {
                 redefinedSubclass,
                 usingGetClass,
                 warningsToSuppress,
+                modes,
                 converter,
                 isKotlin,
                 equalExamples,
@@ -199,6 +205,10 @@ public final class Configuration<T> {
 
     public EnumSet<Warning> getWarningsToSuppress() {
         return EnumSet.copyOf(warningsToSuppress);
+    }
+
+    public Set<Mode> getModes() {
+        return Collections.unmodifiableSet(modes);
     }
 
     public Function<String, String> getFieldnameToGetter() {

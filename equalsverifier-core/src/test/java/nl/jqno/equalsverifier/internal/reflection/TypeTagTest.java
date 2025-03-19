@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class TypeTagTest {
@@ -20,12 +20,12 @@ class TypeTagTest {
             new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
 
     @Test
-    @Disabled("Until a Mockito disabling system is implemented")
     void equalsAndHashCode() {
         EqualsVerifier
                 .forClass(TypeTag.class)
                 .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), SOME_LONG_TYPETAG)
                 .suppress(Warning.NULL_FIELDS)
+                .set(Mode.skipMockito())
                 .verify();
     }
 

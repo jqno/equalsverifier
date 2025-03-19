@@ -12,8 +12,8 @@ public class MockitoValueProvider implements ValueProvider {
 
     private final boolean mockitoIsAvailable;
 
-    public MockitoValueProvider() {
-        this.mockitoIsAvailable = Util.classForName("org.mockito.Mockito") != null;
+    public MockitoValueProvider(boolean disable) {
+        this.mockitoIsAvailable = !disable && Util.classForName("org.mockito.Mockito") != null;
     }
 
     @SuppressWarnings("unchecked")

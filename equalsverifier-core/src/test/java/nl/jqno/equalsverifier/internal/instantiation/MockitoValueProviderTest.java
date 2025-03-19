@@ -10,7 +10,7 @@ public class MockitoValueProviderTest {
 
     private static final String SOME_FIELD_NAME = "someFieldname";
 
-    private final MockitoValueProvider sut = new MockitoValueProvider();
+    private final MockitoValueProvider sut = new MockitoValueProvider(false);
 
     @Test
     void providesSimpleClass() {
@@ -35,6 +35,13 @@ public class MockitoValueProviderTest {
     @Test
     void provideTwoStepRecursiveClass() {
         check(RecursiveTypeHelper.TwoStepNodeA.class);
+    }
+
+    @Test
+    void provideNothingWhenDisabled() {
+        var disabled = new MockitoValueProvider(true);
+        var actual = disabled.provide(new TypeTag(Point.class), SOME_FIELD_NAME);
+        assertThat(actual).isEmpty();
     }
 
     private void check(Class<?> type) {
