@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.types.*;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,12 @@ public class MockitoValueProviderTest {
     @Test
     void provideTwoStepRecursiveClass() {
         check(RecursiveTypeHelper.TwoStepNodeA.class);
+    }
+
+    @Test
+    void provideNothingWhenJavaApiClass() {
+        var actual = sut.provide(new TypeTag(List.class), SOME_FIELD_NAME);
+        assertThat(actual).isEmpty();
     }
 
     @Test

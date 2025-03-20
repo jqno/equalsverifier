@@ -22,8 +22,11 @@ public class MockitoValueProvider implements ValueProvider {
         if (!mockitoIsAvailable) {
             return Optional.empty();
         }
-
         Class<T> type = tag.getType();
+        if (type.getPackageName().startsWith("java.")) {
+            return Optional.empty();
+        }
+
         var red = mock(type);
         var blue = mock(type);
         if (!red.equals(blue)) {
