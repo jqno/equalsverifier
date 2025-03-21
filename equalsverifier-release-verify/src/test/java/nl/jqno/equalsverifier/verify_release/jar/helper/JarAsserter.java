@@ -7,6 +7,7 @@ import java.util.Set;
 public class JarAsserter {
 
     public static final String EV = "/nl/jqno/equalsverifier";
+    public static final String LIB = EV + "/internal/lib";
 
     private final JarReader reader;
 
@@ -35,13 +36,22 @@ public class JarAsserter {
     }
 
     public void assertPresenceOfEmbeddedDepedencies() {
-        assertPresenceOf(
-            EV + "/internal/lib/bytebuddy/ByteBuddy.class",
-            EV + "/internal/lib/objenesis/Objenesis.class");
+        assertPresenceOf(LIB + "/bytebuddy/ByteBuddy.class", LIB + "/objenesis/Objenesis.class");
     }
 
     public void assertAbsenceOfEmbeddedDepedencies() {
-        assertAbsenceOf(EV + "/internal/lib/bytebuddy/ByteBuddy.class", EV + "/internal/lib/objenesis/Objenesis.class");
+        assertAbsenceOf(LIB + "/bytebuddy/ByteBuddy.class", LIB + "/objenesis/Objenesis.class");
+    }
+
+    public void assertAbsenceOfEmbeddedDepedenciesUnderTheirOriginalPath() {
+        assertAbsenceOf("/net/bytebuddy/ByteBuddy.class", "/org/objenesis/Objenesis.class");
+    }
+
+    public void assertAbsenceOfOptionalDependencies() {
+        assertAbsenceOf(
+            "/org/mockito/Mockito.class",
+            LIB + "/org/mockito/Mockito.class",
+            LIB + "/mockito/Mockito.class");
     }
 
     public void assertPresenceOf(String... filenames) {
