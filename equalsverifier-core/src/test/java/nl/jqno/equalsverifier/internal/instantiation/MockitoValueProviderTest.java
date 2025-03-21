@@ -40,6 +40,11 @@ public class MockitoValueProviderTest {
     }
 
     @Test
+    void provideRecordWithPrecondition() {
+        check(PreconditionTypeHelper.SinglePreconditionRecord.class);
+    }
+
+    @Test
     void provideNothingWhenJavaApiClass() {
         var actual = sut.provide(new TypeTag(List.class), SOME_FIELD_NAME);
         assertThat(actual).isEmpty();
