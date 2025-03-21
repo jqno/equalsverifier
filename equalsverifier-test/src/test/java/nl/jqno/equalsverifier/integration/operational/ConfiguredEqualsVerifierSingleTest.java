@@ -6,7 +6,7 @@ import nl.jqno.equalsverifier.api.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier_testhelpers.types.MutablePoint;
-import nl.jqno.equalsverifier_testhelpers.types.PointContainer;
+import nl.jqno.equalsverifier_testhelpers.types.PointContainerOpenForSubclassAttack;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.RecursiveType;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.RecursiveTypeContainer;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
@@ -21,7 +21,11 @@ class ConfiguredEqualsVerifierSingleTest {
 
     @Test
     void suppressedWarningsArePassedOn() {
-        EqualsVerifier.configure().suppress(Warning.STRICT_INHERITANCE).forClass(PointContainer.class).verify();
+        EqualsVerifier
+                .configure()
+                .suppress(Warning.STRICT_INHERITANCE)
+                .forClass(PointContainerOpenForSubclassAttack.class)
+                .verify();
     }
 
     @Test

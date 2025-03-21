@@ -2,11 +2,11 @@ package nl.jqno.equalsverifier_testhelpers.types;
 
 import java.util.Objects;
 
-public final class PointContainer {
+public final class PointContainerOpenForSubclassAttack {
 
     private final Point point;
 
-    public PointContainer(Point point) {
+    public PointContainerOpenForSubclassAttack(Point point) {
         this.point = point;
     }
 
@@ -16,10 +16,10 @@ public final class PointContainer {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof PointContainer)) {
+        if (!(obj instanceof PointContainerOpenForSubclassAttack)) {
             return false;
         }
-        PointContainer other = (PointContainer) obj;
+        var other = (PointContainerOpenForSubclassAttack) obj;
         return Objects.equals(point, other.point);
     }
 

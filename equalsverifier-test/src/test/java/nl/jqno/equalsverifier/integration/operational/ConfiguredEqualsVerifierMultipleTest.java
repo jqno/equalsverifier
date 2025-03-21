@@ -53,7 +53,7 @@ class ConfiguredEqualsVerifierMultipleTest {
         EqualsVerifier
                 .configure()
                 .suppress(Warning.STRICT_INHERITANCE)
-                .forClasses(PointContainer.class, A.class)
+                .forClasses(PointContainerOpenForSubclassAttack.class, A.class)
                 .verify();
     }
 
