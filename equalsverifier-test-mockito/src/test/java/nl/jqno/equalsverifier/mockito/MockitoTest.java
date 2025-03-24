@@ -16,6 +16,7 @@ public class MockitoTest {
     void verifyFinalClassContainer() {
         EqualsVerifier.forClass(FinalPointContainer.class).verify();
     }
+
     @Test
     void verifyRecordWithPrecondition() {
         EqualsVerifier.forClass(SinglePreconditionRecordContainer.class).verify();

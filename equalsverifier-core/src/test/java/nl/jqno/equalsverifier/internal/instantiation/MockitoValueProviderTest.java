@@ -45,9 +45,18 @@ public class MockitoValueProviderTest {
     }
 
     @Test
+    void provideNothingWhenPrimitive() {
+        checkEmpty(int.class);
+    }
+
+    @Test
+    void provideNothingWhenArray() {
+        checkEmpty(Point[].class);
+    }
+
+    @Test
     void provideNothingWhenJavaApiClass() {
-        var actual = sut.provide(new TypeTag(List.class), SOME_FIELD_NAME);
-        assertThat(actual).isEmpty();
+        checkEmpty(List.class);
     }
 
     @Test
@@ -60,5 +69,10 @@ public class MockitoValueProviderTest {
     private void check(Class<?> type) {
         var tuple = sut.provide(new TypeTag(type), SOME_FIELD_NAME).get();
         assertThat(tuple.red()).isNotEqualTo(tuple.blue()).isEqualTo(tuple.redCopy());
+    }
+
+    private void checkEmpty(Class<?> type) {
+        var optional = sut.provide(new TypeTag(type), SOME_FIELD_NAME);
+        assertThat(optional).isEmpty();
     }
 }
