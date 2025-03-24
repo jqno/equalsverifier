@@ -8,14 +8,26 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.Util;
 
+/**
+ * Provider of mock prefabricated instances of classes.
+ *
+ * If Mockito is available on the classpath (or modulepath) of the project, will attempt to use that to construct
+ * instances of the given type.
+ */
 public class MockitoValueProvider implements ValueProvider {
 
     private final boolean mockitoIsAvailable;
 
+    /**
+     * Constructor.
+     *
+     * @param disable If true, this ValueProvider always returns {@code Optional.empty()}.
+     */
     public MockitoValueProvider(boolean disable) {
         this.mockitoIsAvailable = !disable && Util.classForName("org.mockito.Mockito") != null;
     }
 
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
