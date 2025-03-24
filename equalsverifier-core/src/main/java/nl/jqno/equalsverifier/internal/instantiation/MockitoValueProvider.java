@@ -42,10 +42,17 @@ public class MockitoValueProvider implements ValueProvider {
             return Optional.empty();
         }
 
-        var red = mock(type);
-        var blue = mock(type);
-        if (!red.equals(blue)) {
-            return Optional.of((Tuple<T>) new Tuple<>(red, blue, red));
+        try {
+
+            var red = mock(type);
+            var blue = mock(type);
+            if (!red.equals(blue)) {
+                return Optional.of((Tuple<T>) new Tuple<>(red, blue, red));
+            }
+        }
+        catch (RuntimeException ignored) {
+            // I would prefer to catch MockitoException, but that leads to class loading errors in modules that don't have Mockito
+            return Optional.empty();
         }
 
         return Optional.empty();
