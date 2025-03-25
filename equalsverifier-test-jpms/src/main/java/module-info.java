@@ -1,4 +1,4 @@
-module equalsverifier_jpms {
+module equalsverifier.jpms {
     exports nl.jqno.equalsverifier.jpms.model;
 
     opens nl.jqno.equalsverifier.jpms.model;
