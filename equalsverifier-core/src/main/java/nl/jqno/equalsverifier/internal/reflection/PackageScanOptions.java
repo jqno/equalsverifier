@@ -37,7 +37,7 @@ public class PackageScanOptions {
         RECURSIVE, IGNORE_EXTERNAL_JARS;
     }
 
-    public static class MustExtend implements ScanOption {
+    public static final class MustExtend implements ScanOption {
         final Class<?> type;
 
         public MustExtend(Class<?> type) {
@@ -46,7 +46,7 @@ public class PackageScanOptions {
         }
     }
 
-    public static class ExceptClasses implements ScanOption {
+    public static final class ExceptClasses implements ScanOption {
         final Set<Class<?>> types;
 
         public ExceptClasses(Class<?> type, Class<?>... more) {
@@ -56,7 +56,7 @@ public class PackageScanOptions {
         }
     }
 
-    public static class ExclusionPredicate implements ScanOption {
+    public static final class ExclusionPredicate implements ScanOption {
         final Predicate<Class<?>> exclusionPredicate;
 
         public ExclusionPredicate(Predicate<Class<?>> exclusionPredicate) {
