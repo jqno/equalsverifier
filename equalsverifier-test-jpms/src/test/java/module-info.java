@@ -1,5 +1,6 @@
-open module equalsverifier_jpms_test {
-    requires equalsverifier_jpms;
+open module equalsverifier.jpms.test {
+    requires equalsverifier.jpms;
+    requires equalsverifier.testhelpers;
     requires nl.jqno.equalsverifier;
 
     requires org.junit.jupiter.api;

@@ -80,7 +80,7 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void oneStepRecursiveType() {
-        factoryCache.put(Node.class, values(new Node(), new Node(), new Node()));
+        factoryCache.put(Node.class, values(new Node(null), new Node(new Node(null)), new Node(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(NODE_TAG);
     }
@@ -92,7 +92,10 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void oneStepRecursiveArrayType() {
-        factoryCache.put(NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
+        factoryCache
+                .put(
+                    NodeArray.class,
+                    values(new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(NODE_ARRAY_TAG);
     }
@@ -104,7 +107,10 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void addTwoStepRecursiveType() {
-        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        factoryCache
+                .put(
+                    TwoStepNodeB.class,
+                    values(new TwoStepNodeB(null), new TwoStepNodeB(new TwoStepNodeA(null)), new TwoStepNodeB(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_A_TAG);
     }
@@ -119,7 +125,10 @@ class VintageValueProviderCreatorTest {
         factoryCache
                 .put(
                     TwoStepNodeArrayB.class,
-                    values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
+                    values(
+                        new TwoStepNodeArrayB(null),
+                        new TwoStepNodeArrayB(new TwoStepNodeArrayA[] {}),
+                        new TwoStepNodeArrayB(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }

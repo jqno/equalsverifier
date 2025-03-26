@@ -28,6 +28,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Set<String> actualFields;
 
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
+    private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
@@ -70,6 +71,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param type               The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
+     * @param modes              A set of modes in which {@code EqualsVerifier} should operate.
      * @param userPrefabs        Prefab values provided by the user.
      * @param factoryCache       Factories that can be used to create values.
      * @param objenesis          To instantiate non-record classes.
@@ -77,9 +79,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *     equals}            method, instead of an {@code instanceof} check.
      * @param converter          A function that converts from field name to getter name.
      */
+    // CHECKSTYLE OFF: ParameterNumber
     /* package protected */ SingleTypeEqualsVerifierApi(
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
+            Set<Mode> modes,
             UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,
             Objenesis objenesis,
@@ -87,11 +91,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             Function<String, String> converter) {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+        this.modesToSet = new HashSet<>(modes);
         this.userPrefabs = userPrefabs;
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
+    // CHECKSTYLE ON: ParameterNumber
 
     /**
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object, Object[])}.
@@ -110,6 +116,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateWarnings(warningsToSuppress);
         Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
         Validations.validateNonnullFields(nonnullFields, warningsToSuppress);
+        return this;
+    }
+
+    /** {@inheritDoc}} */
+    @Override
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> set(Mode... modes) {
+        Collections.addAll(modesToSet, modes);
         return this;
     }
 
@@ -430,6 +444,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                     redefinedSubclass,
                     usingGetClass,
                     warningsToSuppress,
+                    modesToSet,
                     fieldnameToGetter,
                     ignoredAnnotationClassNames,
                     actualFields,

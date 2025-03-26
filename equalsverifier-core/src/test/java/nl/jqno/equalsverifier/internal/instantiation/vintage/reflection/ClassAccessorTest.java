@@ -104,14 +104,22 @@ class ClassAccessorTest {
 
     @Test
     void instantiateRecursiveTypeUsingPrefabValue() {
-        prefabs.register(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB());
+        prefabs
+                .register(
+                    TwoStepNodeB.class,
+                    new TwoStepNodeB(null),
+                    new TwoStepNodeB(new TwoStepNodeA(null)),
+                    new TwoStepNodeB(null));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     void instantiateRecursiveTypeUsingFactoryCache() {
-        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        factoryCache
+                .put(
+                    TwoStepNodeB.class,
+                    values(new TwoStepNodeB(null), new TwoStepNodeB(new TwoStepNodeA(null)), new TwoStepNodeB(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
     }

@@ -5,6 +5,7 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
 
 /**
@@ -20,6 +21,14 @@ public interface EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     EqualsVerifierApi<T> suppress(Warning... warnings);
+
+    /**
+     * Sets modes that influence how {@code EqualsVerifier} operates.
+     *
+     * @param modes A list of modes to influence how {@code EqualsVerifier} operates.
+     * @return {@code this}, for easy method chaining.
+     */
+    EqualsVerifierApi<T> set(Mode... modes);
 
     /**
      * Adds prefabricated values for instance fields of classes that EqualsVerifier cannot instantiate by itself.

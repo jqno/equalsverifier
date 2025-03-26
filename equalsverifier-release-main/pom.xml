@@ -183,6 +183,12 @@
             <artifactId>byte-buddy</artifactId>
             <version>${version.bytebuddy}</version>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${version.mockito}</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>
 

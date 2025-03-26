@@ -6,7 +6,9 @@ import java.text.AttributedString;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.api.ConfiguredEqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 /*
@@ -14,13 +16,13 @@ import org.junit.jupiter.api.Test;
  * APIs that doesn't already have prefab values.
  */
 public class ModuleErrorsTest {
+
+    private final ConfiguredEqualsVerifier ev = EqualsVerifier.configure().set(Mode.skipMockito());
+
     @Test
     void giveProperErrorMessage_whenClassUnderTestIsInaccessible() {
         assertThatThrownBy(
-            () -> EqualsVerifier
-                    .forClass(AttributedString.class)
-                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                    .verify())
+            () -> ev.forClass(AttributedString.class).suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT).verify())
                 .isInstanceOf(AssertionError.class)
                 .hasMessageContaining("The class")
                 .hasMessageContaining("Consider opening");
@@ -28,7 +30,7 @@ public class ModuleErrorsTest {
 
     @Test
     void giveProperErrorMessage_whenFieldIsInaccessible() {
-        assertThatThrownBy(() -> EqualsVerifier.forClass(InaccessibleContainer.class).verify())
+        assertThatThrownBy(() -> ev.forClass(InaccessibleContainer.class).verify())
                 .isInstanceOf(AssertionError.class)
                 .hasMessageContaining("Field x")
                 .hasMessageContaining("Consider opening")

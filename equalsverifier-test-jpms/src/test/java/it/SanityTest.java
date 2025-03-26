@@ -9,6 +9,6 @@ public class SanityTest {
     void sanity() {
         assertThat(getClass().getModule())
                 .extracting(Module::isNamed, Module::getName)
-                .containsExactly(true, "equalsverifier_jpms_test");
+                .containsExactly(true, "equalsverifier.jpms.test");
     }
 }

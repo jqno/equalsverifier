@@ -49,6 +49,16 @@ class NodepClassesJarTest {
     }
 
     @Test
+    void assertAbsenceOfEmbeddedDependenciesUnderTheirOwnPath() {
+        jar.assertAbsenceOfEmbeddedDepedenciesUnderTheirOriginalPath();
+    }
+
+    @Test
+    void absenceOfOptionalDependencies() {
+        jar.assertAbsenceOfOptionalDependencies();
+    }
+
+    @Test
     void contentOfManifest() {
         jar.assertContentOfManifest("EqualsVerifier (no dependencies)");
     }

@@ -37,6 +37,15 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set modes on ev, but return `this`")
+    public MultipleTypeEqualsVerifierApi set(Mode... modes) {
+        ev.set(modes);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
     @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue) {
         ev.withPrefabValues(otherType, red, blue);

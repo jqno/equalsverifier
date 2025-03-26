@@ -5,9 +5,10 @@ import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.jpms.model.*;
 import nl.jqno.equalsverifier.jpms.model.Records.RecordPoint;
 import nl.jqno.equalsverifier.jpms.model.Records.RecordPointContainer;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.RecursiveTypeContainer;
 import org.junit.jupiter.api.Test;
 
-public class EverythingWorksInTheModularWorldTest {
+public class MockitoWorksInTheModularWorldTest {
 
     @Test
     void classCanBeVerified() {
@@ -15,7 +16,7 @@ public class EverythingWorksInTheModularWorldTest {
     }
 
     @Test
-    void classContainingClassCanBeVerifier() {
+    void classContainingClassCanBeVerified() {
         EqualsVerifier.forClass(ClassPointContainer.class).verify();
     }
 
@@ -30,8 +31,13 @@ public class EverythingWorksInTheModularWorldTest {
     }
 
     @Test
-    void classContainingFieldsFromOtherJdkModulesCanBeVerifier() {
+    void classContainingFieldsFromOtherJdkModulesCanBeVerified() {
         EqualsVerifier.forClass(FieldsFromJdkModulesHaver.class).verify();
+    }
+
+    @Test
+    void recursiveClassCanBeVerified() {
+        EqualsVerifier.forClass(RecursiveTypeContainer.class).verify();
     }
 
     @Test

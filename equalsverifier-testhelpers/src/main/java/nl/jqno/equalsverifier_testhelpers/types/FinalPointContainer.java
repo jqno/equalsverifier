@@ -2,24 +2,24 @@ package nl.jqno.equalsverifier_testhelpers.types;
 
 import java.util.Objects;
 
-public final class PointContainer {
+public final class FinalPointContainer {
 
-    private final Point point;
+    private final FinalPoint point;
 
-    public PointContainer(Point point) {
+    public FinalPointContainer(FinalPoint point) {
         this.point = point;
     }
 
-    public Point getPoint() {
+    public FinalPoint getPoint() {
         return point;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof PointContainer)) {
+        if (!(obj instanceof FinalPointContainer)) {
             return false;
         }
-        PointContainer other = (PointContainer) obj;
+        FinalPointContainer other = (FinalPointContainer) obj;
         return Objects.equals(point, other.point);
     }
 

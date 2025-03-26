@@ -32,10 +32,12 @@ class MainPomTest {
     void dependencies() {
         assertThat(pom)
                 .satisfies(
-                    p -> p.assertNumberOfDependencies(4),
+                    p -> p.assertNumberOfDependencies(5),
                     p -> p.assertDependencyIsOptional(1), // core
                     p -> p.assertDependencyIsOptional(2), // JDK 21
                     p -> p.assertDependency(3, "org.objenesis", "objenesis"),
-                    p -> p.assertDependency(4, "net.bytebuddy", "byte-buddy"));
+                    p -> p.assertDependency(4, "net.bytebuddy", "byte-buddy"),
+                    p -> p.assertDependencyIsOptional(5),
+                    p -> p.assertDependency(5, "org.mockito", "mockito-core"));
     }
 }

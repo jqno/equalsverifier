@@ -79,6 +79,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
+                <version>${version.pitest.maven}</version>
                 <configuration>
                     <crossModule>true</crossModule>
                 </configuration>

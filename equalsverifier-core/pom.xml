@@ -18,6 +18,7 @@
         <maven.compiler.release>17</maven.compiler.release>
         <maven.javadoc.skip>false</maven.javadoc.skip>
         <maven.source.skip>false</maven.source.skip>
+        <argline.mockito>-javaagent:${org.mockito:mockito-core:jar}</argline.mockito>
     </properties>
 
     <build>
@@ -80,6 +81,14 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>${version.bytebuddy}</version>
+        </dependency>
+
+        <!-- Optional dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${version.mockito}</version>
+            <optional>true</optional>
         </dependency>
 
         <!-- Shared test dependencies -->

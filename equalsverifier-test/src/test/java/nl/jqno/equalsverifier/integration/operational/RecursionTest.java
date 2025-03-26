@@ -2,10 +2,10 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -112,132 +112,5 @@ class RecursionTest {
     @Test
     void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
         EqualsVerifier.forClass(StaticFinalNodeContainer.class).verify();
-    }
-
-    static class Node {
-
-        final Node node;
-
-        public Node(Node node) {
-            this.node = node;
-        }
-
-        @Override
-        public final boolean equals(Object obj) {
-            if (!(obj instanceof Node)) {
-                return false;
-            }
-            Node other = (Node) obj;
-            return Objects.equals(node, other.node);
-        }
-
-        @Override
-        public final int hashCode() {
-            return Objects.hash(node);
-        }
-    }
-
-    static class SubNode extends Node {
-
-        public SubNode(Node node) {
-            super(node);
-        }
-    }
-
-    static class NodeContainer {
-
-        final Node node;
-
-        public NodeContainer(Node node) {
-            this.node = node;
-        }
-
-        @Override
-        public final boolean equals(Object obj) {
-            if (!(obj instanceof NodeContainer)) {
-                return false;
-            }
-            NodeContainer other = (NodeContainer) obj;
-            return Objects.equals(node, other.node);
-        }
-
-        @Override
-        public final int hashCode() {
-            return Objects.hash(node);
-        }
-    }
-
-    static class SubNodeContainer extends NodeContainer {
-
-        public SubNodeContainer(Node node) {
-            super(node);
-        }
-    }
-
-    static class Tree {
-
-        final List<Tree> innerTrees;
-
-        public Tree(List<Tree> innerTrees) {
-            this.innerTrees = innerTrees;
-        }
-
-        @Override
-        public final boolean equals(Object obj) {
-            if (!(obj instanceof Tree)) {
-                return false;
-            }
-            Tree other = (Tree) obj;
-            return Objects.equals(innerTrees, other.innerTrees);
-        }
-
-        @Override
-        public final int hashCode() {
-            return Objects.hash(innerTrees);
-        }
-    }
-
-    static class TreeContainer {
-
-        final Tree tree;
-
-        public TreeContainer(Tree tree) {
-            this.tree = tree;
-        }
-
-        @Override
-        public final boolean equals(Object obj) {
-            if (!(obj instanceof TreeContainer)) {
-                return false;
-            }
-            TreeContainer other = (TreeContainer) obj;
-            return Objects.equals(tree, other.tree);
-        }
-
-        @Override
-        public final int hashCode() {
-            return Objects.hash(tree);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    static final class StaticFinalNodeContainer {
-
-        private static final Node NODE = new Node(null);
-        private final int i;
-
-        public StaticFinalNodeContainer(int i) {
-            this.i = i;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof StaticFinalNodeContainer other && Objects.equals(i, other.i);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(i);
-        }
     }
 }

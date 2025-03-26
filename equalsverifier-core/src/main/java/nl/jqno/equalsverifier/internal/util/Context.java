@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
@@ -28,14 +29,16 @@ public final class Context<T> {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = ClassProbe.of(configuration.getType());
+        var modes = configuration.getModes();
 
         var builtinPrefabs = new BuiltinPrefabValueProvider();
+        var mockito = new MockitoValueProvider(modes.contains(Mode.skipMockito()));
 
-        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs);
+        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito);
         var cache = JavaApiPrefabValues.build().merge(factoryCache);
         var vintage = new VintageValueProvider(vintageChain, cache, objenesis);
 
-        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, vintage);
+        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito, vintage);
         var caching = new CachingValueProvider(fieldCache, mainChain);
 
         this.valueProvider = caching;

@@ -5,6 +5,9 @@ module nl.jqno.equalsverifier {
     // Direct dependencies are shaded,
     // so don't need to be declared here.
 
+    // Optional dependencies
+    requires static org.mockito;
+
     // Built-in prefab values
     requires static java.desktop;
     requires static java.naming;

@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 
 /**
- * Contains a number of options that can be set in {@link EqualsVerifier#forPackage(String, ScanOption...)}. These
+ * Provides a number of options that can be set in {@link EqualsVerifier#forPackage(String, ScanOption...)}. These
  * options affect the way in which EqualsVerifier scans the given package.
  */
 public interface ScanOption {
