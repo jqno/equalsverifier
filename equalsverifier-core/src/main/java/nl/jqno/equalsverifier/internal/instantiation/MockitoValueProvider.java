@@ -1,9 +1,11 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.exceptions.MockitoException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.Util;
@@ -43,10 +45,11 @@ public class MockitoValueProvider implements ValueProvider {
         }
 
         try {
-
-            var red = mock(type);
-            var blue = mock(type);
-            if (!red.equals(blue)) {
+            var red = buildMock(type, fieldName);
+            var blue = buildMock(type, fieldName);
+            if (!red.equals(blue) && red.hashCode() != blue.hashCode()) {
+                // Only return mocked values if they're properly unequal.
+                // They should be, but I think this is undocumented behaviour, so best to be safe.
                 return Optional.of((Tuple<T>) new Tuple<>(red, blue, red));
             }
         }
@@ -56,5 +59,12 @@ public class MockitoValueProvider implements ValueProvider {
         }
 
         return Optional.empty();
+    }
+
+    private <T> T buildMock(Class<T> type, String fieldName) {
+        return mock(type, withSettings().defaultAnswer(invocation -> {
+            // Throw an exception on any method except equals and hashCode
+            throw new MockitoException(fieldName, type.getSimpleName());
+        }));
     }
 }
