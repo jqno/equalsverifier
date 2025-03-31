@@ -32,7 +32,8 @@ public final class Context<T> {
         var modes = configuration.getModes();
 
         var builtinPrefabs = new BuiltinPrefabValueProvider();
-        var mockito = new MockitoValueProvider(modes.contains(Mode.skipMockito()));
+        var mockito =
+                new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
 
         var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito);
         var cache = JavaApiPrefabValues.build().merge(factoryCache);

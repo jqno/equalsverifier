@@ -12,12 +12,13 @@ public final class ErrorMessage {
     public static String suffix() {
         return Formatter
                 .of(
-                    "%%\n(EqualsVerifier %%, JDK %% running on %%, on %%)",
+                    "%%\n(EqualsVerifier %%, JDK %% running on %%, on %%. Mockito: %%.)",
                     WEBSITE_URL,
                     ErrorMessage.class.getPackage().getImplementationVersion(),
                     System.getProperty("java.version"),
                     ModuleProbe.runsOnModulePath() ? "modulepath" : "classpath",
-                    System.getProperty("os.name"))
+                    System.getProperty("os.name"),
+                    ExternalLibs.isMockitoAvailable() ? "available" : "not available")
                 .format();
     }
 }

@@ -25,4 +25,12 @@ public class SanityTest {
                 .assertFailure()
                 .assertMessageContains("Subclass:");
     }
+
+    @Test
+    void mockitoIsReportedInErrorMessage() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(GetClassPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains("Mockito: available");
+    }
 }

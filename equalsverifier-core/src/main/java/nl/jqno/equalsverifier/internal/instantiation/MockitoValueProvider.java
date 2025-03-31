@@ -8,7 +8,6 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.MockitoException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.Util;
 
 /**
  * Provider of mock prefabricated instances of classes.
@@ -18,7 +17,7 @@ import nl.jqno.equalsverifier.internal.reflection.Util;
  */
 public class MockitoValueProvider implements ValueProvider {
 
-    private final boolean mockitoIsAvailable;
+    private final boolean disable;
 
     /**
      * Constructor.
@@ -26,14 +25,14 @@ public class MockitoValueProvider implements ValueProvider {
      * @param disable If true, this ValueProvider always returns {@code Optional.empty()}.
      */
     public MockitoValueProvider(boolean disable) {
-        this.mockitoIsAvailable = !disable && Util.classForName("org.mockito.Mockito") != null;
+        this.disable = disable;
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
-        if (!mockitoIsAvailable) {
+        if (disable) {
             return Optional.empty();
         }
         Class<T> type = tag.getType();
