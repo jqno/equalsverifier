@@ -49,6 +49,11 @@ public class MockitoTest {
                 .verify();
     }
 
+    @Test
+    void verifyClassWithFieldWhoseSuperOverridesEquals() {
+        EqualsVerifier.forClass(SubContainer.class).verify();
+    }
+
     record SinglePreconditionRecordContainer(PreconditionTypeHelper.SinglePreconditionRecord r) {}
 
     static final class PojoWithoutEquals {
@@ -82,4 +87,45 @@ public class MockitoTest {
         }
     }
 
+    static class Super {
+        private final int i;
+
+        Super(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            return obj instanceof Super other && i == other.i;
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(i);
+        }
+    }
+
+    static final class Sub extends Super {
+        Sub(int i) {
+            super(i);
+        }
+    }
+
+    static final class SubContainer {
+        private final Sub sub;
+
+        SubContainer(Sub sub) {
+            this.sub = sub;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof SubContainer other && Objects.equals(sub, other.sub);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(sub);
+        }
+    }
 }
