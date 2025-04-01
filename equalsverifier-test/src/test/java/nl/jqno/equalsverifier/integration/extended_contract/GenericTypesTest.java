@@ -8,6 +8,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayEqualsContainer;
+import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayHashCodeContainer;
+import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayToStringContainer;
 import org.junit.jupiter.api.Test;
 
 class GenericTypesTest {
@@ -405,121 +408,6 @@ class GenericTypesTest {
         @Override
         public String toString() {
             return "ArrayOfTContainer: " + array;
-        }
-    }
-
-    static final class SparseArray<T> {
-
-        private final List<T> items;
-
-        public SparseArray(List<T> items) {
-            this.items = items;
-        }
-
-        public int size() {
-            return items.size();
-        }
-
-        public T get(int i) {
-            return items.get(i);
-        }
-        // There are no equals and hashCode
-    }
-
-    static final class SparseArrayEqualsContainer {
-
-        private final SparseArray<Point> sparseArray;
-
-        public SparseArrayEqualsContainer(SparseArray<Point> sparseArray) {
-            this.sparseArray = sparseArray;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof SparseArrayEqualsContainer)) {
-                return false;
-            }
-            SparseArrayEqualsContainer other = (SparseArrayEqualsContainer) obj;
-            if (sparseArray == null || other.sparseArray == null) {
-                return sparseArray == other.sparseArray;
-            }
-            if (sparseArray.size() != other.sparseArray.size()) {
-                return false;
-            }
-            for (int i = 0; i < sparseArray.size(); i++) {
-                Point a = sparseArray.get(i);
-                Point b = other.sparseArray.get(i);
-                if (!a.equals(b)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = 17;
-            if (sparseArray != null) {
-                for (int i = 0; i < sparseArray.size(); i++) {
-                    result += 59 * sparseArray.get(i).hashCode();
-                }
-            }
-            return result;
-        }
-    }
-
-    static final class SparseArrayHashCodeContainer {
-
-        private final SparseArray<Point> sparseArray;
-
-        public SparseArrayHashCodeContainer(SparseArray<Point> sparseArray) {
-            this.sparseArray = sparseArray;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof SparseArrayHashCodeContainer other && Objects.equals(sparseArray, other.sparseArray);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = 17;
-            if (sparseArray != null) {
-                for (int i = 0; i < sparseArray.size(); i++) {
-                    result += 59 * sparseArray.get(i).hashCode();
-                }
-            }
-            return result;
-        }
-    }
-
-    static final class SparseArrayToStringContainer {
-
-        private final SparseArray<Point> sparseArray;
-
-        public SparseArrayToStringContainer(SparseArray<Point> sparseArray) {
-            this.sparseArray = sparseArray;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof SparseArrayToStringContainer other && Objects.equals(sparseArray, other.sparseArray);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(sparseArray);
-        }
-
-        @Override
-        public String toString() {
-            String result = SparseArrayToStringContainer.class.getSimpleName() + ": ";
-            if (sparseArray != null) {
-                for (int i = 0; i < sparseArray.size(); i++) {
-                    result += sparseArray.get(i) + ", ";
-                }
-            }
-            return result;
         }
     }
 

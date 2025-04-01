@@ -4,10 +4,13 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.MockitoException;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.FinalPointContainer;
 import nl.jqno.equalsverifier_testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier_testhelpers.types.PreconditionTypeHelper;
+import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayDirectEqualsContainer;
+import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayEqualsContainer;
 import org.junit.jupiter.api.Test;
 
 public class MockitoTest {
@@ -35,6 +38,7 @@ public class MockitoTest {
                             .suppress(Warning.NULL_FIELDS)
                             .verify())
                 .assertFailure()
+                .assertCause(MockitoException.class)
                 .assertMessageContains("Unable to use Mockito to mock field methodCaller of type PojoWithoutEquals.");
     }
 
@@ -51,7 +55,25 @@ public class MockitoTest {
 
     @Test
     void verifyClassWithFieldWhoseSuperOverridesEquals() {
-        EqualsVerifier.forClass(SubContainer.class).verify();
+        EqualsVerifier.forClass(SubContainerThatAlsoHasARecursion.class).verify();
+    }
+
+    @Test
+    void verifyClassThatContainsSparseArrayThatCallsMethods() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(SparseArrayEqualsContainer.class).verify())
+                .assertFailure()
+                .assertCause(MockitoException.class)
+                .assertMessageContains("Unable to use Mockito to mock field sparseArray of type SparseArray");
+    }
+
+    @Test
+    void verifyClassThatContainsSparseArrayThatCallsDirectlyIntoFields() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(SparseArrayDirectEqualsContainer.class).verify())
+                .assertFailure()
+                // Because Mockito will generate a sparseArray with empty list of items
+                .assertMessageContains("Significant fields: equals does not use sparseArray, or it is stateless");
     }
 
     record SinglePreconditionRecordContainer(PreconditionTypeHelper.SinglePreconditionRecord r) {}
@@ -111,21 +133,25 @@ public class MockitoTest {
         }
     }
 
-    static final class SubContainer {
+    static final class SubContainerThatAlsoHasARecursion {
         private final Sub sub;
+        private final SubContainerThatAlsoHasARecursion container;
 
-        SubContainer(Sub sub) {
+        SubContainerThatAlsoHasARecursion(Sub sub, SubContainerThatAlsoHasARecursion container) {
             this.sub = sub;
+            this.container = container;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof SubContainer other && Objects.equals(sub, other.sub);
+            return obj instanceof SubContainerThatAlsoHasARecursion other
+                    && Objects.equals(sub, other.sub)
+                    && Objects.equals(container, other.container);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(sub);
+            return Objects.hash(sub, container);
         }
     }
 }
