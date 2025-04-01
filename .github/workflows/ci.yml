@@ -27,10 +27,10 @@ jobs:
             java: 21
             dist: temurin
             flags: "-DdisableStaticAnalysis"
-          - title: "Supported JDK 23"
+          - title: "Supported JDK 24"
             experimental: false
-            cache-id: "jdk23"
-            java: 23
+            cache-id: "jdk24"
+            java: 24
             dist: temurin
             flags: ""
           - title: "Experimental JDK EA (simplified)"
