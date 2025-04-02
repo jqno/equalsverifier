@@ -37,32 +37,31 @@ public class PackageScanOptions {
         RECURSIVE, IGNORE_EXTERNAL_JARS;
     }
 
-    public static final class MustExtend implements ScanOption {
-        final Class<?> type;
-
-        public MustExtend(Class<?> type) {
+    public record MustExtend(Class<?> type) implements ScanOption {
+        public MustExtend {
             Objects.requireNonNull(type);
-            this.type = type;
         }
     }
 
-    public static final class ExceptClasses implements ScanOption {
-        final Set<Class<?>> types;
+    public record ExceptClasses(Set<Class<?>> types) implements ScanOption {
+
+        public ExceptClasses(Set<Class<?>> types) {
+            this.types = Set.copyOf(types);
+        }
 
         public ExceptClasses(Class<?> type, Class<?>... more) {
-            this.types = new HashSet<>();
-            this.types.add(type);
-            this.types.addAll(Arrays.asList(more));
+            this(build(type, more));
+        }
+
+        private static Set<Class<?>> build(Class<?> type, Class<?>... more) {
+            Set<Class<?>> types = new HashSet<>();
+            types.add(type);
+            types.addAll(Arrays.asList(more));
+            return types;
         }
     }
 
-    public static final class ExclusionPredicate implements ScanOption {
-        final Predicate<Class<?>> exclusionPredicate;
-
-        public ExclusionPredicate(Predicate<Class<?>> exclusionPredicate) {
-            this.exclusionPredicate = exclusionPredicate;
-        }
-    }
+    public record ExclusionPredicate(Predicate<Class<?>> exclusionPredicate) implements ScanOption {}
 
     public static PackageScanOptions process(ScanOption... options) {
         PackageScanOptions result = new PackageScanOptions();
