@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- StackOverflowError when a field has type with a generic type bound that recurses into itself with a wildcard: `interface X<T extends X<?>>`. ([Issue 1062](https://github.com/jqno/equalsverifier/issues/1062))
+
 ## [3.19.2] - 2025-03-14
 
 ### Fixed

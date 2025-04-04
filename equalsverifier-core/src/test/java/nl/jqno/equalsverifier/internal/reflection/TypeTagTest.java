@@ -127,6 +127,22 @@ class TypeTagTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    void correctnessOfSelfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
+        Field field = SelfRecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
+        TypeTag expected = new TypeTag(SelfRecursiveBoundedTypeVariable.class, new TypeTag(Object.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void correctnessOfSelfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
+        Field field = SelfRecursiveBoundedWildcardTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
+        TypeTag expected = new TypeTag(SelfRecursiveBoundedWildcardTypeVariable.class, new TypeTag(Object.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertThat(actual).isEqualTo(expected);
+    }
+
     @SuppressWarnings("unused")
     static class ContainerContainer {
 
@@ -164,5 +180,17 @@ class TypeTagTest {
     static class WildcardBoundedTypeVariableContainer<T extends Point> {
 
         private BoundedTypeVariable<?> wildcard;
+    }
+
+    @SuppressWarnings("unused")
+    static class SelfRecursiveBoundedTypeVariable<T extends SelfRecursiveBoundedTypeVariable<T>> {
+
+        private T fieldWithBoundedTypeVariable;
+    }
+
+    @SuppressWarnings("unused")
+    static class SelfRecursiveBoundedWildcardTypeVariable<T extends SelfRecursiveBoundedWildcardTypeVariable<?>> {
+
+        private T fieldWithBoundedTypeVariable;
     }
 }

@@ -125,7 +125,9 @@ public final class TypeTag {
         }
         for (TypeVariable<?> tv : typeAsClass.getTypeParameters()) {
             for (Type b : tv.getBounds()) {
-                return resolve(b, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
+                if (!shortCircuitRecursiveTypeBound) {
+                    return resolve(b, typeAsClass, enclosingType, true);
+                }
             }
         }
         return new TypeTag(Object.class);
