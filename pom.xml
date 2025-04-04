@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.jqno.equalsverifier</groupId>
-    <version>3.19.3-SNAPSHOT</version>
+    <version>3.19.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <artifactId>equalsverifier-parent</artifactId>
@@ -92,14 +92,14 @@
         <version.slf4j>2.0.17</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>10.22.0</version.checkstyle>
+        <version.checkstyle>10.23.0</version.checkstyle>
 
         <version.arcmutate>2.1.0</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
         <version.flatten-maven-plugin>1.7.0</version.flatten-maven-plugin>
-        <version.jacoco>0.8.12</version.jacoco>
+        <version.jacoco>0.8.13</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
         <version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>

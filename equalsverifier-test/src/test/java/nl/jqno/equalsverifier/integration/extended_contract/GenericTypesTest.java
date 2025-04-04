@@ -21,6 +21,11 @@ class GenericTypesTest {
     }
 
     @Test
+    void succeed_whenClassHasGenericFieldThatsSpecifiedToAWildcard() {
+        EqualsVerifier.forClass(GenericContainerWithWildcard.class).verify();
+    }
+
+    @Test
     void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();
     }
@@ -114,6 +119,11 @@ class GenericTypesTest {
         EqualsVerifier.forClass(ArrayMapContainerContainer.class).withNonnullFields("mapContainer").verify();
     }
 
+    @Test
+    void succeed_whenFieldHasARecursiveGenericAndAWildcard() {
+        EqualsVerifier.forClass(RecursiveGenericWithWildcardContainer.class).verify();
+    }
+
     static final class GenericContainerWithBuiltin {
 
         private final Generic<List<String>> b;
@@ -134,6 +144,28 @@ class GenericTypesTest {
         @Override
         public int hashCode() {
             return Objects.hash(b);
+        }
+    }
+
+    static final class GenericContainerWithWildcard {
+        private final Generic<?> g;
+
+        public GenericContainerWithWildcard(Generic<?> g) {
+            this.g = g;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof GenericContainerWithWildcard)) {
+                return false;
+            }
+            GenericContainerWithWildcard other = (GenericContainerWithWildcard) obj;
+            return Objects.equals(g, other.g);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(g);
         }
     }
 
@@ -564,6 +596,30 @@ class GenericTypesTest {
                 hashCode += entry.getKey().hashCode() ^ Arrays.hashCode(entry.getValue());
             }
             return hashCode;
+        }
+    }
+
+    interface RecursiveGeneric<T extends RecursiveGeneric<?>> {}
+
+    static final class RecursiveGenericWithWildcardContainer {
+        private final RecursiveGeneric<?> rg;
+
+        public RecursiveGenericWithWildcardContainer(RecursiveGeneric<?> rg) {
+            this.rg = rg;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof RecursiveGenericWithWildcardContainer)) {
+                return false;
+            }
+            RecursiveGenericWithWildcardContainer other = (RecursiveGenericWithWildcardContainer) obj;
+            return Objects.equals(rg, other.rg);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(rg);
         }
     }
 }
