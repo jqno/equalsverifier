@@ -98,10 +98,11 @@ public class ExamplesChecker<T> implements Checker {
                 reference);
         }
         catch (ClassCastException e) {
-            Formatter f = Formatter.of("""
-                    Generics: ClassCastException was thrown.
-                    Consider using withPrefabValuesForField, withGenericPrefabValues, or forExamples \
-                    for the type that triggered the exception.""");
+            Formatter f =
+                    Formatter.of("""
+                                 Generics: ClassCastException was thrown.
+                                 Consider using withPrefabValuesForField, withGenericPrefabValues, or forExamples \
+                                 for the type that triggered the exception.""");
             fail(f, e);
         }
     }
@@ -123,8 +124,8 @@ public class ExamplesChecker<T> implements Checker {
         SomethingElse somethingElse = new SomethingElse();
         try {
             Formatter f = Formatter.of("""
-                    Type-check: equals returns true for an unrelated type.
-                    Add an instanceof or getClass() check.""");
+                                       Type-check: equals returns true for an unrelated type.
+                                       Add an instanceof or getClass() check.""");
             assertFalse(f, reference.equals(somethingElse));
         }
         catch (AssertionException e) {

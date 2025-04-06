@@ -83,8 +83,8 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
     private void abstractMethodErrorThrown(String method, Field field, AbstractMethodError e) {
         Formatter f = Formatter.of("""
-                Abstract delegation: %% throws AbstractMethodError when field %% is null.
-                Suppress Warning.NULL_FIELDS to disable this check.""", method, field.getName());
+                                   Abstract delegation: %% throws AbstractMethodError when field %% is null.
+                                   Suppress Warning.NULL_FIELDS to disable this check.""", method, field.getName());
         fail(f, e);
     }
 

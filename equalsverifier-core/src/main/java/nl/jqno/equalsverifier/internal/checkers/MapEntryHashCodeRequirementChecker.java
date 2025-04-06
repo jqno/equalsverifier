@@ -31,13 +31,13 @@ public class MapEntryHashCodeRequirementChecker<T> implements Checker {
             Formatter f = Formatter
                     .of(
                         """
-                                Map.Entry: hashCode for
-                                  %%
-                                should be %% but was %%.
-                                The hash code of a map entry e is defined as:
-                                    (e.getKey()==null ? 0 : e.getKey().hashCode()) ^ (e.getValue()==null ? 0 : e.getValue().hashCode())
-                                or, using Java 8 API:
-                                    java.util.Objects.hashCode(e.getKey()) ^ java.util.Objects.hashCode(e.getValue())""",
+                        Map.Entry: hashCode for
+                          %%
+                        should be %% but was %%.
+                        The hash code of a map entry e is defined as:
+                            (e.getKey()==null ? 0 : e.getKey().hashCode()) ^ (e.getValue()==null ? 0 : e.getValue().hashCode())
+                        or, using Java 8 API:
+                            java.util.Objects.hashCode(e.getKey()) ^ java.util.Objects.hashCode(e.getValue())""",
                         e,
                         expectedHashCode,
                         actualHashCode);

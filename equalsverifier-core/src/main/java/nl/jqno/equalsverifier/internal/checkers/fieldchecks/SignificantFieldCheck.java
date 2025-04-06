@@ -90,9 +90,9 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                 Formatter formatter = Formatter
                         .of(
                             """
-                                    Significant fields: equals relies on %%, but hashCode does not.
-                                      %% has hashCode %%
-                                      %% has hashCode %%""",
+                            Significant fields: equals relies on %%, but hashCode does not.
+                              %% has hashCode %%
+                              %% has hashCode %%""",
                             fieldName,
                             reference,
                             reference.hashCode(),
@@ -101,11 +101,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                 assertFalse(formatter, equalsChanged);
             }
             Formatter formatter = Formatter.of("""
-                    Significant fields: hashCode relies on %%, but equals does not.
-                    These objects are equal, but probably shouldn't be:
-                      %%
-                    and
-                      %%""", fieldName, reference, changed);
+                                               Significant fields: hashCode relies on %%, but equals does not.
+                                               These objects are equal, but probably shouldn't be:
+                                                 %%
+                                               and
+                                                 %%""", fieldName, reference, changed);
             assertFalse(formatter, hashCodeChanged);
         }
     }
@@ -183,8 +183,8 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         }
         else if (anotherFieldIsMarkedAsId) {
             message = """
-                    Significant fields: equals does not use %%, or it is stateless.
-                    Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
+                      Significant fields: equals does not use %%, or it is stateless.
+                      Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
         }
         else {
             message = "Significant fields: equals does not use %%, or it is stateless.";
@@ -203,13 +203,13 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         final String message;
         if (thisFieldIsMarkedAsId) {
             message = """
-                    Significant fields: %% is marked @Id or @EmbeddedId so equals should not use it, but it does.
-                    Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
+                      Significant fields: %% is marked @Id or @EmbeddedId so equals should not use it, but it does.
+                      Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
         }
         else if (anotherFieldIsMarkedAsId) {
             message = """
-                    Significant fields: equals should not use %% because Warning.SURROGATE_KEY is suppressed\
-                     and it is not marked as @Id or @EmbeddedId, but it does.""";
+                      Significant fields: equals should not use %% because Warning.SURROGATE_KEY is suppressed\
+                       and it is not marked as @Id or @EmbeddedId, but it does.""";
         }
         else {
             message = "Significant fields: equals should not use %%, but it does.";
