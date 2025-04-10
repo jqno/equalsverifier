@@ -77,8 +77,8 @@ There are several Maven profiles that can be enabled or disabled:
 
 | profile                        | activation                                         | purpose                                                                                                                                                        |
 | ------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modules-jdk17`                | JDK 17 up to 20                                    | Build all modules and build releaseable artifacts.                                                                                                             |
-| `modules-jdk21`                | JDK 21 and up                                      | Build all modules and build releaseable artifacts.                                                                                                             |
+| `modules-jdk17`                | JDK 17 up to 20                                    | Build all modules and build releasable artifacts.                                                                                                             |
+| `modules-jdk21`                | JDK 21 and up                                      | Build all modules and build releasable artifacts.                                                                                                             |
 | `static-analysis`              | `disableStaticAnalysis` property must be off       | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis`.                                |
 | `static-analysis-checkstyle`   | -                                                  | Run Checkstyle checks, for Checkstyle's regression CI.                                                                                                         |
 | `argline-preview`              | `preview` property must be on                      | Enable Java preview features. Can be activated by running `mvn verify -Dpreview`.                                                                              |
@@ -132,7 +132,7 @@ To generate the website
 - Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
 - Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
-Note that thepage uses the [TilburgsAns](https://www.tilburgsans.nl/) font but references it from the main site at [jqno.nl](https://jqno.nl). In development, it will fall back to a `sans-serif` font. See the font license [here](assets/tilburgsans/Ans%20Font%20License-AFL.pdf).
+Note that the page uses the [TilburgsAns](https://www.tilburgsans.nl/) font but references it from the main site at [jqno.nl](https://jqno.nl). In development, it will fall back to a `sans-serif` font. See the font license [here](assets/tilburgsans/Ans%20Font%20License-AFL.pdf).
 
 # Disclaimer
 
