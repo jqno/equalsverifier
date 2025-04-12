@@ -19,4 +19,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [Relaxed equality](/equalsverifier/manual/relaxed-equality)
 * [Dealing with legacy systems](/equalsverifier/manual/legacy-systems)
 * [The Java Platform Module System](/equalsverifier/manual/jpms)
+* [What are these prefab values?](/equalsverifier/manual/prefab-values)
 * [Additional resources](/equalsverifier/resources)
