@@ -693,7 +693,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](ht
 ### Added
 
 -   Full support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
--   Re-usable EqualsVerifier configurations: see [the manual](http://jqno.nl/equalsverifier/manual/reusing-configurations).
+-   Re-usable EqualsVerifier configurations: see [the manual](http://jqno.nl/equalsverifier/manual/several-classes-at-once).
 -   `#report()` method to ask EqualsVerifier for a report, instead of making it fail a test.
 -   `#withGenericPrefabValues()` method added to supply values for specific generic types: see [here](http://jqno.nl/equalsverifier/errormessages/recursive-datastructure#generics).
 
@@ -1351,7 +1351,7 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 ### Added
 
--   `#withRelaxedEqualExamples()` to verify equality rules that are more relaxed than simple field-by-field comparisons. ([Issue 9](https://github.com/jqno/equalsverifier/issues/9))
+-   `#forRelaxedEqualExamples()` to verify equality rules that are more relaxed than simple field-by-field comparisons. ([Issue 9](https://github.com/jqno/equalsverifier/issues/9))
 
 ## [0.3] - 2009-08-01
 
