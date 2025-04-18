@@ -123,6 +123,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      *
      * @return A List of {@link EqualsVerifierReport} that indicates whether the contracts are met and whether
      *             {@link EqualsVerifier}'s preconditions hold.
+     *
+     * @since 3.0
      */
     public List<EqualsVerifierReport> report() {
         return types.stream().map(t -> ev.forClass(t).report(false)).collect(Collectors.toList());

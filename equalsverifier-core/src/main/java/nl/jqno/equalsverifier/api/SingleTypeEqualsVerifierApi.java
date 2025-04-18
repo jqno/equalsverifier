@@ -375,6 +375,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @return An {@link EqualsVerifierReport} that indicates whether the contract is met and whether
      *             {@link EqualsVerifier}'s preconditions hold.
+     *
+     * @since 3.0
      */
     public EqualsVerifierReport report() {
         return report(true);

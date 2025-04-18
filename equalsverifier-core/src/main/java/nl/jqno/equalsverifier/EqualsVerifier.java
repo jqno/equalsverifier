@@ -31,6 +31,8 @@ import nl.jqno.equalsverifier.internal.util.Validations;
  *
  * <p>
  * For more information, see the documentation at http://www.jqno.nl/equalsverifier
+ *
+ * @since 0.1
  */
 public final class EqualsVerifier {
 
@@ -48,6 +50,8 @@ public final class EqualsVerifier {
      * for each class whose {@code equals} and {@code hashCode} must be verified.
      *
      * @return A reusable configuration object with a fluent API.
+     *
+     * @since 3.0
      */
     @CheckReturnValue
     public static ConfiguredEqualsVerifier configure() {
@@ -59,6 +63,8 @@ public final class EqualsVerifier {
      * {@code equals} and {@code hashCode} methods without any further configuration.
      *
      * @return A reusable configuration object with a fluent API.
+     *
+     * @since 3.4
      */
     @CheckReturnValue
     public static ConfiguredEqualsVerifier simple() {
@@ -71,6 +77,8 @@ public final class EqualsVerifier {
      * @param type The class for which the {@code equals} method should be tested.
      * @param <T>  The type.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 0.1
      */
     @CheckReturnValue
     public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
@@ -84,6 +92,8 @@ public final class EqualsVerifier {
      * @param blue An example of T where all fields have different values than {@code red}.
      * @param <T>  The type.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 4.0
      */
     @CheckReturnValue
     @SuppressWarnings("unchecked")
@@ -101,6 +111,8 @@ public final class EqualsVerifier {
      *
      * @param classes An iterable containing the classes for which {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.3
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
@@ -114,6 +126,8 @@ public final class EqualsVerifier {
      * @param second Another class for which the {@code equals} method should be tested.
      * @param more   More classes for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.2
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?> second, Class<?>... more) {
@@ -131,6 +145,8 @@ public final class EqualsVerifier {
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @param options     Modifications to the standard package scanning behaviour.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.2 / 3.19
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName, ScanOption... options) {
@@ -164,6 +180,8 @@ public final class EqualsVerifier {
      *                   and {@code second}.
      * @param <T>    the type.
      * @return A fluent API for a more relaxed EqualsVerifier.
+     *
+     * @since 0.4
      */
     @SafeVarargs
     @CheckReturnValue
