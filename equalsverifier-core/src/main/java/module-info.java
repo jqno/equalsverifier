@@ -1,3 +1,8 @@
+/**
+ * Defines EqualsVerifier's needs in the modular world.
+ *
+ * @since 4.0
+ */
 // When making changes to this file, make sure they are
 // reflected in equalsverifier-release-nodep/../module-info.java!
 module nl.jqno.equalsverifier {

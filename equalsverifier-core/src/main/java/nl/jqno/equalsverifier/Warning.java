@@ -4,6 +4,8 @@ package nl.jqno.equalsverifier;
  * Enum of warnings that can be suppressed in {@link nl.jqno.equalsverifier.EqualsVerifier}.
  *
  * @see nl.jqno.equalsverifier.api.EqualsVerifierApi#suppress(Warning...)
+ *
+ * @since 0.6
  */
 public enum Warning {
     /**
@@ -13,6 +15,8 @@ public enum Warning {
      *
      * <p>
      * Only applies to non-transient fields.
+     *
+     * @since 2.0
      */
     ALL_FIELDS_SHOULD_BE_USED,
 
@@ -22,6 +26,8 @@ public enum Warning {
      *
      * <p>
      * Only applies to non-transient fields.
+     *
+     * @since 2.5
      */
     ALL_NONFINAL_FIELDS_SHOULD_BE_USED,
 
@@ -37,6 +43,8 @@ public enum Warning {
      * However, sometimes {@code ==} is used intentionally, or the field in question doesn't implement {@code equals}
      * itself, so a call to the {@code equals} method of that field is essentially a reference equality check instead of
      * a value equality check. In these cases, this warning can be suppressed.
+     *
+     * @since 1.7
      */
     REFERENCE_EQUALITY,
 
@@ -55,6 +63,8 @@ public enum Warning {
      * <p>
      * If this warning is suppressed, and it turns out that an instance of the class under test is equal to an identical
      * copy of itself after all, {@link EqualsVerifier} will fail.
+     *
+     * @since 1.1.1
      */
     IDENTICAL_COPY,
 
@@ -78,6 +88,8 @@ public enum Warning {
      * <p>
      * If this warning is suppressed, and it turns out that an instance of the class under test is equal to an identical
      * copy of itself after all, {@link EqualsVerifier} will NOT fail.
+     *
+     * @since 1.3.1
      */
     IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
 
@@ -87,6 +99,8 @@ public enum Warning {
      * <p>
      * Can be used when a whole package of classes is automatically scanned and presented to EqualsVerifier, and one or
      * more of them don't need to override {@code equals}.
+     *
+     * @since 2.0
      */
     INHERITED_DIRECTLY_FROM_OBJECT,
 
@@ -99,6 +113,8 @@ public enum Warning {
      *
      * <p>
      * Note that suppressing this warning can be dangerous and should only be done in unusual circumstances.
+     *
+     * @since 1.7
      */
     NO_EXAMPLE_FOR_CACHED_HASHCODE,
 
@@ -113,6 +129,8 @@ public enum Warning {
      * <p>
      * However, sometimes an external library requires that fields be non-final. An example of this are Java Beans. In
      * such a case, suppress this warning to prevent {@link EqualsVerifier} from checking for non-final fields.
+     *
+     * @since 0.6
      */
     NONFINAL_FIELDS,
 
@@ -124,6 +142,8 @@ public enum Warning {
      * Sometimes the constructor of a class makes sure no field can be null. If this is the case, and if the fields
      * cannot be made null later in the lifecycle of the class by setters or other methods, suppress this warning to
      * disable the check for {@link NullPointerException}.
+     *
+     * @since 0.6
      */
     NULL_FIELDS,
 
@@ -139,6 +159,8 @@ public enum Warning {
      * Note that {@code hashCode}s with higher distributions give better performance when used in collections such as
      * {@link java.util.HashMap}. Therefore, if possible, you should use all fields that are used in {@code equals}, in
      * {@code hashCode} as well.
+     *
+     * @since 2.1
      */
     STRICT_HASHCODE,
 
@@ -156,6 +178,8 @@ public enum Warning {
      * Some may find that too strict for their liking; suppressing this warning disables that test.
      *
      * @see nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi#withRedefinedSubclass(Class)
+     *
+     * @since 0.6
      */
     STRICT_INHERITANCE,
 
@@ -167,6 +191,8 @@ public enum Warning {
      * When this warning is suppressed, the fields marked with @Id or @EmbeddedId will become the entity's surrogate
      * key. Only these fields can now be part of the {@code equals} contract; all other fields may no longer be used in
      * {@code equals}.
+     *
+     * @since 3.1
      */
     SURROGATE_KEY,
 
@@ -177,6 +203,8 @@ public enum Warning {
      * <p>
      * When this warning is suppressed, all fields will become part of the entity's key, and EqualsVerifier will operate
      * as if the entity were a normal class.
+     *
+     * @since 3.12.2
      */
     SURROGATE_OR_BUSINESS_KEY,
 
@@ -189,6 +217,8 @@ public enum Warning {
      * materialized in some instances. Calling the getter will materialize them, but referencing the field directly will
      * not. This can lead to situations where the {@code equals} method of objects that should be equal to each other
      * returns false, because one instance has the content materialized and the other does not.
+     *
+     * @since 3.15
      */
     JPA_GETTER,
 
@@ -203,6 +233,8 @@ public enum Warning {
      * <p>
      * If measures are taken that this will never happen, this warning can be suppressed to disable
      * {@link EqualsVerifier}'s transience test.
+     *
+     * @since 0.7
      */
     TRANSIENT_FIELDS,
 
@@ -218,6 +250,8 @@ public enum Warning {
      *
      * <p>
      * {@code EqualsVerifier} checks for this by default but it can be disabled by suppressing this warning.
+     *
+     * @since 3.8
      */
     BIGDECIMAL_EQUALITY,
 }

@@ -10,6 +10,8 @@ import java.util.List;
  * {@link Func#apply(List)}.
  *
  * @param <T> The type of prefab value.
+ *
+ * @since 3.0
  */
 @FunctionalInterface
 public interface Func<T> {
@@ -24,6 +26,8 @@ public interface Func<T> {
      *
      * @param <A> The type of {@code T}'s generic parameter.
      * @param <T> The type of prefab value.
+     *
+     * @since 3.0
      */
     @SuppressWarnings("unchecked")
     @FunctionalInterface
@@ -46,6 +50,8 @@ public interface Func<T> {
      * @param <A> The type of {@code T}'s first generic parameter.
      * @param <B> The type of {@code T}'s second generic parameter.
      * @param <T> The type of prefab value.
+     *
+     * @since 3.0
      */
     @SuppressWarnings("unchecked")
     @FunctionalInterface
