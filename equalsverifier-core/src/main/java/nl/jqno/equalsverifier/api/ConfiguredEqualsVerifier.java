@@ -17,6 +17,11 @@ import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+/**
+ * Keeps a re-usable configuration for EqualsVerifier.
+ *
+ * @since 3.0
+ */
 public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     private final EnumSet<Warning> warningsToSuppress;
@@ -27,7 +32,11 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     private Function<String, String> fieldnameToGetter;
     private final Objenesis objenesis = new ObjenesisStd();
 
-    /** Constructor. */
+    /**
+     * Constructor.
+     *
+     * @since 3.0
+     */
     public ConfiguredEqualsVerifier() {
         this(EnumSet.noneOf(Warning.class),
                 new HashSet<>(),
@@ -57,6 +66,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * Returns a copy of the configuration.
      *
      * @return a copy of the configuration.
+     *
+     * @since 3.2
      */
     @CheckReturnValue
     public ConfiguredEqualsVerifier copy() {
@@ -128,6 +139,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @param <T>  The type.
      * @param type The class for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.0
      */
     @CheckReturnValue
     public <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
@@ -148,6 +161,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @param blue An example of T where all fields have different values than {@code red}.
      * @param <T>  The type.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 4.0
      */
     @CheckReturnValue
     @SuppressWarnings("unchecked")
@@ -165,6 +180,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      *
      * @param classes An iterable containing the classes for which {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.3
      */
     @CheckReturnValue
     public MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
@@ -178,6 +195,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @param second Another class for which the {@code equals} method should be tested.
      * @param more   More classes for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.2
      */
     @CheckReturnValue
     public MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?> second, Class<?>... more) {
@@ -194,6 +213,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @param options     Modifications to the standard package scanning behaviour.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.2 / 3.19
      */
     @CheckReturnValue
     public MultipleTypeEqualsVerifierApi forPackage(String packageName, ScanOption... options) {

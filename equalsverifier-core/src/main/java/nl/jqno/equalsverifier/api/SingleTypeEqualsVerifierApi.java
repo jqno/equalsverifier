@@ -21,6 +21,8 @@ import org.objenesis.ObjenesisStd;
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
  *
  * @param <T> The class under test.
+ *
+ * @since 3.2
  */
 public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
@@ -49,6 +51,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * Constructor.
      *
      * @param type The class for which the {@code equals} method should be tested.
+     *
+     * @since 3.2
      */
     public SingleTypeEqualsVerifierApi(Class<T> type) {
         this(type, new ObjenesisStd());
@@ -147,6 +151,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @throws NullPointerException     If {@code red} or {@code blue} is null, or if the named field does not exist in
      *                                      the class.
      * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 3.17
      */
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue) {
@@ -197,6 +203,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.0
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withIgnoredFields(String... fields) {
@@ -210,6 +218,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.0
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
@@ -237,6 +247,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param fields Fields that can never be null.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.2
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withNonnullFields(String... fields) {
@@ -257,6 +269,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param annotations Annotations to ignore.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.3
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
@@ -275,6 +289,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * T itself does not necessarily have to have subclasses that redefine {@code equals} and {@code hashCode}.
      *
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 0.6
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass() {
@@ -293,6 +309,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param subclass A subclass of T for which no instance can be equal to any instance of T.
      * @return {@code this}, for easy method chaining.
      * @see Warning#STRICT_INHERITANCE
+     *
+     * @since 0.1
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
@@ -326,6 +344,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param example                 An instance of the class under test, to verify that the hashCode has been
      *                                    initialized properly.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 1.7
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withCachedHashCode(
@@ -344,6 +364,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param example An instance of the class under test, to verify that the hashCode has been initialized properly.
      * @return {@code this}, for easy method chaining.
      * @see #withCachedHashCode(String, String, Object)
+     *
+     * @since 3.7
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withLombokCachedHashCode(T example) {
@@ -356,6 +378,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * {@link AssertionError} if there is a problem.
      *
      * @throws AssertionError If the contract is not met, or if {@link EqualsVerifier}'s preconditions do not hold.
+     *
+     * @since 0.1
      */
     public void verify() {
         try {
@@ -389,6 +413,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param showUrl Whether or not to show the url at the end of the error message.
      * @return An {@link EqualsVerifierReport} that indicates whether the contract is met and whether
      *             {@link EqualsVerifier}'s preconditions hold.
+     *
+     * @since 3.2
      */
     public EqualsVerifierReport report(boolean showUrl) {
         try {
