@@ -15,10 +15,11 @@ import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
 /**
- * Creator of prefabricated instances of classes, using a "vintage" strategy for doing so.
+ * Creator of prefabricated instances of classes, using a strategy that is aware of recursion and generics.
  *
  * Vintage in this case means that it employs the creation strategy that EqualsVerifier has been using since its
- * inception. This strategy is quite hacky and messy, and other strategies might be preferable.
+ * inception. This strategy is quite hacky and messy, and other strategies might be preferable. However, it is also
+ * quite reliable because it's been around so long, so it remains a good fallback ValueProvider.
  */
 public class VintageValueProvider implements ValueProvider {
 
