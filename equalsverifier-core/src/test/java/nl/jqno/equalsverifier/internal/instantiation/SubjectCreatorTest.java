@@ -84,6 +84,14 @@ class SubjectCreatorTest {
     }
 
     @Test
+    void withAllMatchingFieldsDefaulted() {
+        expected = new SomeClass(I_RED, 0, null);
+        actual = sut.withAllMatchingFieldsDefaulted(f -> !f.getName().equals("x"));
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
     void withAllFieldsDefaultedExcept() {
         expected = new SomeClass(0, I_RED, null);
         actual = sut.withAllFieldsDefaultedExcept(fieldI);

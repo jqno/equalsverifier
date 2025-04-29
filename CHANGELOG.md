@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Suppressing `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` doesn't work for a versioned entity class when `equals` is defined in an entity parent class.
+
 ## [3.19.3] - 2025-04-04
 
 ### Fixed
