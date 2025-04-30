@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func.Func1;
@@ -33,10 +32,6 @@ public final class Factories {
             return coll;
         };
         return Factories.<A, T>simple(f, emptyFactory);
-    }
-
-    public static <T, S> PrefabValueFactory<T> copy(Class<S> source, Function<S, T> copy) {
-        return new CopyFactory<>(source, copy);
     }
 
     public static <K, V, T extends Map<K, V>> PrefabValueFactory<T> map(Supplier<T> emptyFactory) {

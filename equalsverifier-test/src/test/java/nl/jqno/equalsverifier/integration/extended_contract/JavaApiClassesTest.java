@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.net.*;
 import java.nio.*;
 import java.nio.charset.Charset;
@@ -31,6 +32,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper;
 import org.junit.jupiter.api.Test;
 
+// CHECKSTYLE OFF: ExecutableStatementCount
 // CHECKSTYLE OFF: ParameterNumber
 
 class JavaApiClassesTest {
@@ -419,6 +421,7 @@ class JavaApiClassesTest {
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class CommonClassesContainer {
 
+        private final Object object;
         private final String string;
         private final Integer integer;
         private final BitSet bitset;
@@ -443,13 +446,18 @@ class JavaApiClassesTest {
         private final java.sql.Timestamp sqlTimestamp;
         private final Currency currency;
         private final EventObject eventObject;
+        private final Formatter formatter;
+        private final Locale locale;
+        private final Scanner scanner;
         private final Charset charset;
         private final Semaphore semaphore;
         private final ReentrantLock reentrantLock;
         private final HexFormat hexFormat;
         private final PrintStream printStream;
+        private final BigInteger bigInteger;
 
         public CommonClassesContainer(
+                Object object,
                 String string,
                 Integer integer,
                 BitSet bitset,
@@ -474,11 +482,16 @@ class JavaApiClassesTest {
                 java.sql.Timestamp sqlTimestamp,
                 Currency currency,
                 EventObject eventObject,
+                Formatter formatter,
+                Locale locale,
+                Scanner scanner,
                 Charset charset,
                 Semaphore semaphore,
                 ReentrantLock reentrantLock,
                 HexFormat hexFormat,
-                PrintStream printStream) {
+                PrintStream printStream,
+                BigInteger bigInteger) {
+            this.object = object;
             this.string = string;
             this.integer = integer;
             this.bitset = bitset;
@@ -503,11 +516,15 @@ class JavaApiClassesTest {
             this.sqlTimestamp = sqlTimestamp;
             this.currency = currency;
             this.eventObject = eventObject;
+            this.formatter = formatter;
+            this.locale = locale;
+            this.scanner = scanner;
             this.charset = charset;
             this.semaphore = semaphore;
             this.reentrantLock = reentrantLock;
             this.hexFormat = hexFormat;
             this.printStream = printStream;
+            this.bigInteger = bigInteger;
         }
 
         @Override
