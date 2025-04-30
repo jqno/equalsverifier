@@ -78,6 +78,9 @@ class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
         if (is(Scanner.class)) {
             return val(new Scanner("one"), new Scanner("two"), new Scanner("one"));
         }
+        if (is(TimeZone.class)) {
+            return val(TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"), TimeZone.getTimeZone("GMT+1"));
+        }
         if (is(UUID.class)) {
             return val(new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
         }

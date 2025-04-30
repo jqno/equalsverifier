@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import java.time.*;
 import java.util.Optional;
-import java.util.TimeZone;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
@@ -45,9 +44,6 @@ class JavaTimeValueSupplier<T> extends ValueSupplier<T> {
         }
         if (is(Period.class)) {
             return val(Period.ZERO, Period.of(1, 1, 1), Period.ZERO);
-        }
-        if (is(TimeZone.class)) {
-            return val(TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"), TimeZone.getTimeZone("GMT+1"));
         }
         if (is(Year.class)) {
             return val(Year.of(2000), Year.of(2010), Year.of(2000));

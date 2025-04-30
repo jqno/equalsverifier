@@ -455,6 +455,7 @@ class JavaApiClassesTest {
         private final HexFormat hexFormat;
         private final PrintStream printStream;
         private final BigInteger bigInteger;
+        private final TimeZone timeZone;
 
         public CommonClassesContainer(
                 Object object,
@@ -490,7 +491,8 @@ class JavaApiClassesTest {
                 ReentrantLock reentrantLock,
                 HexFormat hexFormat,
                 PrintStream printStream,
-                BigInteger bigInteger) {
+                BigInteger bigInteger,
+                TimeZone timeZone) {
             this.object = object;
             this.string = string;
             this.integer = integer;
@@ -525,6 +527,7 @@ class JavaApiClassesTest {
             this.hexFormat = hexFormat;
             this.printStream = printStream;
             this.bigInteger = bigInteger;
+            this.timeZone = timeZone;
         }
 
         @Override
