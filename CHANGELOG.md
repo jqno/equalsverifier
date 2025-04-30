@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.4] - 2025-04-30
+
 ### Fixed
 
 - Suppressing `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` doesn't work for a versioned entity class when `equals` is defined in an entity parent class.
@@ -1352,7 +1354,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.3...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.4...HEAD
+[3.19.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.3...equalsverifier-3.19.4
 [3.19.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.2...equalsverifier-3.19.3
 [3.19.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.1...equalsverifier-3.19.2
 [3.19.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19...equalsverifier-3.19.1
