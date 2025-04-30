@@ -142,6 +142,14 @@ class VersionedEntityTest {
     }
 
     @Test
+    void succeed_whenVersionedEntityHasAParentEntityThatHandlesEquals() {
+        EqualsVerifier
+                .forClass(InheritedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
     void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
         EqualsVerifier.forClass(CanEqualVersionedEntity.class).verify();
     }
@@ -343,6 +351,45 @@ class VersionedEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(s);
+        }
+    }
+
+    private static class BaseEntity {
+
+        @Id
+        private final Long id;
+
+        public BaseEntity(Long id) {
+            this.id = id;
+        }
+
+        public boolean isNew() {
+            return id == null;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof BaseEntity)) {
+                return false;
+            }
+            if (isNew()) {
+                return false;
+            }
+            BaseEntity other = (BaseEntity) obj;
+            return Objects.equals(id, other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
+    }
+
+    @Entity
+    private static class InheritedEntity extends BaseEntity {
+
+        public InheritedEntity(Long id) {
+            super(id);
         }
     }
 

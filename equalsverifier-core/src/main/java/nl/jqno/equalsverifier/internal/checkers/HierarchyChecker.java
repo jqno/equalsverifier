@@ -3,8 +3,10 @@ package nl.jqno.equalsverifier.internal.checkers;
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
@@ -22,6 +24,7 @@ public class HierarchyChecker<T> implements Checker {
     private final ClassProbe<T> classProbe;
     private final Class<? extends T> redefinedSubclass;
     private final boolean strictnessSuppressed;
+    private final boolean versionedEntity;
     private final boolean hasRedefinedSubclass;
     private final boolean typeIsFinal;
     private final boolean typeIsSealed;
@@ -31,6 +34,7 @@ public class HierarchyChecker<T> implements Checker {
         this.config = context.getConfiguration();
 
         this.strictnessSuppressed = config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
+        this.versionedEntity = config.getWarningsToSuppress().contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
         this.hasRedefinedSubclass = config.getRedefinedSubclass() != null;
         if (strictnessSuppressed && hasRedefinedSubclass) {
             fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
@@ -80,9 +84,22 @@ public class HierarchyChecker<T> implements Checker {
         }
         else {
             safelyCheckSuperProperties(subjectCreator.plain(), subjectCreator.withAllFieldsShallowlyChanged());
-            safelyCheckSuperProperties(
-                subjectCreator.withAllFieldsDefaulted(),
-                subjectCreator.withAllFieldsShallowlyChanged());
+
+            if (versionedEntity) {
+                // If it's a versioned entity with an id field that indicates "newness" if it has its default value,
+                // we should give the id field(s) an actual value, otherwise it will never be equal to its equal super.
+                Predicate<Field> p = f -> !config
+                        .getAnnotationCache()
+                        .hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID);
+                safelyCheckSuperProperties(
+                    subjectCreator.withAllMatchingFieldsDefaulted(p),
+                    subjectCreator.withAllFieldsShallowlyChanged());
+            }
+            else {
+                safelyCheckSuperProperties(
+                    subjectCreator.withAllFieldsDefaulted(),
+                    subjectCreator.withAllFieldsShallowlyChanged());
+            }
         }
     }
 

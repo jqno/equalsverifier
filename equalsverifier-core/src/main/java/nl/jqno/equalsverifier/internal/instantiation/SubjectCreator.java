@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
@@ -73,6 +74,25 @@ public class SubjectCreator<T> {
         Map<Field, Object> values = empty();
         for (FieldProbe p : fields()) {
             values.put(p.getField(), null);
+        }
+        return createInstance(values);
+    }
+
+    /**
+     * Creates an instance with all fields matching the predicate set to their type's default value: null for object
+     * references, 0 for numbers, false for booleans, except for fields that don't match the predicate, which will get a
+     * {@link #plain()} value.
+     *
+     * @param predicate A predicate to determine if the field should be defaulted.
+     * @return An instance with all matching fields defaulted and all non-matching fields set to their {@link #plain()}
+     *             value.
+     */
+    public T withAllMatchingFieldsDefaulted(Predicate<Field> predicate) {
+        Map<Field, Object> values = empty();
+        for (FieldProbe p : fields()) {
+            if (predicate.test(p.getField())) {
+                values.put(p.getField(), null);
+            }
         }
         return createInstance(values);
     }
