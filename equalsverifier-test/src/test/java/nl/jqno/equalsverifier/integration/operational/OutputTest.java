@@ -14,6 +14,7 @@ class OutputTest {
     private static final String SEE_ALSO = "For more information, go to";
     private static final String WEBSITE_URL = "https://www.jqno.nl/equalsverifier/errormessages";
     private static final String SUFFIX = "(EqualsVerifier null, JDK";
+    private static final String CLASSPATH = "running on classpath";
     private static final String MESSAGE = "a message for an exception";
 
     @Test
@@ -21,7 +22,7 @@ class OutputTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Point.class).verify())
                 .assertCause(AssertionException.class)
-                .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, SUFFIX);
+                .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, SUFFIX, CLASSPATH);
     }
 
     @Test
@@ -32,7 +33,8 @@ class OutputTest {
                 .assertMessageContains("---")
                 .assertMessageContainsOnce(SEE_ALSO)
                 .assertMessageContainsOnce(WEBSITE_URL)
-                .assertMessageContainsOnce(SUFFIX);
+                .assertMessageContainsOnce(SUFFIX)
+                .assertMessageContainsOnce(CLASSPATH);
     }
 
     @Test
@@ -45,7 +47,7 @@ class OutputTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class).verify())
                 .assertMessageContains(AssertionExceptionWithCauseThrower.class.getSimpleName())
-                .assertMessageContains(SEE_ALSO, WEBSITE_URL, SUFFIX, MESSAGE)
+                .assertMessageContains(SEE_ALSO, WEBSITE_URL, SUFFIX, CLASSPATH, MESSAGE)
                 .assertMessageDoesNotContain(NullPointerException.class.getSimpleName())
                 .assertCause(AssertionException.class)
                 .assertCause(NullPointerException.class);

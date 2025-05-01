@@ -24,6 +24,7 @@ public class ModuleErrorsTest {
         assertThatThrownBy(
             () -> ev.forClass(AttributedString.class).suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT).verify())
                 .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("running on modulepath")
                 .hasMessageContaining("The class")
                 .hasMessageContaining("Consider opening");
     }
@@ -32,6 +33,7 @@ public class ModuleErrorsTest {
     void giveProperErrorMessage_whenFieldIsInaccessible() {
         assertThatThrownBy(() -> ev.forClass(InaccessibleContainer.class).verify())
                 .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("running on modulepath")
                 .hasMessageContaining("Field x")
                 .hasMessageContaining("Consider opening")
                 .hasMessageContaining("add prefab values");
