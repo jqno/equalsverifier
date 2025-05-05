@@ -7,7 +7,7 @@
     <parent>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier-parent</artifactId>
-        <version>3.19.5-SNAPSHOT</version>
+        <version>4.0</version>
     </parent>
     <packaging>jar</packaging>
 
