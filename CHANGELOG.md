@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0] - 2025-05-05
+
 If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](http://jqno.nl/equalsverifier/migration3to4).
 
 ### Added
@@ -1383,7 +1385,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.4...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0...HEAD
+[4.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.4...equalsverifier-4.0
 [3.19.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.3...equalsverifier-3.19.4
 [3.19.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.2...equalsverifier-3.19.3
 [3.19.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.1...equalsverifier-3.19.2
