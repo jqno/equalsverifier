@@ -29,14 +29,14 @@ public final class PackageScanner {
      * @return the classes contained in the given package.
      */
     public static List<Class<?>> getClassesIn(String packageName, PackageScanOptions options) {
-        List<Class<?>> result = getDirs(packageName, options)
+        var result = getDirs(packageName, options)
                 .stream()
                 .flatMap(d -> getClassesInDir(packageName, d, options).stream())
                 .collect(Collectors.toList());
 
-        Validations.validateTypesAreKnown(options.exceptClasses, result);
-        result.removeAll(options.exceptClasses);
-        result.removeIf(options.exclusionPredicate);
+        Validations.validateTypesAreKnown(options.exceptClasses(), result);
+        result.removeAll(options.exceptClasses());
+        result.removeIf(options.exclusionPredicate());
         return result;
     }
 
@@ -55,7 +55,7 @@ public final class PackageScanner {
     private static Stream<File> getResourcePath(URL r, PackageScanOptions options) {
         String result = rethrow(() -> r.toURI().getPath(), e -> "Could not resolve resource path: " + e.getMessage());
         if (result == null) {
-            if (options.ignoreExternalJars) {
+            if (options.ignoreExternalJars()) {
                 return Stream.empty();
             }
             throw new ReflectionException("Could not resolve third-party resource " + r);
@@ -69,14 +69,14 @@ public final class PackageScanner {
         }
         return Arrays
                 .stream(dir.listFiles())
-                .filter(f -> (options.scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
+                .filter(f -> (options.scanRecursively() && f.isDirectory()) || f.getName().endsWith(".class"))
                 .flatMap(f -> {
                     List<Class<?>> classes;
                     if (f.isDirectory()) {
                         classes = getClassesInDir(packageName + "." + f.getName(), f, options);
                     }
                     else {
-                        classes = Collections.singletonList(fileToClass(packageName, f));
+                        classes = List.of(fileToClass(packageName, f));
                     }
                     return classes.stream();
                 })
@@ -84,8 +84,8 @@ public final class PackageScanner {
                 .filter(c -> !c.isLocalClass())
                 .filter(c -> !c.getName().endsWith("Test"))
                 .filter(
-                    c -> options.mustExtend == null
-                            || (options.mustExtend.isAssignableFrom(c) && !options.mustExtend.equals(c)))
+                    c -> options.mustExtend() == null
+                            || (options.mustExtend().isAssignableFrom(c) && !options.mustExtend().equals(c)))
                 .collect(Collectors.toList());
     }
 

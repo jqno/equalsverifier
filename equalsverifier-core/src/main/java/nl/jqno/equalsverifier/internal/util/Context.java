@@ -1,7 +1,9 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.*;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
@@ -13,7 +15,6 @@ public final class Context<T> {
     private final Class<T> type;
     private final Configuration<T> configuration;
     private final ClassProbe<T> classProbe;
-    private final FieldCache fieldCache;
 
     private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
@@ -21,17 +22,26 @@ public final class Context<T> {
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "FieldCache is inherently mutable")
     public Context(
             Configuration<T> configuration,
+            UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,
             FieldCache fieldCache,
             Objenesis objenesis) {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = ClassProbe.of(configuration.getType());
-        this.fieldCache = fieldCache;
+        var modes = configuration.getModes();
 
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        VintageValueProvider vintage = new VintageValueProvider(cache, objenesis);
-        CachingValueProvider caching = new CachingValueProvider(fieldCache, vintage);
+        var builtinPrefabs = new BuiltinPrefabValueProvider();
+        var mockito =
+                new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
+
+        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito);
+        var cache = JavaApiPrefabValues.build().merge(factoryCache);
+        var vintage = new VintageValueProvider(vintageChain, cache, objenesis);
+
+        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito, vintage);
+        var caching = new CachingValueProvider(fieldCache, mainChain);
+
         this.valueProvider = caching;
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
@@ -46,11 +56,6 @@ public final class Context<T> {
 
     public ClassProbe<T> getClassProbe() {
         return classProbe;
-    }
-
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable")
-    public FieldCache getFieldCache() {
-        return fieldCache;
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "VintageValueProvider can use a mutable cache.")

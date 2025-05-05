@@ -26,7 +26,6 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> nonnullFields;
     private final Set<String> prefabbedFields;
     private final AnnotationCache annotationCache;
-    private final FieldCache fieldCache;
 
     public ReflexivityFieldCheck(Context<T> context) {
         this.subjectCreator = context.getSubjectCreator();
@@ -38,7 +37,6 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         this.nonnullFields = config.getNonnullFields();
         this.prefabbedFields = config.getPrefabbedFields();
         this.annotationCache = config.getAnnotationCache();
-        this.fieldCache = context.getFieldCache();
     }
 
     @Override
@@ -81,17 +79,16 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Field field = probe.getField();
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Tuple<?> tuple = prefabbedFields.contains(fieldName)
-                ? fieldCache.get(fieldName, tag)
-                : valueProvider.provideOrThrow(tag, fieldName);
+        Tuple<?> tuple = valueProvider.provideOrThrow(tag, fieldName);
 
-        Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
-        Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());
+        Object left = subjectCreator.withFieldSetTo(field, tuple.red());
+        Object right = subjectCreator.withFieldSetTo(field, tuple.redCopy());
 
         Formatter f = Formatter
                 .of(
-                    "Reflexivity: == used instead of .equals() on field: %%"
-                            + "\nIf this is intentional, consider suppressing Warning.%%",
+                    """
+                    Reflexivity: == used instead of .equals() on field: %%
+                    If this is intentional, consider suppressing Warning.%%""",
                     probe.getName(),
                     Warning.REFERENCE_EQUALITY.toString());
         assertEquals(f, left, right);
@@ -128,8 +125,10 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             if (isEntity) {
                 Formatter f = Formatter
                         .of(
-                            "Reflexivity: entity does not equal an identical copy of itself:\n  %%"
-                                    + "\nIf this is intentional, consider suppressing Warning.%%.",
+                            """
+                            Reflexivity: entity does not equal an identical copy of itself:
+                              %%
+                            If this is intentional, consider suppressing Warning.%%.""",
                             left,
                             Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString());
                 assertEquals(f, left, right);
@@ -137,8 +136,10 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             else {
                 Formatter f = Formatter
                         .of(
-                            "Reflexivity: object does not equal an identical copy of itself:\n  %%"
-                                    + "\nIf this is intentional, consider suppressing Warning.%%.",
+                            """
+                            Reflexivity: object does not equal an identical copy of itself:
+                              %%
+                            If this is intentional, consider suppressing Warning.%%.""",
                             left,
                             Warning.IDENTICAL_COPY.toString());
                 assertEquals(f, left, right);

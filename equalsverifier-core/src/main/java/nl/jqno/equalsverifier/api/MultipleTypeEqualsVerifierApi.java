@@ -3,23 +3,33 @@ package nl.jqno.equalsverifier.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.util.ErrorMessage;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test for several types at once with a fluent API.
+ *
+ * @since 3.2
  */
 public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     private final List<Class<?>> types;
     private final ConfiguredEqualsVerifier ev;
 
+    /**
+     * Constructor.
+     *
+     * @param types The classes for which the {@code equals} method should be tested.
+     * @param ev    A configuration that can be used for each class.
+     *
+     * @since 3.2
+     */
     public MultipleTypeEqualsVerifierApi(List<Class<?>> types, ConfiguredEqualsVerifier ev) {
         this.types = new ArrayList<>(types);
         this.ev = ev.copy();
@@ -31,6 +41,15 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set suppressions on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi suppress(Warning... warnings) {
         ev.suppress(warnings);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set modes on ev, but return `this`")
+    public MultipleTypeEqualsVerifierApi set(Mode... modes) {
+        ev.set(modes);
         return this;
     }
 
@@ -84,61 +103,13 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @deprecated No longer needed; this happens automatically.
-     */
-    @Deprecated
-    @Override
-    @CheckReturnValue
-    public MultipleTypeEqualsVerifierApi withResetCaches() {
-        return this;
-    }
-
-    /**
-     * Removes the given type or types from the list of types to verify.
-     *
-     * @param type A type to remove from the list of types to verify.
-     * @param more More types to remove from the list of types to verify.
-     * @return {@code this}, for easy method chaining.
-     * @deprecated Use {@link EqualsVerifier#forPackage(String, ScanOption...)} with
-     *                 {@link ScanOption#except(Class, Class...)} instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public MultipleTypeEqualsVerifierApi except(Class<?> type, Class<?>... more) {
-        List<Class<?>> typesToRemove = ListBuilders.buildListOfAtLeastOne(type, more);
-        removeTypes(typesToRemove);
-        return this;
-    }
-
-    /**
-     * Removes all types matching the given Predicate.
-     *
-     * @param exclusionPredicate A Predicate matching classes to remove from the list of types to verify.
-     * @return {@code this}, for easy method chaining.
-     * @deprecated Use {@link EqualsVerifier#forPackage(String, ScanOption...)} with
-     *                 {@link ScanOption#except(Predicate)} instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public MultipleTypeEqualsVerifierApi except(Predicate<Class<?>> exclusionPredicate) {
-        List<Class<?>> typesToRemove = types.stream().filter(exclusionPredicate).collect(Collectors.toList());
-        removeTypes(typesToRemove);
-        return this;
-    }
-
-    private void removeTypes(List<Class<?>> typesToRemove) {
-        Validations.validateTypesAreKnown(typesToRemove, types);
-        types.removeAll(typesToRemove);
-    }
-
-    /**
      * Performs the verification of the contracts for {@code equals} and {@code hashCode} and throws an
      * {@link AssertionError} if there is a problem.
      *
      * @throws AssertionError If one of the contracts is not met, or if {@link EqualsVerifier}'s preconditions do not
      *                            hold.
+     *
+     * @since 0.1
      */
     public void verify() {
         List<EqualsVerifierReport> failures =
@@ -164,6 +135,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      *
      * @return A List of {@link EqualsVerifierReport} that indicates whether the contracts are met and whether
      *             {@link EqualsVerifier}'s preconditions hold.
+     *
+     * @since 3.0
      */
     public List<EqualsVerifierReport> report() {
         return types.stream().map(t -> ev.forClass(t).report(false)).collect(Collectors.toList());

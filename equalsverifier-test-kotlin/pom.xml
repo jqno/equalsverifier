@@ -45,7 +45,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>11</jvmTarget>
+                    <jvmTarget>17</jvmTarget>
                 </configuration>
             </plugin>
             <plugin>
@@ -75,6 +75,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${version.pitest.maven}</version>
+                <configuration>
+                    <crossModule>true</crossModule>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -110,6 +118,5 @@
             <version>${version.kotlin}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 </project>

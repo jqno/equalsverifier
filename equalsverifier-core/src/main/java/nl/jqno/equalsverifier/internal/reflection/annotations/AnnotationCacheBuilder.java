@@ -1,12 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 import net.bytebuddy.description.annotation.AnnotationDescription;
@@ -37,7 +31,7 @@ public class AnnotationCacheBuilder {
             TypePool pool = TypePool.Default.of(type.getClassLoader());
             TypeDescription typeDescription = pool.describe(type.getName()).resolve();
 
-            visitType(setOf(type), cache, typeDescription, false);
+            visitType(Set.of(type), cache, typeDescription, false);
             visitSuperclasses(type, cache, pool);
             visitOuterClasses(type, cache, pool);
             visitPackage(type, cache, pool);
@@ -59,7 +53,7 @@ public class AnnotationCacheBuilder {
     private void visitSuperclasses(Class<?> type, AnnotationCache cache, TypePool pool) {
         for (Class<?> c : SuperclassIterable.of(type)) {
             TypeDescription typeDescription = pool.describe(c.getName()).resolve();
-            visitType(setOf(type, c), cache, typeDescription, true);
+            visitType(Set.of(type, c), cache, typeDescription, true);
         }
     }
 
@@ -67,7 +61,7 @@ public class AnnotationCacheBuilder {
         Class<?> outer = type.getDeclaringClass();
         while (outer != null) {
             TypeDescription typeDescription = pool.describe(outer.getName()).resolve();
-            visitType(setOf(type, outer), cache, typeDescription, false);
+            visitType(Set.of(type, outer), cache, typeDescription, false);
 
             outer = outer.getDeclaringClass();
         }
@@ -83,7 +77,7 @@ public class AnnotationCacheBuilder {
 
         try {
             TypeDescription typeDescription = pool.describe(className).resolve();
-            visitType(setOf(type), cache, typeDescription, false);
+            visitType(Set.of(type), cache, typeDescription, false);
         }
         catch (IllegalStateException e) {
             // No package object; do nothing.
@@ -178,8 +172,7 @@ public class AnnotationCacheBuilder {
     }
 
     private void addEnumProperties(Object val, String name, AnnotationProperties props) {
-        if (val instanceof EnumerationDescription) {
-            EnumerationDescription e = (EnumerationDescription) val;
+        if (val instanceof EnumerationDescription e) {
             props.putEnumValue(name, e.getValue());
         }
     }
@@ -187,10 +180,10 @@ public class AnnotationCacheBuilder {
     private void addArrayProperties(Object val, String name, AnnotationProperties props) {
         if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
             Object[] array = (Object[]) val;
-            Set<String> values = new HashSet<>();
+            var values = new HashSet<String>();
             for (Object obj : array) {
-                if (obj instanceof TypeDescription) {
-                    values.add(((TypeDescription) obj).getName());
+                if (obj instanceof TypeDescription description) {
+                    values.add(description.getName());
                 }
                 else {
                     values.add(obj.toString());

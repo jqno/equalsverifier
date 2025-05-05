@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 
 /*

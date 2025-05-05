@@ -6,10 +6,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.D;
 import nl.jqno.equalsverifier.testhelpers.packages.subclasses.*;
 import nl.jqno.equalsverifier.testhelpers.packages.subclasses.subpackage.SubA3;
 import org.junit.jupiter.api.Test;
@@ -28,7 +30,7 @@ class PackageScannerTest {
 
     @Test
     void happyPathMustExtendClass() {
-        opts.mustExtend = SuperA.class;
+        opts = PackageScanOptions.process(ScanOption.mustExtend(SuperA.class));
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", opts);
         sort(classes);
@@ -37,7 +39,7 @@ class PackageScannerTest {
 
     @Test
     void happyPathMustExtendInterface() {
-        opts.mustExtend = SuperI.class;
+        opts = PackageScanOptions.process(ScanOption.mustExtend(SuperI.class));
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", opts);
         sort(classes);
@@ -46,7 +48,7 @@ class PackageScannerTest {
 
     @Test
     void happyPathRecursive() {
-        opts.scanRecursively = true;
+        opts = PackageScanOptions.process(ScanOption.recursive());
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
         sort(classes);
@@ -61,13 +63,12 @@ class PackageScannerTest {
                                 nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.B.class,
                                 nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.A.class,
                                 nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.B.class,
-                                nl.jqno.equalsverifier.testhelpers.packages.correct.subpackage.subpackage.D.class));
+                                D.class));
     }
 
     @Test
     void happyPathMustExtendClassRecursive() {
-        opts.scanRecursively = true;
-        opts.mustExtend = SuperA.class;
+        opts = PackageScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(SuperA.class));
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", opts);
         sort(classes);
@@ -76,7 +77,7 @@ class PackageScannerTest {
 
     @Test
     void happyPathExceptClasses() {
-        opts.exceptClasses.add(B.class);
+        opts = PackageScanOptions.process(ScanOption.except(B.class));
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
         sort(classes);
@@ -85,7 +86,7 @@ class PackageScannerTest {
 
     @Test
     void happyPathExceptPredicate() {
-        opts.exclusionPredicate = c -> c.getSimpleName().endsWith("B");
+        opts = PackageScanOptions.process(ScanOption.except(c -> c.getSimpleName().endsWith("B")));
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
         sort(classes);
@@ -103,7 +104,7 @@ class PackageScannerTest {
 
     @Test
     void filterOutTestClassesRecursively() {
-        opts.scanRecursively = true;
+        opts = PackageScanOptions.process(ScanOption.recursive());
         List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", opts);
         List<Class<?>> testClasses =
                 classes.stream().filter(c -> c.getName().endsWith("Test")).collect(Collectors.toList());
@@ -119,7 +120,7 @@ class PackageScannerTest {
 
     @Test
     void nonexistentPackageAndSubPackage() {
-        opts.scanRecursively = true;
+        opts = PackageScanOptions.process(ScanOption.recursive());
         List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.nonexistentpackage", opts);
         assertThat(classes).isEqualTo(Collections.emptyList());
     }
@@ -129,8 +130,7 @@ class PackageScannerTest {
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.anonymous", opts);
 
-        assertThat(classes)
-                .isEqualTo(Collections.singletonList(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
+        assertThat(classes).isEqualTo(List.of(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
     }
 
     @Test
@@ -142,7 +142,7 @@ class PackageScannerTest {
 
     @Test
     void dependencyPackageWithIgnore() {
-        opts.ignoreExternalJars = true;
+        opts = PackageScanOptions.process(ScanOption.ignoreExternalJars());
         List<Class<?>> classes = PackageScanner.getClassesIn("org.junit", opts);
         assertThat(classes).isEmpty();
     }

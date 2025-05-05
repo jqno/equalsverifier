@@ -2,12 +2,10 @@ package nl.jqno.equalsverifier;
 
 import java.util.List;
 
-import nl.jqno.equalsverifier.api.EqualsVerifierApi;
-import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
-import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
-import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.api.*;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
+import nl.jqno.equalsverifier.internal.util.FieldToPrefabValues;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
@@ -33,6 +31,8 @@ import nl.jqno.equalsverifier.internal.util.Validations;
  *
  * <p>
  * For more information, see the documentation at http://www.jqno.nl/equalsverifier
+ *
+ * @since 0.1
  */
 public final class EqualsVerifier {
 
@@ -50,6 +50,8 @@ public final class EqualsVerifier {
      * for each class whose {@code equals} and {@code hashCode} must be verified.
      *
      * @return A reusable configuration object with a fluent API.
+     *
+     * @since 3.0
      */
     @CheckReturnValue
     public static ConfiguredEqualsVerifier configure() {
@@ -61,6 +63,8 @@ public final class EqualsVerifier {
      * {@code equals} and {@code hashCode} methods without any further configuration.
      *
      * @return A reusable configuration object with a fluent API.
+     *
+     * @since 3.4
      */
     @CheckReturnValue
     public static ConfiguredEqualsVerifier simple() {
@@ -73,6 +77,8 @@ public final class EqualsVerifier {
      * @param type The class for which the {@code equals} method should be tested.
      * @param <T>  The type.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 0.1
      */
     @CheckReturnValue
     public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
@@ -82,8 +88,31 @@ public final class EqualsVerifier {
     /**
      * Factory method. For general use.
      *
+     * @param red  An example of T.
+     * @param blue An example of T where all fields have different values than {@code red}.
+     * @param <T>  The type.
+     * @return A fluent API for EqualsVerifier.
+     *
+     * @since 4.0
+     */
+    @CheckReturnValue
+    @SuppressWarnings("unchecked")
+    public static <T> SingleTypeEqualsVerifierApi<T> forExamples(T red, T blue) {
+        Validations.validateRedAndBlueExamples(red, blue);
+
+        var type = (Class<T>) red.getClass();
+        var api = forClass(type);
+        FieldToPrefabValues.move(api, type, red, blue);
+        return api;
+    }
+
+    /**
+     * Factory method. For general use.
+     *
      * @param classes An iterable containing the classes for which {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.3
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
@@ -97,6 +126,8 @@ public final class EqualsVerifier {
      * @param second Another class for which the {@code equals} method should be tested.
      * @param more   More classes for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.2
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?> second, Class<?>... more) {
@@ -114,53 +145,12 @@ public final class EqualsVerifier {
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @param options     Modifications to the standard package scanning behaviour.
      * @return A fluent API for EqualsVerifier.
+     *
+     * @since 3.2 / 3.19
      */
     @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName, ScanOption... options) {
-        PackageScanOptions opts = ScanOptions.process(options);
-        List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
-        Validations.validatePackageContainsClasses(packageName, classes);
-        return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
-    }
-
-    /**
-     * Factory method. For general use.
-     *
-     * <p>
-     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
-     * instead.
-     *
-     * @param packageName     A package for which each class's {@code equals} should be tested.
-     * @param scanRecursively true to scan all sub-packages
-     * @return A fluent API for EqualsVerifier.
-     * @deprecated Use {@link #forPackage(String, ScanOption...)} with {@link ScanOption#recursive()} instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public static MultipleTypeEqualsVerifierApi forPackage(String packageName, boolean scanRecursively) {
-        return scanRecursively ? forPackage(packageName, ScanOption.recursive()) : forPackage(packageName);
-    }
-
-    /**
-     * Factory method. For general use.
-     *
-     * <p>
-     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
-     * instead.
-     *
-     * <p>
-     * Also note that if {@code mustExtend} is given, and it exists within {@code packageName}, it will NOT be included.
-     *
-     * @param packageName A package for which each class's {@code equals} should be tested.
-     * @param mustExtend  if not null, returns only classes that extend or implement this class.
-     * @return A fluent API for EqualsVerifier.
-     * @deprecated Use {@link #forPackage(String, ScanOption...)} with {@link ScanOption#mustExtend(Class)}, and
-     *                 possibly {@link ScanOption#recursive()}, instead.
-     */
-    @CheckReturnValue
-    @Deprecated
-    public static MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {
-        PackageScanOptions opts = ScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
+        PackageScanOptions opts = PackageScanOptions.process(options);
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
@@ -190,6 +180,8 @@ public final class EqualsVerifier {
      *                   and {@code second}.
      * @param <T>    the type.
      * @return A fluent API for a more relaxed EqualsVerifier.
+     *
+     * @since 0.4
      */
     @SafeVarargs
     @CheckReturnValue

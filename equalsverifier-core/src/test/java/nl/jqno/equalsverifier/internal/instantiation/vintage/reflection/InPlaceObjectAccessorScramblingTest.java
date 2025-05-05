@@ -1,22 +1,24 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.AttributedString;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
+import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.Point3D;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.Point3D;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
@@ -32,10 +34,12 @@ class InPlaceObjectAccessorScramblingTest {
 
     @BeforeEach
     void setup() {
+        var prefabs = new UserPrefabValueProvider();
+        var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
-        valueProviderTest = new VintageValueProvider(factoryCache, objenesis);
+        valueProviderTest = new VintageValueProvider(chain, factoryCache, objenesis);
     }
 
     @Test
@@ -175,8 +179,8 @@ class InPlaceObjectAccessorScramblingTest {
 
     static final class GenericContainerContainer {
 
-        private final GenericContainer<String> strings = new GenericContainer<>(new ArrayList<String>());
-        private final GenericContainer<Point> points = new GenericContainer<>(new ArrayList<Point>());
+        private final GenericContainer<String> strings = new GenericContainer<>(List.of());
+        private final GenericContainer<Point> points = new GenericContainer<>(List.of());
     }
 
     static final class GenericContainer<T> {

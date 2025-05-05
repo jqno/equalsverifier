@@ -61,7 +61,6 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
                             <Multi-Release>true</Multi-Release>
                             <Implementation-Title>EqualsVerifier</Implementation-Title>
                             <Website>${project.url}</Website>
@@ -169,27 +168,6 @@
         </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-11</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-16</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-17</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier-21</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
@@ -206,15 +184,9 @@
             <version>${version.bytebuddy}</version>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${version.joda-time}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${version.guava}</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${version.mockito}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>

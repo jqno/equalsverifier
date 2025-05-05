@@ -128,13 +128,15 @@ public class HierarchyChecker<T> implements Checker {
                 Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper);
         assertTrue(symmetryFormatter, reference.equals(equalSuper) && equalSuper.equals(reference));
 
-        Formatter transitivityFormatter = Formatter
-                .of(
-                    "Transitivity:\n"
-                            + "  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.",
-                    reference,
-                    shallow,
-                    equalSuper);
+        Formatter transitivityFormatter =
+                Formatter.of("""
+                             Transitivity:
+                               %%
+                             and
+                               %%
+                             both equal superclass instance
+                               %%
+                             which implies they equal each other.""", reference, shallow, equalSuper);
         assertTrue(
             transitivityFormatter,
             reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
@@ -169,21 +171,20 @@ public class HierarchyChecker<T> implements Checker {
         T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
 
         if (config.isUsingGetClass()) {
-            Formatter formatter = Formatter
-                    .of(
-                        "Subclass: object is equal to an instance of a trivial subclass with"
-                                + " equal fields:\n  %%\nThis should not happen when using getClass().",
-                        reference);
+            Formatter formatter =
+                    Formatter.of("""
+                                 Subclass: object is equal to an instance of a trivial subclass with equal fields:
+                                   %%
+                                 This should not happen when using getClass().""", reference);
             assertFalse(formatter, reference.equals(equalSub));
         }
         else {
-            Formatter formatter = Formatter
-                    .of(
-                        "Subclass: object is not equal to an instance of a trivial subclass"
-                                + " with equal fields:\n  %%\n"
-                                + "Maybe you forgot to add usingGetClass(). Otherwise, consider"
-                                + " making the class final or use EqualsVerifier.simple().",
-                        reference);
+            Formatter formatter =
+                    Formatter.of("""
+                                 Subclass: object is not equal to an instance of a trivial subclass with equal fields:
+                                   %%
+                                 Maybe you forgot to add usingGetClass(). Otherwise, consider\
+                                  making the class final or use EqualsVerifier.simple().""", reference);
             assertTrue(formatter, reference.equals(equalSub));
         }
     }
@@ -224,19 +225,18 @@ public class HierarchyChecker<T> implements Checker {
                 hashCodeIsFinal);
         }
         else {
-            Formatter equalsFormatter = Formatter
-                    .of(
-                        "Subclass: equals is not final.\nMake your class or your equals method final, or supply an"
-                                + " instance of a redefined subclass using withRedefinedSubclass"
-                                + " if equals cannot be final.");
+            Formatter equalsFormatter = Formatter.of("""
+                                                     Subclass: equals is not final.
+                                                     Make your class or your equals method final, or supply an\
+                                                      instance of a redefined subclass using withRedefinedSubclass\
+                                                      if equals cannot be final.""");
             assertTrue(equalsFormatter, equalsIsFinal);
 
-            Formatter hashCodeFormatter = Formatter
-                    .of(
-                        "Subclass: hashCode is not final.\n"
-                                + "Make your class or your hashCode method final, or supply an"
-                                + " instance of a redefined subclass using withRedefinedSubclass"
-                                + " if hashCode cannot be final.");
+            Formatter hashCodeFormatter = Formatter.of("""
+                                                       Subclass: hashCode is not final.
+                                                       Make your class or your hashCode method final, or supply an\
+                                                        instance of a redefined subclass using withRedefinedSubclass\
+                                                        if hashCode cannot be final.""");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
     }

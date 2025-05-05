@@ -2,9 +2,12 @@ package nl.jqno.equalsverifier.verify_release.jar.helper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Set;
+
 public class JarAsserter {
 
     public static final String EV = "/nl/jqno/equalsverifier";
+    public static final String LIB = EV + "/internal/lib";
 
     private final JarReader reader;
 
@@ -14,27 +17,41 @@ public class JarAsserter {
 
     public void assertPresenceOfCoreClasses() {
         assertPresenceOf(
+            "/module-info.class",
             EV + "/EqualsVerifier.class",
             EV + "/internal/reflection/ClassProbe.class",
             EV + "/internal/checkers/HierarchyChecker.class");
     }
 
     public void assertPresenceOfMultiReleaseClasses() {
-        assertPresenceOf(
-            "/META-INF/versions/11" + EV + "/internal/versionspecific/ModuleHelper.class",
-            "/META-INF/versions/16" + EV + "/internal/versionspecific/RecordsHelper.class",
-            "/META-INF/versions/17" + EV + "/internal/versionspecific/SealedTypesHelper.class",
-            "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class");
+        assertPresenceOf("/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class");
+    }
+
+    public void assertAbsenceOfMetainfStuff() {
+        assertAbsenceOf("/META-INF/LICENSE", "/META-INF/maven/nl.jqno.equalsverifier/equalsverifier-core/pom.xml");
+    }
+
+    public void assertAbsenceOfTesthelpers() {
+        assertAbsenceOf(EV + "-testhelpers/Util.class", EV + "-testhelpers/ExpectedException.class");
     }
 
     public void assertPresenceOfEmbeddedDepedencies() {
-        assertPresenceOf(
-            EV + "/internal/lib/bytebuddy/ByteBuddy.class",
-            EV + "/internal/lib/objenesis/Objenesis.class");
+        assertPresenceOf(LIB + "/bytebuddy/ByteBuddy.class", LIB + "/objenesis/Objenesis.class");
     }
 
     public void assertAbsenceOfEmbeddedDepedencies() {
-        assertAbsenceOf(EV + "/internal/lib/bytebuddy/ByteBuddy.class", EV + "/internal/lib/objenesis/Objenesis.class");
+        assertAbsenceOf(LIB + "/bytebuddy/ByteBuddy.class", LIB + "/objenesis/Objenesis.class");
+    }
+
+    public void assertAbsenceOfEmbeddedDepedenciesUnderTheirOriginalPath() {
+        assertAbsenceOf("/net/bytebuddy/ByteBuddy.class", "/org/objenesis/Objenesis.class");
+    }
+
+    public void assertAbsenceOfOptionalDependencies() {
+        assertAbsenceOf(
+            "/org/mockito/Mockito.class",
+            LIB + "/org/mockito/Mockito.class",
+            LIB + "/mockito/Mockito.class");
     }
 
     public void assertPresenceOf(String... filenames) {
@@ -47,12 +64,17 @@ public class JarAsserter {
         assertThat(fileNames).allMatch(fn -> !entries.contains(fn), "absent from " + reader.getFilename());
     }
 
+    public void assertAbsenceOfDirectory(String... dirNames) {
+        var dirs = Set.of(dirNames);
+        var entries = reader.getEntries();
+        assertThat(entries).noneMatch(dirs::contains);
+    }
+
     public void assertContentOfManifest(String implementationTitle) {
         var filename = "/META-INF/MANIFEST.MF";
         var manifest = new String(reader.getContentOf(filename));
         assertThat(manifest)
                 .satisfies(
-                    m -> assertContains("Automatic-Module-Name: nl.jqno.equalsverifier", m, filename),
                     m -> assertContains("Implementation-Title: " + implementationTitle, m, filename),
                     m -> assertContains("Implementation-Version: ", m, filename),
                     m -> assertContains("Multi-Release: true", m, filename),
@@ -67,16 +89,7 @@ public class JarAsserter {
         // See https://javaalmanac.io/bytecode/versions/
         assertThat(true)
                 .satisfies(
-                    b -> assertVersionOfClassFile(52, EV + "/EqualsVerifier.class"),
-                    b -> assertVersionOfClassFile(
-                        55,
-                        "/META-INF/versions/11" + EV + "/internal/versionspecific/ModuleHelper.class"),
-                    b -> assertVersionOfClassFile(
-                        60,
-                        "/META-INF/versions/16" + EV + "/internal/versionspecific/RecordsHelper.class"),
-                    b -> assertVersionOfClassFile(
-                        61,
-                        "/META-INF/versions/17" + EV + "/internal/versionspecific/SealedTypesHelper.class"),
+                    b -> assertVersionOfClassFile(61, EV + "/EqualsVerifier.class"),
                     b -> assertVersionOfClassFile(
                         65,
                         "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class"));
@@ -95,5 +108,27 @@ public class JarAsserter {
         var description = "Expected " + innerFilename + " to have version " + expectedVersion + ", but it has version "
                 + actualVersion;
         assertThat(actualVersion).as(description).isEqualTo((byte) expectedVersion);
+    }
+
+    public void assertModuleInfoWithDependencies() {
+        var moduleinfo = reader.getContentOf("module-info.class");
+        var module = ModuleInfoAsserter.parse(moduleinfo);
+        assertThat(module)
+                .satisfies(
+                    m -> m.assertName("nl.jqno.equalsverifier"),
+                    m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
+                    m -> m.assertRequires("net.bytebuddy", "transitive"),
+                    m -> m.assertRequires("org.objenesis", ""));
+    }
+
+    public void assertModuleInfoWithoutDependencies() {
+        var moduleinfo = reader.getContentOf("module-info.class");
+        var module = ModuleInfoAsserter.parse(moduleinfo);
+        assertThat(module)
+                .satisfies(
+                    m -> m.assertName("nl.jqno.equalsverifier"),
+                    m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
+                    m -> m.assertDoesNotRequire("net.bytebuddy"),
+                    m -> m.assertDoesNotRequire("org.objenesis"));
     }
 }

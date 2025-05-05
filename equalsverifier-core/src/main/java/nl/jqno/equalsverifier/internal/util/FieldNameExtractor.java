@@ -12,7 +12,7 @@ public final class FieldNameExtractor {
     private FieldNameExtractor() {}
 
     public static <T> Set<String> extractFieldNames(Class<T> type) {
-        Set<String> actualFieldNames = new HashSet<>();
+        var actualFieldNames = new HashSet<String>();
         for (FieldProbe p : FieldIterable.of(type)) {
             String name = p.getName();
             actualFieldNames.add(name);

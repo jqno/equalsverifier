@@ -30,8 +30,11 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
             fail(
                 Formatter
                         .of(
-                            "Transitivity: two of these three instances are equal to each other,"
-                                    + " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
+                            """
+                            Transitivity: two of these three instances are equal to each other, so the third one should be, too:
+                            -  %%
+                            -  %%
+                            -  %%""",
                             a1,
                             b1,
                             b2));

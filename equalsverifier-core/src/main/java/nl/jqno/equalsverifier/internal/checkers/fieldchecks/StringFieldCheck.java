@@ -34,7 +34,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);
-            String red = valueProvider.<String>provideOrThrow(string, fieldProbe.getName()).getRed();
+            String red = valueProvider.<String>provideOrThrow(string, fieldProbe.getName()).red();
 
             final T reference;
             final T copy;

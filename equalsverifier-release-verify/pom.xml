@@ -13,10 +13,11 @@
     <name>EqualsVerifier | release verify</name>
 
     <properties>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <artifact.src.main>${project.basedir}/../equalsverifier-release-main/target</artifact.src.main>
         <artifact.src.nodep>${project.basedir}/../equalsverifier-release-nodep/target</artifact.src.nodep>
+        <artifact.src.core>${project.basedir}/../equalsverifier-core/target</artifact.src.core>
         <artifact.dst>${project.basedir}/src/test/resources</artifact.dst>
     </properties>
 
@@ -76,6 +77,10 @@
                                             <sourceFile>${artifact.src.nodep}/equalsverifier-nodep-${project.version}-sources.jar</sourceFile>
                                             <destinationFile>${artifact.dst}/equalsverifier-nodep-sources.jar</destinationFile>
                                         </fileSet>
+                                        <fileSet>
+                                            <sourceFile>${artifact.src.core}/equalsverifier-core-${project.version}.jar</sourceFile>
+                                            <destinationFile>${artifact.dst}/equalsverifier-core.jar</destinationFile>
+                                        </fileSet>
                                     </fileSets>
                                 </configuration>
                             </execution>
@@ -107,6 +112,11 @@
                     <artifactId>assertj-core</artifactId>
                     <version>${version.assertj}</version>
                     <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>net.bytebuddy</groupId>
+                    <artifactId>byte-buddy</artifactId>
+                    <version>${version.bytebuddy}</version>
                 </dependency>
             </dependencies>
         </profile>

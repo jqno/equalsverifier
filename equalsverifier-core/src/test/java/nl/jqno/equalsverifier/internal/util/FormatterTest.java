@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;

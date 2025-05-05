@@ -38,10 +38,10 @@ public class RecordProbe<T> {
 
     private String buildMessage(Throwable e, List<?> params) {
         String prefix = "Record: failed to run constructor for record type " + type.getName()
-                + "\n  These were the values passed to the constructor: " + params;
+                + "\n   These were the values passed to the constructor: " + params;
 
         if (e.getCause() instanceof NullPointerException) {
-            return prefix + "\n  If the record does not accept null values for its constructor parameters,"
+            return prefix + "\n   If the record does not accept null values for its constructor parameters,"
                     + " consider suppressing Warning.NULL_FIELDS.";
         }
 
@@ -59,12 +59,14 @@ public class RecordProbe<T> {
 
         String msg = prefix;
         if (hasZeros) {
-            msg += "\n  If the record does not accept 0 or false as a value for its constructor parameters,"
-                    + " consider suppressing Warning.ZERO_FIELDS.";
+            msg += """
+                   \n   If the record does not accept 0 or false as a value for its constructor parameters,\
+                   consider suppressing Warning.ZERO_FIELDS.""";
         }
         if (hasSomethingElse) {
-            msg += "\n  If the record does not accept any of the given values for its constructor parameters,"
-                    + " consider providing prefab values for the types of those fields.";
+            msg += """
+                   \n   If the record does not accept any of the given values for its constructor parameters,\
+                   consider providing prefab values for the types of those fields.""";
         }
         return msg;
     }

@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -62,11 +62,28 @@ public final class Validations {
         validate(equalExamples.contains(example), "an equal example also appears as unequal example.");
     }
 
+    public static <T> void validateRedAndBlueExamples(T red, T blue) {
+        validateNotNull(red, "red example is null.");
+        validateNotNull(blue, "blue example is null.");
+        Class<?> redType = red.getClass();
+        Class<?> blueType = blue.getClass();
+        validate(!redType.equals(blueType), "examples are of different types.");
+        validate(red.equals(blue), "both examples are equal.");
+    }
+
     public static <T> void validateRedAndBluePrefabValues(Class<T> type, T red, T blue) {
         validateNotNull(type, "prefab value type is null.");
         validateNotNull(red, "red prefab value of type " + type.getSimpleName() + " is null.");
         validateNotNull(blue, "blue prefab value of type " + type.getSimpleName() + " is null.");
-        validate(red.equals(blue), "both prefab values of type " + type.getSimpleName() + " are equal.");
+        validate(Objects.equals(red, blue), "both prefab values of type " + type.getSimpleName() + " are equal.");
+    }
+
+    public static <T> void validateRedAndBluePrefabValues(String fieldName, T red, T blue) {
+        String fieldDescription =
+                red == null ? "`" + fieldName + "`" : "`" + red.getClass().getSimpleName() + " " + fieldName + "`";
+        validateNotNull(red, "red prefab value for field " + fieldDescription + " is null.");
+        validateNotNull(blue, "blue prefab value for field " + fieldDescription + " is null.");
+        validate(Objects.equals(red, blue), "both prefab values for field " + fieldDescription + " are equal.");
     }
 
     public static <T> Field validateFieldTypeMatches(Class<T> container, String fieldName, Class<?> fieldType) {
@@ -106,12 +123,14 @@ public final class Validations {
 
         validate(
             hasSurrogateKey && usesWithOnlyTheseFields,
-            "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.\n"
-                    + "You can remove withOnlyTheseFields.");
+            """
+            you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.
+            You can remove withOnlyTheseFields.""");
         validate(
             hasSurrogateKey && usesWithIgnoredFields,
-            "you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.\n"
-                    + "You can remove withIgnoredFields.");
+            """
+            you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.
+            You can remove withIgnoredFields.""");
     }
 
     public static void validateGivenAnnotations(Class<?>... givenAnnotations) {
@@ -179,9 +198,10 @@ public final class Validations {
             includedFields.contains(p.getName())
                     && cache.hasFieldAnnotation(type, p.getName(), SupportedAnnotations.ID)
                     && !warnings.contains(Warning.SURROGATE_OR_BUSINESS_KEY),
-            "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n"
-                    + "Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields "
-                    + "if you want to use only the @Id or @EmbeddedId fields in equals.");
+            """
+            you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.
+            Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields\
+             if you want to use only the @Id or @EmbeddedId fields in equals.""");
     }
 
     public static void validatePackageContainsClasses(String packageName, List<Class<?>> types) {

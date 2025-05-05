@@ -1,18 +1,16 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.util.*;
 
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -24,29 +22,30 @@ class VintageValueProviderTest {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
-    private final Objenesis objenesis = new ObjenesisStd();
+    private final UserPrefabValueProvider prefabs = new UserPrefabValueProvider();
     private final FactoryCache factoryCache = new FactoryCache();
+    private final Objenesis objenesis = new ObjenesisStd();
     private VintageValueProvider vp;
 
     @BeforeEach
     void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
-        factoryCache.put(int.class, values(42, 1337, 42));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        prefabs.register(int.class, 42, 1337, 42);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
     }
 
     @Test
     void sanityTestFactoryIncreasesStringLength() {
         AppendingStringTestFactory f = new AppendingStringTestFactory();
-        assertThat(f.createValues(null, null, null).getRed()).isEqualTo("r");
-        assertThat(f.createValues(null, null, null).getRed()).isEqualTo("rr");
-        assertThat(f.createValues(null, null, null).getRed()).isEqualTo("rrr");
+        assertThat(f.createValues(null, null, null).red()).isEqualTo("r");
+        assertThat(f.createValues(null, null, null).red()).isEqualTo("rr");
+        assertThat(f.createValues(null, null, null).red()).isEqualTo("rrr");
     }
 
     @Test
     void provide() {
         Optional<Tuple<Point>> actual = vp.provide(POINT_TAG, null);
-        assertThat(actual).contains(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
+        assertThat(actual).contains(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
     }
 
     @Test
@@ -109,7 +108,7 @@ class VintageValueProviderTest {
     @Test
     void stringListIsSeparateFromIntegerList() {
         factoryCache.put(List.class, new ListTestFactory());
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
 
         List<String> strings = vp.giveRed(new TypeTag(List.class, STRING_TAG));
         List<Integer> ints = vp.giveRed(new TypeTag(List.class, INT_TAG));
@@ -125,8 +124,8 @@ class VintageValueProviderTest {
 
     @Test
     void addingATypeTwiceOverrulesTheExistingOne() {
-        factoryCache.put(int.class, values(-1, -2, -1));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        prefabs.register(int.class, -1, -2, -1);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
         assertThat((int) vp.giveRed(INT_TAG)).isEqualTo(-1);
         assertThat((int) vp.giveBlue(INT_TAG)).isEqualTo(-2);
     }
@@ -134,8 +133,8 @@ class VintageValueProviderTest {
     @Test
     void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
-        factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+        prefabs.register(Lazy.class, Lazy.X, Lazy.Y, Lazy.X);
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
         assertThat(vp.<Lazy>giveRed(lazyTag)).isEqualTo(Lazy.X);
         assertThat(vp.<Lazy>giveBlue(lazyTag)).isEqualTo(Lazy.Y);
         assertThat(vp.<Lazy>giveRedCopy(lazyTag)).isEqualTo(Lazy.X);
@@ -145,12 +144,12 @@ class VintageValueProviderTest {
     void addLazyFactoryIsLazy() {
         TypeTag throwingInitializerTag = new TypeTag(ThrowingInitializer.class);
 
-        // Shouldn't throw, because constructing PrefabValues doesn't instantiate objects:
+        // Shouldn't throw, because declaring Factories doesn't instantiate objects:
         factoryCache
                 .put(
                     ThrowingInitializer.class.getName(),
-                    (t, p, ts) -> Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
-        vp = new VintageValueProvider(factoryCache, objenesis);
+                    (t, p, ts) -> new Tuple<>(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
+        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {
@@ -204,7 +203,7 @@ class VintageValueProviderTest {
                 LinkedHashSet<TypeTag> typeStack) {
             red += "r";
             blue += "b";
-            return Tuple.of(red, blue, new String(red));
+            return new Tuple<>(red, blue, new String(red));
         }
     }
 
@@ -212,23 +211,17 @@ class VintageValueProviderTest {
     private static final class ListTestFactory implements PrefabValueFactory<List> {
 
         @Override
-        @SuppressWarnings("unchecked")
         public Tuple<List> createValues(
                 TypeTag tag,
                 VintageValueProvider valueProvider,
                 LinkedHashSet<TypeTag> typeStack) {
-            TypeTag subtag = tag.getGenericTypes().get(0);
+            TypeTag subtag = tag.genericTypes().get(0);
 
-            List red = new ArrayList<>();
-            red.add(valueProvider.giveRed(subtag));
+            List red = List.of(valueProvider.<Object>giveRed(subtag));
+            List blue = List.of(valueProvider.<Object>giveBlue(subtag));
+            List redCopy = List.of(valueProvider.<Object>giveRed(subtag));
 
-            List blue = new ArrayList<>();
-            blue.add(valueProvider.giveBlue(subtag));
-
-            List redCopy = new ArrayList<>();
-            redCopy.add(valueProvider.giveRed(subtag));
-
-            return Tuple.of(red, blue, redCopy);
+            return new Tuple<>(red, blue, redCopy);
         }
     }
 
@@ -254,12 +247,12 @@ class VintageValueProviderTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            return obj instanceof Lazy other && Objects.equals(i, other.i);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(i);
         }
 
         @Override

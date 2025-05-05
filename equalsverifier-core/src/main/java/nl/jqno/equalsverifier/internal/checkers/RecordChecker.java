@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
@@ -46,7 +45,7 @@ public class RecordChecker<T> implements Checker {
             return;
         }
 
-        List<String> failedFields = new ArrayList<>();
+        var failedFields = new ArrayList<String>();
         for (FieldProbe p : FieldIterable.of(type)) {
             Method accessorMethod = getAccessorMethodFor(type, p.getField());
             try {

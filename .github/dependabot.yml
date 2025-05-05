@@ -8,8 +8,6 @@ updates:
       dependencies:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "com.github.spotbugs:*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

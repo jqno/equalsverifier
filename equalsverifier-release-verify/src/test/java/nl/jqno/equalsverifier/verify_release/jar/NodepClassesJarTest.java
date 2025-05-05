@@ -34,8 +34,28 @@ class NodepClassesJarTest {
     }
 
     @Test
+    void absenceOfMetainfStuff() {
+        jar.assertAbsenceOfMetainfStuff();
+    }
+
+    @Test
+    void assertAbsenceOfTesthelpers() {
+        jar.assertAbsenceOfTesthelpers();
+    }
+
+    @Test
     void assertPresenceOfEmbeddedDependencies() {
         jar.assertPresenceOfEmbeddedDepedencies();
+    }
+
+    @Test
+    void assertAbsenceOfEmbeddedDependenciesUnderTheirOwnPath() {
+        jar.assertAbsenceOfEmbeddedDepedenciesUnderTheirOriginalPath();
+    }
+
+    @Test
+    void absenceOfOptionalDependencies() {
+        jar.assertAbsenceOfOptionalDependencies();
     }
 
     @Test
@@ -51,5 +71,10 @@ class NodepClassesJarTest {
     @Test
     void versionsOfEmbeddedDependencies() {
         jar.assertVersionsOfEmbeddedClassFiles();
+    }
+
+    @Test
+    void presenceOfModuleInfoWithoutDependencies() {
+        jar.assertModuleInfoWithoutDependencies();
     }
 }

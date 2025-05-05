@@ -6,10 +6,11 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -20,6 +21,8 @@ import org.objenesis.ObjenesisStd;
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
  *
  * @param <T> The class under test.
+ *
+ * @since 3.2
  */
 public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
@@ -27,9 +30,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Set<String> actualFields;
 
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
+    private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
+    private UserPrefabValueProvider userPrefabs = new UserPrefabValueProvider();
     private FactoryCache factoryCache = new FactoryCache();
     private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
@@ -46,6 +51,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * Constructor.
      *
      * @param type The class for which the {@code equals} method should be tested.
+     *
+     * @since 3.2
      */
     public SingleTypeEqualsVerifierApi(Class<T> type) {
         this(type, new ObjenesisStd());
@@ -57,7 +64,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type      The class for which the {@code equals} method should be tested.
      * @param objenesis To instantiate non-record classes.
      */
-    public SingleTypeEqualsVerifierApi(Class<T> type, Objenesis objenesis) {
+    private SingleTypeEqualsVerifierApi(Class<T> type, Objenesis objenesis) {
         this.type = type;
         this.actualFields = FieldNameExtractor.extractFieldNames(type);
         this.objenesis = objenesis;
@@ -68,25 +75,33 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param type               The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
+     * @param modes              A set of modes in which {@code EqualsVerifier} should operate.
+     * @param userPrefabs        Prefab values provided by the user.
      * @param factoryCache       Factories that can be used to create values.
      * @param objenesis          To instantiate non-record classes.
      * @param usingGetClass      Whether {@code getClass} is used in the implementation of the {@code
      *     equals}            method, instead of an {@code instanceof} check.
      * @param converter          A function that converts from field name to getter name.
      */
-    public SingleTypeEqualsVerifierApi(
+    // CHECKSTYLE OFF: ParameterNumber
+    /* package protected */ SingleTypeEqualsVerifierApi(
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
+            Set<Mode> modes,
+            UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,
             Objenesis objenesis,
             boolean usingGetClass,
             Function<String, String> converter) {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+        this.modesToSet = new HashSet<>(modes);
+        this.userPrefabs = userPrefabs;
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
+    // CHECKSTYLE ON: ParameterNumber
 
     /**
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object, Object[])}.
@@ -108,11 +123,19 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         return this;
     }
 
+    /** {@inheritDoc}} */
+    @Override
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> set(Mode... modes) {
+        Collections.addAll(modesToSet, modes);
+        return this;
+    }
+
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -128,6 +151,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @throws NullPointerException     If {@code red} or {@code blue} is null, or if the named field does not exist in
      *                                      the class.
      * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 3.17
      */
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue) {
@@ -178,6 +203,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.0
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withIgnoredFields(String... fields) {
@@ -191,6 +218,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.0
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
@@ -218,6 +247,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param fields Fields that can never be null.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.2
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withNonnullFields(String... fields) {
@@ -238,6 +269,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param annotations Annotations to ignore.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 2.3
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
@@ -256,6 +289,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * T itself does not necessarily have to have subclasses that redefine {@code equals} and {@code hashCode}.
      *
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 0.6
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass() {
@@ -274,6 +309,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param subclass A subclass of T for which no instance can be equal to any instance of T.
      * @return {@code this}, for easy method chaining.
      * @see Warning#STRICT_INHERITANCE
+     *
+     * @since 0.1
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
@@ -307,6 +344,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param example                 An instance of the class under test, to verify that the hashCode has been
      *                                    initialized properly.
      * @return {@code this}, for easy method chaining.
+     *
+     * @since 1.7
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withCachedHashCode(
@@ -325,6 +364,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param example An instance of the class under test, to verify that the hashCode has been initialized properly.
      * @return {@code this}, for easy method chaining.
      * @see #withCachedHashCode(String, String, Object)
+     *
+     * @since 3.7
      */
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withLombokCachedHashCode(T example) {
@@ -333,22 +374,12 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @deprecated No longer needed; this happens automatically.
-     */
-    @Deprecated
-    @Override
-    @CheckReturnValue
-    public SingleTypeEqualsVerifierApi<T> withResetCaches() {
-        return this;
-    }
-
-    /**
      * Performs the verification of the contracts for {@code equals} and {@code hashCode} and throws an
      * {@link AssertionError} if there is a problem.
      *
      * @throws AssertionError If the contract is not met, or if {@link EqualsVerifier}'s preconditions do not hold.
+     *
+     * @since 0.1
      */
     public void verify() {
         try {
@@ -368,6 +399,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @return An {@link EqualsVerifierReport} that indicates whether the contract is met and whether
      *             {@link EqualsVerifier}'s preconditions hold.
+     *
+     * @since 3.0
      */
     public EqualsVerifierReport report() {
         return report(true);
@@ -380,6 +413,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param showUrl Whether or not to show the url at the end of the error message.
      * @return An {@link EqualsVerifierReport} that indicates whether the contract is met and whether
      *             {@link EqualsVerifier}'s preconditions hold.
+     *
+     * @since 3.2
      */
     public EqualsVerifierReport report(boolean showUrl) {
         try {
@@ -411,7 +446,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache, fieldCache, objenesis);
+        var context = new Context<T>(config, userPrefabs, factoryCache, fieldCache, objenesis);
         Validations
                 .validateProcessedAnnotations(
                     type,
@@ -437,6 +472,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                     redefinedSubclass,
                     usingGetClass,
                     warningsToSuppress,
+                    modesToSet,
                     fieldnameToGetter,
                     ignoredAnnotationClassNames,
                     actualFields,

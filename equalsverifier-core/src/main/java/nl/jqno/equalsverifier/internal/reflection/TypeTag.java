@@ -13,13 +13,10 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugExcep
  * <p>
  * If the type is not generic, the genericTypes list will be empty.
  */
-public final class TypeTag {
+public final record TypeTag(Class<?> type, List<TypeTag> genericTypes) {
 
     /** Null object for TypeTag. */
     public static final TypeTag NULL = new TypeTag(NullType.class);
-
-    private final Class<?> type;
-    private final List<TypeTag> genericTypes;
 
     /**
      * Constructor.
@@ -31,12 +28,18 @@ public final class TypeTag {
         this(type, Arrays.asList(genericTypes));
     }
 
-    private TypeTag(Class<?> type, List<TypeTag> genericTypes) {
+    /**
+     * Constructor.
+     *
+     * @param type         The raw type.
+     * @param genericTypes A list of TypeTags for each generic type parameter.
+     */
+    public TypeTag(Class<?> type, List<TypeTag> genericTypes) {
         if (type == null) {
             throw new NullPointerException("type");
         }
         this.type = type;
-        this.genericTypes = genericTypes;
+        this.genericTypes = Collections.unmodifiableList(genericTypes);
     }
 
     /**
@@ -56,30 +59,26 @@ public final class TypeTag {
             Class<?> typeAsClass,
             TypeTag enclosingType,
             boolean shortCircuitRecursiveTypeBound) {
-        List<TypeTag> nestedTags = new ArrayList<>();
-        if (type instanceof Class) {
-            return processClass((Class<?>) type, nestedTags);
+        var nestedTags = new ArrayList<TypeTag>();
+        if (type instanceof Class<?> cls) {
+            return processClass(cls, nestedTags);
         }
-        if (type instanceof ParameterizedType) {
+        if (type instanceof ParameterizedType parameterizedType) {
             return processParameterizedType(
-                (ParameterizedType) type,
+                parameterizedType,
                 typeAsClass,
                 enclosingType,
                 nestedTags,
                 shortCircuitRecursiveTypeBound);
         }
-        if (type instanceof GenericArrayType) {
-            return processGenericArray((GenericArrayType) type, typeAsClass, enclosingType);
+        if (type instanceof GenericArrayType arrayType) {
+            return processGenericArray(arrayType, typeAsClass, enclosingType);
         }
-        if (type instanceof WildcardType) {
-            return processWildcard((WildcardType) type, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
+        if (type instanceof WildcardType wildcardType) {
+            return processWildcard(wildcardType, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
-        if (type instanceof TypeVariable) {
-            return processTypeVariable(
-                (TypeVariable<?>) type,
-                typeAsClass,
-                enclosingType,
-                shortCircuitRecursiveTypeBound);
+        if (type instanceof TypeVariable<?> variable) {
+            return processTypeVariable(variable, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
         throw new EqualsVerifierInternalBugException(
                 "Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
@@ -106,7 +105,7 @@ public final class TypeTag {
         TypeTag tag = resolve(type.getGenericComponentType(), typeAsClass, enclosingType, false);
         String arrayTypeName = "[L" + tag.getType().getName() + ";";
         Class<?> arrayType = classForName(arrayTypeName);
-        return new TypeTag(arrayType, tag.getGenericTypes());
+        return new TypeTag(arrayType, tag.genericTypes());
     }
 
     private static TypeTag processWildcard(
@@ -153,14 +152,14 @@ public final class TypeTag {
 
     private static Map<String, TypeTag> buildLookup(TypeTag enclosingType) {
         TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
-        Map<String, TypeTag> lookup = new HashMap<>();
-        if (enclosingType.getGenericTypes().size() == 0) {
-            return lookup;
+        if (enclosingType.genericTypes().size() == 0) {
+            return Map.of();
         }
 
+        var lookup = new HashMap<String, TypeTag>();
         for (int i = 0; i < typeParameters.length; i++) {
             String name = typeParameters[i].getName();
-            TypeTag tag = enclosingType.getGenericTypes().get(i);
+            TypeTag tag = enclosingType.genericTypes().get(i);
             lookup.put(name, tag);
         }
         return lookup;
@@ -173,30 +172,6 @@ public final class TypeTag {
     @SuppressWarnings("unchecked")
     public <T> Class<T> getType() {
         return (Class<T>) type;
-    }
-
-    /** @return The TypeTag's generic types. */
-    public List<TypeTag> getGenericTypes() {
-        return Collections.unmodifiableList(genericTypes);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof TypeTag)) {
-            return false;
-        }
-        TypeTag other = (TypeTag) obj;
-        return type.equals(other.type) && genericTypes.equals(other.genericTypes);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int hashCode() {
-        int result = 37;
-        result = (59 * result) + type.hashCode();
-        result = (59 * result) + genericTypes.hashCode();
-        return result;
     }
 
     /** {@inheritDoc} */

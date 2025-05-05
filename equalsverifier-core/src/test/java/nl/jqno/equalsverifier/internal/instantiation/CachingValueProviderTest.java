@@ -26,36 +26,36 @@ public class CachingValueProviderTest {
 
     @Test
     void useFallbackValueAndCheckCache() {
-        assertThat(sut.provide(FALLBACK_TAG, SOME_FIELD)).contains(Tuple.of(42, 1337, 42));
+        assertThat(sut.provide(FALLBACK_TAG, SOME_FIELD)).contains(new Tuple<>(42, 1337, 42));
     }
 
     @Test
     void useCachedValue() {
-        cache.put(SOME_FIELD, SOME_TAG, Tuple.of(1, 2, 1));
-        assertThat(sut.provide(SOME_TAG, SOME_FIELD)).contains(Tuple.of(1, 2, 1));
+        cache.put(SOME_FIELD, SOME_TAG, new Tuple<>(1, 2, 1));
+        assertThat(sut.provide(SOME_TAG, SOME_FIELD)).contains(new Tuple<>(1, 2, 1));
     }
 
     @Test
     void dontUseCachedValueForOtherField() {
-        cache.put(SOME_FIELD, SOME_TAG, Tuple.of("a", "b", "a"));
+        cache.put(SOME_FIELD, SOME_TAG, new Tuple<>("a", "b", "a"));
         assertThat(sut.provide(SOME_TAG, "somethingElse")).isEmpty();
     }
 
     @Test
     void dontUseCachedValueForSameFieldNameButDifferentType() {
-        cache.put(SOME_FIELD, SOME_TAG, Tuple.of("a", "b", "a"));
+        cache.put(SOME_FIELD, SOME_TAG, new Tuple<>("a", "b", "a"));
         assertThat(sut.provide(OTHER_TAG, SOME_FIELD)).isEmpty();
     }
 
     @Test
     void dontUseCachedValueForNullFieldName() {
-        cache.put(null, SOME_TAG, Tuple.of("a", "b", "a"));
+        cache.put(null, SOME_TAG, new Tuple<>("a", "b", "a"));
         assertThat(sut.provide(SOME_TAG, null)).isEmpty();
     }
 
     @Test
     void dontUseCachedValueForNullFieldType() {
-        cache.put(SOME_FIELD, null, Tuple.of("a", "b", "a"));
+        cache.put(SOME_FIELD, null, new Tuple<>("a", "b", "a"));
         assertThat(sut.provide(SOME_TAG, null)).isEmpty();
     }
 
@@ -65,7 +65,7 @@ public class CachingValueProviderTest {
         @SuppressWarnings("unchecked")
         public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
             if (int.class.equals(tag.getType())) {
-                return Optional.of((Tuple<T>) Tuple.of(42, 1337, 42));
+                return Optional.of((Tuple<T>) new Tuple<>(42, 1337, 42));
             }
             return Optional.empty();
         }

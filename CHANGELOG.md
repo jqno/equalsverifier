@@ -5,13 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+-   Jump to [version 4.x](#4.x)
 -   Jump to [version 3.x](#3.x)
 -   Jump to [version 2.x](#2.x)
 -   Jump to [version 1.x](#1.x)
 
-<a name="3.x"/>
+<a name="4.x"/>
 
 ## [Unreleased]
+
+If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](http://jqno.nl/equalsverifier/migration3to4).
+
+### Added
+
+- Mockito integration: if Mockito is on the classpath or modulepath, EqualsVerifier will use it to instantiate values. This reduces the need for providing prefab values. If Mockito is not available, or if `EqualsVerifier.set(Mode.skipMockito())` is used, EqualsVerifier will fall back to its previous behaviour.
+- `forExamples(T red, T blue)` as an alternative to `forClass()` or `forPackage()`. Give it two instances of a type, and it will test that type using the values already present in the fields of the instances. This way, you don't have to use `withPrefabValues` anymore.
+- Prefab value for `java.util.HexFormat`. ([Issue 981](https://github.com/jqno/equalsverifier/issues/981))
+
+### Changed
+
+- EqualsVerifier now requires Java 17.
+- EqualsVerifier is now properly modularized according to the JPMS.
+- When using EqualsVerifier as a module, it's no longer needed to `requires net.bytebuddy` (this is now a proper transitive requirement).
+- Improved error message when ClassCastException is encountered.
+
+### Removed
+
+- Built-in prefab values for Google Guava, Joda-Time and Javafx.
+- `#withResetCaches()`, which was deprecated since version 3.16.2.
+- `Warning.ZERO_FIELDS`, which was deprecated since version 3.17.
+- `forPackage(String packageName, boolean scanRecursively)`, which was deprecated since version 3.19.
+- `forPackage(String packageName, Class<?> mustExtend)`, which was deprecated since version 3.19.
+- `forPackage(...).except(Class<?>... types)`, which was deprecated since version 3.19.
+- `forPackage(...).except(Predicate<Class<?>>... exclusionPredicate)`, which was deprecated since version 3.19.
+
+<a name="3.x"/>
 
 ## [3.19.4] - 2025-04-30
 
@@ -42,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bug in `withPrefabValueForField` where in some cases the prefab value is not used.
 
+<a name="ScanOption"/>
 ## [3.19] - 2025-02-06
 
 ### Added
@@ -671,7 +700,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](ht
 ### Added
 
 -   Full support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
--   Re-usable EqualsVerifier configurations: see [the manual](http://jqno.nl/equalsverifier/manual/reusing-configurations).
+-   Re-usable EqualsVerifier configurations: see [the manual](http://jqno.nl/equalsverifier/manual/several-classes-at-once).
 -   `#report()` method to ask EqualsVerifier for a report, instead of making it fail a test.
 -   `#withGenericPrefabValues()` method added to supply values for specific generic types: see [here](http://jqno.nl/equalsverifier/errormessages/recursive-datastructure#generics).
 
@@ -1329,7 +1358,7 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 ### Added
 
--   `#withRelaxedEqualExamples()` to verify equality rules that are more relaxed than simple field-by-field comparisons. ([Issue 9](https://github.com/jqno/equalsverifier/issues/9))
+-   `#forRelaxedEqualExamples()` to verify equality rules that are more relaxed than simple field-by-field comparisons. ([Issue 9](https://github.com/jqno/equalsverifier/issues/9))
 
 ## [0.3] - 2009-08-01
 

@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleClass.class)) {
             actual.add(type);
         }
-        assertThat(actual).isEqualTo(singletonList(SimpleClass.class));
+        assertThat(actual).isEqualTo(List.of(SimpleClass.class));
     }
 
     @Test
@@ -65,7 +64,7 @@ class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleInterface.class)) {
             actual.add(type);
         }
-        assertThat(actual).isEqualTo(singletonList(SimpleInterface.class));
+        assertThat(actual).isEqualTo(List.of(SimpleInterface.class));
     }
 
     @Test
@@ -81,7 +80,7 @@ class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubInterface.class)) {
             actual.add(type);
         }
-        assertThat(actual).isEqualTo(singletonList(SimpleSubInterface.class));
+        assertThat(actual).isEqualTo(List.of(SimpleSubInterface.class));
     }
 
     static class SimpleClass {}

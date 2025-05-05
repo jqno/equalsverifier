@@ -6,9 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
-import nl.jqno.equalsverifier.internal.versionspecific.SealedTypesHelper;
-
 /**
  * Provides read-only reflective access to a class.
  */
@@ -43,7 +40,7 @@ public final class ClassProbe<T> {
      * @return true if T is a Java Record.
      */
     public boolean isRecord() {
-        return RecordsHelper.isRecord(type);
+        return type.isRecord();
     }
 
     /**
@@ -52,7 +49,7 @@ public final class ClassProbe<T> {
      * @return true if T is a sealed class
      */
     public boolean isSealed() {
-        return SealedTypesHelper.isSealed(type);
+        return type.isSealed();
     }
 
     /**

@@ -5,11 +5,11 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
@@ -19,10 +19,7 @@ public final class ArchitectureTest {
             .that()
             .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.instantiation.vintage..")
             .and()
-            .doNotBelongToAnyOf(
-                JavaApiPrefabValues.class,
-                // 👇 Test classes
-                FactoryCacheFactory.class)
+            .doNotBelongToAnyOf(JavaApiPrefabValues.class, PrefabValuesApi.class)
             .should()
             .accessClassesThat()
             .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues..")
@@ -54,15 +51,6 @@ public final class ArchitectureTest {
 
     @ArchTest
     public static final ArchRule AWT = dontAllowImports_outsideFactoryProvidersAndTests_from("java.awt.common..");
-
-    @ArchTest
-    public static final ArchRule GUAVA = dontAllowImports_outsideFactoryProvidersAndTests_from("com.google.common..");
-
-    @ArchTest
-    public static final ArchRule JAVAFX = dontAllowImports_outsideFactoryProvidersAndTests_from("javafx..");
-
-    @ArchTest
-    public static final ArchRule JODA = dontAllowImports_outsideFactoryProvidersAndTests_from("org.joda..");
 
     private static final String FACTORYPROVIDER_PATTERN =
             "nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders..";

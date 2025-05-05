@@ -4,7 +4,7 @@ permalink: /resources/
 ---
 * [FAQ](/equalsverifier/faq)
 * [Changelog](https://github.com/jqno/equalsverifier/blob/main/CHANGELOG.md)
-* Migration guides: [[2.x to 3.x](/equalsverifier/migration2to3)] [[1.x to 2.x](/equalsverifier/migration1to2)]
+* Migration guides: [[3.x to 4.x](/equalsverifier/migration3to4)] [[2.x to 3.x](/equalsverifier/migration2to3)] [[1.x to 2.x](/equalsverifier/migration1to2)]
 * The [inspiration](/equalsverifier/inspiration) for EqualsVerifier
 
 ## Fork me on GitHub!

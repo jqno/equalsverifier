@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
-import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
-import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
@@ -14,7 +12,6 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import nl.jqno.equalsverifier.internal.versionspecific.SealedTypesHelper;
 import org.objenesis.Objenesis;
 import org.objenesis.instantiator.ObjectInstantiator;
 
@@ -49,8 +46,8 @@ public final class Instantiator<T> {
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type, Objenesis objenesis) {
-        if (SealedTypesHelper.isSealed(type)) {
-            Class<T> concrete = SealedTypesHelper.findInstantiableSubclass(type).get();
+        if (type.isSealed()) {
+            Class<T> concrete = SealedTypesFinder.findInstantiableSubclass(type).get();
             return Instantiator.of(concrete, objenesis);
         }
         if (Modifier.isAbstract(type.getModifiers())) {
@@ -121,18 +118,12 @@ public final class Instantiator<T> {
     }
 
     private static <S> ClassLoadingStrategy<ClassLoader> getClassLoadingStrategy(Class<S> context) {
-        if (System.getProperty("java.version").startsWith("1.")) {
-            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
-        }
-        else {
-            ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
-            Object lookup = ci
-                    .callFactory(
-                        "java.lang.invoke.MethodHandles",
-                        "privateLookupIn",
-                        classes(Class.class, MethodHandles.Lookup.class),
-                        objects(context, MethodHandles.lookup()));
+        try {
+            var lookup = MethodHandles.privateLookupIn(context, MethodHandles.lookup());
             return ClassLoadingStrategy.UsingLookup.of(lookup);
+        }
+        catch (IllegalAccessException e) {
+            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
         }
     }
 

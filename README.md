@@ -75,17 +75,16 @@ To build EqualsVerifier, you need [Maven](https://maven.apache.org/). Just call 
 
 There are several Maven profiles that can be enabled or disabled:
 
-| profile                | activation                                                             | purpose                                                                                                                                                        |
-| ---------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modules-jdk8`         | JDK 8 up to but not including 11                                       | Build only the modules that are compatible with Java 8 and up.                                                                                                 |
-| `modules-jdk11`        | JDK 11 up to but not including 16                                      | Build only the modules that are compatible with Java 11 and up.                                                                                                |
-| `modules-jdk16`        | JDK 16                                                                 | Build only the modules that are compatible with Java 16 and up.                                                                                                |
-| `modules-jdk17`        | JDK 17 and up                                                          | Build all modules and build releaseable artifacts.                                                                                                             |
-| `static-analysis`      | JDK 17 and up, _and_ `disableStaticAnalysis` property must be off      | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis`                                 |
-| `release-verification` | JDK 17 and up, _and_ `disableReleaseVerification` property must be off | Run release verification checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableReleaseVerification`                       |
-| `argline-preview`      | `preview` property must be on                                          | Enable Java preview features. Can be activated by running `mvn verify -Dpreview`                                                                               |
-| `argline-experimental` | `experimental` property must be on                                     | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
-| `pitest`               | `pitest` property must be on                                           | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest`                                                                        |
+| profile                        | activation                                         | purpose                                                                                                                                                        |
+| ------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modules-jdk17`                | JDK 17 up to 20                                    | Build all modules and build releasable artifacts.                                                                                                             |
+| `modules-jdk21`                | JDK 21 and up                                      | Build all modules and build releasable artifacts.                                                                                                             |
+| `static-analysis`              | `disableStaticAnalysis` property must be off       | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis`.                                |
+| `static-analysis-checkstyle`   | -                                                  | Run Checkstyle checks, for Checkstyle's regression CI.                                                                                                         |
+| `argline-preview`              | `preview` property must be on                      | Enable Java preview features. Can be activated by running `mvn verify -Dpreview`.                                                                              |
+| `argline-experimental`         | `experimental` property must be on                 | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
+| `pitest`                       | `pitest` property must be on                       | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest`.                                                                       |
+| `modules-jdk21-without-pitest` | JDK 21 and up, _and_ `pitest` property must be off | Like `modules-jdk21`, but with additional verifications that are incompatible with PITest.                                                                     |
 
 ## Formatting
 
@@ -101,15 +100,16 @@ Here's a description of the modules:
 | ----------------------------- | --------------------------------------------------------------------- |
 | docs                          | project's Jekyll website                                              |
 | equalsverifier-core           | the actual EqualsVerifier code                                        |
-| equalsverifier-11             | logic for modules, tests for Java 11 and up                           |
-| equalsverifier-16             | logic for records, and corresponding tests                            |
-| equalsverifier-17             | logic for sealed classes, and corresponding tests                     |
 | equalsverifier-21             | tests for record pattern matching                                     |
+| equalsverifier-testhelpers    | shared types and helpers for use in tests                             |
+| equalsverifier-test           | integration tests (without access to Mockito)                         |
+| equalsverifier-test-jpms      | tests for the Java module system (with access to Mockito)             |
+| equalsverifier-test-kotlin    | tests for Kotlin classes                                              |
+| equalsverifier-test-mockito   | tests for instantiation using Mockito                                 |
 | equalsverifier-aggregator     | generic release assembly description, and shared jacoco configuration |
 | equalsverifier-release-main   | release assembly for jar with dependencies                            |
 | equalsverifier-release-nodep  | release assembly for fat jar (with dependencies shaded in)            |
 | equalsverifier-release-verify | validation tests for the releases                                     |
-| equalsverifier-test-kotlin    | tests for Kotlin classes                                              |
 
 ## Signed JAR
 
@@ -129,10 +129,10 @@ The signed JAR itself can be found in [this repo](https://github.com/jqno/equals
 
 To generate the website
 
--   Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
--   Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
+- Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
+- Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
-Note that thepage uses the [TilburgsAns](https://www.tilburgsans.nl/) font but references it from the main site at [jqno.nl](https://jqno.nl). In development, it will fall back to a `sans-serif` font. See the font license [here](assets/tilburgsans/Ans%20Font%20License-AFL.pdf).
+Note that the page uses the [TilburgsAns](https://www.tilburgsans.nl/) font but references it from the main site at [jqno.nl](https://jqno.nl). In development, it will fall back to a `sans-serif` font. See the font license [here](assets/tilburgsans/Ans%20Font%20License-AFL.pdf).
 
 # Disclaimer
 

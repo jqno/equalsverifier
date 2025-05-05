@@ -1,14 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
-import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier_testhelpers.Util.coverThePrivateConstructor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Set;
 
-import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class UtilTest {
@@ -56,15 +53,5 @@ class UtilTest {
         Object[] expected = new Object[] { "x", new Point(1, 2) };
         Object[] actual = Util.objects("x", new Point(1, 2));
         assertThat(actual).containsExactly(expected);
-    }
-
-    @Test
-    void setOfReturnsItsArguments() {
-        Set<String> expected = new HashSet<>();
-        expected.add("one");
-        expected.add("two");
-
-        Set<String> actual = setOf("one", "two");
-        assertThat(actual).isEqualTo(expected);
     }
 }

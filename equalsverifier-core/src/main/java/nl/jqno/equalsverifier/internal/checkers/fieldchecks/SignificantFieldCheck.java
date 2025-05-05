@@ -89,8 +89,10 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             if (!skipEqualsHasMoreThanHashCodeTest) {
                 Formatter formatter = Formatter
                         .of(
-                            "Significant fields: equals relies on %%, but hashCode does not."
-                                    + "\n  %% has hashCode %%\n  %% has hashCode %%",
+                            """
+                            Significant fields: equals relies on %%, but hashCode does not.
+                              %% has hashCode %%
+                              %% has hashCode %%""",
                             fieldName,
                             reference,
                             reference.hashCode(),
@@ -98,13 +100,12 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                             changed.hashCode());
                 assertFalse(formatter, equalsChanged);
             }
-            Formatter formatter = Formatter
-                    .of(
-                        "Significant fields: hashCode relies on %%, but equals does not.\n"
-                                + "These objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
-                        fieldName,
-                        reference,
-                        changed);
+            Formatter formatter = Formatter.of("""
+                                               Significant fields: hashCode relies on %%, but equals does not.
+                                               These objects are equal, but probably shouldn't be:
+                                                 %%
+                                               and
+                                                 %%""", fieldName, reference, changed);
             assertFalse(formatter, hashCodeChanged);
         }
     }
@@ -181,8 +182,9 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                     + " is suppressed, but equals does not use it.";
         }
         else if (anotherFieldIsMarkedAsId) {
-            message = "Significant fields: equals does not use %%, or it is stateless.\n"
-                    + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).";
+            message = """
+                      Significant fields: equals does not use %%, or it is stateless.
+                      Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
         }
         else {
             message = "Significant fields: equals does not use %%, or it is stateless.";
@@ -200,13 +202,14 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             boolean testWithNull) {
         final String message;
         if (thisFieldIsMarkedAsId) {
-            message = "Significant fields: %% is marked @Id or @EmbeddedId so equals should not use"
-                    + " it, but it does.\nSuppress Warning.SURROGATE_KEY if you want to use only the @Id or"
-                    + " @EmbeddedId field(s).";
+            message = """
+                      Significant fields: %% is marked @Id or @EmbeddedId so equals should not use it, but it does.
+                      Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
         }
         else if (anotherFieldIsMarkedAsId) {
-            message = "Significant fields: equals should not use %% because Warning.SURROGATE_KEY is"
-                    + " suppressed and it is not marked as @Id or @EmbeddedId, but it does.";
+            message = """
+                      Significant fields: equals should not use %% because Warning.SURROGATE_KEY is suppressed\
+                       and it is not marked as @Id or @EmbeddedId, but it does.""";
         }
         else {
             message = "Significant fields: equals should not use %%, but it does.";

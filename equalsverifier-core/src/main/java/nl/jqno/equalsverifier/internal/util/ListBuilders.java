@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /** Helper functions for building lists with examples. */
 public final class ListBuilders {
@@ -23,7 +23,7 @@ public final class ListBuilders {
             throw new IllegalArgumentException("First example is null.");
         }
 
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         result.add(first);
         addArrayElementsToList(result, more);
 
@@ -48,7 +48,7 @@ public final class ListBuilders {
             throw new IllegalArgumentException("Second example is null.");
         }
 
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         result.add(first);
         result.add(second);
         addArrayElementsToList(result, more);
@@ -76,7 +76,7 @@ public final class ListBuilders {
      * @return A list with the elements of the Iterable.
      */
     public static <T> List<T> fromIterable(Iterable<T> iterable) {
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         for (T t : iterable) {
             result.add(t);
         }
@@ -91,6 +91,6 @@ public final class ListBuilders {
      * @return Whether the given list contains duplicates.
      */
     public static <T> boolean listContainsDuplicates(List<T> list) {
-        return list.size() != new HashSet<>(list).size();
+        return list.size() != Set.of(list).size();
     }
 }

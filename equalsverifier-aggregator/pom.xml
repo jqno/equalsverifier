@@ -21,21 +21,7 @@
         </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-11</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-16</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-17</artifactId>
+            <artifactId>equalsverifier-test</artifactId>
             <version>${project.version}</version>
             <type>pom</type>
             <scope>test</scope>
@@ -46,6 +32,28 @@
             <version>${project.version}</version>
             <type>pom</type>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-test-kotlin</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-test-mockito</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-test-jpms</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -117,7 +125,7 @@
                                             </executiondata>
                                             <structure name="EqualsVerifier: external coverage">
                                                 <classfiles>
-                                                    <fileset dir="${project.basedir}/../equalsverifier-core/target/test-classes/nl/jqno/equalsverifier/coverage">
+                                                    <fileset dir="${project.basedir}/../equalsverifier-test/target/test-classes/nl/jqno/equalsverifier/coverage">
                                                         <include name="*.class" />
                                                     </fileset>
                                                 </classfiles>

@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -12,11 +11,11 @@ class FieldCacheTest {
 
     private final String stringField = "string";
     private final TypeTag stringTag = new TypeTag(String.class);
-    private final Tuple<String> stringValues = Tuple.of("red", "blue", "red");
+    private final Tuple<String> stringValues = new Tuple<>("red", "blue", "red");
 
     private final String intField = "int";
     private final TypeTag intTag = new TypeTag(int.class);
-    private final Tuple<Integer> intValues = Tuple.of(1, 2, 1);
+    private final Tuple<Integer> intValues = new Tuple<>(1, 2, 1);
 
     private final FieldCache cache = new FieldCache();
 
@@ -75,8 +74,7 @@ class FieldCacheTest {
         assertThat(cache.getFieldNames()).isEqualTo(Collections.emptySet());
 
         cache.put(stringField, stringTag, stringValues);
-        Set<String> expected = new HashSet<>();
-        expected.add(stringField);
+        var expected = Set.of(stringField);
         assertThat(cache.getFieldNames()).isEqualTo(expected);
     }
 }

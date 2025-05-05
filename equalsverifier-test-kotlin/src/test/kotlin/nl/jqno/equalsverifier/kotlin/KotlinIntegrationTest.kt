@@ -18,6 +18,13 @@ class KotlinIntegrationTest {
       .verify()
   }
 
+  @Test
+  fun `tralalala super's backing field does not affect implementing regular class`() {
+    EqualsVerifier.forClass(ImplementingPreconditionClass::class.java)
+      .withPrefabValuesForField("toOverride", 1337, 1338)
+      .verify()
+  }
+
   sealed class Base(
     internal open val base: Int,
     internal open val toOverride: Int,
@@ -28,6 +35,19 @@ class KotlinIntegrationTest {
   class ImplementingRegularClass(override val toOverride: Int) : Base(42, toOverride) {
     override fun equals(other: Any?): Boolean {
       return other is ImplementingRegularClass
+        && base == other.base
+        && toOverride == other.toOverride
+    }
+
+    override fun hashCode(): Int {
+      return Objects.hash(base, toOverride)
+    }
+  }
+
+  class ImplementingPreconditionClass(override val toOverride: Int) : Base(42, toOverride) {
+    override fun equals(other: Any?): Boolean {
+      if (toOverride < 1337) throw IllegalStateException("toOverride is smaller than 1337: $toOverride")
+      return other is ImplementingPreconditionClass
         && base == other.base
         && toOverride == other.toOverride
     }

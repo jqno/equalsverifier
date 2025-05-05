@@ -10,7 +10,7 @@ import java.util.Map;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class TypeTagTest {
@@ -41,7 +41,7 @@ class TypeTagTest {
     void getGenericTypes() {
         List<TypeTag> expected =
                 Arrays.asList(new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
-        assertThat(SOME_LONG_TYPETAG.getGenericTypes()).isEqualTo(expected);
+        assertThat(SOME_LONG_TYPETAG.genericTypes()).isEqualTo(expected);
     }
 
     @Test

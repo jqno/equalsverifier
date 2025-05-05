@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.versionspecific;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.collection;
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.map;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.collection;
+import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.map;
 
 import java.util.*;
 
