@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
 // CHECKSTYLE OFF: CyclomaticComplexity
@@ -13,9 +12,6 @@ class PrimitiveValueSupplier<T> extends ValueSupplier<T> {
         super(type);
     }
 
-    @SuppressFBWarnings(
-            value = { "DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR" },
-            justification = "We really do need separate instances with the same value")
     public Optional<Tuple<T>> get() {
         if (is(boolean.class)) {
             return val(true, false, true);

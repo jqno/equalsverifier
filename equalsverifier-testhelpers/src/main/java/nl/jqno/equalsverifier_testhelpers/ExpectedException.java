@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier_testhelpers;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
-@SuppressFBWarnings(value = "NM_CLASS_NOT_EXCEPTION", justification = "Only called in test code, not production.")
 public final class ExpectedException {
 
     private final Throwable e;

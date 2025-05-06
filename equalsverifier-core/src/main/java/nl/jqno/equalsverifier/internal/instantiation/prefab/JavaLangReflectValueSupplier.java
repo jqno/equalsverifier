@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
 class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
@@ -45,10 +44,8 @@ class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
     @SuppressWarnings("unused")
     private static class JavaApiReflectionClassesContainer {
 
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "These fields are accessed through reflection")
         Object a;
 
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "These fields are accessed through reflection")
         Object b;
 
         public JavaApiReflectionClassesContainer() {}

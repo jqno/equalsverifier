@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -853,9 +852,6 @@ class JavaApiClassesTest {
         }
     }
 
-    @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "Only called in test code, not production.")
     private static boolean defaultEquals(Object here, Object there) {
         Class<?> type = here.getClass();
         if (there == null || !there.getClass().isAssignableFrom(type)) {
@@ -877,9 +873,6 @@ class JavaApiClassesTest {
         return equals;
     }
 
-    @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "Only called in test code, not production.")
     private static int defaultHashCode(Object x) {
         int hash = 59;
         try {

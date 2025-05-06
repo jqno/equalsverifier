@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -19,7 +18,6 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     private final ValueProvider valueProvider;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "PrefabValues is inherently mutable.")
     public StringFieldCheck(
             SubjectCreator<T> subjectCreator,
             ValueProvider instanceCreator,
@@ -30,7 +28,6 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "String prefab values are probably not localized.")
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);

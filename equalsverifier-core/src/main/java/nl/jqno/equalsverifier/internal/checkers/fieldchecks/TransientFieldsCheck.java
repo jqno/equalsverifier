@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -16,7 +15,6 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
     private final TypeTag typeTag;
     private final AnnotationCache annotationCache;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
     public TransientFieldsCheck(SubjectCreator<T> subjectCreator, TypeTag typeTag, AnnotationCache annotationCache) {
         this.subjectCreator = subjectCreator;
         this.typeTag = typeTag;

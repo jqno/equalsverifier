@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.util.ErrorMessage;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -38,7 +37,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set suppressions on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi suppress(Warning... warnings) {
         ev.suppress(warnings);
         return this;
@@ -47,7 +45,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set modes on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi set(Mode... modes) {
         ev.set(modes);
         return this;
@@ -56,7 +53,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue) {
         ev.withPrefabValues(otherType, red, blue);
         return this;
@@ -65,9 +61,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(
-            value = "RV_RETURN_VALUE_IGNORED",
-            justification = "Set generic prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
@@ -76,9 +69,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(
-            value = "RV_RETURN_VALUE_IGNORED",
-            justification = "Set generic prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
@@ -87,7 +77,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set usingGetClass on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi usingGetClass() {
         ev.usingGetClass();
         return this;
@@ -96,7 +85,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set converters on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi withFieldnameToGetterConverter(Function<String, String> converter) {
         ev.withFieldnameToGetterConverter(converter);
         return this;

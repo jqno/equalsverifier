@@ -9,7 +9,6 @@ import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
@@ -103,9 +102,6 @@ public class HierarchyChecker<T> implements Checker {
         }
     }
 
-    @SuppressFBWarnings(
-            value = "DCN_NULLPOINTER_EXCEPTION",
-            justification = "The equals method in a superclasses can throw an NPE, but it's a specific non-goal to do something with that here.")
     private void safelyCheckSuperProperties(T reference, T shallowScrambled) {
         if (strictnessSuppressed) {
             return;

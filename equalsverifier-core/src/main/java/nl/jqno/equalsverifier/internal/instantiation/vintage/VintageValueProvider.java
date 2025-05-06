@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import java.util.*;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -37,7 +36,6 @@ public class VintageValueProvider implements ValueProvider {
      * @param factoryCache The factories that can be used to create values.
      * @param objenesis    To instantiate non-record classes.
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
     public VintageValueProvider(ValueProvider prefabs, FactoryCache factoryCache, Objenesis objenesis) {
         this.prefabs = prefabs;
         this.factoryCache = factoryCache;

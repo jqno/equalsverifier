@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 
 /**
  * Contains the results of an {@link nl.jqno.equalsverifier.EqualsVerifier} run.
@@ -93,7 +92,6 @@ public final class EqualsVerifierReport {
      *
      * @since 3.0
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Can't defensively copy a Throwable.")
     public Throwable getCause() {
         return cause;
     }

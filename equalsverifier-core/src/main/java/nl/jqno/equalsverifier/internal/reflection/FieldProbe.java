@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -35,7 +34,6 @@ public final class FieldProbe {
     }
 
     /** @return The field itself. */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Can't defensively copy a Field.")
     public Field getField() {
         return field;
     }
@@ -47,9 +45,6 @@ public final class FieldProbe {
      * @return The field's value.
      * @throws ReflectionException If the operation fails.
      */
-    @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "Only called in test code, not production.")
     public Object getValue(Object object) {
         field.setAccessible(true);
         return rethrow(() -> field.get(object));

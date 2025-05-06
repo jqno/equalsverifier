@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
@@ -231,7 +230,6 @@ public final class Configuration<T> {
         return typeTag;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable.")
     public AnnotationCache getAnnotationCache() {
         return annotationCache;
     }
