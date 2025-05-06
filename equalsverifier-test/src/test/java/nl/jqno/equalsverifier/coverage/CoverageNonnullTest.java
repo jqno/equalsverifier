@@ -40,7 +40,6 @@ class CoverageNonnullTest {
 
         @java.lang.Override
         @java.lang.SuppressWarnings("all")
-        @javax.annotation.Generated("lombok")
         public boolean equals(final java.lang.Object o) {
             if (o == this)
                 return true;
@@ -56,7 +55,6 @@ class CoverageNonnullTest {
 
         @java.lang.Override
         @java.lang.SuppressWarnings("all")
-        @javax.annotation.Generated("lombok")
         public int hashCode() {
             final int PRIME = 59;
             int result = 1;
