@@ -221,7 +221,7 @@ class JavaApiClassesTest {
         private final CopyOnWriteArraySet<String> copyOnWriteArraySet;
         private final HashSet<String> hashSet;
         private final TreeSet<String> treeSet;
-        private final EnumSet<TypeHelper.Enum> enumSet;
+        private final EnumSet<TypeHelper.SimpleEnum> enumSet;
 
         public SetContainer(
                 Set<String> set,
@@ -230,7 +230,7 @@ class JavaApiClassesTest {
                 CopyOnWriteArraySet<String> copyOnWriteArraySet,
                 HashSet<String> hashSet,
                 TreeSet<String> treeSet,
-                EnumSet<TypeHelper.Enum> enumSet) {
+                EnumSet<TypeHelper.SimpleEnum> enumSet) {
             this.set = set;
             this.sortedSet = sortedSet;
             this.navigableSet = navigableSet;
@@ -326,7 +326,7 @@ class JavaApiClassesTest {
         private final Properties properties;
         private final TreeMap<String, String> treeMap;
         private final WeakHashMap<String, String> weakHashMap;
-        private final EnumMap<TypeHelper.Enum, String> enumMap;
+        private final EnumMap<TypeHelper.SimpleEnum, String> enumMap;
 
         public MapContainer(
                 Map<String, String> map,
@@ -340,7 +340,7 @@ class JavaApiClassesTest {
                 Properties properties,
                 TreeMap<String, String> treeMap,
                 WeakHashMap<String, String> weakHashMap,
-                EnumMap<TypeHelper.Enum, String> enumMap) {
+                EnumMap<TypeHelper.SimpleEnum, String> enumMap) {
             this.map = map;
             this.sortedMap = sortedMap;
             this.navigableMap = navigableMap;
