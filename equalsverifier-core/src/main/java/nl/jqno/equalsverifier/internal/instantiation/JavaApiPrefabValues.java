@@ -25,6 +25,7 @@ import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelpe
  * Contains hand-made instances of well-known Java API classes that cannot be instantiated dynamically because of an
  * internal infinite recursion of types, or other issues.
  */
+@SuppressWarnings("JdkObsolete")
 public final class JavaApiPrefabValues {
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);

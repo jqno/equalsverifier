@@ -55,6 +55,8 @@ public enum TestSupportedAnnotations implements Annotation {
     };
 
     private final boolean inherits;
+
+    @SuppressWarnings("ImmutableEnumChecker")
     private final Set<String> partialClassNames;
 
     TestSupportedAnnotations(boolean inherits, String... partialClassNames) {

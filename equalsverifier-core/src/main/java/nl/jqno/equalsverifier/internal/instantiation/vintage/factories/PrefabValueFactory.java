@@ -22,5 +22,6 @@ public interface PrefabValueFactory<T> {
      *                          detection.
      * @return A "red" instance of {@code T}.
      */
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack);
 }

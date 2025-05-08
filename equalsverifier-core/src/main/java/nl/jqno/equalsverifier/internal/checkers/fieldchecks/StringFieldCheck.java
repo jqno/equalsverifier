@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
+import java.util.Locale;
+
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -36,8 +38,8 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
             final T reference;
             final T copy;
             try {
-                reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toLowerCase());
-                copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toUpperCase());
+                reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toLowerCase(Locale.getDefault()));
+                copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toUpperCase(Locale.getDefault()));
             }
             catch (ReflectionException ignored) {
                 // Differently-cased String is not allowed, so cannot cause problems either.

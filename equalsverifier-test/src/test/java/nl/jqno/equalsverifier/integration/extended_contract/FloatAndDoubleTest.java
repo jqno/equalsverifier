@@ -84,6 +84,7 @@ class FloatAndDoubleTest {
         }
 
         @Override
+        @SuppressWarnings({ "BoxedPrimitiveEquality", "ReferenceEquality" })
         public boolean equals(Object obj) {
             if (!(obj instanceof CompareObjectFloatByReference)) {
                 return false;
@@ -150,6 +151,7 @@ class FloatAndDoubleTest {
         }
 
         @Override
+        @SuppressWarnings({ "BoxedPrimitiveEquality", "ReferenceEquality" })
         public boolean equals(Object obj) {
             if (!(obj instanceof CompareObjectDoubleByReference)) {
                 return false;

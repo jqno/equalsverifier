@@ -250,7 +250,8 @@
                                 <arg>
                                     -Xplugin:ErrorProne \
                                     -Xep:PatternMatchingInstanceof:OFF \
-                                    -Xep:EqualsGetClass:OFF
+                                    -Xep:EqualsGetClass:OFF \
+                                    -Xep:DoNotCallSuggester:OFF
                                 </arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
                                 <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>

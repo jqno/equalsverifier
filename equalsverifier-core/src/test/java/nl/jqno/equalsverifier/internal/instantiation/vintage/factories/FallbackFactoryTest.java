@@ -131,9 +131,7 @@ class FallbackFactoryTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof IntContainer other
-                    && Objects.equals(finalI, other.finalI)
-                    && Objects.equals(i, other.i);
+            return obj instanceof IntContainer other && finalI == other.finalI && i == other.i;
         }
 
         @Override

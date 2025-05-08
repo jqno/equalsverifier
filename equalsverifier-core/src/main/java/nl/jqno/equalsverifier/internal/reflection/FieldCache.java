@@ -48,6 +48,8 @@ public class FieldCache {
     }
 
     /**
+     * Returns whether values are available for the given field.
+     *
      * @param fieldName The name of the field for which values are needed.
      * @param fieldType The type of the field for which values are needed.
      * @return Whether values are available for the given field.
@@ -57,6 +59,8 @@ public class FieldCache {
     }
 
     /**
+     * Returns the fields preset in the cache.
+     *
      * @return The fields preset in the cache.
      */
     public Set<String> getFieldNames() {

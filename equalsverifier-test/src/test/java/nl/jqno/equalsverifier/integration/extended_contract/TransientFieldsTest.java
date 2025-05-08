@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Transient;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("UnusedVariable")
 class TransientFieldsTest {
 
     @Test

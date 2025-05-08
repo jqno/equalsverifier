@@ -197,6 +197,7 @@ class VintageValueProviderTest {
         }
 
         @Override
+        @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
         public Tuple<String> createValues(
                 TypeTag tag,
                 VintageValueProvider valueProvider,
@@ -211,6 +212,7 @@ class VintageValueProviderTest {
     private static final class ListTestFactory implements PrefabValueFactory<List> {
 
         @Override
+        @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
         public Tuple<List> createValues(
                 TypeTag tag,
                 VintageValueProvider valueProvider,
@@ -247,7 +249,7 @@ class VintageValueProviderTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Lazy other && Objects.equals(i, other.i);
+            return obj instanceof Lazy other && i == other.i;
         }
 
         @Override

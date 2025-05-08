@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({ "BoxedPrimitiveEquality", "ReferenceEquality" })
 class ExtendedReflexivityTest {
 
     @Test

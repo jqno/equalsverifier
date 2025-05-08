@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "CheckReturnValue" })
 class WithGenericPrefabValuesTest {
 
     @Test
@@ -175,7 +175,7 @@ class WithGenericPrefabValuesTest {
                             .forClass(DoubleGenericContainerContainer.class)
                             .withGenericPrefabValues(
                                 DoubleGenericContainer.class,
-                                (Func1) (a -> new DoubleGenericContainer<>(a, a))))
+                                (Func1) a -> new DoubleGenericContainer<>(a, a)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition", "number of generic type parameters doesn't match");
     }

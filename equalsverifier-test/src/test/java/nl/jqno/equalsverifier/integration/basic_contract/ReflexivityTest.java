@@ -99,12 +99,12 @@ class ReflexivityTest {
         }
     }
 
+    @SuppressWarnings({ "EqualsWrongThing", "InconsistentHashCode" })
     static final class FieldsMixedUpInEquals {
 
         private final String one;
         private final String two;
 
-        @SuppressWarnings("unused")
         private final String unused;
 
         public FieldsMixedUpInEquals(String one, String two, String unused) {
@@ -179,6 +179,7 @@ class ReflexivityTest {
         }
 
         @Override
+        @SuppressWarnings("EqualsUnsafeCast")
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

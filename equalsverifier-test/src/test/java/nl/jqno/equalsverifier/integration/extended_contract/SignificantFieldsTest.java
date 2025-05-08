@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class SignificantFieldsTest {
 
     @Test
@@ -379,7 +380,7 @@ class SignificantFieldsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof ConstantHashCode other && Objects.equals(x, other.x) && Objects.equals(y, other.y);
+            return obj instanceof ConstantHashCode other && x == other.x && y == other.y;
         }
 
         @Override
@@ -413,6 +414,7 @@ class SignificantFieldsTest {
         }
     }
 
+    @SuppressWarnings("InconsistentHashCode")
     static final class ExtraFieldInHashCode {
 
         private final int x;
@@ -525,6 +527,7 @@ class SignificantFieldsTest {
         }
     }
 
+    @SuppressWarnings("StaticAssignmentInConstructor")
     static final class OneStaticFieldUnusedColorPoint {
 
         @SuppressWarnings("unused")
@@ -617,7 +620,7 @@ class SignificantFieldsTest {
 
     static final class X {
 
-        public static final X X = new X();
+        public static final X X_FIELD = new X();
 
         @Override
         public boolean equals(Object obj) {
@@ -747,6 +750,7 @@ class SignificantFieldsTest {
         }
     }
 
+    @SuppressWarnings("unused")
     public static final class IdentityIntContainer {
 
         public static final int WHATEVER = 1;

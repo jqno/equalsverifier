@@ -33,6 +33,7 @@ class RelaxedEqualsTest {
     }
 
     @Test
+    @SuppressWarnings("CheckReturnValue")
     void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(a))
@@ -48,7 +49,7 @@ class RelaxedEqualsTest {
                 .verify();
     }
 
-    public class NullContainingSubMultiple extends Multiple {
+    static class NullContainingSubMultiple extends Multiple {
 
         @SuppressWarnings("unused")
         private final String noValue = null;

@@ -30,7 +30,7 @@ public final class Instantiator<T> {
     private final Objenesis objenesis;
     private final ObjectInstantiator<T> objenesisInstantiator;
 
-    /** Private constructor. Call {@link #of(Class)} to instantiate. */
+    /** Private constructor. Call {@link #of(Class, Objenesis)} to instantiate. */
     private Instantiator(Class<T> type, Objenesis objenesis) {
         this.type = type;
         this.objenesis = objenesis;

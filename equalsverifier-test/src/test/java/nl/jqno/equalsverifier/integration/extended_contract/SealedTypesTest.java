@@ -152,7 +152,7 @@ class SealedTypesTest {
         }
     }
 
-    public final class SealedTypeContainer {
+    public static final class SealedTypeContainer {
 
         private final SealedParentWithFinalChild sealedWithFinalChild;
         private final SealedParentWithNonsealedChild sealedWithNonsealedChild;

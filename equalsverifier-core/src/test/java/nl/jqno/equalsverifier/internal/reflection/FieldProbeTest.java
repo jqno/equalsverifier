@@ -194,6 +194,7 @@ class FieldProbeTest {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic")
     class NonStaticInner {}
 
     static class ModifierMix {

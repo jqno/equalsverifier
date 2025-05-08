@@ -95,6 +95,7 @@ public class AbstractDelegationChecker<T> implements Checker {
                     bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
     }
 
+    @SuppressWarnings("ReturnValueIgnored")
     private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
         try {
             instance.equals(copy);

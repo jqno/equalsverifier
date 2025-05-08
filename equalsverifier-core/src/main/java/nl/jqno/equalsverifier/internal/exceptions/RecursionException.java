@@ -15,6 +15,7 @@ public class RecursionException extends MessagingException {
      *
      * @param typeStack A collection of types that have been encountered prior to detecting the recursion.
      */
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     public RecursionException(LinkedHashSet<TypeTag> typeStack) {
         super();
         this.typeStack = typeStack;

@@ -118,6 +118,7 @@ class JavaApiClassesTest {
                 .verify();
     }
 
+    @SuppressWarnings("CheckReturnValue")
     abstract static class CollectionContainer {
 
         protected abstract void callAbstractMethodsOnInterface();
@@ -171,6 +172,7 @@ class JavaApiClassesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class ListContainer extends CollectionContainer {
 
         private final List<String> list;
@@ -213,6 +215,7 @@ class JavaApiClassesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class SetContainer extends CollectionContainer {
 
         private final Set<String> set;
@@ -313,6 +316,7 @@ class JavaApiClassesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class MapContainer extends CollectionContainer {
 
         private final Map<String, String> map;
@@ -845,6 +849,7 @@ class JavaApiClassesTest {
 
     static final class UnusedInEqualsButPresentInClassContainer {
 
+        @SuppressWarnings("unused")
         private final PropertyChangeSupport pcs;
 
         public UnusedInEqualsButPresentInClassContainer(PropertyChangeSupport pcs) {

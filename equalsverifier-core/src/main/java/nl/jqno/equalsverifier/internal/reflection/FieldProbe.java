@@ -33,7 +33,11 @@ public final class FieldProbe {
         return new FieldProbe(field);
     }
 
-    /** @return The field itself. */
+    /**
+     * Returns the field itself.
+     *
+     * @return The field itself.
+     */
     public Field getField() {
         return field;
     }
@@ -50,48 +54,82 @@ public final class FieldProbe {
         return rethrow(() -> field.get(object));
     }
 
-    /** @return The field's type. */
+    /**
+     * Returns the field's type.
+     *
+     * @return The field's type.
+     */
     public Class<?> getType() {
         return field.getType();
     }
 
-    /** @return The field's name. */
+    /**
+     * Returns the field's name.
+     *
+     * @return The field's name.
+     */
     public String getName() {
         return field.getName();
     }
 
-    /** @return Whether the field is of a primitive type. */
+    /**
+     * Returns whether the field is primitive.
+     *
+     * @return Whether the field is of a primitive type.
+     */
     public boolean isPrimitive() {
         return getType().isPrimitive();
     }
 
-    /** @return Whether the field has public visibility */
+    /**
+     * Returns whether the field is public.
+     *
+     * @return Whether the field has public visibility
+     */
     public boolean isPublic() {
         return Modifier.isPublic(field.getModifiers());
     }
 
-    /** @return Whether the field is marked with the final modifier. */
+    /**
+     * Returns whether the field is final.
+     *
+     * @return Whether the field is marked with the final modifier.
+     */
     public boolean isFinal() {
         return Modifier.isFinal(field.getModifiers());
     }
 
-    /** @return Whether the field is marked with the static modifier. */
+    /**
+     * Returns whether the field is static.
+     *
+     * @return Whether the field is marked with the static modifier.
+     */
     public boolean isStatic() {
         return Modifier.isStatic(field.getModifiers());
     }
 
-    /** @return Whether the field is marked with the transient modifier. */
+    /**
+     * Returns whether the field is transient.
+     *
+     * @return Whether the field is marked with the transient modifier.
+     */
     public boolean isTransient() {
         return Modifier.isTransient(field.getModifiers());
     }
 
-    /** @return Whether the field is an enum with a single value. */
+    /**
+     * Returns whether the field is a single-value enum.
+     *
+     * @return Whether the field is an enum with a single value.
+     */
     public boolean isEmptyOrSingleValueEnum() {
         Class<?> type = field.getType();
         return type.isEnum() && type.getEnumConstants().length <= 1;
     }
 
     /**
+     * Returns whether the field can be set to the default value for its type.
+     *
      * @param config The configuration affects whether a given field van be default.
      * @return Whether the field can be set to the default value for its type.
      */

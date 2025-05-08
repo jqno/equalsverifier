@@ -4,6 +4,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("EqualsHashCode")
 class TypeCheckTest {
 
     @Test
@@ -61,6 +62,7 @@ class TypeCheckTest {
         }
 
         @Override
+        @SuppressWarnings("EqualsUnsafeCast")
         public boolean equals(Object obj) {
             if (obj == null) {
                 return false;
@@ -78,6 +80,7 @@ class TypeCheckTest {
         }
 
         @Override
+        @SuppressWarnings("EqualsUnsafeCast")
         public boolean equals(Object obj) {
             try {
                 if (obj == null) {

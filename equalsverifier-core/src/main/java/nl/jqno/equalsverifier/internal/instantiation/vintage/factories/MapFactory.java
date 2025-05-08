@@ -22,6 +22,7 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
     }
 
     @Override
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     public Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);

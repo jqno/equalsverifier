@@ -37,6 +37,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public MultipleTypeEqualsVerifierApi suppress(Warning... warnings) {
         ev.suppress(warnings);
         return this;
@@ -53,6 +54,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue) {
         ev.withPrefabValues(otherType, red, blue);
         return this;
@@ -61,6 +63,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
@@ -69,6 +72,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
@@ -77,6 +81,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public MultipleTypeEqualsVerifierApi usingGetClass() {
         ev.usingGetClass();
         return this;
@@ -85,6 +90,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public MultipleTypeEqualsVerifierApi withFieldnameToGetterConverter(Function<String, String> converter) {
         ev.withFieldnameToGetterConverter(converter);
         return this;

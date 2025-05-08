@@ -11,7 +11,7 @@ public class NonFinal {
 
     @Override
     public final boolean equals(Object obj) {
-        return obj instanceof NonFinal other && Objects.equals(i, other.i);
+        return obj instanceof NonFinal other && i == other.i;
     }
 
     @Override

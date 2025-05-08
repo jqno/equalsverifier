@@ -52,6 +52,7 @@ class BigDecimalTest {
     /**
      * Uses standard equals and hashCode for objects. 0 and 0.0 are not equal.
      */
+    @SuppressWarnings("unused")
     private static final class BigDecimalEquals {
 
         private final BigDecimal bd;
@@ -79,6 +80,7 @@ class BigDecimalTest {
      * Uses compareTo for BigDecimal equality and ensures hashCode is equal for equal BigDecimal instances. 0 and 0.0
      * are equal and produce the same hashCode.
      */
+    @SuppressWarnings("unused")
     private static final class BigDecimalCompareTo {
 
         private final BigDecimal bd;
@@ -106,6 +108,7 @@ class BigDecimalTest {
      * Uses standard equals but with a consistent hashCode for comparably equal instances. 0 and 0.0 are not equal but
      * produce the same hashCode.
      */
+    @SuppressWarnings("unused")
     private static final class BigDecimalEqualsWithComparablyConsistentHashCode {
 
         private final BigDecimal bd;
@@ -138,6 +141,7 @@ class BigDecimalTest {
      * Uses compareTo for BigDecimal equality but has hashCode that is inconsistent. 0 and 0.0 are equal but produce
      * different hashCodes.
      */
+    @SuppressWarnings("unused")
     private static final class BigDecimalInconsistentHashCode {
 
         private final BigDecimal bd;

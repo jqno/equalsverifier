@@ -36,6 +36,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     public ObjectAccessor<T> scramble(
             VintageValueProvider valueProvider,
             TypeTag enclosingType,

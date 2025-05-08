@@ -50,13 +50,5 @@ class SequencedCollectionsClassesTest {
             }
             return Objects.hash(collection, set, map);
         }
-
-        protected void callIterator(Iterable<?>... collections) {
-            for (Iterable<?> c : collections) {
-                if (c != null) {
-                    c.iterator();
-                }
-            }
-        }
     }
 }

@@ -46,6 +46,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
+    @SuppressWarnings("ReturnValueIgnored")
     private void performTests(Field field, final Object reference, final Object changed) {
         handle("equals", "the parameter's field", field, () -> reference.equals(changed));
         handle("equals", "the 'this' object's field", field, () -> changed.equals(reference));

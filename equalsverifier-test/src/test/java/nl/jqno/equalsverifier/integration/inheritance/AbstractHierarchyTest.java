@@ -201,7 +201,7 @@ class AbstractHierarchyTest {
 
         private final SupplierThatDoesntHaveAPrefab<Object> objectFactory;
 
-        protected NullThrowingLazyObjectContainer(SupplierThatDoesntHaveAPrefab<Object> flourFactory) {
+        public NullThrowingLazyObjectContainer(SupplierThatDoesntHaveAPrefab<Object> flourFactory) {
             this.objectFactory = flourFactory;
         }
 

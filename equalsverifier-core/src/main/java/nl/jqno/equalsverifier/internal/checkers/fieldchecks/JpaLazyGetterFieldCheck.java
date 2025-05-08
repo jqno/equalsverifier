@@ -41,6 +41,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
+    @SuppressWarnings("ReturnValueIgnored")
     public void execute(FieldProbe fieldProbe) {
         String fieldName = fieldProbe.getName();
         String getterName = fieldnameToGetter.apply(fieldName);

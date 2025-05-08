@@ -361,6 +361,7 @@ class GenericTypesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class ListOfTContainer<T> {
 
         private final ArrayList<T> list;
@@ -370,6 +371,7 @@ class GenericTypesTest {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object obj) {
             if (!(obj instanceof ListOfTContainer)) {
                 return false;
@@ -439,7 +441,7 @@ class GenericTypesTest {
 
         @Override
         public String toString() {
-            return "ArrayOfTContainer: " + array;
+            return "ArrayOfTContainer: " + Arrays.toString(array);
         }
     }
 
@@ -471,6 +473,7 @@ class GenericTypesTest {
         }
     }
 
+    @SuppressWarnings("ProtectedMembersInFinalClass")
     static final class TypeVariableExtendsContainer<I extends Comparable<I>> {
 
         private final I id;
@@ -491,6 +494,7 @@ class GenericTypesTest {
         }
     }
 
+    @SuppressWarnings("ProtectedMembersInFinalClass")
     static final class TypeVariableExtendsWithSuperContainer<I extends Comparable<? super I>> {
 
         private final I id;

@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.verify_release.jar.helper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.charset.Charset;
 import java.util.Set;
 
 public class JarAsserter {
@@ -72,7 +73,7 @@ public class JarAsserter {
 
     public void assertContentOfManifest(String implementationTitle) {
         var filename = "/META-INF/MANIFEST.MF";
-        var manifest = new String(reader.getContentOf(filename));
+        var manifest = new String(reader.getContentOf(filename), Charset.defaultCharset());
         assertThat(manifest)
                 .satisfies(
                     m -> assertContains("Implementation-Title: " + implementationTitle, m, filename),

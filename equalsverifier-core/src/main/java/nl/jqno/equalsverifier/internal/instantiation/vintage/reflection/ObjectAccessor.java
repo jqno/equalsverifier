@@ -98,6 +98,7 @@ public abstract class ObjectAccessor<T> {
      * @param typeStack     Keeps track of recursion in the type.
      * @return An accessor to the scrambled object.
      */
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     public abstract ObjectAccessor<T> scramble(
             VintageValueProvider valueProvider,
             TypeTag enclosingType,

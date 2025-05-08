@@ -13,13 +13,14 @@ import org.objenesis.Objenesis;
  *
  * @param <T> A class.
  */
+@SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
 public class ClassAccessor<T> {
 
     private final Class<T> type;
     private final VintageValueProvider valueProvider;
     private final Objenesis objenesis;
 
-    /** Private constructor. Call {@link #of(Class, PrefabValues)} instead. */
+    /** Private constructor. Call {@link #of(Class, VintageValueProvider, Objenesis)} instead. */
     ClassAccessor(Class<T> type, VintageValueProvider valueProvider, Objenesis objenesis) {
         this.type = type;
         this.valueProvider = valueProvider;

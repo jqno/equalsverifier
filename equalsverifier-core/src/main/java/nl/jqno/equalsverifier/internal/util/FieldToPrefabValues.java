@@ -8,6 +8,7 @@ public final class FieldToPrefabValues {
 
     private FieldToPrefabValues() {}
 
+    @SuppressWarnings("CheckReturnValue")
     public static <T> void move(SingleTypeEqualsVerifierApi<T> api, Class<T> type, T red, T blue) {
         for (FieldProbe probe : FieldIterable.ofIgnoringStatic(type)) {
             Object fRed = probe.getValue(red);

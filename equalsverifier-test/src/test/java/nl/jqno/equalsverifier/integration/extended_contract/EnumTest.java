@@ -10,7 +10,7 @@ class EnumTest {
 
     @Test
     void succeed_whenClassIsAnEnum() {
-        EqualsVerifier.forClass(Enum.class).verify();
+        EqualsVerifier.forClass(SimpleEnum.class).verify();
     }
 
     @Test
@@ -48,7 +48,7 @@ class EnumTest {
         EqualsVerifier.forClass(SingletonOptionalContainer.class).verify();
     }
 
-    enum Enum {
+    enum SimpleEnum {
         ONE, TWO, THREE
     }
 

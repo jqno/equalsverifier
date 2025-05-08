@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 /**
  * Abstract implementation of {@link PrefabValueFactory} that provides helper functions for dealing with generics.
  */
+@SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
 public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T> {
 
     public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);

@@ -38,7 +38,7 @@ class ClassProbeTest {
         assertThat(SimpleRecord.class.isRecord()).isTrue();
     }
 
-    /* Tests the false case. The true case is tested in {@link ClassProbeSealedTest}. */
+    // Tests the false case. The true case is tested in {@link ClassProbeSealedTest}.
     @Test
     void isSealed() {
         assertThat(pointProbe.isSealed()).isFalse();

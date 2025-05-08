@@ -83,6 +83,7 @@ class OutputTest {
                 .assertNotCause(StackOverflowError.class);
     }
 
+    @SuppressWarnings("EqualsHashCode")
     private static final class AssertionExceptionWithCauseThrower {
 
         @Override
@@ -92,6 +93,7 @@ class OutputTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     private static final class UnsupportedOperationExceptionWithMessageThrower {
 
         @Override
@@ -100,6 +102,7 @@ class OutputTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     private static final class IllegalStateExceptionThrower {
 
         @Override

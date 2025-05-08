@@ -21,6 +21,7 @@ import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.subpackage.Incor
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class MultipleTypeEqualsVerifierTest {
 
     private static final String CORRECT_PACKAGE = "nl.jqno.equalsverifier.testhelpers.packages.correct";

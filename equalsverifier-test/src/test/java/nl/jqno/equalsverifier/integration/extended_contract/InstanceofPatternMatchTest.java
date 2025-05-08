@@ -12,7 +12,7 @@ class InstanceofPatternMatchTest {
         EqualsVerifier.forClass(Point.class).verify();
     }
 
-    final class Point {
+    static final class Point {
 
         private final int x;
         private final int y;

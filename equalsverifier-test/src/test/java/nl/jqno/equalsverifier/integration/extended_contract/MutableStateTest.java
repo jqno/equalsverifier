@@ -138,13 +138,13 @@ class MutableStateTest {
 
     static final class EnumMutableField {
 
-        public enum Enum {
+        public enum Color {
             RED, BLUE
         }
 
-        private Enum field;
+        private Color field;
 
-        public EnumMutableField(Enum value) {
+        public EnumMutableField(Color value) {
             field = value;
         }
 

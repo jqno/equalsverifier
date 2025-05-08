@@ -108,6 +108,7 @@ public class ExamplesChecker<T> implements Checker {
 
     private void checkNonNullity(T reference) {
         try {
+            @SuppressWarnings("EqualsNull")
             boolean nullity = reference.equals(null);
             assertFalse(Formatter.of("Non-nullity: true returned for null value"), nullity);
         }

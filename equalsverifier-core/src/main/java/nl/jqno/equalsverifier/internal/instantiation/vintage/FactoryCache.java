@@ -59,6 +59,8 @@ public class FactoryCache {
     }
 
     /**
+     * Returns whether a factory is available for the given type.
+     *
      * @param type The type for which a factory is needed.
      * @return Whether a factory is available for the given type.
      */

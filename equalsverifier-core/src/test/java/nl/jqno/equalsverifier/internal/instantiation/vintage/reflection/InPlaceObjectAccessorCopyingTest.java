@@ -26,6 +26,7 @@ class InPlaceObjectAccessorCopyingTest {
     }
 
     @Test
+    @SuppressWarnings("ReferenceEquality")
     void shallowCopy() {
         PointContainer original = new PointContainer(new Point(1, 2));
         PointContainer copy = copyOf(original);

@@ -12,6 +12,7 @@ class PrimitiveValueSupplier<T> extends ValueSupplier<T> {
         super(type);
     }
 
+    @Override
     public Optional<Tuple<T>> get() {
         if (is(boolean.class)) {
             return val(true, false, true);

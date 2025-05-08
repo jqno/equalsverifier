@@ -204,6 +204,7 @@ class AbstractDelegationTest {
 
         private int i;
 
+        @SuppressWarnings("unused")
         abstract void someMethod();
 
         @Override
@@ -461,7 +462,7 @@ class AbstractDelegationTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof AbstractDelegator other && Objects.equals(i, other.i);
+            return obj instanceof AbstractDelegator other && i == other.i;
         }
 
         @Override
@@ -522,7 +523,7 @@ class AbstractDelegationTest {
         public boolean equals(Object obj) {
             return obj instanceof HashCodeDelegatesToAbstractMethodInField other
                     && Objects.equals(delegator, other.delegator)
-                    && Objects.equals(i, other.i);
+                    && i == other.i;
         }
 
         @Override
@@ -548,7 +549,7 @@ class AbstractDelegationTest {
         public boolean equals(Object obj) {
             return obj instanceof ToStringDelegatesToAbstractMethodInField other
                     && Objects.equals(delegator, other.delegator)
-                    && Objects.equals(i, other.i);
+                    && i == other.i;
         }
 
         @Override

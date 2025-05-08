@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier_testhelpers.types.Multiple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class RelaxedEqualsPreconditionTest {
 
     private static final String PRECONDITION = "Precondition";

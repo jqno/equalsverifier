@@ -20,9 +20,9 @@ public class JavaNetValueSupplier<T> extends ValueSupplier<T> {
             return wrap(
                 InetAddress.class,
                 () -> val(
-                    InetAddress.getByName("127.0.0.1"),
+                    InetAddress.getLoopbackAddress(),
                     InetAddress.getByName("127.0.0.42"),
-                    InetAddress.getByName("127.0.0.1")));
+                    InetAddress.getLoopbackAddress()));
         }
         if (is(Inet4Address.class)) {
             return wrap(

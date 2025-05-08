@@ -99,8 +99,7 @@ public class MockitoTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof PojoWithoutEqualsContainer other
-                    && Objects.equals(methodCaller.getI(), other.methodCaller.getI());
+            return obj instanceof PojoWithoutEqualsContainer other && methodCaller.getI() == other.methodCaller.getI();
         }
 
         @Override

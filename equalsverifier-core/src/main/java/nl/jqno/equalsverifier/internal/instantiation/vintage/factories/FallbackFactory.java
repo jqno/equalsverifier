@@ -16,6 +16,7 @@ import org.objenesis.Objenesis;
  * It instantiates the type using bytecode magic, bypassing the constructor. Then it uses {@link VintageValueProvider}
  * to fill up all the fields, recursively.
  */
+@SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     private final Objenesis objenesis;

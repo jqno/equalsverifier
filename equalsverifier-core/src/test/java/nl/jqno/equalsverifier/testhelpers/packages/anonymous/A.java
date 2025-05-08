@@ -31,6 +31,7 @@ public final class A {
         return getClass().getSimpleName() + ":" + x + "," + y;
     }
 
+    @SuppressWarnings("UnusedAnonymousClass")
     public static void anonymousClass() {
         new Supplier<String>() {
             @Override
@@ -41,6 +42,7 @@ public final class A {
     }
 
     public static void localClass() {
+        @SuppressWarnings({ "unused", "UnusedNestedClass" })
         class Local {
 
             int x;

@@ -53,6 +53,7 @@ class AnnotationsIgnoreTest {
     }
 
     @Test
+    @SuppressWarnings("CheckReturnValue")
     void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ImmutableByAnnotation.class).withIgnoredAnnotations(String.class))
@@ -71,7 +72,7 @@ class AnnotationsIgnoreTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof ImmutableByAnnotation other && Objects.equals(i, other.i);
+            return obj instanceof ImmutableByAnnotation other && i == other.i;
         }
 
         @Override

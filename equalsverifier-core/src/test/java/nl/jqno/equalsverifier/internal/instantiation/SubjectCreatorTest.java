@@ -283,10 +283,7 @@ class SubjectCreatorTest {
                 return false;
             }
             SomeClass other = (SomeClass) obj;
-            return other.canEqual(this)
-                    && super.equals(other)
-                    && Objects.equals(i, other.i)
-                    && Objects.equals(s, other.s);
+            return other.canEqual(this) && super.equals(other) && i == other.i && Objects.equals(s, other.s);
         }
 
         @Override
