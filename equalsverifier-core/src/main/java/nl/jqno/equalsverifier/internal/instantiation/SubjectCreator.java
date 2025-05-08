@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -32,7 +31,6 @@ public class SubjectCreator<T> {
      * @param valueProvider To provide values for the fields of the subject.
      * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
     public SubjectCreator(Configuration<T> config, ValueProvider valueProvider, Objenesis objenesis) {
         this.typeTag = config.getTypeTag();
         this.type = typeTag.getType();

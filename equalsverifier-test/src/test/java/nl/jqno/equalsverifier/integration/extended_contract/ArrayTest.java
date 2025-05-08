@@ -157,6 +157,7 @@ class ArrayTest {
         }
 
         @Override
+        @SuppressWarnings("ArrayEquals")
         public boolean equals(Object obj) {
             if (!(obj instanceof PrimitiveArrayRegularEquals)) {
                 return false;
@@ -189,6 +190,7 @@ class ArrayTest {
         }
 
         @Override
+        @SuppressWarnings("ArrayHashCode")
         public int hashCode() {
             return Objects.hashCode(array);
         }
@@ -258,6 +260,7 @@ class ArrayTest {
         }
 
         @Override
+        @SuppressWarnings("ArrayHashCode")
         public int hashCode() {
             return array == null ? 0 : array.hashCode();
         }
@@ -404,6 +407,7 @@ class ArrayTest {
         }
 
         @Override
+        @SuppressWarnings("ArrayEquals")
         public boolean equals(Object obj) {
             if (!(obj instanceof ObjectArrayRegularEquals)) {
                 return false;
@@ -436,6 +440,7 @@ class ArrayTest {
         }
 
         @Override
+        @SuppressWarnings("ArrayHashCode")
         public int hashCode() {
             return Objects.hashCode(array);
         }

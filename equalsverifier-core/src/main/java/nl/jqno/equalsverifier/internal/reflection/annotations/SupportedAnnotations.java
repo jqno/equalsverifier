@@ -197,6 +197,8 @@ public enum SupportedAnnotations implements Annotation {
     KOTLIN(false, "kotlin.Metadata");
 
     private final boolean inherits;
+
+    @SuppressWarnings("ImmutableEnumChecker")
     private final Set<String> partialClassNames;
 
     SupportedAnnotations(boolean inherits, String... partialClassNames) {

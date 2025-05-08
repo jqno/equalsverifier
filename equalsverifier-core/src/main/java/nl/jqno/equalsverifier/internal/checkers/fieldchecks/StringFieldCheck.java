@@ -2,7 +2,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
+import java.util.Locale;
+
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -19,7 +20,6 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     private final ValueProvider valueProvider;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "PrefabValues is inherently mutable.")
     public StringFieldCheck(
             SubjectCreator<T> subjectCreator,
             ValueProvider instanceCreator,
@@ -30,7 +30,6 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    @SuppressFBWarnings(value = "DM_CONVERT_CASE", justification = "String prefab values are probably not localized.")
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);
@@ -39,8 +38,8 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
             final T reference;
             final T copy;
             try {
-                reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toLowerCase());
-                copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toUpperCase());
+                reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toLowerCase(Locale.getDefault()));
+                copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toUpperCase(Locale.getDefault()));
             }
             catch (ReflectionException ignored) {
                 // Differently-cased String is not allowed, so cannot cause problems either.

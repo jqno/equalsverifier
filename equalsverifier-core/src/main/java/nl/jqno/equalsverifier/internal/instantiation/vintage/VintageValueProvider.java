@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import java.util.*;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -21,6 +20,7 @@ import org.objenesis.Objenesis;
  * inception. This strategy is quite hacky and messy, and other strategies might be preferable. However, it is also
  * quite reliable because it's been around so long, so it remains a good fallback ValueProvider.
  */
+@SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
 public class VintageValueProvider implements ValueProvider {
 
     // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
@@ -37,7 +37,6 @@ public class VintageValueProvider implements ValueProvider {
      * @param factoryCache The factories that can be used to create values.
      * @param objenesis    To instantiate non-record classes.
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
     public VintageValueProvider(ValueProvider prefabs, FactoryCache factoryCache, Objenesis objenesis) {
         this.prefabs = prefabs;
         this.factoryCache = factoryCache;
@@ -60,6 +59,7 @@ public class VintageValueProvider implements ValueProvider {
      * @param tag A description of the desired type, including generic parameters.
      * @return The "red" prefabricated value.
      */
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     public <T> T giveRed(TypeTag tag) {
         return this.<T>giveTuple(tag).red();
     }
@@ -74,6 +74,7 @@ public class VintageValueProvider implements ValueProvider {
      * @param tag A description of the desired type, including generic parameters.
      * @return The "blue" prefabricated value.
      */
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     public <T> T giveBlue(TypeTag tag) {
         return this.<T>giveTuple(tag).blue();
     }
@@ -88,6 +89,7 @@ public class VintageValueProvider implements ValueProvider {
      * @param tag A description of the desired type, including generic parameters.
      * @return A shallow copy of the "red" prefabricated value.
      */
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     public <T> T giveRedCopy(TypeTag tag) {
         return this.<T>giveTuple(tag).redCopy();
     }

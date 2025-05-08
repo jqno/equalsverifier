@@ -102,5 +102,11 @@
             <version>${version.jakarta-persistence-api}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${version.spotbugs}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

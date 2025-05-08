@@ -77,6 +77,7 @@ class SignatureTest {
             this.i = i;
         }
 
+        @SuppressWarnings("NonOverridingEquals")
         public boolean equals(OverloadedWithOwnType obj) {
             if (obj == null) {
                 return false;
@@ -136,6 +137,7 @@ class SignatureTest {
             this.i = i;
         }
 
+        @SuppressWarnings("NonOverridingEquals")
         public boolean equals(int obj) {
             return this.i == obj;
         }
@@ -162,6 +164,7 @@ class SignatureTest {
             return i == ((OverloadedAndOverridden) obj).i;
         }
 
+        @SuppressWarnings("NonOverridingEquals")
         public boolean equals(OverloadedAndOverridden obj) {
             if (obj == null) {
                 return false;

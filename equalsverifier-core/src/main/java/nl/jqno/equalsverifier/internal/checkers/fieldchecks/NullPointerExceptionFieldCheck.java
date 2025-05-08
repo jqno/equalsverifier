@@ -4,13 +4,11 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldMutator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.*;
 
-@SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "We only want to see if it throws an exception.")
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
     private final Configuration<T> config;
@@ -48,15 +46,13 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
+    @SuppressWarnings("ReturnValueIgnored")
     private void performTests(Field field, final Object reference, final Object changed) {
         handle("equals", "the parameter's field", field, () -> reference.equals(changed));
         handle("equals", "the 'this' object's field", field, () -> changed.equals(reference));
         handle("hashCode", "field", field, () -> config.getCachedHashCodeInitializer().getInitializedHashCode(changed));
     }
 
-    @SuppressFBWarnings(
-            value = "DCN_NULLPOINTER_EXCEPTION",
-            justification = "We're catching and wrapping it to provide better output to the user.")
     private void handle(String testedMethodName, String whichOne, Field field, Runnable r) {
         try {
             r.run();

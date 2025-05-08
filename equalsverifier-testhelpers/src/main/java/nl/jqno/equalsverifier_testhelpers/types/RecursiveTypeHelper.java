@@ -108,7 +108,7 @@ public class RecursiveTypeHelper {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof StaticFinalNodeContainer other && Objects.equals(i, other.i);
+            return obj instanceof StaticFinalNodeContainer other && i == other.i;
         }
 
         @Override
@@ -166,6 +166,11 @@ public class RecursiveTypeHelper {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof TwoStepNodeB other && Objects.equals(node, other.node);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(node);
         }
     }
 

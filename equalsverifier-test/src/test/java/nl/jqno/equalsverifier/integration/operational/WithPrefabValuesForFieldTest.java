@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier_testhelpers.types.PreconditionTypeHelper.*;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class WithPrefabValuesForFieldTest {
 
     private final FinalPoint pRed = new FinalPoint(3, 42);
@@ -296,7 +297,7 @@ class WithPrefabValuesForFieldTest {
         }
     }
 
-    public final class DifficultGeneric {
+    static final class DifficultGeneric {
 
         private final List<DifficultGeneric> list;
 

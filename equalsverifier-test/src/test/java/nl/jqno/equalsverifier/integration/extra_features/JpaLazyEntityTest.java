@@ -732,7 +732,7 @@ class JpaLazyEntityTest {
                 return false;
             }
             FinalEntity other = (FinalEntity) obj;
-            return Objects.equals(getId(), other.getId());
+            return getId() == other.getId();
         }
 
         @Override

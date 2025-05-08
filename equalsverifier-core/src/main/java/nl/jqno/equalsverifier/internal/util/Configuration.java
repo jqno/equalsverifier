@@ -7,14 +7,10 @@ import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
 public final class Configuration<T> {
-
-    private static final Function<String, String> DEFAULT_FIELDNAME_TO_GETTER_CONVERTER =
-            fn -> "get" + Character.toUpperCase(fn.charAt(0)) + fn.substring(1);
 
     private final Class<T> type;
     private final Set<String> nonnullFields;
@@ -98,7 +94,7 @@ public final class Configuration<T> {
             includedFields,
             actualFields);
         Function<String, String> converter =
-                fieldnameToGetter != null ? fieldnameToGetter : DEFAULT_FIELDNAME_TO_GETTER_CONVERTER;
+                fieldnameToGetter != null ? fieldnameToGetter : Configuration::defaulFieldNameToGetterConverter;
         boolean isKotlin = annotationCache.hasClassAnnotation(type, SupportedAnnotations.KOTLIN);
 
         return new Configuration<>(type,
@@ -175,6 +171,10 @@ public final class Configuration<T> {
         return excludedFields;
     }
 
+    private static String defaulFieldNameToGetterConverter(String fieldName) {
+        return "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+    }
+
     public Class<T> getType() {
         return type;
     }
@@ -231,7 +231,6 @@ public final class Configuration<T> {
         return typeTag;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable.")
     public AnnotationCache getAnnotationCache() {
         return annotationCache;
     }

@@ -71,8 +71,6 @@
 
         <analysis.jacoco.threshold>0.96</analysis.jacoco.threshold>
         <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
-        <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
-        <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
         <analysis.spotless.formatter.config>build/eclipse-formatter-config.xml</analysis.spotless.formatter.config>
         <analysis.spotless.importorder.config>build/eclipse-formatter-config.importorder</analysis.spotless.importorder.config>
 
@@ -98,6 +96,7 @@
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
+        <version.error-prone>2.38.0</version.error-prone>
         <version.flatten-maven-plugin>1.7.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.13</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
@@ -113,7 +112,6 @@
         <version.mockito>5.17.0</version.mockito>
         <version.pitest.junit5>1.2.2</version.pitest.junit5>
         <version.pitest.maven>1.19.1</version.pitest.maven>
-        <version.spotbugs.maven>4.9.3.0</version.spotbugs.maven>
         <version.spotbugs>4.9.0</version.spotbugs>
         <version.spotless>2.44.4</version.spotless>
     </properties>
@@ -241,10 +239,38 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <showWarnings>true</showWarnings>
+                            <fork>true</fork>
                             <compilerArgs>
                                 <arg>-Werror</arg>
                                 <arg>-Xlint:deprecation,removal,rawtypes,unchecked,-options</arg>
+
+                                <!-- for ErrorProne -->
+                                <arg>-XDcompilePolicy=simple</arg>
+                                <arg>--should-stop=ifError=FLOW</arg>
+                                <arg>
+                                    -Xplugin:ErrorProne \
+                                    -Xep:PatternMatchingInstanceof:OFF \
+                                    -Xep:EqualsGetClass:OFF \
+                                    -Xep:DoNotCallSuggester:OFF
+                                </arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+                                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+                                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
                             </compilerArgs>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>com.google.errorprone</groupId>
+                                    <artifactId>error_prone_core</artifactId>
+                                    <version>${version.error-prone}</version>
+                                </path>
+                            </annotationProcessorPaths>
                         </configuration>
                     </plugin>
 
@@ -261,33 +287,6 @@
                                 <configuration>
                                     <propertyName>argline.full</propertyName>
                                 </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                        <version>${version.spotbugs.maven}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.github.spotbugs</groupId>
-                                <artifactId>spotbugs</artifactId>
-                                <version>${version.spotbugs}</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <effort>${analysis.spotbugs.effort}</effort>
-                            <threshold>${analysis.spotbugs.threshold}</threshold>
-                            <xmlOutput>true</xmlOutput>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>run-spotbugs</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
                             </execution>
                         </executions>
                     </plugin>
@@ -363,20 +362,6 @@
                     </plugin>
                 </plugins>
             </build>
-
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                        <version>${spotbugs.maven.version}</version>
-                        <configuration>
-                            <effort>${spotbugs.effort}</effort>
-                            <threshold>${spotbugs.threshold}</threshold>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </reporting>
         </profile>
 
         <profile>

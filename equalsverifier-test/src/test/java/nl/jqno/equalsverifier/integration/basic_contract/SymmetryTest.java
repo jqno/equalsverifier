@@ -31,6 +31,7 @@ class SymmetryTest {
         }
 
         @Override
+        @SuppressWarnings("EqualsUsingHashCode")
         public boolean equals(Object obj) {
             if (goodEquals(obj)) {
                 return true;

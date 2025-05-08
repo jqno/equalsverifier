@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.*;
@@ -96,9 +95,7 @@ public class AbstractDelegationChecker<T> implements Checker {
                     bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
     }
 
-    @SuppressFBWarnings(
-            value = "DE_MIGHT_IGNORE",
-            justification = "These exceptions will re-occur and be handled later.")
+    @SuppressWarnings("ReturnValueIgnored")
     private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
         try {
             instance.equals(copy);

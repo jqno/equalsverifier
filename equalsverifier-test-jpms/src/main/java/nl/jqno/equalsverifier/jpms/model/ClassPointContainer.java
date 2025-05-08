@@ -5,7 +5,7 @@ import java.util.Objects;
 public final class ClassPointContainer {
     private final ClassPoint cp;
 
-    private ClassPointContainer(ClassPoint cp) {
+    public ClassPointContainer(ClassPoint cp) {
         this.cp = cp;
     }
 

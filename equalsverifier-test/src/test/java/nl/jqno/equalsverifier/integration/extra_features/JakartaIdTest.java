@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.annotations.org.hibernate.annotations.NaturalId;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "CheckReturnValue" })
 class JakartaIdTest {
 
     @Test
@@ -814,7 +814,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Float.floatToIntBits(id);
+            return Objects.hash(id);
         }
     }
 
@@ -918,9 +918,7 @@ class JakartaIdTest {
                 return false;
             }
             JakartaIdDirtyTrackingPerson other = (JakartaIdDirtyTrackingPerson) obj;
-            return Objects.equals(id, other.id)
-                    && Objects.equals(version, other.version)
-                    && Objects.equals(isDirty, other.isDirty);
+            return Objects.equals(id, other.id) && version == other.version && isDirty == other.isDirty;
         }
 
         @Override

@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -46,6 +47,7 @@ class StringTest {
 
         private final String caseInsensitiveString;
 
+        @SuppressWarnings("unused")
         public IncorrectIgnoreCaseStringEquals(String caseInsensitiveString) {
             this.caseInsensitiveString = caseInsensitiveString;
         }
@@ -71,6 +73,7 @@ class StringTest {
 
         private final String caseInsensitiveString;
 
+        @SuppressWarnings("unused")
         public CorrectIgnoreCaseStringEquals(String caseInsensitiveString) {
             this.caseInsensitiveString = caseInsensitiveString;
         }
@@ -88,7 +91,8 @@ class StringTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(caseInsensitiveString == null ? "" : caseInsensitiveString.toUpperCase());
+            return Objects
+                    .hash(caseInsensitiveString == null ? "" : caseInsensitiveString.toUpperCase(Locale.getDefault()));
         }
     }
 

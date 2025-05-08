@@ -166,6 +166,8 @@ public final record TypeTag(Class<?> type, List<TypeTag> genericTypes) {
     }
 
     /**
+     * Returns the TypeTag's raw type.
+     *
      * @param <T> The returned {@link Class} will have this generic type.
      * @return The TypeTag's raw type.
      */

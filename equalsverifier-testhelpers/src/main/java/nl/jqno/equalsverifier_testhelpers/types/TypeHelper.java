@@ -11,7 +11,7 @@ public class TypeHelper {
 
     private static final Object OBJECT = new Object();
 
-    public enum Enum {
+    public enum SimpleEnum {
         FIRST, SECOND
     }
 
@@ -36,7 +36,7 @@ public class TypeHelper {
         public Long _Long = 0L;
         public Short _Short = 0;
 
-        public Enum _enum = Enum.FIRST;
+        public SimpleEnum _enum = SimpleEnum.FIRST;
         public int[] _array = { 1, 2, 3 };
         public Object _object = OBJECT;
         public Class<?> _type = Class.class;
@@ -45,6 +45,7 @@ public class TypeHelper {
         // CHECKSTYLE ON: MemberName
 
         @Override
+        @SuppressWarnings("EqualsHashCode")
         public boolean equals(Object obj) {
             if (!(obj instanceof AllTypesContainer)) {
                 return false;
@@ -59,9 +60,9 @@ public class TypeHelper {
             result &= _int == other._int;
             result &= _long == other._long;
             result &= _short == other._short;
-            result &= _Boolean == other._Boolean;
+            result &= Objects.equals(_Boolean, other._Boolean);
             result &= Objects.equals(_Byte, other._Byte);
-            result &= _Char == other._Char;
+            result &= Objects.equals(_Char, other._Char);
             result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
             result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
             result &= Objects.equals(_Int, other._Int);
@@ -98,13 +99,14 @@ public class TypeHelper {
         Short[] Shorts = { 1 };
         // CHECKSTYLE ON: MemberName
 
-        Enum[] enums = { Enum.FIRST };
+        SimpleEnum[] enums = { SimpleEnum.FIRST };
         int[][] arrays = { { 1 } };
         Object[] objects = { OBJECT };
         Class<?>[] classes = { Class.class };
         String[] strings = { "1" };
 
         @Override
+        @SuppressWarnings("EqualsHashCode")
         public boolean equals(Object obj) {
             if (!(obj instanceof AllArrayTypesContainer)) {
                 return false;

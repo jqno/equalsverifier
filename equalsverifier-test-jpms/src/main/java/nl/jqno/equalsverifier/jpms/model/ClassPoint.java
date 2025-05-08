@@ -7,7 +7,7 @@ public final class ClassPoint {
     private final int x;
     private final int y;
 
-    private ClassPoint(int x, int y) {
+    public ClassPoint(int x, int y) {
         this.x = x;
         this.y = y;
     }

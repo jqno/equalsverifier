@@ -61,7 +61,7 @@ public final class PreconditionTypeHelper {
                 return false;
             }
             DualPrecondition other = (DualPrecondition) obj;
-            return Objects.equals(x, other.x) && Objects.equals(y, other.y);
+            return x == other.x && y == other.y;
         }
 
         @Override

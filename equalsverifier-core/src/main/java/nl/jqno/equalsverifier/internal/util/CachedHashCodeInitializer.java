@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
@@ -49,7 +48,6 @@ public class CachedHashCodeInitializer<T> {
         this.example = example;
     }
 
-    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Will evaluate this later")
     public CachedHashCodeInitializer(
             Class<?> type,
             String cachedHashCodeField,

@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.util;
 import java.lang.reflect.InaccessibleObjectException;
 import java.util.function.Function;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -31,9 +30,6 @@ public final class Rethrow {
     /** Do not instantiate. */
     private Rethrow() {}
 
-    @SuppressFBWarnings(
-            value = "THROWS_METHOD_THROWS_RUNTIMEEXCEPTION",
-            justification = "In some cases we need to re-throw the original exception")
     public static <T> T rethrow(ThrowingSupplier<T> supplier, Function<Throwable, String> errorMessage) {
         try {
             return supplier.get();
@@ -71,17 +67,11 @@ public final class Rethrow {
 
     @FunctionalInterface
     public interface ThrowingSupplier<T> {
-        @SuppressFBWarnings(
-                value = "THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION",
-                justification = "In order to catch these exceptions in rethrow, the must be declared")
         T get() throws Exception;
     }
 
     @FunctionalInterface
     public interface ThrowingRunnable {
-        @SuppressFBWarnings(
-                value = "THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION",
-                justification = "In order to catch these exceptions in rethrow, the must be declared")
         void run() throws Exception;
     }
 }

@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -22,7 +21,6 @@ public class CachingValueProvider implements ValueProvider {
      * @param fieldCache The underlying cache of instances.
      * @param fallback   The ValueProvider that provides instances when there's a cache miss.
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "FieldCache is inherently mutable")
     public CachingValueProvider(FieldCache fieldCache, ValueProvider fallback) {
         this.fieldCache = fieldCache;
         this.fallback = fallback;

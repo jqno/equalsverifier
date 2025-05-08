@@ -42,7 +42,7 @@ public class ShadowingTest {
                 return false;
             }
             NonstaticSub other = (NonstaticSub) obj;
-            return Objects.equals(a, other.a) && Objects.equals(getA(), other.getA());
+            return a == other.a && Objects.equals(getA(), other.getA());
         }
 
         @Override

@@ -16,7 +16,7 @@ class SealedTypesHelperTest {
 
     sealed interface TwoLevelParent {}
 
-    final class TwoLevelChild implements TwoLevelParent {}
+    static final class TwoLevelChild implements TwoLevelParent {}
 
     @Test
     void fourLevels() {
@@ -30,7 +30,7 @@ class SealedTypesHelperTest {
 
     sealed interface FourLevelMiddle2 extends FourLevelMiddle1 {}
 
-    final class FourLevelChild implements FourLevelMiddle2 {}
+    static final class FourLevelChild implements FourLevelMiddle2 {}
 
     @Test
     void allConcrete() {
@@ -38,11 +38,11 @@ class SealedTypesHelperTest {
         assertThat(actual.get()).isEqualTo(AllConcreteMiddle.class);
     }
 
-    sealed class AllConcreteParent {}
+    sealed static class AllConcreteParent {}
 
-    sealed class AllConcreteMiddle extends AllConcreteParent {}
+    sealed static class AllConcreteMiddle extends AllConcreteParent {}
 
-    final class AllConcreteChild extends AllConcreteMiddle {}
+    static final class AllConcreteChild extends AllConcreteMiddle {}
 
     @Test
     void nonSealedAtTheBottom() {

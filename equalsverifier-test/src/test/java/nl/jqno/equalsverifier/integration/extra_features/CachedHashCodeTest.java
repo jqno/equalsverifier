@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class CachedHashCodeTest {
 
     private static final String SOME_NAME = "some name";
@@ -492,7 +493,6 @@ class CachedHashCodeTest {
 
     static class ObjectWithLegitimatelyZeroHashCode {
 
-        @Nonnull
         private final int number;
 
         private final int cachedHashCode;

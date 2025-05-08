@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class NullFieldsTest {
 
     private static final String NON_NULLITY = "Non-nullity";
@@ -291,6 +292,7 @@ class NullFieldsTest {
 
     static final class ConstantFieldIsNull {
 
+        @SuppressWarnings("unused")
         private static final String NULL_CONSTANT = null;
         private final Object o;
 

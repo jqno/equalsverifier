@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -107,11 +106,9 @@ public class ExamplesChecker<T> implements Checker {
         }
     }
 
-    @SuppressFBWarnings(
-            value = { "EC_NULL_ARG", "DCN_NULLPOINTER_EXCEPTION" },
-            justification = "Check what happens when null is passed into equals.")
     private void checkNonNullity(T reference) {
         try {
+            @SuppressWarnings("EqualsNull")
             boolean nullity = reference.equals(null);
             assertFalse(Formatter.of("Non-nullity: true returned for null value"), nullity);
         }
@@ -179,9 +176,6 @@ public class ExamplesChecker<T> implements Checker {
         });
     }
 
-    @SuppressFBWarnings(
-            value = "HE_HASHCODE_USE_OBJECT_EQUALS",
-            justification = "The hashCode must be stable, the class has no state so we don't need to override equals")
     private static final class SomethingElse {
 
         @Override

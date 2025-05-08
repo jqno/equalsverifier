@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 
 /**
  * Contains the results of an {@link nl.jqno.equalsverifier.EqualsVerifier} run.
@@ -48,7 +47,7 @@ public final class EqualsVerifierReport {
         return new EqualsVerifierReport(type, false, message, cause);
     }
 
-    /** Private constructor. Use {@link #SUCCESS} or {@link #failure(String, Throwable)} instead. */
+    /** Private constructor. Use {@link #success(Class)} or {@link #failure(Class, String, Throwable)} instead. */
     private EqualsVerifierReport(Class<?> type, boolean successful, String message, Throwable cause) {
         this.type = type;
         this.successful = successful;
@@ -57,6 +56,8 @@ public final class EqualsVerifierReport {
     }
 
     /**
+     * Returns the class that was tested.
+     *
      * @return the class that was tested.
      *
      * @since 3.2
@@ -66,6 +67,8 @@ public final class EqualsVerifierReport {
     }
 
     /**
+     * Returns whether the tested class conforms to the {@code equals()} and {@code hashCode()} contracts.
+     *
      * @return whether the class tested by {@link SingleTypeEqualsVerifierApi#report()} conforms to the
      *             {@link Object#equals(Object)} and {@link Object#hashCode()} contracts.
      *
@@ -76,6 +79,9 @@ public final class EqualsVerifierReport {
     }
 
     /**
+     * Returns a detailed error message if the tested class does not conform to the {@code equals()} and
+     * {@code hashCode()} contracts.
+     *
      * @return a detailed error message if the class tested by {@link SingleTypeEqualsVerifierApi#report()} does not
      *             conform to the {@link Object#equals(Object)} and {@link Object#hashCode()} contracts; or an empty
      *             string if it does.
@@ -87,13 +93,15 @@ public final class EqualsVerifierReport {
     }
 
     /**
+     * Returns the exception that detected the failure of the tested class to conform to the {@code equals()} and
+     * {@code hashCode()} contracts.
+     *
      * @return an exception indicating the source of the failure if the class tested by
      *             {@link SingleTypeEqualsVerifierApi#report()} does not conform to the {@link Object#equals(Object)}
      *             and {@link Object#hashCode()} contracts; or null if it does.
      *
      * @since 3.0
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Can't defensively copy a Throwable.")
     public Throwable getCause() {
         return cause;
     }

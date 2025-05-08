@@ -29,7 +29,11 @@ public final class ClassProbe<T> {
         return new ClassProbe<>(type);
     }
 
-    /** @return The class on which {@link ClassProbe} operates. */
+    /**
+     * Returns the class on which {@link ClassProbe} operates.
+     *
+     * @return The class on which {@link ClassProbe} operates.
+     */
     public Class<T> getType() {
         return type;
     }
@@ -87,6 +91,7 @@ public final class ClassProbe<T> {
         return false;
     }
 
+    @SuppressWarnings("ReturnValueIgnored")
     private static boolean declaresMethod(Class<?> type, String name, Class<?>... parameterTypes) {
         try {
             type.getDeclaredMethod(name, parameterTypes);

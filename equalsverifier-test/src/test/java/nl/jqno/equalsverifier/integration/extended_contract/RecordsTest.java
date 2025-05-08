@@ -177,7 +177,7 @@ class RecordsTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof EqualsRecord other && Objects.equals(i, other.i) && Objects.equals(s, other.s);
+            return obj instanceof EqualsRecord other && i == other.i && Objects.equals(s, other.s);
         }
 
     }
@@ -206,6 +206,7 @@ class RecordsTest {
     }
 
     record NullFieldRecord(int i, String s) {
+        @SuppressWarnings("ReturnValueIgnored")
         public NullFieldRecord {
             s.length();
         }
@@ -218,6 +219,7 @@ class RecordsTest {
             this.s = s + "x";
         }
 
+        @Override
         public int i() {
             throw new IllegalStateException();
         }
@@ -231,6 +233,7 @@ class RecordsTest {
             this.t = t + "x";
         }
 
+        @Override
         public String s() {
             throw new NullPointerException();
         }
@@ -239,6 +242,7 @@ class RecordsTest {
 
     record StaticFieldRecord(int i, String s) {
 
+        @SuppressWarnings("unused")
         private static final int X = 0;
     }
 

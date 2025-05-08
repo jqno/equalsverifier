@@ -13,8 +13,8 @@ import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.Enum;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SimpleEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -23,7 +23,7 @@ import org.objenesis.ObjenesisStd;
 class VintageValueProviderCreatorTest {
 
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
-    private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
+    private static final TypeTag ENUM_TAG = new TypeTag(SimpleEnum.class);
     private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
     private static final TypeTag EMPTY_ENUM_TAG = new TypeTag(EmptyEnum.class);
     private static final TypeTag NODE_TAG = new TypeTag(Node.class);
@@ -62,8 +62,8 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void createEnum() {
-        assertThat(valueProvider.<Enum>giveRed(ENUM_TAG)).isNotNull();
-        assertThat(valueProvider.<Enum>giveBlue(ENUM_TAG)).isNotNull();
+        assertThat(valueProvider.<SimpleEnum>giveRed(ENUM_TAG)).isNotNull();
+        assertThat(valueProvider.<SimpleEnum>giveBlue(ENUM_TAG)).isNotNull();
     }
 
     @Test

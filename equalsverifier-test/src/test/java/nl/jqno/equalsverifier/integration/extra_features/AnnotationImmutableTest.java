@@ -43,7 +43,7 @@ class AnnotationImmutableTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof ImmutableByAnnotation other && Objects.equals(i, other.i);
+            return obj instanceof ImmutableByAnnotation other && i == other.i;
         }
 
         @Override

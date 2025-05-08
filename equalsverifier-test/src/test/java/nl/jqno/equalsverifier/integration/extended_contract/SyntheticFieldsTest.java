@@ -63,6 +63,7 @@ class SyntheticFieldsTest {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic")
     /* non-static */final class Outer {
 
         private final Inner inner;
@@ -77,7 +78,7 @@ class SyntheticFieldsTest {
 
             @Override
             public boolean equals(Object obj) {
-                return obj instanceof Inner other && Objects.equals(foo, other.foo);
+                return obj instanceof Inner other && foo == other.foo;
             }
 
             @Override
@@ -101,6 +102,7 @@ class SyntheticFieldsTest {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic")
     /* non-static */final class OuterContainer {
 
         private final Outer outer;

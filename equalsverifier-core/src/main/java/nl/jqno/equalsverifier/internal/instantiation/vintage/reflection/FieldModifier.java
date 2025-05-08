@@ -16,7 +16,7 @@ public final class FieldModifier {
     private final Field field;
     private final Object object;
 
-    /** Private constructor. Call {@link #of(Field, Object)} to instantiate. */
+    /** Private constructor. Call {@link #of(FieldProbe, Object)} to instantiate. */
     private FieldModifier(FieldProbe fieldProbe, Object object) {
         this.fieldProbe = fieldProbe;
         this.field = fieldProbe.getField();
@@ -61,6 +61,7 @@ public final class FieldModifier {
      * @param typeStack     Keeps track of recursion in the type.
      * @throws ReflectionException If the operation fails.
      */
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     public void changeField(
             VintageValueProvider valueProvider,
             TypeTag enclosingType,

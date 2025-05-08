@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -13,6 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 /**
  * Abstract implementation of {@link PrefabValueFactory} that provides helper functions for dealing with generics.
  */
+@SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
 public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T> {
 
     public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
@@ -60,7 +60,6 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
         return genericTypes.get(n);
     }
 
-    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     protected void invoke(Class<?> type, Object receiver, String methodName, Class<?>[] classes, Object[] values) {
         try {
             Method method = type.getMethod(methodName, classes);

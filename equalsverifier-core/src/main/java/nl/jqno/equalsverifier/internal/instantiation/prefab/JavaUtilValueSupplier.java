@@ -14,6 +14,7 @@ class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
     }
 
     @Override
+    @SuppressWarnings("JavaUtilDate")
     public Optional<Tuple<T>> get() {
         if (is(BitSet.class)) {
             return val(

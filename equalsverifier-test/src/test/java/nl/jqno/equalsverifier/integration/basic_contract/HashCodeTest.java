@@ -41,6 +41,7 @@ class HashCodeTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     static class NoHashCode {
 
         private final int i;

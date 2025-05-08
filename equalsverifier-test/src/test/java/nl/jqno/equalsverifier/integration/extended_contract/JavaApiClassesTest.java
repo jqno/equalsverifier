@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -119,6 +118,7 @@ class JavaApiClassesTest {
                 .verify();
     }
 
+    @SuppressWarnings("CheckReturnValue")
     abstract static class CollectionContainer {
 
         protected abstract void callAbstractMethodsOnInterface();
@@ -172,6 +172,7 @@ class JavaApiClassesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class ListContainer extends CollectionContainer {
 
         private final List<String> list;
@@ -214,6 +215,7 @@ class JavaApiClassesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class SetContainer extends CollectionContainer {
 
         private final Set<String> set;
@@ -222,7 +224,7 @@ class JavaApiClassesTest {
         private final CopyOnWriteArraySet<String> copyOnWriteArraySet;
         private final HashSet<String> hashSet;
         private final TreeSet<String> treeSet;
-        private final EnumSet<TypeHelper.Enum> enumSet;
+        private final EnumSet<TypeHelper.SimpleEnum> enumSet;
 
         public SetContainer(
                 Set<String> set,
@@ -231,7 +233,7 @@ class JavaApiClassesTest {
                 CopyOnWriteArraySet<String> copyOnWriteArraySet,
                 HashSet<String> hashSet,
                 TreeSet<String> treeSet,
-                EnumSet<TypeHelper.Enum> enumSet) {
+                EnumSet<TypeHelper.SimpleEnum> enumSet) {
             this.set = set;
             this.sortedSet = sortedSet;
             this.navigableSet = navigableSet;
@@ -314,6 +316,7 @@ class JavaApiClassesTest {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     static final class MapContainer extends CollectionContainer {
 
         private final Map<String, String> map;
@@ -327,7 +330,7 @@ class JavaApiClassesTest {
         private final Properties properties;
         private final TreeMap<String, String> treeMap;
         private final WeakHashMap<String, String> weakHashMap;
-        private final EnumMap<TypeHelper.Enum, String> enumMap;
+        private final EnumMap<TypeHelper.SimpleEnum, String> enumMap;
 
         public MapContainer(
                 Map<String, String> map,
@@ -341,7 +344,7 @@ class JavaApiClassesTest {
                 Properties properties,
                 TreeMap<String, String> treeMap,
                 WeakHashMap<String, String> weakHashMap,
-                EnumMap<TypeHelper.Enum, String> enumMap) {
+                EnumMap<TypeHelper.SimpleEnum, String> enumMap) {
             this.map = map;
             this.sortedMap = sortedMap;
             this.navigableMap = navigableMap;
@@ -846,6 +849,7 @@ class JavaApiClassesTest {
 
     static final class UnusedInEqualsButPresentInClassContainer {
 
+        @SuppressWarnings("unused")
         private final PropertyChangeSupport pcs;
 
         public UnusedInEqualsButPresentInClassContainer(PropertyChangeSupport pcs) {
@@ -853,9 +857,6 @@ class JavaApiClassesTest {
         }
     }
 
-    @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "Only called in test code, not production.")
     private static boolean defaultEquals(Object here, Object there) {
         Class<?> type = here.getClass();
         if (there == null || !there.getClass().isAssignableFrom(type)) {
@@ -877,9 +878,6 @@ class JavaApiClassesTest {
         return equals;
     }
 
-    @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "Only called in test code, not production.")
     private static int defaultHashCode(Object x) {
         int hash = 59;
         try {

@@ -50,11 +50,12 @@ class FieldNameExtractorTest {
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> fields.remove(FIELD_STRING));
     }
 
-    class FieldNameExtractorTestHelper {
+    static class FieldNameExtractorTestHelper {
 
         public final String fieldString;
         protected int fieldPrimitiveInt;
         final List<Integer> fieldList;
+        @SuppressWarnings("unused")
         private final Object fieldObject;
 
         public FieldNameExtractorTestHelper(String fieldString, List<Integer> fieldList, Object fieldObject) {

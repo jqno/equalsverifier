@@ -175,7 +175,7 @@ class VersionedEntityTest {
     }
 
     @Entity
-    public static final class OtherwiseStatelessVersionedEntity {
+    static final class OtherwiseStatelessVersionedEntity {
 
         @Id
         private final long id;
@@ -185,6 +185,7 @@ class VersionedEntityTest {
         }
 
         @Override
+        @SuppressWarnings("SuperCallToObjectMethod")
         public boolean equals(Object obj) {
             if (!(obj instanceof OtherwiseStatelessVersionedEntity)) {
                 return false;
@@ -203,7 +204,7 @@ class VersionedEntityTest {
     }
 
     @Entity
-    public static final class LongIdStringFieldVersionedEntity {
+    static final class LongIdStringFieldVersionedEntity {
 
         @Id
         private final long id;
@@ -230,12 +231,12 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Float.floatToIntBits(id);
+            return Objects.hash(id);
         }
     }
 
     @Entity
-    public static final class UuidIdStringFieldVersionedEntity {
+    static final class UuidIdStringFieldVersionedEntity {
 
         @Id
         private final UUID id;
@@ -267,7 +268,7 @@ class VersionedEntityTest {
     }
 
     @Entity
-    public static final class WeakStringVersionedEntity {
+    static final class WeakStringVersionedEntity {
 
         @Id
         private final long id;
@@ -293,12 +294,12 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Float.floatToIntBits(id);
+            return Objects.hash(id);
         }
     }
 
     @Entity
-    public static final class NullCheckStringVersionedEntity {
+    static final class NullCheckStringVersionedEntity {
 
         @Id
         private final Long id;
@@ -327,9 +328,10 @@ class VersionedEntityTest {
     }
 
     @Entity
-    public static final class BusinessKeyStringVersionedEntity {
+    static final class BusinessKeyStringVersionedEntity {
 
         @Id
+        @SuppressWarnings("UnusedVariable")
         private final Long id;
 
         private final String s;
@@ -354,7 +356,7 @@ class VersionedEntityTest {
         }
     }
 
-    private static class BaseEntity {
+    static class BaseEntity {
 
         @Id
         private final Long id;
@@ -386,7 +388,7 @@ class VersionedEntityTest {
     }
 
     @Entity
-    private static class InheritedEntity extends BaseEntity {
+    static class InheritedEntity extends BaseEntity {
 
         public InheritedEntity(Long id) {
             super(id);
@@ -394,7 +396,7 @@ class VersionedEntityTest {
     }
 
     @Entity
-    private static class CanEqualVersionedEntity {
+    static class CanEqualVersionedEntity {
 
         private final Long id;
 
@@ -428,7 +430,7 @@ class VersionedEntityTest {
     }
 
     @Entity
-    private static class NonReflexiveCanEqualVersionedEntity extends CanEqualVersionedEntity {
+    static class NonReflexiveCanEqualVersionedEntity extends CanEqualVersionedEntity {
 
         public NonReflexiveCanEqualVersionedEntity(Long id) {
             super(id);

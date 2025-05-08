@@ -26,7 +26,11 @@ public class AnnotationProperties {
         this.className = className;
     }
 
-    /** @return the annotation's className string. */
+    /**
+     * Returns the annotation's className string.
+     *
+     * @return the annotation's className string.
+     */
     public String getClassName() {
         return className;
     }

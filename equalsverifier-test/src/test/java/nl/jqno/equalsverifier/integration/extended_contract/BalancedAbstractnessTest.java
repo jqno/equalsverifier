@@ -112,7 +112,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof AbstractHashCode other && Objects.equals(i, other.i);
+            return obj instanceof AbstractHashCode other && i == other.i;
         }
 
         @Override
@@ -129,7 +129,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof SubclassOfAbstractBoth other && Objects.equals(foo, other.foo);
+            return obj instanceof SubclassOfAbstractBoth other && foo == other.foo;
         }
 
         @Override
@@ -138,6 +138,7 @@ class BalancedAbstractnessTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     abstract static class AbstractEqualsButNotHashCode {
 
         @Override
@@ -154,7 +155,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof SubclassOfAbstractEqualsButNotHashCode other && Objects.equals(foo, other.foo);
+            return obj instanceof SubclassOfAbstractEqualsButNotHashCode other && foo == other.foo;
         }
 
         @Override
@@ -179,7 +180,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof SubclassOfAbstractHashCodeButNotEquals other && Objects.equals(foo, other.foo);
+            return obj instanceof SubclassOfAbstractHashCodeButNotEquals other && foo == other.foo;
         }
 
         @Override
@@ -200,7 +201,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof SubclassOfSubclassOfAbstractBoth other && Objects.equals(foo, other.foo);
+            return obj instanceof SubclassOfSubclassOfAbstractBoth other && foo == other.foo;
         }
 
         @Override

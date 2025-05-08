@@ -18,6 +18,7 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
     }
 
     @Override
+    @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
     public Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {
         return tuple;
     }

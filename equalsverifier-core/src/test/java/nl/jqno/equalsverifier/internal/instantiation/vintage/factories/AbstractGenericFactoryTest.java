@@ -23,6 +23,7 @@ class AbstractGenericFactoryTest {
         receiver = "";
         factory = new AbstractGenericFactory<String>() {
             @Override
+            @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
             public Tuple<String> createValues(
                     TypeTag tag,
                     VintageValueProvider valueProvider,

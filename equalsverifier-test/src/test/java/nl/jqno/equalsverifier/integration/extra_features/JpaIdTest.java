@@ -13,7 +13,7 @@ import nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Id;
 import nl.jqno.equalsverifier_testhelpers.annotations.org.hibernate.annotations.NaturalId;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "CheckReturnValue" })
 class JpaIdTest {
 
     @Test
@@ -857,7 +857,7 @@ class JpaIdTest {
         }
     }
 
-    public final class JpaIdVersionedEntity {
+    static final class JpaIdVersionedEntity {
 
         @Id
         private final long id;
@@ -883,7 +883,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Float.floatToIntBits(id);
+            return Objects.hash(id);
         }
     }
 
@@ -987,9 +987,7 @@ class JpaIdTest {
                 return false;
             }
             JpaIdDirtyTrackingPerson other = (JpaIdDirtyTrackingPerson) obj;
-            return Objects.equals(id, other.id)
-                    && Objects.equals(version, other.version)
-                    && Objects.equals(isDirty, other.isDirty);
+            return Objects.equals(id, other.id) && version == other.version && isDirty == other.isDirty;
         }
 
         @Override

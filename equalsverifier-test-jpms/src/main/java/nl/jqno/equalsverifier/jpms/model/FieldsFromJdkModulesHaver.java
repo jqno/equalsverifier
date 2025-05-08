@@ -8,6 +8,7 @@ public final class FieldsFromJdkModulesHaver {
     private final java.sql.Date sqlDate;
     private final javax.naming.Reference namingReference;
 
+    @SuppressWarnings("UnusedMethod")
     private FieldsFromJdkModulesHaver(
             java.awt.Color c,
             java.rmi.server.UID u,

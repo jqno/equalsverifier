@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("CheckReturnValue")
 class WithPrefabValuesTest {
 
     private final FinalPoint red = new FinalPoint(1, 2);

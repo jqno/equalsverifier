@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.Mode;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
@@ -19,7 +18,6 @@ public final class Context<T> {
     private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "FieldCache is inherently mutable")
     public Context(
             Configuration<T> configuration,
             UserPrefabValueProvider userPrefabs,
@@ -58,7 +56,6 @@ public final class Context<T> {
         return classProbe;
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "VintageValueProvider can use a mutable cache.")
     public ValueProvider getValueProvider() {
         return valueProvider;
     }
