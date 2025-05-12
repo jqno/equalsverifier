@@ -77,7 +77,7 @@
         <version.bytebuddy>1.17.5</version.bytebuddy>
         <version.objenesis>3.4</version.objenesis>
 
-        <version.archunit>1.4.0</version.archunit>
+        <version.archunit>1.4.1</version.archunit>
         <version.assertj>3.27.3</version.assertj>
         <version.commons-lang3>3.17.0</version.commons-lang3>
         <version.eclipse-annotation>2.3.100</version.eclipse-annotation>
@@ -111,8 +111,8 @@
         <version.maven-surefire-plugin>3.5.3</version.maven-surefire-plugin>
         <version.mockito>5.17.0</version.mockito>
         <version.pitest.junit5>1.2.2</version.pitest.junit5>
-        <version.pitest.maven>1.19.1</version.pitest.maven>
-        <version.spotbugs>4.9.0</version.spotbugs>
+        <version.pitest.maven>1.19.2</version.pitest.maven>
+        <version.spotbugs>4.9.3</version.spotbugs>
         <version.spotless>2.44.4</version.spotless>
     </properties>
 
