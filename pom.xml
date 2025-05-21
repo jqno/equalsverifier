@@ -242,7 +242,7 @@
                             <fork>true</fork>
                             <compilerArgs>
                                 <arg>-Werror</arg>
-                                <arg>-Xlint:deprecation,removal,rawtypes,unchecked,-options</arg>
+                                <arg>-Xlint:deprecation,removal,rawtypes,unchecked</arg>
 
                                 <!-- for ErrorProne -->
                                 <arg>-XDcompilePolicy=simple</arg>
