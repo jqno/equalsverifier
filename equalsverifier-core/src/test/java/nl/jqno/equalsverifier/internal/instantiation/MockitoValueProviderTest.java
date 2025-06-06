@@ -6,6 +6,7 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.types.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SimpleEnum;
 import org.junit.jupiter.api.Test;
 
 public class MockitoValueProviderTest {
@@ -52,6 +53,11 @@ public class MockitoValueProviderTest {
     @Test
     void provideNothingWhenArray() {
         checkEmpty(Point[].class);
+    }
+
+    @Test
+    void provideNothingWhenEnum() {
+        checkEmpty(SimpleEnum.class);
     }
 
     @Test

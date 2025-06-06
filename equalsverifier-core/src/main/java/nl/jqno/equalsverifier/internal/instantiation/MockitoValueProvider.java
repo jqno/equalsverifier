@@ -39,7 +39,7 @@ public class MockitoValueProvider implements ValueProvider {
         if (type.getPackageName().startsWith("java.")) {
             return Optional.empty();
         }
-        if (type.isPrimitive() || type.isArray()) {
+        if (type.isPrimitive() || type.isArray() || type.isEnum()) {
             return Optional.empty();
         }
 
