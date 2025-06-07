@@ -36,6 +36,13 @@ class SealedTypesRecursionTest {
                     "SealedRecordInterface");
     }
 
+    @Test
+    void succeed_whenFirstPermittedRefersBackToContainerButSecondIsOk() {
+        // A container with a field of a sealed interface.
+        // The sealed interface permits 2 types; the first is a record that refers back to the container, but the second is ok.
+        EqualsVerifier.forClass(SealedAndOrderedContainer.class).verify();
+    }
+
     static final class SealedContainer {
 
         public final SealedInterface sealed;
@@ -120,4 +127,12 @@ class SealedTypesRecursionTest {
 
     static final record OnlyPermittedRecordImplementation(SealedRecordContainer container)
             implements SealedRecordInterface {}
+
+    static final record SealedAndOrderedContainer(SealedAndOrderedInterface sealed) {}
+
+    sealed interface SealedAndOrderedInterface permits SealedAndOrderedA, SealedAndOrderedB {}
+
+    static final record SealedAndOrderedA(SealedAndOrderedContainer container) implements SealedAndOrderedInterface {}
+
+    static final record SealedAndOrderedB(int i) implements SealedAndOrderedInterface {}
 }
