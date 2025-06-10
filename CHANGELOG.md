@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2025-06-10
+
 ### Fixed
 
 - A class with field of type `EnumMap` or `EnumSet` produces `MockitoException` when Mockito is present. ([Issue 1080](https://github.com/jqno/equalsverifier/issues/1080))
@@ -1389,7 +1391,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.1...HEAD
+[4.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0...equalsverifier-4.0.1
 [4.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.4...equalsverifier-4.0
 [3.19.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.3...equalsverifier-3.19.4
 [3.19.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.2...equalsverifier-3.19.3
