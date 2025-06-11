@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for Kotlin delegates. ([Issue 1083](https://github.com/jqno/equalsverifier/issues/1083))
+
 ## [4.0.1] - 2025-06-10
 
 ### Fixed

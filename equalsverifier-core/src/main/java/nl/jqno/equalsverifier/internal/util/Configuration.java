@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
@@ -96,6 +98,14 @@ public final class Configuration<T> {
         Function<String, String> converter =
                 fieldnameToGetter != null ? fieldnameToGetter : Configuration::defaulFieldNameToGetterConverter;
         boolean isKotlin = annotationCache.hasClassAnnotation(type, SupportedAnnotations.KOTLIN);
+
+        if (isKotlin) {
+            for (FieldProbe f : FieldIterable.ofKotlin(type)) {
+                if (f.isKotlinDelegate()) {
+                    nonnullFields.add(f.getName());
+                }
+            }
+        }
 
         return new Configuration<>(type,
                 typeTag,
