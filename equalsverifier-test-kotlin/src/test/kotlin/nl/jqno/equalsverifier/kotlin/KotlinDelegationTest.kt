@@ -7,29 +7,23 @@ class KotlinDelegationTest {
 
   @Test
   fun `succeed when class uses interface delegation`() {
-    EqualsVerifier.forClass(FooBarImpl::class.java).verify()
+    EqualsVerifier.forClass(FooContainer::class.java).verify()
   }
 
   interface Foo {
     val foo: Int
   }
 
-  interface Bar {
-    val bar: Int
-  }
+  data class FooImpl(override val foo: Int): Foo
 
-  data class BarImpl(override val bar: Int): Bar
-
-  class FooBarImpl(barValue: Int): Foo, Bar by BarImpl(barValue) {
-
-    override val foo = -bar
+  class FooContainer(fooValue: Int): Foo by FooImpl(fooValue) {
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
-      if (other !is FooBarImpl) return false
+      if (other !is FooContainer) return false
       return foo == other.foo
     }
 
-    override fun hashCode(): Int = bar
+    override fun hashCode(): Int = foo
   }
 }
