@@ -170,7 +170,7 @@ public final class FieldProbe {
      * @return Whether or not the field can be modified reflectively.
      */
     public boolean canBeModifiedReflectively() {
-        if (field.isSynthetic()) {
+        if (field.isSynthetic() && !field.getName().startsWith("$$delegate_")) {
             return false;
         }
         if (isFinal() && isStatic()) {
