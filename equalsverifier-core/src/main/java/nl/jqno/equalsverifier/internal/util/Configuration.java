@@ -101,7 +101,7 @@ public final class Configuration<T> {
 
         if (isKotlin) {
             for (FieldProbe f : FieldIterable.ofKotlin(type)) {
-                if (f.getName().startsWith("$$delegate_")) {
+                if (f.isKotlinDelegate()) {
                     nonnullFields.add(f.getName());
                 }
             }
