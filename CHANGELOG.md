@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for Kotlin delegates. ([Issue 1083](https://github.com/jqno/equalsverifier/issues/1083))
 
+### Changed
+
+- When a Mockito error occurs, the error message now says which mocked method was attempted to call. ([Issue 1082](https://github.com/jqno/equalsverifier/issues/1082))
+
 ## [4.0.1] - 2025-06-10
 
 ### Fixed

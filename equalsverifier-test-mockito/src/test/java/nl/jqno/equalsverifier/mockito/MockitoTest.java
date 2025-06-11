@@ -39,7 +39,9 @@ public class MockitoTest {
                             .verify())
                 .assertFailure()
                 .assertCause(MockitoException.class)
-                .assertMessageContains("Unable to use Mockito to mock field methodCaller of type PojoWithoutEquals.");
+                .assertMessageContains(
+                    "Unable to use Mockito to mock field methodCaller",
+                    "tried to call method PojoWithoutEquals.getI");
     }
 
     @Test
@@ -64,7 +66,9 @@ public class MockitoTest {
                 .when(() -> EqualsVerifier.forClass(SparseArrayEqualsContainer.class).verify())
                 .assertFailure()
                 .assertCause(MockitoException.class)
-                .assertMessageContains("Unable to use Mockito to mock field sparseArray of type SparseArray");
+                .assertMessageContains(
+                    "Unable to use Mockito to mock field sparseArray",
+                    "tried to call method SparseArray.size");
     }
 
     @Test

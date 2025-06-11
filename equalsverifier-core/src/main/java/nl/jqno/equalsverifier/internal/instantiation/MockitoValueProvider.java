@@ -63,7 +63,7 @@ public class MockitoValueProvider implements ValueProvider {
     private <T> T buildMock(Class<T> type, String fieldName) {
         return mock(type, withSettings().defaultAnswer(invocation -> {
             // Throw an exception on any method except equals and hashCode
-            throw new MockitoException(fieldName, type.getSimpleName());
+            throw new MockitoException(fieldName, type.getSimpleName(), invocation.getMethod().getName());
         }));
     }
 }
