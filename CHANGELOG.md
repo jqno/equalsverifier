@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.2] - 2025-06-12
+
 ### Added
 
 - Support for Kotlin delegates. ([Issue 1083](https://github.com/jqno/equalsverifier/issues/1083))
@@ -1399,7 +1401,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.2...HEAD
+[4.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.1...equalsverifier-4.0.2
 [4.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0...equalsverifier-4.0.1
 [4.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.4...equalsverifier-4.0
 [3.19.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.3...equalsverifier-3.19.4
