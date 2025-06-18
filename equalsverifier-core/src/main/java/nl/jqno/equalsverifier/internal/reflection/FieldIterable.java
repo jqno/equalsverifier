@@ -117,7 +117,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
         if (includeSuperclasses) {
             for (Class<?> c : SuperclassIterable.of(type)) {
                 List<FieldProbe> superFields =
-                        addFieldsFor(c).stream().filter(p -> !names.contains(p.getName())).collect(Collectors.toList());
+                        addFieldsFor(c).stream().filter(p -> !names.contains(p.getName())).toList();
                 result.addAll(superFields);
                 superFields.stream().map(FieldProbe::getName).forEach(names::add);
             }

@@ -209,7 +209,7 @@ public final class Validations {
     }
 
     public static void validateTypesAreKnown(Collection<Class<?>> types, List<Class<?>> knownTypes) {
-        List<Class<?>> unknownTypes = types.stream().filter(t -> !knownTypes.contains(t)).collect(Collectors.toList());
+        List<Class<?>> unknownTypes = types.stream().filter(t -> !knownTypes.contains(t)).toList();
         String message = "Unknown class(es) found: "
                 + unknownTypes.stream().map(t -> t.getCanonicalName()).collect(Collectors.joining(", "));
         validate(!unknownTypes.isEmpty(), message);

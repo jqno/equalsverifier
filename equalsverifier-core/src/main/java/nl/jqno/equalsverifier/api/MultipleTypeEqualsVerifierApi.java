@@ -106,8 +106,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      * @since 0.1
      */
     public void verify() {
-        List<EqualsVerifierReport> failures =
-                report().stream().filter(r -> !r.isSuccessful()).collect(Collectors.toList());
+        List<EqualsVerifierReport> failures = report().stream().filter(r -> !r.isSuccessful()).toList();
         if (failures.isEmpty()) {
             return;
         }
@@ -133,6 +132,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      * @since 3.0
      */
     public List<EqualsVerifierReport> report() {
-        return types.stream().map(t -> ev.forClass(t).report(false)).collect(Collectors.toList());
+        return types.stream().map(t -> ev.forClass(t).report(false)).toList();
     }
 }

@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -30,7 +29,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public T copy(Objenesis objenesis) {
-        List<?> params = probe.fields().map(this::getField).collect(Collectors.toList());
+        List<?> params = probe.fields().map(this::getField).toList();
         return callRecordConstructor(params);
     }
 
@@ -49,7 +48,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     private ObjectAccessor<T> makeAccessor(Function<FieldProbe, Object> determineValue) {
-        List<Object> params = probe.fields().map(determineValue).collect(Collectors.toList());
+        List<Object> params = probe.fields().map(determineValue).toList();
         T newObject = callRecordConstructor(params);
         return ObjectAccessor.of(newObject);
     }

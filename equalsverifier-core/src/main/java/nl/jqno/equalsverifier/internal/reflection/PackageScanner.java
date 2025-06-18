@@ -44,11 +44,7 @@ public final class PackageScanner {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
         return rethrow(
-            () -> Collections
-                    .list(cl.getResources(path))
-                    .stream()
-                    .flatMap(r -> getResourcePath(r, options))
-                    .collect(Collectors.toList()),
+            () -> Collections.list(cl.getResources(path)).stream().flatMap(r -> getResourcePath(r, options)).toList(),
             e -> "Could not scan package " + packageName);
     }
 
@@ -86,7 +82,7 @@ public final class PackageScanner {
                 .filter(
                     c -> options.mustExtend() == null
                             || (options.mustExtend().isAssignableFrom(c) && !options.mustExtend().equals(c)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static Class<?> fileToClass(String packageName, File file) {

@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -96,8 +95,7 @@ class PackageScannerTest {
     @Test
     void filterOutTestClasses() {
         List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", opts);
-        List<Class<?>> testClasses =
-                classes.stream().filter(c -> c.getName().endsWith("Test")).collect(Collectors.toList());
+        List<Class<?>> testClasses = classes.stream().filter(c -> c.getName().endsWith("Test")).toList();
         assertThat(testClasses).isEqualTo(Collections.emptyList());
         assertThat(classes.size() - testClasses.size() > 0).isTrue();
     }
@@ -106,8 +104,7 @@ class PackageScannerTest {
     void filterOutTestClassesRecursively() {
         opts = PackageScanOptions.process(ScanOption.recursive());
         List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", opts);
-        List<Class<?>> testClasses =
-                classes.stream().filter(c -> c.getName().endsWith("Test")).collect(Collectors.toList());
+        List<Class<?>> testClasses = classes.stream().filter(c -> c.getName().endsWith("Test")).toList();
         assertThat(testClasses).isEqualTo(Collections.emptyList());
         assertThat(classes.size() - testClasses.size() > 0).isTrue();
     }
