@@ -1,12 +1,10 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.*;
 
 import nl.jqno.equalsverifier.ScanOption;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
@@ -131,16 +129,26 @@ class PackageScannerTest {
     }
 
     @Test
-    void dependencyPackage() {
-        assertThatThrownBy(() -> PackageScanner.getClassesIn("org.junit", opts))
-                .isInstanceOf(ReflectionException.class)
-                .hasMessageContaining("Could not resolve third-party resource");
+    void jarPackage() {
+        List<Class<?>> classes = PackageScanner.getClassesIn("org.objenesis", opts);
+        assertThat(classes)
+                .anyMatch(c -> "org.objenesis.Objenesis".equals(c.getName()))
+                .noneMatch(c -> "org.objenesis.instantiator.ObjectInstantiator".equals(c.getName()));
     }
 
     @Test
-    void dependencyPackageWithIgnore() {
+    void jarPackageRecursive() {
+        opts = PackageScanOptions.process(ScanOption.recursive());
+        List<Class<?>> classes = PackageScanner.getClassesIn("org.objenesis", opts);
+        assertThat(classes)
+                .anyMatch(c -> "org.objenesis.Objenesis".equals(c.getName()))
+                .anyMatch(c -> "org.objenesis.instantiator.ObjectInstantiator".equals(c.getName()));
+    }
+
+    @Test
+    void jarPackageWithIgnore() {
         opts = PackageScanOptions.process(ScanOption.ignoreExternalJars());
-        List<Class<?>> classes = PackageScanner.getClassesIn("org.junit", opts);
+        List<Class<?>> classes = PackageScanner.getClassesIn("org.objenesis", opts);
         assertThat(classes).isEmpty();
     }
 
