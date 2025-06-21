@@ -8,7 +8,6 @@ import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.ScanOption;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
@@ -72,19 +71,27 @@ class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    void fail_whenVerifyingAThirdPartyPackage() {
+    void fail_whenVerifyingAThirdPartyPackage_becauseTheyDontPassEqualsVerifier() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("org.junit").verify())
-                .assertThrows(ReflectionException.class)
-                .assertMessageContains("Could not resolve");
+                .when(() -> EqualsVerifier.forPackage("org.objenesis").verify())
+                .assertThrows(AssertionError.class)
+                .assertMessageContains("EqualsVerifier found a problem");
     }
 
     @Test
-    void failDifferently_whenVerifyingAThirdPartyPackage_givenScanOptionIgnoreExternalJars() {
+    void fail_whenVerifyingAThirdPartyPackageWithNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("org.junit", ScanOption.ignoreExternalJars()).verify())
+                .when(() -> EqualsVerifier.forPackage("org.junit").verify())
                 .assertThrows(IllegalStateException.class)
-                .assertMessageContains("org.junit", "doesn't contain any (non-Test) types");
+                .assertMessageContains("Precondition", "doesn't contain any (non-Test) types");
+    }
+
+    @Test
+    void fail_whenVerifyingAThirdPartyPackage_givenScanOptionIgnoreExternalJars() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage("org.objenesis", ScanOption.ignoreExternalJars()).verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "doesn't contain any (non-Test) types");
     }
 
     @Test
