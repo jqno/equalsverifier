@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `forPackage` can now also scan jar files, which is handy for certain kinds of integration tests that run against jar files instead of directories with `.class` files. ([Issue 1078](https://github.com/jqno/equalsverifier/issues/1078))
+
 ## [4.0.2] - 2025-06-12
 
 ### Added
