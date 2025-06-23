@@ -62,7 +62,7 @@ public final class PackageScanner {
         return rethrow(() -> switch (resource.toURI().getScheme()) {
             case "file" -> processDirectory(resource, options.scanRecursively());
             case "jar" -> options.ignoreExternalJars()
-                    ? Stream.of()
+                    ? Stream.empty()
                     : walkJar(resource, packagePath, options.scanRecursively());
             default -> throw new ReflectionException(
                     "Could not resolve " + resource.toURI().getScheme() + " resource " + resource);
@@ -76,7 +76,7 @@ public final class PackageScanner {
 
     private static Stream<File> walkDirectory(File dir, boolean scanRecursively) {
         if (!dir.exists()) {
-            return Stream.of();
+            return Stream.empty();
         }
         return Arrays
                 .stream(dir.listFiles())

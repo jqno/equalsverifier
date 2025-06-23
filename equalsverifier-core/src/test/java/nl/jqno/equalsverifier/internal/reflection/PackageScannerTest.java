@@ -152,6 +152,14 @@ class PackageScannerTest {
         assertThat(classes).isEmpty();
     }
 
+    @Test
+    void jarPackageDontReturnEntireJar() {
+        List<Class<?>> classes = PackageScanner.getClassesIn("org.objenesis.instantiator", opts);
+        assertThat(classes)
+                .noneMatch(c -> "org.objenesis.Objenesis".equals(c.getName()))
+                .anyMatch(c -> "org.objenesis.instantiator.ObjectInstantiator".equals(c.getName()));
+    }
+
     private void sort(List<Class<?>> classes) {
         classes.sort(Comparator.comparing(Class::getName));
     }
