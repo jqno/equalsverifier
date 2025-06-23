@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.3] - 2025-06-23
+
 ### Changed
 
 - `forPackage` can now also scan jar files, which is handy for certain kinds of integration tests that run against jar files instead of directories with `.class` files. ([Issue 1078](https://github.com/jqno/equalsverifier/issues/1078))
@@ -1405,7 +1407,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.2...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.3...HEAD
+[4.0.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.2...equalsverifier-4.0.3
 [4.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.1...equalsverifier-4.0.2
 [4.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0...equalsverifier-4.0.1
 [4.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.19.4...equalsverifier-4.0
