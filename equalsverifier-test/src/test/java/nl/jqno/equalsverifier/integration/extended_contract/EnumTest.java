@@ -29,6 +29,11 @@ class EnumTest {
     }
 
     @Test
+    void succeed_whenClassHasAnArrayOfSingletonEnumAndUsesItInEquals() {
+        EqualsVerifier.forClass(SingletonArrayUser.class).verify();
+    }
+
+    @Test
     void succeed_whenSingletonIsUsedWithoutNullCheck_givenNullFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(NullThrowingSingletonUser.class).suppress(Warning.NULL_FIELDS).verify();
     }
@@ -127,6 +132,25 @@ class EnumTest {
         @Override
         public int hashCode() {
             return Objects.hash(singleton);
+        }
+    }
+
+    static final class SingletonArrayUser {
+
+        private final Singleton[] singleton;
+
+        public SingletonArrayUser(Singleton[] singleton) {
+            this.singleton = singleton;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof SingletonArrayUser other && Arrays.equals(singleton, other.singleton);
+        }
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(singleton);
         }
     }
 

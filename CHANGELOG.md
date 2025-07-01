@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Can now test a class with a field whose type is an array of a single value enum. ([Issue 1093](https://github.com/jqno/equalsverifier/issues/1093))
+
 ## [4.0.3] - 2025-06-23
 
 ### Changed
