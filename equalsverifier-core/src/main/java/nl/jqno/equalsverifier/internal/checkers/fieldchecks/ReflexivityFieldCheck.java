@@ -32,11 +32,11 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         this.valueProvider = context.getValueProvider();
 
         Configuration<T> config = context.getConfiguration();
-        this.typeTag = config.getTypeTag();
-        this.warningsToSuppress = config.getWarningsToSuppress();
-        this.nonnullFields = config.getNonnullFields();
-        this.prefabbedFields = config.getPrefabbedFields();
-        this.annotationCache = config.getAnnotationCache();
+        this.typeTag = config.typeTag();
+        this.warningsToSuppress = config.warningsToSuppress();
+        this.nonnullFields = config.nonnullFields();
+        this.prefabbedFields = config.prefabbedFields();
+        this.annotationCache = config.annotationCache();
     }
 
     @Override

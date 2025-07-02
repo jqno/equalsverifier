@@ -35,9 +35,9 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         this.classProbe = context.getClassProbe();
 
         Configuration<T> config = context.getConfiguration();
-        this.annotationCache = config.getAnnotationCache();
-        this.fieldnameToGetter = config.getFieldnameToGetter();
-        this.strictHashcode = config.getWarningsToSuppress().contains(Warning.STRICT_HASHCODE);
+        this.annotationCache = config.annotationCache();
+        this.fieldnameToGetter = config.fieldnameToGetter();
+        this.strictHashcode = config.warningsToSuppress().contains(Warning.STRICT_HASHCODE);
     }
 
     @Override

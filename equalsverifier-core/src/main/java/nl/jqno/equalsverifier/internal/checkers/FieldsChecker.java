@@ -32,24 +32,23 @@ public class FieldsChecker<T> implements Checker {
         this.context = context;
         this.config = context.getConfiguration();
 
-        final TypeTag typeTag = config.getTypeTag();
+        final TypeTag typeTag = config.typeTag();
         final SubjectCreator<T> subjectCreator = context.getSubjectCreator();
 
-        final String cachedHashCodeFieldName = config.getCachedHashCodeInitializer().getCachedHashCodeFieldName();
+        final String cachedHashCodeFieldName = config.cachedHashCodeInitializer().getCachedHashCodeFieldName();
         final Predicate<FieldProbe> isCachedHashCodeField = p -> p.getName().equals(cachedHashCodeFieldName);
 
-        this.arrayFieldCheck = new ArrayFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
+        this.arrayFieldCheck = new ArrayFieldCheck<>(subjectCreator, config.cachedHashCodeInitializer());
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
         this.mutableStateFieldCheck = new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(context);
         this.significantFieldCheck = new SignificantFieldCheck<>(context, isCachedHashCodeField);
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(subjectCreator);
-        this.transientFieldsCheck = new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
+        this.transientFieldsCheck = new TransientFieldsCheck<>(subjectCreator, typeTag, config.annotationCache());
         this.transitivityFieldCheck = new TransitivityFieldCheck<>(subjectCreator);
-        this.stringFieldCheck = new StringFieldCheck<>(subjectCreator,
-                context.getValueProvider(),
-                config.getCachedHashCodeInitializer());
-        this.bigDecimalFieldCheck = new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
+        this.stringFieldCheck =
+                new StringFieldCheck<>(subjectCreator, context.getValueProvider(), config.cachedHashCodeInitializer());
+        this.bigDecimalFieldCheck = new BigDecimalFieldCheck<>(subjectCreator, config.cachedHashCodeInitializer());
         this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(context);
     }
 
@@ -67,7 +66,7 @@ public class FieldsChecker<T> implements Checker {
             inspector.check(mutableStateFieldCheck);
         }
 
-        if (!config.getWarningsToSuppress().contains(Warning.TRANSIENT_FIELDS)) {
+        if (!config.warningsToSuppress().contains(Warning.TRANSIENT_FIELDS)) {
             inspector.check(transientFieldsCheck);
         }
 
@@ -76,20 +75,20 @@ public class FieldsChecker<T> implements Checker {
         inspector.check(transitivityFieldCheck);
         inspector.check(stringFieldCheck);
 
-        if (!config.getWarningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
+        if (!config.warningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
             inspector.check(bigDecimalFieldCheck);
         }
 
-        AnnotationCache cache = config.getAnnotationCache();
-        if (cache.hasClassAnnotation(config.getType(), SupportedAnnotations.ENTITY)
-                && !config.getWarningsToSuppress().contains(Warning.JPA_GETTER)) {
+        AnnotationCache cache = config.annotationCache();
+        if (cache.hasClassAnnotation(config.type(), SupportedAnnotations.ENTITY)
+                && !config.warningsToSuppress().contains(Warning.JPA_GETTER)) {
             inspector.check(jpaLazyGetterFieldCheck);
         }
     }
 
     private boolean ignoreMutability(Class<?> type) {
-        AnnotationCache cache = config.getAnnotationCache();
-        return config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS)
+        AnnotationCache cache = config.annotationCache();
+        return config.warningsToSuppress().contains(Warning.NONFINAL_FIELDS)
                 || cache.hasClassAnnotation(type, SupportedAnnotations.IMMUTABLE)
                 || cache.hasClassAnnotation(type, SupportedAnnotations.ENTITY);
     }

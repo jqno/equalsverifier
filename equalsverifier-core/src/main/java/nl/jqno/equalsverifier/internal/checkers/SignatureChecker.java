@@ -22,7 +22,7 @@ public class SignatureChecker<T> implements Checker {
     public SignatureChecker(Context<T> context) {
         this.type = context.getType();
         this.classProbe = context.getClassProbe();
-        this.warningsToSuppress = context.getConfiguration().getWarningsToSuppress();
+        this.warningsToSuppress = context.getConfiguration().warningsToSuppress();
     }
 
     @Override

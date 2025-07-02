@@ -32,9 +32,9 @@ public class HierarchyChecker<T> implements Checker {
     public HierarchyChecker(Context<T> context) {
         this.config = context.getConfiguration();
 
-        this.strictnessSuppressed = config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
-        this.versionedEntity = config.getWarningsToSuppress().contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
-        this.hasRedefinedSubclass = config.getRedefinedSubclass() != null;
+        this.strictnessSuppressed = config.warningsToSuppress().contains(Warning.STRICT_INHERITANCE);
+        this.versionedEntity = config.warningsToSuppress().contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
+        this.hasRedefinedSubclass = config.redefinedSubclass() != null;
         if (strictnessSuppressed && hasRedefinedSubclass) {
             fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
         }
@@ -42,10 +42,10 @@ public class HierarchyChecker<T> implements Checker {
         this.type = context.getType();
         this.subjectCreator = context.getSubjectCreator();
         this.classProbe = context.getClassProbe();
-        this.redefinedSubclass = config.getRedefinedSubclass();
+        this.redefinedSubclass = config.redefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.typeIsSealed = classProbe.isSealed();
-        this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
+        this.cachedHashCodeInitializer = config.cachedHashCodeInitializer();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class HierarchyChecker<T> implements Checker {
             return;
         }
 
-        if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
+        if (config.hasRedefinedSuperclass() || config.usingGetClass()) {
             T reference = subjectCreator.plain();
             Object equalSuper = getEqualSuper(reference);
 
@@ -87,9 +87,8 @@ public class HierarchyChecker<T> implements Checker {
             if (versionedEntity) {
                 // If it's a versioned entity with an id field that indicates "newness" if it has its default value,
                 // we should give the id field(s) an actual value, otherwise it will never be equal to its equal super.
-                Predicate<Field> p = f -> !config
-                        .getAnnotationCache()
-                        .hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID);
+                Predicate<Field> p =
+                        f -> !config.annotationCache().hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID);
                 safelyCheckSuperProperties(
                     subjectCreator.withAllMatchingFieldsDefaulted(p),
                     subjectCreator.withAllFieldsShallowlyChanged());
@@ -161,12 +160,12 @@ public class HierarchyChecker<T> implements Checker {
         T reference = subjectCreator.plain();
 
         @SuppressWarnings("unchecked")
-        // don't use type directly, as reference may already be a subclass if type was abstract
+        // Don't use type directly, as reference may already be a subclass if type was abstract
         Class<T> realClass = (Class<T>) reference.getClass();
         Class<T> anonymousSubclass = Instantiator.giveDynamicSubclass(realClass);
         T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
 
-        if (config.isUsingGetClass()) {
+        if (config.usingGetClass()) {
             Formatter formatter =
                     Formatter.of("""
                                  Subclass: object is equal to an instance of a trivial subclass with equal fields:
@@ -206,7 +205,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkFinalEqualsMethod() {
-        boolean isEntity = config.getAnnotationCache().hasClassAnnotation(type, SupportedAnnotations.ENTITY);
+        boolean isEntity = config.annotationCache().hasClassAnnotation(type, SupportedAnnotations.ENTITY);
         if (strictnessSuppressed || isEntity || typeIsFinal || hasRedefinedSubclass) {
             return;
         }
@@ -214,7 +213,7 @@ public class HierarchyChecker<T> implements Checker {
         boolean equalsIsFinal = methodIsFinal("equals", Object.class);
         boolean hashCodeIsFinal = methodIsFinal("hashCode");
 
-        if (config.isUsingGetClass()) {
+        if (config.usingGetClass()) {
             assertEquals(
                 Formatter.of("Finality: equals and hashCode must both be final or both be non-final."),
                 equalsIsFinal,

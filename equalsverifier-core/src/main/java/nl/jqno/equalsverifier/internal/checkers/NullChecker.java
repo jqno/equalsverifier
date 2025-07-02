@@ -14,7 +14,7 @@ public class NullChecker<T> implements Checker {
 
     @Override
     public void check() {
-        if (context.getConfiguration().getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
+        if (context.getConfiguration().warningsToSuppress().contains(Warning.NULL_FIELDS)) {
             return;
         }
 

@@ -19,11 +19,11 @@ public class AbstractDelegationChecker<T> implements Checker {
     public AbstractDelegationChecker(Context<T> context) {
         Configuration<T> config = context.getConfiguration();
         this.type = context.getType();
-        this.typeTag = config.getTypeTag();
+        this.typeTag = config.typeTag();
         this.subjectCreator = context.getSubjectCreator();
         this.valueProvider = context.getValueProvider();
         this.classProbe = context.getClassProbe();
-        this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
+        this.cachedHashCodeInitializer = config.cachedHashCodeInitializer();
     }
 
     @Override

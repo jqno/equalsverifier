@@ -28,11 +28,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     public SignificantFieldCheck(Context<T> context, Predicate<FieldProbe> isCachedHashCodeField) {
         this.subjectCreator = context.getSubjectCreator();
         this.config = context.getConfiguration();
-        this.type = config.getType();
-        this.warningsToSuppress = config.getWarningsToSuppress();
-        this.ignoredFields = config.getIgnoredFields();
-        this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
-        this.annotationCache = config.getAnnotationCache();
+        this.type = config.type();
+        this.warningsToSuppress = config.warningsToSuppress();
+        this.ignoredFields = config.ignoredFields();
+        this.cachedHashCodeInitializer = config.cachedHashCodeInitializer();
+        this.annotationCache = config.annotationCache();
         this.isCachedHashCodeField = isCachedHashCodeField;
     }
 

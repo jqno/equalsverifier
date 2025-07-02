@@ -24,10 +24,10 @@ public final class Context<T> {
             FactoryCache factoryCache,
             FieldCache fieldCache,
             Objenesis objenesis) {
-        this.type = configuration.getType();
+        this.type = configuration.type();
         this.configuration = configuration;
-        this.classProbe = ClassProbe.of(configuration.getType());
-        var modes = configuration.getModes();
+        this.classProbe = ClassProbe.of(configuration.type());
+        var modes = configuration.modes();
 
         var builtinPrefabs = new BuiltinPrefabValueProvider();
         var mockito =

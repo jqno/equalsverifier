@@ -22,11 +22,11 @@ public class MapEntryHashCodeRequirementChecker<T> implements Checker {
 
     @Override
     public void check() {
-        if (Map.Entry.class.isAssignableFrom(config.getType())) {
+        if (Map.Entry.class.isAssignableFrom(config.type())) {
             Map.Entry<?, ?> e = (Map.Entry<?, ?>) subjectCreator.plain();
 
             int expectedHashCode = Objects.hashCode(e.getKey()) ^ Objects.hashCode(e.getValue());
-            int actualHashCode = config.getCachedHashCodeInitializer().getInitializedHashCode(e);
+            int actualHashCode = config.cachedHashCodeInitializer().getInitializedHashCode(e);
 
             Formatter f = Formatter
                     .of(

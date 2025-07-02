@@ -12,62 +12,13 @@ import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
-public final class Configuration<T> {
-
-    private final Class<T> type;
-    private final Set<String> nonnullFields;
-    private final Set<String> prefabbedFields;
-    private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
-    private final boolean hasRedefinedSuperclass;
-    private final Class<? extends T> redefinedSubclass;
-    private final boolean usingGetClass;
-    private final EnumSet<Warning> warningsToSuppress;
-    private final Set<Mode> modes;
-    private final Function<String, String> fieldnameToGetter;
-    private final boolean isKotlin;
-
-    private final TypeTag typeTag;
-    private final AnnotationCache annotationCache;
-    private final Set<String> ignoredFields;
-
-    private final List<T> equalExamples;
-    private final List<T> unequalExamples;
-
-    // CHECKSTYLE OFF: ParameterNumber
-    private Configuration(
-            Class<T> type,
-            TypeTag typeTag,
-            Set<String> ignoredFields,
-            Set<String> nonnullFields,
-            Set<String> prefabbedFields,
-            AnnotationCache annotationCache,
-            CachedHashCodeInitializer<T> cachedHashCodeInitializer,
-            boolean hasRedefinedSuperclass,
-            Class<? extends T> redefinedSubclass,
-            boolean usingGetClass,
-            EnumSet<Warning> warningsToSuppress,
-            Set<Mode> modes,
-            Function<String, String> fieldnameToGetter,
-            boolean isKotlin,
-            List<T> equalExamples,
-            List<T> unequalExamples) {
-        this.type = type;
-        this.typeTag = typeTag;
-        this.ignoredFields = ignoredFields;
-        this.nonnullFields = nonnullFields;
-        this.prefabbedFields = prefabbedFields;
-        this.annotationCache = annotationCache;
-        this.cachedHashCodeInitializer = cachedHashCodeInitializer;
-        this.hasRedefinedSuperclass = hasRedefinedSuperclass;
-        this.redefinedSubclass = redefinedSubclass;
-        this.usingGetClass = usingGetClass;
-        this.warningsToSuppress = warningsToSuppress;
-        this.modes = modes;
-        this.fieldnameToGetter = fieldnameToGetter;
-        this.isKotlin = isKotlin;
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
-    }
+// CHECKSTYLE OFF: ParameterNumber
+public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignoredFields, Set<String> nonnullFields,
+        Set<String> prefabbedFields, AnnotationCache annotationCache,
+        CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
+        Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
+        Set<Mode> modes, Function<String, String> fieldnameToGetter, boolean isKotlin, List<T> equalExamples,
+        List<T> unequalExamples) {
 
     public static <T> Configuration<T> build(
             Class<T> type,
@@ -125,8 +76,6 @@ public final class Configuration<T> {
                 unequalExamples);
     }
 
-    // CHECKSTYLE ON: ParameterNumber
-
     private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationClassNames) {
         AnnotationCacheBuilder acb =
                 new AnnotationCacheBuilder(SupportedAnnotations.values(), ignoredAnnotationClassNames);
@@ -183,69 +132,5 @@ public final class Configuration<T> {
 
     private static String defaulFieldNameToGetterConverter(String fieldName) {
         return "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
-    }
-
-    public Class<T> getType() {
-        return type;
-    }
-
-    public Set<String> getNonnullFields() {
-        return Collections.unmodifiableSet(nonnullFields);
-    }
-
-    public Set<String> getPrefabbedFields() {
-        return Collections.unmodifiableSet(prefabbedFields);
-    }
-
-    public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
-        return cachedHashCodeInitializer;
-    }
-
-    public boolean hasRedefinedSuperclass() {
-        return hasRedefinedSuperclass;
-    }
-
-    public Class<? extends T> getRedefinedSubclass() {
-        return redefinedSubclass;
-    }
-
-    public boolean isUsingGetClass() {
-        return usingGetClass;
-    }
-
-    public EnumSet<Warning> getWarningsToSuppress() {
-        return EnumSet.copyOf(warningsToSuppress);
-    }
-
-    public Set<Mode> getModes() {
-        return Collections.unmodifiableSet(modes);
-    }
-
-    public Function<String, String> getFieldnameToGetter() {
-        return fieldnameToGetter;
-    }
-
-    public boolean isKotlin() {
-        return isKotlin;
-    }
-
-    public List<T> getEqualExamples() {
-        return Collections.unmodifiableList(equalExamples);
-    }
-
-    public List<T> getUnequalExamples() {
-        return Collections.unmodifiableList(unequalExamples);
-    }
-
-    public TypeTag getTypeTag() {
-        return typeTag;
-    }
-
-    public AnnotationCache getAnnotationCache() {
-        return annotationCache;
-    }
-
-    public Set<String> getIgnoredFields() {
-        return Collections.unmodifiableSet(ignoredFields);
     }
 }

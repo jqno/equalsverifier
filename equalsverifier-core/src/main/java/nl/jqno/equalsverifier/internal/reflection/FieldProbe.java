@@ -135,12 +135,12 @@ public final class FieldProbe {
      */
     public boolean canBeDefault(Configuration<?> config) {
         if (isPrimitive()) {
-            return !config.getPrefabbedFields().contains(getName());
+            return !config.prefabbedFields().contains(getName());
         }
 
-        boolean isAnnotated = isAnnotatedNonnull(config.getAnnotationCache());
-        boolean isMentionedExplicitly = config.getNonnullFields().contains(field.getName());
-        return !config.getWarningsToSuppress().contains(Warning.NULL_FIELDS) && !isAnnotated && !isMentionedExplicitly;
+        boolean isAnnotated = isAnnotatedNonnull(config.annotationCache());
+        boolean isMentionedExplicitly = config.nonnullFields().contains(field.getName());
+        return !config.warningsToSuppress().contains(Warning.NULL_FIELDS) && !isAnnotated && !isMentionedExplicitly;
     }
 
     /**

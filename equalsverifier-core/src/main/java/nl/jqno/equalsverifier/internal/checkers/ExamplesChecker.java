@@ -23,11 +23,11 @@ public class ExamplesChecker<T> implements Checker {
 
     public ExamplesChecker(Context<T> context) {
         Configuration<T> config = context.getConfiguration();
-        this.type = config.getType();
-        this.equalExamples = config.getEqualExamples();
-        this.unequalExamples = config.getUnequalExamples();
+        this.type = config.type();
+        this.equalExamples = config.equalExamples();
+        this.unequalExamples = config.unequalExamples();
         this.subjectCreator = context.getSubjectCreator();
-        this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
+        this.cachedHashCodeInitializer = config.cachedHashCodeInitializer();
     }
 
     @Override

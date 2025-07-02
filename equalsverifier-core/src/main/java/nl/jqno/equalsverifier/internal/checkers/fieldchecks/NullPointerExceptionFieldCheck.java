@@ -21,13 +21,13 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(FieldProbe fieldProbe) {
-        if (config.getNonnullFields().contains(fieldProbe.getName())) {
+        if (config.nonnullFields().contains(fieldProbe.getName())) {
             return;
         }
         if (fieldProbe.isPrimitive()) {
             return;
         }
-        if (fieldProbe.isAnnotatedNonnull(config.getAnnotationCache())) {
+        if (fieldProbe.isAnnotatedNonnull(config.annotationCache())) {
             return;
         }
 
@@ -50,7 +50,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     private void performTests(Field field, final Object reference, final Object changed) {
         handle("equals", "the parameter's field", field, () -> reference.equals(changed));
         handle("equals", "the 'this' object's field", field, () -> changed.equals(reference));
-        handle("hashCode", "field", field, () -> config.getCachedHashCodeInitializer().getInitializedHashCode(changed));
+        handle("hashCode", "field", field, () -> config.cachedHashCodeInitializer().getInitializedHashCode(changed));
     }
 
     private void handle(String testedMethodName, String whichOne, Field field, Runnable r) {

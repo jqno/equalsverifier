@@ -32,7 +32,7 @@ public class SubjectCreator<T> {
      * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
      */
     public SubjectCreator(Configuration<T> config, ValueProvider valueProvider, Objenesis objenesis) {
-        this.typeTag = config.getTypeTag();
+        this.typeTag = config.typeTag();
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;

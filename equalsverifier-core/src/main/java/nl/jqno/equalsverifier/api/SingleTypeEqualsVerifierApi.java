@@ -450,7 +450,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations
                 .validateProcessedAnnotations(
                     type,
-                    config.getAnnotationCache(),
+                    config.annotationCache(),
                     warningsToSuppress,
                     allIncludedFields,
                     allExcludedFields);
