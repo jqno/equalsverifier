@@ -62,7 +62,7 @@ class FallbackFactoryTest {
     void giveArray() {
         Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
         assertThat((int[]) tuple.red()).containsExactly(new int[] { 42 });
-        assertThat((int[]) tuple.blue()).containsExactly(new int[] { 1337 });
+        assertThat((int[]) tuple.blue()).containsExactly(new int[] { 1337, 42 });
     }
 
     @Test

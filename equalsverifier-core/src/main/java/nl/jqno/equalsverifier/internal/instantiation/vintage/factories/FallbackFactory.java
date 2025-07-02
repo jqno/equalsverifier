@@ -65,8 +65,9 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
         T red = (T) Array.newInstance(componentType, 1);
         Array.set(red, 0, valueProvider.giveRed(componentTag));
-        T blue = (T) Array.newInstance(componentType, 1);
+        T blue = (T) Array.newInstance(componentType, 2);
         Array.set(blue, 0, valueProvider.giveBlue(componentTag));
+        Array.set(blue, 1, valueProvider.giveRed(componentTag));
         T redCopy = (T) Array.newInstance(componentType, 1);
         Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
 
