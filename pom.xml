@@ -92,7 +92,7 @@
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.checkstyle>10.26.1</version.checkstyle>
 
-        <version.arcmutate>2.2.3</version.arcmutate>
+        <version.arcmutate>2.2.4</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
@@ -103,7 +103,7 @@
         <version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.14.0</version.maven-compiler-plugin>
-        <version.maven-enforcer-plugin>3.5.0</version.maven-enforcer-plugin>
+        <version.maven-enforcer-plugin>3.6.0</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.4.2</version.maven-jar-plugin>
         <version.maven-javadoc-plugin>3.11.2</version.maven-javadoc-plugin>
         <version.maven-shade-plugin>3.6.0</version.maven-shade-plugin>
