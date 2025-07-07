@@ -33,6 +33,12 @@ class RelaxedEqualsTest {
     }
 
     @Test
+    void succeed_whenObjectsWithDifferentFieldsAreEqual_givenThereAreMultipleUnequalExamples() {
+        var y = new Multiple(3, 1);
+        EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(x, y).verify();
+    }
+
+    @Test
     @SuppressWarnings("CheckReturnValue")
     void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
         ExpectedException
