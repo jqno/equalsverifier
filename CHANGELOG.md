@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- When verifying a relaxed equals relation, `andUnequalExamples` thinks two unequal examples are equal. ([Issue 1098](https://github.com/jqno/equalsverifier/issues/1098))
+
 ## [4.0.4] - 2025-07-03
 
 ### Fixed
