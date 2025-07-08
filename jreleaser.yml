@@ -8,9 +8,11 @@ project:
   license: Apache-2.0
   links:
     homepage: https://jqno.nl/equalsverifier
-  java:
-    groupId: nl.jqno.equalsverifier
-    version: 8
+  languages:
+    java:
+      groupId: nl.jqno.equalsverifier
+      artifactId: equalsverifier
+      version: 17
   inceptionYear: 2009
 
 release:
