@@ -25,15 +25,14 @@ import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ExecutableStatementCount
 // CHECKSTYLE OFF: ParameterNumber
+// CHECKSTYLE OFF: CyclomaticComplexity
 
+@SuppressWarnings("UndefinedEquals")
 class JavaApiClassesTest {
 
     @Test
@@ -118,34 +117,7 @@ class JavaApiClassesTest {
                 .verify();
     }
 
-    @SuppressWarnings("CheckReturnValue")
-    abstract static class CollectionContainer {
-
-        protected abstract void callAbstractMethodsOnInterface();
-
-        protected int doHashCode() {
-            callAbstractMethodsOnInterface();
-            return defaultHashCode(this);
-        }
-
-        protected void callIterator(Iterable<?>... collections) {
-            for (Iterable<?> c : collections) {
-                if (c != null) {
-                    c.iterator();
-                }
-            }
-        }
-
-        protected void callKeySet(Map<?, ?>... maps) {
-            for (Map<?, ?> m : maps) {
-                if (m != null) {
-                    m.keySet();
-                }
-            }
-        }
-    }
-
-    static final class SuperCollectionContainer extends CollectionContainer {
+    static final class SuperCollectionContainer {
 
         private final Iterable<String> iterable;
         private final Collection<String> collection;
@@ -157,23 +129,23 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof SuperCollectionContainer)) {
+                return false;
+            }
+            SuperCollectionContainer other = (SuperCollectionContainer) obj;
+            return Objects.equals(iterable, other.iterable) && Objects.equals(collection, other.collection);
         }
 
         @Override
         public int hashCode() {
-            return doHashCode();
-        }
-
-        @Override
-        protected void callAbstractMethodsOnInterface() {
             callIterator(iterable);
             callIterator(collection);
+            return Objects.hash(iterable, collection);
         }
     }
 
     @SuppressWarnings("NonApiType")
-    static final class ListContainer extends CollectionContainer {
+    static final class ListContainer {
 
         private final List<String> list;
         private final CopyOnWriteArrayList<String> copyOnWriteArrayList;
@@ -199,24 +171,29 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof ListContainer)) {
+                return false;
+            }
+            ListContainer other = (ListContainer) obj;
+            return Objects.equals(list, other.list)
+                    && Objects.equals(copyOnWriteArrayList, other.copyOnWriteArrayList)
+                    && Objects.equals(linkedList, other.linkedList)
+                    && Objects.equals(arrayList, other.arrayList)
+                    && Objects.equals(vector, other.vector)
+                    && Objects.equals(stack, other.stack);
         }
 
         @Override
         public int hashCode() {
-            return doHashCode();
-        }
-
-        @Override
-        protected void callAbstractMethodsOnInterface() {
             callIterator(list);
             callIterator(copyOnWriteArrayList, linkedList, arrayList);
             callIterator(vector, stack);
+            return Objects.hash(list, copyOnWriteArrayList, linkedList, arrayList, vector, stack);
         }
     }
 
     @SuppressWarnings("NonApiType")
-    static final class SetContainer extends CollectionContainer {
+    static final class SetContainer {
 
         private final Set<String> set;
         private final SortedSet<String> sortedSet;
@@ -245,23 +222,29 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof SetContainer)) {
+                return false;
+            }
+            SetContainer other = (SetContainer) obj;
+            return Objects.equals(set, other.set)
+                    && Objects.equals(sortedSet, other.sortedSet)
+                    && Objects.equals(navigableSet, other.navigableSet)
+                    && Objects.equals(copyOnWriteArraySet, other.copyOnWriteArraySet)
+                    && Objects.equals(hashSet, other.hashSet)
+                    && Objects.equals(treeSet, other.treeSet)
+                    && Objects.equals(enumSet, other.enumSet);
         }
 
         @Override
         public int hashCode() {
-            return doHashCode();
-        }
-
-        @Override
-        protected void callAbstractMethodsOnInterface() {
             callIterator(set, sortedSet, navigableSet);
             callIterator(copyOnWriteArraySet, hashSet, treeSet);
             callIterator(enumSet);
+            return Objects.hash(set, sortedSet, navigableSet, copyOnWriteArraySet, hashSet, treeSet, enumSet);
         }
     }
 
-    static final class QueueContainer extends CollectionContainer {
+    static final class QueueContainer {
 
         private final Queue<String> queue;
         private final BlockingQueue<String> blockingQueue;
@@ -299,25 +282,45 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof QueueContainer)) {
+                return false;
+            }
+            QueueContainer other = (QueueContainer) obj;
+            return Objects.equals(queue, other.queue)
+                    && Objects.equals(blockingQueue, other.blockingQueue)
+                    && Objects.equals(deque, other.deque)
+                    && Objects.equals(blockingDeque, other.blockingDeque)
+                    && Objects.equals(arrayBlockingQueue, other.arrayBlockingQueue)
+                    && Objects.equals(concurrentLinkedQueue, other.concurrentLinkedQueue)
+                    && Objects.equals(delayQueue, other.delayQueue)
+                    && Objects.equals(linkedBlockingQueue, other.linkedBlockingQueue)
+                    && Objects.equals(priorityBlockingQueue, other.priorityBlockingQueue)
+                    && Objects.equals(synchronousQueue, other.synchronousQueue);
         }
 
         @Override
         public int hashCode() {
-            return doHashCode();
-        }
-
-        @Override
-        protected void callAbstractMethodsOnInterface() {
             callIterator(queue, blockingQueue, deque, blockingDeque);
             callIterator(arrayBlockingQueue, concurrentLinkedQueue, delayQueue);
             callIterator(linkedBlockingQueue, priorityBlockingQueue);
             callIterator(synchronousQueue);
+            return Objects
+                    .hash(
+                        queue,
+                        blockingQueue,
+                        deque,
+                        blockingDeque,
+                        arrayBlockingQueue,
+                        concurrentLinkedQueue,
+                        delayQueue,
+                        linkedBlockingQueue,
+                        priorityBlockingQueue,
+                        synchronousQueue);
         }
     }
 
     @SuppressWarnings("NonApiType")
-    static final class MapContainer extends CollectionContainer {
+    static final class MapContainer {
 
         private final Map<String, String> map;
         private final SortedMap<String, String> sortedMap;
@@ -361,21 +364,45 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof MapContainer)) {
+                return false;
+            }
+            MapContainer other = (MapContainer) obj;
+            return Objects.equals(map, other.map)
+                    && Objects.equals(sortedMap, other.sortedMap)
+                    && Objects.equals(navigableMap, other.navigableMap)
+                    && Objects.equals(concurrentNavigableMap, other.concurrentNavigableMap)
+                    && Objects.equals(concurrentHashMap, other.concurrentHashMap)
+                    && Objects.equals(hashMap, other.hashMap)
+                    && Objects.equals(hashtable, other.hashtable)
+                    && Objects.equals(linkedHashMap, other.linkedHashMap)
+                    && Objects.equals(properties, other.properties)
+                    && Objects.equals(treeMap, other.treeMap)
+                    && Objects.equals(weakHashMap, other.weakHashMap)
+                    && Objects.equals(enumMap, other.enumMap);
         }
 
         @Override
         public int hashCode() {
-            return doHashCode();
-        }
-
-        @Override
-        protected void callAbstractMethodsOnInterface() {
             callKeySet(map, sortedMap, navigableMap, concurrentNavigableMap);
             callKeySet(concurrentNavigableMap, concurrentHashMap);
             callKeySet(hashMap, hashtable, linkedHashMap);
             callKeySet(properties, treeMap, weakHashMap);
             callKeySet(enumMap);
+            return Objects
+                    .hash(
+                        map,
+                        sortedMap,
+                        navigableMap,
+                        concurrentNavigableMap,
+                        concurrentHashMap,
+                        hashMap,
+                        hashtable,
+                        linkedHashMap,
+                        properties,
+                        treeMap,
+                        weakHashMap,
+                        enumMap);
         }
     }
 
@@ -412,12 +439,32 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof NioBufferContainer)) {
+                return false;
+            }
+            NioBufferContainer other = (NioBufferContainer) obj;
+            return Objects.equals(buffer, other.buffer)
+                    && Objects.equals(byteBuffer, other.byteBuffer)
+                    && Objects.equals(charBuffer, other.charBuffer)
+                    && Objects.equals(doubleBuffer, other.doubleBuffer)
+                    && Objects.equals(floatBuffer, other.floatBuffer)
+                    && Objects.equals(intBuffer, other.intBuffer)
+                    && Objects.equals(longBuffer, other.longBuffer)
+                    && Objects.equals(shortBuffer, other.shortBuffer);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects
+                    .hash(
+                        buffer,
+                        byteBuffer,
+                        charBuffer,
+                        doubleBuffer,
+                        floatBuffer,
+                        intBuffer,
+                        longBuffer,
+                        shortBuffer);
         }
     }
 
@@ -535,12 +582,86 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof CommonClassesContainer)) {
+                return false;
+            }
+            CommonClassesContainer other = (CommonClassesContainer) obj;
+            return Objects.equals(object, other.object)
+                    && Objects.equals(string, other.string)
+                    && Objects.equals(integer, other.integer)
+                    && Objects.equals(bitset, other.bitset)
+                    && Objects.equals(calendar, other.calendar)
+                    && Objects.equals(date, other.date)
+                    && Objects.equals(file, other.file)
+                    && Objects.equals(gregorianCalendar, other.gregorianCalendar)
+                    && Objects.equals(pattern, other.pattern)
+                    && Objects.equals(decimalFormat, other.decimalFormat)
+                    && Objects.equals(numberFormat, other.numberFormat)
+                    && Objects.equals(simpleDateFormat, other.simpleDateFormat)
+                    && Objects.equals(uri, other.uri)
+                    && Objects.equals(url, other.url)
+                    && Objects.equals(uuid, other.uuid)
+                    && Objects.equals(inetAddress, other.inetAddress)
+                    && Objects.equals(inet4Address, other.inet4Address)
+                    && Objects.equals(inet6Address, other.inet6Address)
+                    && Objects.equals(inetSocketAddress, other.inetSocketAddress)
+                    && Objects.equals(thread, other.thread)
+                    && Objects.equals(sqlDate, other.sqlDate)
+                    && Objects.equals(sqlTime, other.sqlTime)
+                    && Objects.equals(sqlTimestamp, other.sqlTimestamp)
+                    && Objects.equals(currency, other.currency)
+                    && Objects.equals(eventObject, other.eventObject)
+                    && Objects.equals(formatter, other.formatter)
+                    && Objects.equals(locale, other.locale)
+                    && Objects.equals(scanner, other.scanner)
+                    && Objects.equals(charset, other.charset)
+                    && Objects.equals(semaphore, other.semaphore)
+                    && Objects.equals(reentrantLock, other.reentrantLock)
+                    && Objects.equals(hexFormat, other.hexFormat)
+                    && Objects.equals(printStream, other.printStream)
+                    && Objects.equals(bigInteger, other.bigInteger)
+                    && Objects.equals(timeZone, other.timeZone);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects
+                    .hash(
+                        object,
+                        string,
+                        integer,
+                        bitset,
+                        calendar,
+                        date,
+                        file,
+                        gregorianCalendar,
+                        pattern,
+                        decimalFormat,
+                        numberFormat,
+                        simpleDateFormat,
+                        uri,
+                        url,
+                        uuid,
+                        inetAddress,
+                        inet4Address,
+                        inet6Address,
+                        inetSocketAddress,
+                        thread,
+                        sqlDate,
+                        sqlTime,
+                        sqlTimestamp,
+                        currency,
+                        eventObject,
+                        formatter,
+                        locale,
+                        scanner,
+                        charset,
+                        semaphore,
+                        reentrantLock,
+                        hexFormat,
+                        printStream,
+                        bigInteger,
+                        timeZone);
         }
     }
 
@@ -631,12 +752,68 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof Java8ApiClassesContainer)) {
+                return false;
+            }
+            Java8ApiClassesContainer other = (Java8ApiClassesContainer) obj;
+            return Objects.equals(optional, other.optional)
+                    && Objects.equals(optionalDouble, other.optionalDouble)
+                    && Objects.equals(optionalInt, other.optionalInt)
+                    && Objects.equals(optionalLong, other.optionalLong)
+                    && Objects.equals(localDate, other.localDate)
+                    && Objects.equals(localTime, other.localTime)
+                    && Objects.equals(localDateTime, other.localDateTime)
+                    && Objects.equals(zoneId, other.zoneId)
+                    && Objects.equals(zoneOffset, other.zoneOffset)
+                    && Objects.equals(zonedDateTime, other.zonedDateTime)
+                    && Objects.equals(dateTimeFormatter, other.dateTimeFormatter)
+                    && Objects.equals(completableFuture, other.completableFuture)
+                    && Objects.equals(stampedLock, other.stampedLock)
+                    && Objects.equals(supplier, other.supplier)
+                    && Objects.equals(clock, other.clock)
+                    && Objects.equals(duration, other.duration)
+                    && Objects.equals(instant, other.instant)
+                    && Objects.equals(monthDay, other.monthDay)
+                    && Objects.equals(offsetDateTime, other.offsetDateTime)
+                    && Objects.equals(offsetTime, other.offsetTime)
+                    && Objects.equals(period, other.period)
+                    && Objects.equals(year, other.year)
+                    && Objects.equals(yearMonth, other.yearMonth)
+                    && Objects.equals(doubleSummaryStatistics, other.doubleSummaryStatistics)
+                    && Objects.equals(intSummaryStatistics, other.intSummaryStatistics)
+                    && Objects.equals(longSummaryStatistics, other.longSummaryStatistics);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects
+                    .hash(
+                        optional,
+                        optionalDouble,
+                        optionalInt,
+                        optionalLong,
+                        localDate,
+                        localTime,
+                        localDateTime,
+                        zoneId,
+                        zoneOffset,
+                        zonedDateTime,
+                        dateTimeFormatter,
+                        completableFuture,
+                        stampedLock,
+                        supplier,
+                        clock,
+                        duration,
+                        instant,
+                        monthDay,
+                        offsetDateTime,
+                        offsetTime,
+                        period,
+                        year,
+                        yearMonth,
+                        doubleSummaryStatistics,
+                        intSummaryStatistics,
+                        longSummaryStatistics);
         }
     }
 
@@ -655,12 +832,18 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof ExceptionsContainer)) {
+                return false;
+            }
+            ExceptionsContainer other = (ExceptionsContainer) obj;
+            return Objects.equals(throwable, other.throwable)
+                    && Objects.equals(exception, other.exception)
+                    && Objects.equals(runtimeException, other.runtimeException);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(throwable, exception, runtimeException);
         }
     }
 
@@ -681,12 +864,19 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof ReflectionClassesContainer)) {
+                return false;
+            }
+            ReflectionClassesContainer other = (ReflectionClassesContainer) obj;
+            return Objects.equals(type, other.type)
+                    && Objects.equals(method, other.method)
+                    && Objects.equals(field, other.field)
+                    && Objects.equals(constructor, other.constructor);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(type, method, field, constructor);
         }
     }
 
@@ -738,12 +928,42 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof AtomicClassesContainer)) {
+                return false;
+            }
+            AtomicClassesContainer other = (AtomicClassesContainer) obj;
+            return Objects.equals(atomicBoolean, other.atomicBoolean)
+                    && Objects.equals(atomicInteger, other.atomicInteger)
+                    && Objects.equals(atomicIntegerArray, other.atomicIntegerArray)
+                    && Objects.equals(atomicLong, other.atomicLong)
+                    && Objects.equals(atomicLongArray, other.atomicLongArray)
+                    && Objects.equals(atomicMarkableReference, other.atomicMarkableReference)
+                    && Objects.equals(atomicReference, other.atomicReference)
+                    && Objects.equals(atomicReferenceArray, other.atomicReferenceArray)
+                    && Objects.equals(atomicStampedReference, other.atomicStampedReference)
+                    && Objects.equals(doubleAdder, other.doubleAdder)
+                    && Objects.equals(doubleAccumulator, other.doubleAccumulator)
+                    && Objects.equals(longAdder, other.longAdder)
+                    && Objects.equals(longAccumulator, other.longAccumulator);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects
+                    .hash(
+                        atomicBoolean,
+                        atomicInteger,
+                        atomicIntegerArray,
+                        atomicLong,
+                        atomicLongArray,
+                        atomicMarkableReference,
+                        atomicReference,
+                        atomicReferenceArray,
+                        atomicStampedReference,
+                        doubleAdder,
+                        doubleAccumulator,
+                        longAdder,
+                        longAccumulator);
         }
     }
 
@@ -777,12 +997,22 @@ class JavaApiClassesTest {
 
         @Override
         public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
+            if (!(obj instanceof AncientJavaApiClassesContainer)) {
+                return false;
+            }
+            AncientJavaApiClassesContainer other = (AncientJavaApiClassesContainer) obj;
+            return Objects.equals(awtColorSpace, other.awtColorSpace)
+                    && Objects.equals(iccColorSpace, other.iccColorSpace)
+                    && Objects.equals(iccProfile, other.iccProfile)
+                    && Objects.equals(font, other.font)
+                    && Objects.equals(image, other.image)
+                    && Objects.equals(vmid, other.vmid)
+                    && Objects.equals(uid, other.uid);
         }
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hash(awtColorSpace, iccColorSpace, iccProfile, font, image, vmid, uid);
         }
     }
 
@@ -820,7 +1050,10 @@ class JavaApiClassesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            if (instance == null || instance.get() == null) {
+                return 0;
+            }
+            return instance.get().hashCode();
         }
     }
 
@@ -843,7 +1076,7 @@ class JavaApiClassesTest {
 
         @Override
         public int hashCode() {
-            return defaultHashCode(this);
+            return Objects.hashCode(stringBuilder.toString());
         }
     }
 
@@ -857,44 +1090,21 @@ class JavaApiClassesTest {
         }
     }
 
-    private static boolean defaultEquals(Object here, Object there) {
-        Class<?> type = here.getClass();
-        if (there == null || !there.getClass().isAssignableFrom(type)) {
-            return false;
-        }
-        boolean equals = true;
-        try {
-            for (FieldProbe p : FieldIterable.of(type)) {
-                if (isRelevant(p)) {
-                    Object x = p.getValue(here);
-                    Object y = p.getValue(there);
-                    equals &= Objects.equals(x, y);
-                }
+    @SuppressWarnings("CheckReturnValue")
+    private static void callIterator(Iterable<?>... collections) {
+        for (Iterable<?> c : collections) {
+            if (c != null) {
+                c.iterator();
             }
         }
-        catch (ReflectionException e) {
-            throw new AssertionError(e.toString(), e);
-        }
-        return equals;
     }
 
-    private static int defaultHashCode(Object x) {
-        int hash = 59;
-        try {
-            for (FieldProbe p : FieldIterable.of(x.getClass())) {
-                if (isRelevant(p)) {
-                    Object val = p.getValue(x);
-                    hash += 59 * Objects.hashCode(val);
-                }
+    @SuppressWarnings("CheckReturnValue")
+    private static void callKeySet(Map<?, ?>... maps) {
+        for (Map<?, ?> m : maps) {
+            if (m != null) {
+                m.keySet();
             }
         }
-        catch (ReflectionException e) {
-            throw new AssertionError(e.toString(), e);
-        }
-        return hash;
-    }
-
-    private static boolean isRelevant(FieldProbe p) {
-        return p.canBeModifiedReflectively();
     }
 }
