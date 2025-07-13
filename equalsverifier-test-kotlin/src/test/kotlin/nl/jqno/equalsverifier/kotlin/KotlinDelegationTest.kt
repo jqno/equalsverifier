@@ -10,6 +10,11 @@ class KotlinDelegationTest {
     EqualsVerifier.forClass(FooContainer::class.java).verify()
   }
 
+  @Test
+  fun `succeed when class uses lazy delegate`() {
+    EqualsVerifier.forClass(LazyFooContainer::class.java).verify()
+  }
+
   interface Foo {
     val foo: Int
   }
@@ -18,11 +23,17 @@ class KotlinDelegationTest {
 
   class FooContainer(fooValue: Int): Foo by FooImpl(fooValue) {
 
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (other !is FooContainer) return false
-      return foo == other.foo
-    }
+    override fun equals(other: Any?): Boolean =
+      (other is FooContainer) && foo == other.foo
+
+    override fun hashCode(): Int = foo
+  }
+
+  class LazyFooContainer(fooValue: Int) {
+    val foo: Int by lazy { fooValue }
+
+    override fun equals(other: Any?): Boolean =
+      (other is LazyFooContainer) && foo == other.foo
 
     override fun hashCode(): Int = foo
   }
