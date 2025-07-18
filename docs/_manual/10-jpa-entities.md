@@ -79,6 +79,8 @@ Therefore, when these fields are used in `equals` and `hashCode`, it's important
 
 EqualsVerifier checks for these fields that their getter is used. If they're referenced directly, EqualsVerifier will fail. Note that this can be disabled by suppressing `Warning.JPA_GETTER`.
 
+Note also that the getter must be non-final, otherwise EqualsVerifier is unable to perform this check. If that's problematic, you can disable the check completely by suppressing `Warning.JPA_GETTER`.
+
 By default, EqualsVerifier assumes that the JavaBeans conventions are used to determine the name of the getter. For example, if a field is called `employee`, it assumes that the getter is called `getEmployee()`. If your project uses a different convention, you can use `#withFieldnameToGetterConverter()` to override that behavior.
 
 For example, if in your project, a field must have a prefix, like so: `m_employee`, but the getter is still `getEmployee()`, you might call EqualsVerifier like this:
