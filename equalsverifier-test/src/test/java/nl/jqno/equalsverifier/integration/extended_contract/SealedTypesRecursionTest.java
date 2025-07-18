@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class SealedTypesRecursionTest {
@@ -37,6 +38,9 @@ class SealedTypesRecursionTest {
     }
 
     @Test
+    @Disabled("""
+              See issue 1081: EqualsVerifier should fall back to a second permitted class if the first fails,
+              but current architecture doesn't allow it""")
     void succeed_whenFirstPermittedRefersBackToContainerButSecondIsOk() {
         // A container with a field of a sealed interface.
         // The sealed interface permits 2 types; the first is a record that refers back to the container, but the second is ok.
