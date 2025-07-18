@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.6] - 2025-07-18
+
 ### Changed
 
 - EqualsVerifier will issue an error when an entity has lazy fields that should be accessed by their getter, and the getter is final, because in that case it can't perform the check. ([Issue 1102](https://github.com/jqno/equalsverifier/issues/1102))
@@ -1423,7 +1425,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.5...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.6...HEAD
+[4.0.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.5...equalsverifier-4.0.6
 [4.0.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.4...equalsverifier-4.0.5
 [4.0.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.3...equalsverifier-4.0.4
 [4.0.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.2...equalsverifier-4.0.3
