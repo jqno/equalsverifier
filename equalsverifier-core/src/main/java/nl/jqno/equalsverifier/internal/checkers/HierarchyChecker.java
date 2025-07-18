@@ -1,10 +1,8 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
-import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
@@ -189,7 +187,7 @@ public class HierarchyChecker<T> implements Checker {
             return;
         }
 
-        if (methodIsFinal("equals", Object.class)) {
+        if (classProbe.isMethodFinal("equals", Object.class)) {
             fail(
                 Formatter
                         .of(
@@ -210,8 +208,8 @@ public class HierarchyChecker<T> implements Checker {
             return;
         }
 
-        boolean equalsIsFinal = methodIsFinal("equals", Object.class);
-        boolean hashCodeIsFinal = methodIsFinal("hashCode");
+        boolean equalsIsFinal = classProbe.isMethodFinal("equals", Object.class);
+        boolean hashCodeIsFinal = classProbe.isMethodFinal("hashCode");
 
         if (config.usingGetClass()) {
             assertEquals(
@@ -234,12 +232,5 @@ public class HierarchyChecker<T> implements Checker {
                                                         if hashCode cannot be final.""");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
-    }
-
-    private boolean methodIsFinal(String methodName, Class<?>... parameterTypes) {
-        return rethrow(() -> {
-            Method method = type.getMethod(methodName, parameterTypes);
-            return Modifier.isFinal(method.getModifiers());
-        });
     }
 }

@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static net.bytebuddy.implementation.ExceptionMethod.throwing;
 import static net.bytebuddy.matcher.ElementMatchers.named;
+import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
 import java.lang.reflect.Field;
@@ -60,6 +61,18 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                         getterName,
                         fieldName),
             classProbe.hasMethod(getterName));
+        assertFalse(
+            Formatter
+                    .of(
+                        """
+                        Getter method %% in JPA entity class %% is final.
+                           EqualsVerifier cannot determine if %% calls getters instead of referencing field %% directly.
+                           Please make the method non-final, or suppress Warning.JPA_GETTER to disable the check.""",
+                        getterName,
+                        classProbe.getType().getSimpleName(),
+                        classProbe.getType().getSimpleName(),
+                        fieldName),
+            classProbe.isMethodFinal(getterName));
 
         Class<? extends T> sub = throwingGetterCreator(getterName);
         T original = subjectCreator.plain();

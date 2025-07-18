@@ -160,6 +160,24 @@ class ClassProbeTest {
     }
 
     @Test
+    void methodIsFinal() {
+        ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
+        assertThat(accessor.isMethodFinal("m_final")).isTrue();
+    }
+
+    @Test
+    void methodIsNotFinal() {
+        ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
+        assertThat(accessor.isMethodFinal("m")).isFalse();
+    }
+
+    @Test
+    void methodIsNotFinalBecauseItDoesntExist() {
+        ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
+        assertThat(accessor.isMethodFinal("m_doesnotexist")).isFalse();
+    }
+
+    @Test
     void getSuperAccessorForPojo() {
         ClassProbe<? super PointContainer> superAccessor = pointProbe.getSuperProbe();
         assertThat(superAccessor.getType()).isEqualTo(Object.class);
@@ -177,6 +195,8 @@ class ClassProbeTest {
         public void m() {}
 
         protected void m_protected() {}
+
+        public final void m_final() {}
     }
 
     static class ChildOfMethodContainer extends MethodContainer {}

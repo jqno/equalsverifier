@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Optional;
 
@@ -141,6 +142,12 @@ public final class ClassProbe<T> {
         return true;
     }
 
+    /**
+     * Finds a field (no matter its accessibility) in T or its superclasses.
+     *
+     * @param name The name of the field that should be found.
+     * @return The field wrapped in an Optional, or an empty Optional if the field could not be found.
+     */
     public Optional<Field> findField(String name) {
         Class<?> t = type;
         while (t != null) {
@@ -158,6 +165,38 @@ public final class ClassProbe<T> {
             return type.getDeclaredField(name);
         }
         catch (NoSuchFieldException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Determines whether the given method in T is final.
+     *
+     * @param methodName     The name of the method in T.
+     * @param parameterTypes The types of the method's parameters, to determine the right overload.
+     * @return True if the given method in T is final, false if it's not final or if it doesn't exist.
+     */
+    public boolean isMethodFinal(String methodName, Class<?>... parameterTypes) {
+        return findMethod(methodName, parameterTypes).map(m -> Modifier.isFinal(m.getModifiers())).orElse(false);
+    }
+
+    private Optional<Method> findMethod(String name, Class<?>... parameterTypes) {
+        Class<?> t = type;
+        while (t != null) {
+            Method f = getMethod(t, name, parameterTypes);
+            if (f != null) {
+                return Optional.of(f);
+            }
+            t = t.getSuperclass();
+        }
+        return Optional.empty();
+    }
+
+    private static Method getMethod(Class<?> type, String name, Class<?>... parameterTypes) {
+        try {
+            return type.getDeclaredMethod(name, parameterTypes);
+        }
+        catch (NoSuchMethodException e) {
             return null;
         }
     }

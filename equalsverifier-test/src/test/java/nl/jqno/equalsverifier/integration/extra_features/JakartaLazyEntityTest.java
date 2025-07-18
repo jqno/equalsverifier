@@ -177,6 +177,22 @@ class JakartaLazyEntityTest {
                 .verify();
     }
 
+    @Test
+    void finalGetterThrowsError() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(CorrectButFinalLazyMethodJakartaFieldContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains("Getter method getGenerated", "is final");
+    }
+
+    @Test
+    void finalGetterSucceedsIfWarningSuppressed() {
+        EqualsVerifier
+                .forClass(CorrectButFinalLazyMethodJakartaFieldContainer.class)
+                .suppress(Warning.JPA_GETTER)
+                .verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
@@ -752,6 +768,31 @@ class JakartaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getBasic());
+        }
+    }
+
+    @Entity
+    static class CorrectButFinalLazyMethodJakartaFieldContainer {
+
+        @GeneratedValue
+        private Long generated;
+
+        public final Long getGenerated() {
+            return generated;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof CorrectButFinalLazyMethodJakartaFieldContainer)) {
+                return false;
+            }
+            CorrectButFinalLazyMethodJakartaFieldContainer other = (CorrectButFinalLazyMethodJakartaFieldContainer) obj;
+            return Objects.equals(getGenerated(), other.getGenerated());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getGenerated());
         }
     }
 }
