@@ -106,7 +106,7 @@ public final class PackageScanner {
         String className = f.getName().substring(0, f.getName().length() - 6);
         String fullPath = f.getParent();
         String packageName = fullPath.substring(fullPath.indexOf(packagePath))
-            .replace(FileSystems.getDefault().getSeparator(), ".");
+                .replace(FileSystems.getDefault().getSeparator(), ".");
         return rethrow(
             () -> Class.forName(packageName + "." + className),
             e -> "Could not resolve class " + className + ", which was found in package " + packageName);
