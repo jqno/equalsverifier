@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.util.*;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public final class PackageScanner {
      * @return the classes contained in the given package.
      */
     public static List<Class<?>> getClassesIn(String packageName, PackageScanOptions options) {
-        String packagePath = packageName.replace('.', '/');
+        String packagePath = packageName.replace(".", FileSystems.getDefault().getSeparator());
 
         List<Class<?>> result = getResources(packagePath)
                 .flatMap(r -> processResource(r, packagePath, options))
@@ -104,7 +105,7 @@ public final class PackageScanner {
     private static Class<?> fileToClass(File f, String packagePath) {
         String className = f.getName().substring(0, f.getName().length() - 6);
         String fullPath = f.getParent();
-        String packageName = fullPath.substring(fullPath.indexOf(packagePath)).replace("/", ".");
+        String packageName = fullPath.substring(fullPath.indexOf(packagePath)).replace(FileSystems.getDefault().getSeparator(), ".");
         return rethrow(
             () -> Class.forName(packageName + "." + className),
             e -> "Could not resolve class " + className + ", which was found in package " + packageName);
