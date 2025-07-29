@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `StringIndexOutOfBoundsException` when using `forPackage` on Windows. ([Issue 1106](https://github.com/jqno/equalsverifier/issues/1106))
+
 ## [4.0.6] - 2025-07-18
 
 ### Changed
