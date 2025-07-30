@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.7] - 2025-07-30
+
 ### Fixed
 
 - `StringIndexOutOfBoundsException` when using `forPackage` on Windows. ([Issue 1106](https://github.com/jqno/equalsverifier/issues/1106))
@@ -1429,7 +1431,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.6...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.7...HEAD
+[4.0.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.6...equalsverifier-4.0.7
 [4.0.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.5...equalsverifier-4.0.6
 [4.0.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.4...equalsverifier-4.0.5
 [4.0.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.3...equalsverifier-4.0.4
