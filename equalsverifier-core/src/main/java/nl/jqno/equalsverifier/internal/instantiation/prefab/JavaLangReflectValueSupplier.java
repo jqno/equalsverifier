@@ -48,9 +48,9 @@ class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
 
         Object b;
 
-        public JavaApiReflectionClassesContainer() {}
+        JavaApiReflectionClassesContainer() {}
 
-        public JavaApiReflectionClassesContainer(Object o) {}
+        JavaApiReflectionClassesContainer(Object o) {}
 
         void m1() {}
 

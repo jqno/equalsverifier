@@ -124,7 +124,7 @@ class FallbackFactoryTest {
         @SuppressWarnings("unused")
         private int i;
 
-        public IntContainer(int finalI, int i) {
+        private IntContainer(int finalI, int i) {
             this.finalI = finalI;
             this.i = i;
         }

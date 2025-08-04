@@ -186,12 +186,12 @@ class VintageValueProviderTest {
         }
     }
 
-    private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
+    private static final class AppendingStringTestFactory implements PrefabValueFactory<String> {
 
         private String red;
         private String blue;
 
-        public AppendingStringTestFactory() {
+        private AppendingStringTestFactory() {
             red = "";
             blue = "";
         }

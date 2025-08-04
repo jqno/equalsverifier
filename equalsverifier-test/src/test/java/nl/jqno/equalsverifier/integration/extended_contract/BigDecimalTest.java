@@ -57,7 +57,7 @@ class BigDecimalTest {
 
         private final BigDecimal bd;
 
-        public BigDecimalEquals(BigDecimal bd) {
+        private BigDecimalEquals(BigDecimal bd) {
             this.bd = bd;
         }
 
@@ -85,7 +85,7 @@ class BigDecimalTest {
 
         private final BigDecimal bd;
 
-        public BigDecimalCompareTo(BigDecimal bd) {
+        private BigDecimalCompareTo(BigDecimal bd) {
             this.bd = bd;
         }
 
@@ -113,12 +113,8 @@ class BigDecimalTest {
 
         private final BigDecimal bd;
 
-        public BigDecimalEqualsWithComparablyConsistentHashCode(BigDecimal bd) {
+        private BigDecimalEqualsWithComparablyConsistentHashCode(BigDecimal bd) {
             this.bd = bd;
-        }
-
-        public BigDecimal getBd() {
-            return bd;
         }
 
         @Override
@@ -146,7 +142,7 @@ class BigDecimalTest {
 
         private final BigDecimal bd;
 
-        public BigDecimalInconsistentHashCode(BigDecimal bd) {
+        private BigDecimalInconsistentHashCode(BigDecimal bd) {
             this.bd = bd;
         }
 

@@ -57,14 +57,14 @@ class LombokLazyEqualsAndHashcodeTest {
      * </pre>
      */
     @SuppressWarnings({ "RedundantIfStatement", "EqualsReplaceableByObjectsCall" })
-    private static class LazyPojo {
+    private static final class LazyPojo {
 
         private transient int $hashCodeCache;
 
         private final String foo;
         private final Object bar;
 
-        public LazyPojo(String foo, Object bar) {
+        private LazyPojo(String foo, Object bar) {
             this.foo = foo;
             this.bar = bar;
         }
@@ -89,7 +89,7 @@ class LombokLazyEqualsAndHashcodeTest {
             return true;
         }
 
-        protected boolean canEqual(Object other) {
+        private boolean canEqual(Object other) {
             return other instanceof LazyPojo;
         }
 

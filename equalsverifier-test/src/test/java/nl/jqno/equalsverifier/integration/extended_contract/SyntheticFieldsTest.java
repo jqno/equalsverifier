@@ -72,7 +72,7 @@ class SyntheticFieldsTest {
 
             private final int foo;
 
-            public Inner(int foo) {
+            private Inner(int foo) {
                 this.foo = foo;
             }
 

@@ -48,7 +48,7 @@ class StringTest {
         private final String caseInsensitiveString;
 
         @SuppressWarnings("unused")
-        public IncorrectIgnoreCaseStringEquals(String caseInsensitiveString) {
+        private IncorrectIgnoreCaseStringEquals(String caseInsensitiveString) {
             this.caseInsensitiveString = caseInsensitiveString;
         }
 
@@ -74,7 +74,7 @@ class StringTest {
         private final String caseInsensitiveString;
 
         @SuppressWarnings("unused")
-        public CorrectIgnoreCaseStringEquals(String caseInsensitiveString) {
+        private CorrectIgnoreCaseStringEquals(String caseInsensitiveString) {
             this.caseInsensitiveString = caseInsensitiveString;
         }
 
@@ -101,7 +101,7 @@ class StringTest {
         private final String caseInsensitiveString;
         private final int cachedHashCode;
 
-        public IncorrectCachedIgnoreCaseStringEquals(String caseInsensitiveString) {
+        private IncorrectCachedIgnoreCaseStringEquals(String caseInsensitiveString) {
             this.caseInsensitiveString = caseInsensitiveString;
             this.cachedHashCode = calcHashCode();
         }

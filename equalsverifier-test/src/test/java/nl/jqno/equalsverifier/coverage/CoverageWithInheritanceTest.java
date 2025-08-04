@@ -58,7 +58,7 @@ public class CoverageWithInheritanceTest {
         }
 
         @SuppressWarnings("unchecked")
-        public static <T> Arguments of(Class<?> containerType) {
+        private static <T> Arguments of(Class<?> containerType) {
             Class<?>[] containingTypes = containerType.getClasses();
             Class<? super T> superType = find(containingTypes, "Point");
             Class<T> subType = find(containingTypes, "ColorPoint");
