@@ -32,7 +32,7 @@ jobs:
             cache-id: "jdk24"
             java: 24
             dist: temurin
-            flags: ""
+            flags: "-Prelease"
           - title: "Experimental JDK EA (simplified)"
             experimental: true
             cache-id: "jdk-ea-simple"

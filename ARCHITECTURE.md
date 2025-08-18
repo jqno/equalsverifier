@@ -6,16 +6,16 @@ To build EqualsVerifier, you need [Maven](https://maven.apache.org/). Just call 
 
 There are several Maven profiles that can be enabled or disabled:
 
-| profile                        | activation                                         | purpose                                                                                                                                                        |
-| ------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modules-jdk17`                | JDK 17 up to 20                                    | Build all modules and build releasable artifacts.                                                                                                             |
-| `modules-jdk21`                | JDK 21 and up                                      | Build all modules and build releasable artifacts.                                                                                                             |
-| `static-analysis`              | `disableStaticAnalysis` property must be off       | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis`.                                |
-| `static-analysis-checkstyle`   | -                                                  | Run Checkstyle checks, for Checkstyle's regression CI.                                                                                                         |
-| `argline-preview`              | `preview` property must be on                      | Enable Java preview features. Can be activated by running `mvn verify -Dpreview`.                                                                              |
-| `argline-experimental`         | `experimental` property must be on                 | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
-| `pitest`                       | `pitest` property must be on                       | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest`.                                                                       |
-| `modules-jdk21-without-pitest` | JDK 21 and up, _and_ `pitest` property must be off | Like `modules-jdk21`, but with additional verifications that are incompatible with PITest.                                                                     |
+| profile                      | activation                                   | purpose                                                                                                                                                        |
+| ---------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modules-jdk17`              | JDK 17 up to 20                              | Build all modules and build releasable artifacts.                                                                                                              |
+| `modules-jdk21`              | JDK 21 and up                                | Build all modules and build releasable artifacts.                                                                                                              |
+| `static-analysis`            | `disableStaticAnalysis` property must be off | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis`.                                |
+| `static-analysis-checkstyle` | -                                            | Run Checkstyle checks, for Checkstyle's regression CI.                                                                                                         |
+| `argline-preview`            | `preview` property must be on                | Enable Java preview features. Can be activated by running `mvn verify -Dpreview`.                                                                              |
+| `argline-experimental`       | `experimental` property must be on           | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
+| `pitest`                     | `pitest` property must be on                 | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest`.                                                                       |
+| `release`                    | Must be actuated manually                    | Mixes in the modules that are needed to make a release. Running `mvn verify -Prelease` tests the release, but doesn't actually deploy it.                      |
 
 ## Formatting
 
@@ -64,5 +64,3 @@ To generate the website
 - Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
 Note that the page uses the [TilburgsAns](https://www.tilburgsans.nl/) font but references it from the main site at [jqno.nl](https://jqno.nl). In development, it will fall back to a `sans-serif` font. See the font license [here](assets/tilburgsans/Ans%20Font%20License-AFL.pdf).
-
-

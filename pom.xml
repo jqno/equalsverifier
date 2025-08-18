@@ -521,13 +521,7 @@
         </profile>
 
         <profile>
-            <id>modules-jdk21-without-pitest</id>
-            <activation>
-                <jdk>[21,)</jdk>
-                <property>
-                    <name>!pitest</name>
-                </property>
-            </activation>
+            <id>release</id>
 
             <modules>
                 <module>equalsverifier-test-jpms</module>

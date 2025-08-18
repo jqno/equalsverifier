@@ -26,7 +26,7 @@ jobs:
       - name: 'Print version information'
         run: echo -e "New version ${{ github.event.inputs.version }}\nNext version $NEXT_VERSION"
       - name: 'Set release version'
-        run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion=${{ github.event.inputs.version }}
+        run: mvn versions:set -Prelease --no-transfer-progress --batch-mode -DnewVersion=${{ github.event.inputs.version }}
       - name: 'Update version in documentation'
         run: |
           sed -i "s/<version>.*<\/version>/<version>${{ github.event.inputs.version }}<\/version>/g" README.md
@@ -37,7 +37,7 @@ jobs:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
           message: Bumps version to ${{ github.event.inputs.version }}
       - name: 'Stage release'
-        run: mvn clean deploy --no-transfer-progress --batch-mode "-DaltDeploymentRepository=local::default::file://$(pwd)/target/staging-deploy"
+        run: mvn clean deploy -Prelease --no-transfer-progress --batch-mode "-DaltDeploymentRepository=local::default::file://$(pwd)/target/staging-deploy"
       - name: 'Run JReleaser'
         uses: jreleaser/release-action@v2
         with:
@@ -52,7 +52,7 @@ jobs:
           JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME }}
           JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN: ${{ secrets.JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN }}
       - name: 'Set release version'
-        run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion="$NEXT_VERSION"
+        run: mvn versions:set -Prelease --no-transfer-progress --batch-mode -DnewVersion="$NEXT_VERSION"
       - name: 'Commit & push changes'
         uses: actions-js/push@master
         with:
