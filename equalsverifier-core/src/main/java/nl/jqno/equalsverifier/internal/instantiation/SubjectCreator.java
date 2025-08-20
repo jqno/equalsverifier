@@ -18,6 +18,7 @@ public class SubjectCreator<T> {
 
     private final TypeTag typeTag;
     private final Class<T> type;
+    private final Class<? extends T> actualType;
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
@@ -39,6 +40,7 @@ public class SubjectCreator<T> {
         this.classProbe = ClassProbe.of(type);
         this.objenesis = objenesis;
         this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
+        this.actualType = instanceCreator.getActualType();
     }
 
     /**
@@ -236,10 +238,14 @@ public class SubjectCreator<T> {
     }
 
     private FieldIterable fields() {
-        return FieldIterable.ofIgnoringStatic(type);
+        return FieldIterable.ofIgnoringStatic(actualType);
     }
 
     private FieldIterable nonSuperFields() {
+        // This should probably use `actualType` instead of `type`, but then we'd need to find
+        // a way to include all fields from `type` and `actualType` together but without the fields
+        // from `type`'s superclass. That's hard, and it doesn't seem to come up in practice. I'm
+        // leaving this comment here as an explanation, in case it does come up at some point.
         return FieldIterable.ofIgnoringSuperAndStatic(type);
     }
 

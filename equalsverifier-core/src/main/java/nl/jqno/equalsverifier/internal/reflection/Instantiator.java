@@ -57,6 +57,15 @@ public final class Instantiator<T> {
     }
 
     /**
+     * The actual type that will be instantiated. Could be a subclass of the requested type.
+     *
+     * @return The actual type that will be instantiated.
+     */
+    public Class<T> getType() {
+        return type;
+    }
+
+    /**
      * Instantiates an object of type T.
      *
      * <p>
