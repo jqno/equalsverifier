@@ -2,8 +2,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 
 class SealedTypesHelperTest {
@@ -35,7 +33,7 @@ class SealedTypesHelperTest {
     @Test
     void allConcrete() {
         var actual = SealedTypesFinder.findInstantiableSubclass(AllConcreteParent.class);
-        assertThat(actual.get()).isEqualTo(AllConcreteMiddle.class);
+        assertThat(actual.get()).isEqualTo(AllConcreteParent.class);
     }
 
     sealed static class AllConcreteParent {}
@@ -43,6 +41,18 @@ class SealedTypesHelperTest {
     sealed static class AllConcreteMiddle extends AllConcreteParent {}
 
     static final class AllConcreteChild extends AllConcreteMiddle {}
+
+    @Test
+    void abstractTopThreeLevels() {
+        var actual = SealedTypesFinder.findInstantiableSubclass(AbstractParent.class);
+        assertThat(actual.get()).isEqualTo(AbstractMiddle.class);
+    }
+
+    sealed abstract static class AbstractParent {}
+
+    sealed static class AbstractMiddle extends AbstractParent {}
+
+    static final class AbstractChild extends AbstractMiddle {}
 
     @Test
     void nonSealedAtTheBottom() {
@@ -57,6 +67,6 @@ class SealedTypesHelperTest {
     @Test
     void notSealed() {
         var actual = SealedTypesFinder.findInstantiableSubclass(Object.class);
-        assertThat(actual).isEqualTo(Optional.empty());
+        assertThat(actual.get()).isEqualTo(Object.class);
     }
 }

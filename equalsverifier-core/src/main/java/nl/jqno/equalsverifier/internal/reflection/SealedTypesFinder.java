@@ -10,7 +10,7 @@ public final class SealedTypesFinder {
     private SealedTypesFinder() {}
 
     public static <T, U extends T> Optional<Class<U>> findInstantiableSubclass(Class<T> type) {
-        return findInstantiablePermittedClass(type, false);
+        return findInstantiablePermittedClass(type, true);
     }
 
     private static <T, U extends T> Optional<Class<U>> findInstantiablePermittedClass(
