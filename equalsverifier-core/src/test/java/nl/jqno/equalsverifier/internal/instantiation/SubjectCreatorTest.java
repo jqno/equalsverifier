@@ -53,6 +53,18 @@ class SubjectCreatorTest {
     }
 
     @Test
+    void plain_sealedAbstract() {
+        var anotherConfig = ConfigurationHelper.emptyConfiguration(SealedAbstract.class);
+        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
+        var anotherActual = anotherSut.plain();
+
+        assertThat(anotherActual.s).isEqualTo(S_RED);
+
+        // SubjectCreator returns a subclass with new fields!
+        assertThat(((SealedSub) anotherActual).i).isEqualTo(I_RED);
+    }
+
+    @Test
     void withFieldDefaulted_super() {
         expected = new SomeClass(0, I_RED, S_RED);
         actual = sut.withFieldDefaulted(fieldX);
@@ -328,6 +340,23 @@ class SubjectCreatorTest {
         @Override
         public String toString() {
             return "SomeSub: " + x + "," + i + "," + s + "," + q;
+        }
+    }
+
+    sealed static abstract class SealedAbstract permits SealedSub {
+        private final String s;
+
+        public SealedAbstract(String s) {
+            this.s = s;
+        }
+    }
+
+    static final class SealedSub extends SealedAbstract {
+        private final int i;
+
+        public SealedSub(String s, int i) {
+            super(s);
+            this.i = i;
         }
     }
 }

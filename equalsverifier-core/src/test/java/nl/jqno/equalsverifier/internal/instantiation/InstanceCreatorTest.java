@@ -12,10 +12,31 @@ import org.objenesis.ObjenesisStd;
 
 class InstanceCreatorTest {
 
+    private final Objenesis objenesis = new ObjenesisStd();
+
+    @Test
+    void getActualType() {
+        var probe = ClassProbe.of(SomeClass.class);
+        var sut = new InstanceCreator<>(probe, objenesis);
+
+        Class<SomeClass> actual = sut.getActualType();
+
+        assertThat(actual).isEqualTo(SomeClass.class);
+    }
+
+    @Test
+    void getActualType_sealedAbstract() {
+        var probe = ClassProbe.of(SealedAbstract.class);
+        var sut = new InstanceCreator<>(probe, objenesis);
+
+        Class<SealedAbstract> actual = sut.getActualType();
+
+        assertThat(actual).isEqualTo(SealedSub.class);
+    }
+
     @Test
     void instantiate() throws NoSuchFieldException {
         ClassProbe<SomeClass> probe = ClassProbe.of(SomeClass.class);
-        Objenesis objenesis = new ObjenesisStd();
         var sut = new InstanceCreator<InstanceCreatorTest.SomeClass>(probe, objenesis);
 
         Field x = SomeClass.class.getDeclaredField("x");
@@ -32,7 +53,6 @@ class InstanceCreatorTest {
     @Test
     void copy() throws NoSuchFieldException {
         ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
-        Objenesis objenesis = new ObjenesisStd();
         var sut = new InstanceCreator<InstanceCreatorTest.SomeSubClass>(probe, objenesis);
 
         SomeClass original = new SomeClass(42, 1337, "yeah");
@@ -66,4 +86,8 @@ class InstanceCreatorTest {
             this.a = a;
         }
     }
+
+    sealed static abstract class SealedAbstract permits SealedSub {}
+
+    static final class SealedSub extends SealedAbstract {}
 }
