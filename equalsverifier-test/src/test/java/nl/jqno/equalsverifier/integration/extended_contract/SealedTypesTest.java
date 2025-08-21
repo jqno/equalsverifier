@@ -265,7 +265,7 @@ class SealedTypesTest {
         }
     }
 
-    public static sealed class SealedParentThrowsNull permits SealedChildThrowsNull {
+    public static abstract sealed class SealedParentThrowsNull permits SealedChildThrowsNull {
         private final String string;
 
         public SealedParentThrowsNull(String string) {
