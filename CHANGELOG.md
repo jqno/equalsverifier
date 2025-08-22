@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.9] - 2025-08-22
+
 ### Fixed
 
 - Regression introduced in version 4.0.8: StackOverflowError when testing a non-abstract sealed type. ([Issue 1111](https://github.com/jqno/equalsverifier/issues/1111#issuecomment-3213790771))
@@ -1441,7 +1443,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.8...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.9...HEAD
+[4.0.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.8...equalsverifier-4.0.9
 [4.0.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.7...equalsverifier-4.0.8
 [4.0.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.6...equalsverifier-4.0.7
 [4.0.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.5...equalsverifier-4.0.6
