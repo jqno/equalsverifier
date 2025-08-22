@@ -24,9 +24,20 @@ public class InstanceCreator<T> {
      * @param objenesis To instantiate non-record classes.
      */
     public InstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
-        this.type = probe.getType();
         this.probe = probe;
-        this.instantiator = Instantiator.of(type, objenesis);
+        this.instantiator = Instantiator.of(probe.getType(), objenesis);
+        this.type = instantiator.getType();
+    }
+
+    /**
+     * Returns the actual type as determined by the Instantiator. The instantiator might defer to a subtype of the given
+     * type, for example if it's a sealed abstract type. The subtype might have additional fields, which need to receive
+     * values too.
+     *
+     * @return The actual type.
+     */
+    public Class<T> getActualType() {
+        return type;
     }
 
     /**

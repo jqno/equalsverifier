@@ -24,6 +24,24 @@ class InstantiatorTest {
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
+    void getType() {
+        Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
+        Class<Point> type = instantiator.getType();
+        assertThat(type).isEqualTo(Point.class);
+    }
+
+    @Test
+    void getType_sealedAbstract() {
+        Instantiator<SealedAbstract> instantiator = Instantiator.of(SealedAbstract.class, objenesis);
+        Class<SealedAbstract> type = instantiator.getType();
+        assertThat(type).isEqualTo(SealedSub.class);
+    }
+
+    sealed static abstract class SealedAbstract permits SealedSub {}
+
+    static final class SealedSub extends SealedAbstract {}
+
+    @Test
     void instantiateClass() {
         Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
         Point p = instantiator.instantiate();

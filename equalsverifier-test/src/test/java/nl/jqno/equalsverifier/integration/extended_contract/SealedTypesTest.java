@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,11 @@ class SealedTypesTest {
     }
 
     @Test
+    void succeed_whenSealedParentHasTwoChildren_parent() {
+        EqualsVerifier.forClass(SealedParentWithTwoChildren.class).verify();
+    }
+
+    @Test
     void succeed_whenSealedParentHasTwoChildren_a() {
         EqualsVerifier.forClass(SealedChildA.class).verify();
     }
@@ -72,6 +78,22 @@ class SealedTypesTest {
     @Test
     void succeed_whenSealedParentHasTwoChildren_b() {
         EqualsVerifier.forClass(SealedChildB.class).verify();
+    }
+
+    @Test
+    void succeed_whenSealedParentThrowsNull() {
+        EqualsVerifier
+                .forClass(SealedParentThrowsNull.class)
+                .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    void succeed_whenSealedChildThrowsNull() {
+        EqualsVerifier
+                .forClass(SealedChildThrowsNull.class)
+                .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
+                .verify();
     }
 
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {
@@ -212,14 +234,14 @@ class SealedTypesTest {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public final boolean equals(Object other) {
             return other != null
                     && (this.getClass() == other.getClass())
                     && Objects.equals(this.value, ((SealedParentWithTwoChildren) other).value);
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hashCode(this.value);
         }
 
@@ -240,6 +262,45 @@ class SealedTypesTest {
 
         SealedChildB(String value) {
             super(value);
+        }
+    }
+
+    public static abstract sealed class SealedParentThrowsNull permits SealedChildThrowsNull {
+        private final String string;
+
+        public SealedParentThrowsNull(String string) {
+            this.string = string;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof SealedParentThrowsNull other && Objects.equals(string, other.string);
+        }
+
+        @Override
+        public int hashCode() {
+            return string.hashCode();
+        }
+    }
+
+    public static final class SealedChildThrowsNull extends SealedParentThrowsNull {
+        private final Integer i;
+
+        public SealedChildThrowsNull(String string, Integer i) {
+            super(string);
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof SealedChildThrowsNull other && super.equals(obj) && Objects.equals(i, other.i);
+        }
+
+        @Override
+        public int hashCode() {
+            int hashCode = super.hashCode();
+            hashCode = 31 * hashCode + i.hashCode();
+            return hashCode;
         }
     }
 }
