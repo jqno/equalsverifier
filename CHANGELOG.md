@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `NullPointerException` with abstract sealed types whose subtypes add state and need `Warning.NULL_FIELDS` suppressed. ([Issue 1111](https://github.com/jqno/equalsverifier/issues/1111))
+
 ## [4.0.7] - 2025-07-30
 
 ### Fixed
