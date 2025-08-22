@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Regression introduced in version 4.0.8: StackOverflowError when testing a non-abstract sealed type. ([Issue 1111](https://github.com/jqno/equalsverifier/issues/1111#issuecomment-3213790771))
+
 ## [4.0.8] - 2025-08-22
 
 ### Fixed

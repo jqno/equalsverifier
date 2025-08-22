@@ -58,6 +58,15 @@ public final class ClassProbe<T> {
     }
 
     /**
+     * Determines whether T is abstract.
+     *
+     * @return true if T is abstract.
+     */
+    public boolean isAbstract() {
+        return Modifier.isAbstract(type.getModifiers());
+    }
+
+    /**
      * Determines whether T has an {@code equals} method.
      *
      * @return True if T has an {@code equals} method.

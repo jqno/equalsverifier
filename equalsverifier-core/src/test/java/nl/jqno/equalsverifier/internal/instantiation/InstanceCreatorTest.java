@@ -31,7 +31,17 @@ class InstanceCreatorTest {
 
         Class<SealedAbstract> actual = sut.getActualType();
 
-        assertThat(actual).isEqualTo(SealedSub.class);
+        assertThat(actual).isEqualTo(SealedAbstractSub.class);
+    }
+
+    @Test
+    void getActualType_sealedNonAbstract() {
+        var probe = ClassProbe.of(SealedNonAbstract.class);
+        var sut = new InstanceCreator<>(probe, objenesis);
+
+        Class<SealedNonAbstract> actual = sut.getActualType();
+
+        assertThat(actual).isEqualTo(SealedNonAbstract.class);
     }
 
     @Test
@@ -87,7 +97,11 @@ class InstanceCreatorTest {
         }
     }
 
-    sealed static abstract class SealedAbstract permits SealedSub {}
+    sealed static abstract class SealedAbstract permits SealedAbstractSub {}
 
-    static final class SealedSub extends SealedAbstract {}
+    static final class SealedAbstractSub extends SealedAbstract {}
+
+    sealed static class SealedNonAbstract permits SealedNonAbstractSub {}
+
+    static final class SealedNonAbstractSub extends SealedNonAbstract {}
 }

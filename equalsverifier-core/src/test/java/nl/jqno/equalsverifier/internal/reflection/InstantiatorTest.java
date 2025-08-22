@@ -34,12 +34,23 @@ class InstantiatorTest {
     void getType_sealedAbstract() {
         Instantiator<SealedAbstract> instantiator = Instantiator.of(SealedAbstract.class, objenesis);
         Class<SealedAbstract> type = instantiator.getType();
-        assertThat(type).isEqualTo(SealedSub.class);
+        assertThat(type).isEqualTo(SealedAbstractSub.class);
     }
 
-    sealed static abstract class SealedAbstract permits SealedSub {}
+    sealed static abstract class SealedAbstract permits SealedAbstractSub {}
 
-    static final class SealedSub extends SealedAbstract {}
+    static final class SealedAbstractSub extends SealedAbstract {}
+
+    @Test
+    void getType_sealedNonAbstract() {
+        Instantiator<SealedNonAbstract> instantiator = Instantiator.of(SealedNonAbstract.class, objenesis);
+        Class<SealedNonAbstract> type = instantiator.getType();
+        assertThat(type).isEqualTo(SealedNonAbstract.class);
+    }
+
+    sealed static class SealedNonAbstract permits SealedNonAbstractSub {}
+
+    static final class SealedNonAbstractSub extends SealedNonAbstract {}
 
     @Test
     void instantiateClass() {
