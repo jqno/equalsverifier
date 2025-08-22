@@ -8,7 +8,8 @@ class SealedTypesFinderTest {
 
     @Test
     void twoLevels() {
-        var actual = SealedTypesFinder.findInstantiableSubclass(TwoLevelParent.class);
+        var probe = ClassProbe.of(TwoLevelParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(TwoLevelChild.class);
     }
 
@@ -18,7 +19,8 @@ class SealedTypesFinderTest {
 
     @Test
     void fourLevels() {
-        var actual = SealedTypesFinder.findInstantiableSubclass(FourLevelParent.class);
+        var probe = ClassProbe.of(FourLevelParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(FourLevelChild.class);
     }
 
@@ -32,7 +34,8 @@ class SealedTypesFinderTest {
 
     @Test
     void allConcrete() {
-        var actual = SealedTypesFinder.findInstantiableSubclass(AllConcreteParent.class);
+        var probe = ClassProbe.of(AllConcreteParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(AllConcreteParent.class);
     }
 
@@ -44,7 +47,8 @@ class SealedTypesFinderTest {
 
     @Test
     void abstractTopThreeLevels() {
-        var actual = SealedTypesFinder.findInstantiableSubclass(AbstractParent.class);
+        var probe = ClassProbe.of(AbstractParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(AbstractMiddle.class);
     }
 
@@ -56,7 +60,8 @@ class SealedTypesFinderTest {
 
     @Test
     void nonSealedAtTheBottom() {
-        var actual = SealedTypesFinder.findInstantiableSubclass(NonSealedAtTheBottomParent.class);
+        var probe = ClassProbe.of(NonSealedAtTheBottomParent.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(NonSealedAtTheBottomChild.class);
     }
 
@@ -66,7 +71,8 @@ class SealedTypesFinderTest {
 
     @Test
     void notSealed() {
-        var actual = SealedTypesFinder.findInstantiableSubclass(Object.class);
+        var probe = ClassProbe.of(Object.class);
+        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(Object.class);
     }
 }

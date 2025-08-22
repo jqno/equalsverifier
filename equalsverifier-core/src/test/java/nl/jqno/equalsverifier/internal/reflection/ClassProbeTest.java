@@ -38,10 +38,38 @@ class ClassProbeTest {
         assertThat(SimpleRecord.class.isRecord()).isTrue();
     }
 
-    // Tests the false case. The true case is tested in {@link ClassProbeSealedTest}.
+    @Test
+    void isNotSealed() {
+        assertThat(pointProbe.isSealed()).isFalse();
+    }
+
+    @Test
+    void childIsNotSealed() {
+        var probe = ClassProbe.of(SealedChild.class);
+        assertThat(probe.isSealed()).isFalse();
+    }
+
     @Test
     void isSealed() {
-        assertThat(pointProbe.isSealed()).isFalse();
+        var probe = ClassProbe.of(SealedParent.class);
+        assertThat(probe.isSealed()).isTrue();
+    }
+
+    @Test
+    void isNotAbstract() {
+        assertThat(pointProbe.isAbstract()).isFalse();
+    }
+
+    @Test
+    void isAbstract() {
+        var probe = ClassProbe.of(Abstract.class);
+        assertThat(probe.isAbstract()).isTrue();
+    }
+
+    @Test
+    void interfaceIsAbstract() {
+        var probe = ClassProbe.of(Interface.class);
+        assertThat(probe.isAbstract()).isTrue();
     }
 
     @Test
@@ -190,6 +218,16 @@ class ClassProbeTest {
         assertThat(superAccessor.getType()).isEqualTo(Point3D.class);
     }
 
+    static class ChildOfFieldContainer extends FieldContainer {}
+
+    public abstract static sealed class SealedParent {}
+
+    public static non-sealed class SealedChild extends SealedParent {}
+
+    static abstract class Abstract {}
+
+    static interface Interface {}
+
     static class MethodContainer {
 
         public void m() {}
@@ -209,6 +247,4 @@ class ClassProbeTest {
         // CHECKSTYLE OFF: MemberName
         protected int f_protected;
     }
-
-    static class ChildOfFieldContainer extends FieldContainer {}
 }

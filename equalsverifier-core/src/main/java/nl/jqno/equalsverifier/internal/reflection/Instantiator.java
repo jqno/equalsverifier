@@ -46,8 +46,9 @@ public final class Instantiator<T> {
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type, Objenesis objenesis) {
-        if (type.isSealed()) {
-            Class<T> concrete = SealedTypesFinder.findInstantiableSubclass(type).get();
+        ClassProbe<T> probe = ClassProbe.of(type);
+        if (probe.isSealed() && probe.isAbstract()) {
+            Class<T> concrete = SealedTypesFinder.findInstantiableSubclass(probe).get();
             return Instantiator.of(concrete, objenesis);
         }
         if (Modifier.isAbstract(type.getModifiers())) {
