@@ -10,13 +10,11 @@ public final class SealedTypesFinder {
     private SealedTypesFinder() {}
 
     public static <T, U extends T> Optional<Class<U>> findInstantiableSubclass(Class<T> type) {
-        return findInstantiablePermittedClass(type, true);
+        return findInstantiablePermittedClass(type);
     }
 
-    private static <T, U extends T> Optional<Class<U>> findInstantiablePermittedClass(
-            Class<T> type,
-            boolean checkCurrent) {
-        if (checkCurrent && (!isAbstract(type) || !type.isSealed())) {
+    private static <T, U extends T> Optional<Class<U>> findInstantiablePermittedClass(Class<T> type) {
+        if (!isAbstract(type) || !type.isSealed()) {
             @SuppressWarnings("unchecked")
             var result = (Class<U>) type;
             return Optional.of(result);
@@ -29,7 +27,7 @@ public final class SealedTypesFinder {
             @SuppressWarnings("unchecked")
             Class<U> subType = (Class<U>) permitted;
 
-            var c = findInstantiablePermittedClass(subType, true);
+            var c = findInstantiablePermittedClass(subType);
             if (c.isPresent()) {
                 return c;
             }
