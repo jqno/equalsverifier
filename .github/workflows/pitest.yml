@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           # important to set a fetch depth of 2. By default the checkout action make no history available
           fetch-depth: 2
@@ -30,7 +30,7 @@ jobs:
           key: ${{ runner.os }}-mvn-pitest-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-mvn-pitest
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
