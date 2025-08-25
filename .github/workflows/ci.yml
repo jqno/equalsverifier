@@ -48,7 +48,7 @@ jobs:
     - name: 'Checkout from Git'
       # Can't refer to matrix in job if conditional, so we have to repeat it every step: https://github.com/actions/runner/issues/1985
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: 'Cache Maven repo'
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       uses: actions/cache@v4
@@ -59,7 +59,7 @@ jobs:
             ${{ runner.os }}-mvn-${{ matrix.cache-id }}
     - name: 'Set up JDK ${{ matrix.java }} (regular)'
       if: ${{ !matrix.experimental }}
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
           distribution: ${{ matrix.dist }}
           java-version: ${{ matrix.java }}
