@@ -124,6 +124,16 @@ class RecordsTest {
     }
 
     @Test
+    void succeed_whenRecordHasFieldsThatDontOverrideEquals() {
+        EqualsVerifier.forClass(ObjectRecord.class).verify();
+    }
+
+    @Test
+    void succeed_whenRecordIsGeneric() {
+        EqualsVerifier.forClass(GenericRecord.class).verify();
+    }
+
+    @Test
     void succeed_whenRecordHasBoundedWildcardGeneric() {
         EqualsVerifier.forClass(WildcardGenericRecordContainer.class).verify();
     }
@@ -253,6 +263,10 @@ class RecordsTest {
             }
         }
     }
+
+    record ObjectRecord(Object o) {}
+
+    record GenericRecord<T>(T t) {}
 
     record BoundedGenericRecord<T extends Serializable>(T t) {}
 
