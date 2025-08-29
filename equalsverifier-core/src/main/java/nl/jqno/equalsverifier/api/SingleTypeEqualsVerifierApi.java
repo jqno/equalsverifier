@@ -495,7 +495,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private void verifyWithoutExamples(Context<T> context) {
         Configuration<T> config = context.getConfiguration();
         Checker[] checkers = { new SignatureChecker<>(context), new AbstractDelegationChecker<>(context),
-                new NullChecker<>(context), new RecordChecker<>(context), new CachedHashCodeChecker<>(config) };
+                new NullChecker<>(context), new CachedHashCodeChecker<>(config) };
 
         for (Checker checker : checkers) {
             checker.check();

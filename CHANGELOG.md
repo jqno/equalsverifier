@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Records with a constructor that changes a parameter's value are now allowed.
+
 ## [4.0.9] - 2025-08-22
 
 ### Fixed
