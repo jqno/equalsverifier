@@ -19,6 +19,7 @@ public class CachingValueProvider implements ValueProvider {
     /**
      * Constructor.
      *
+     * @param decider    Decides whether a value should be cached or not.
      * @param fieldCache The underlying cache of instances.
      * @param fallback   The ValueProvider that provides instances when there's a cache miss.
      */
