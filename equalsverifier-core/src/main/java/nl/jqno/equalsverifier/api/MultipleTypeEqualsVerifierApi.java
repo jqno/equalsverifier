@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.*;
@@ -57,6 +58,18 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     @SuppressWarnings("CheckReturnValue")
     public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue) {
         ev.withPrefabValues(otherType, red, blue);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
+    public <S> MultipleTypeEqualsVerifierApi withPrefabValueSupplier(
+            Class<S> otherType,
+            Supplier<S> red,
+            Supplier<S> blue) {
+        ev.withPrefabValueSupplier(otherType, red, blue);
         return this;
     }
 

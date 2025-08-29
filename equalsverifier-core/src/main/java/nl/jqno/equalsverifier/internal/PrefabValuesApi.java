@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Fa
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
@@ -41,6 +42,17 @@ public final class PrefabValuesApi {
                 userPrefabs.register(otherType, red, blue, red);
             }
         }
+    }
+
+    public static <T> void addPrefabValues(
+            UserPrefabValueProvider userPrefabs,
+            Objenesis objenesis,
+            Class<T> otherType,
+            Supplier<T> red,
+            Supplier<T> blue) {
+        Validations.validateRedAndBluePrefabValues(otherType, red.get(), blue.get());
+
+        userPrefabs.register(otherType, red, blue, red);
     }
 
     public static <T> void addPrefabValuesForField(

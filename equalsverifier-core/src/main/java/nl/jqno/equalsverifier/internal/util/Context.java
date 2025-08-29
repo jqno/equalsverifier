@@ -38,7 +38,7 @@ public final class Context<T> {
         var vintage = new VintageValueProvider(vintageChain, cache, objenesis);
 
         var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito, vintage);
-        var caching = new CachingValueProvider(fieldCache, mainChain);
+        var caching = new CachingValueProvider(userPrefabs, fieldCache, mainChain);
 
         this.valueProvider = caching;
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);

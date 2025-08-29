@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -15,8 +16,9 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  * get values for them. For that, we either need withPrefabValuesForField, or the complicated recursion mechanism that
  * is currently provided by VintageValueProvider.
  */
-public class UserPrefabValueProvider implements ValueProvider {
+public class UserPrefabValueProvider implements ValueProvider, CacheDecider {
 
+    private final Map<Class<?>, Tuple<Supplier<?>>> supplierCache = new HashMap<>();
     private final Map<Class<?>, Tuple<?>> cache = new HashMap<>();
 
     /** Constructor. */
@@ -29,6 +31,7 @@ public class UserPrefabValueProvider implements ValueProvider {
      */
     private UserPrefabValueProvider(UserPrefabValueProvider other) {
         this();
+        supplierCache.putAll(other.supplierCache);
         cache.putAll(other.cache);
     }
 
@@ -55,7 +58,16 @@ public class UserPrefabValueProvider implements ValueProvider {
 
     @SuppressWarnings("unchecked")
     private <T> Tuple<T> attempt(Class<?> type) {
+        if (supplierCache.containsKey(type)) {
+            Tuple<Supplier<?>> supplier = supplierCache.get(type);
+            return (Tuple<T>) new Tuple<>(supplier.red().get(), supplier.blue().get(), supplier.redCopy().get());
+        }
         return (Tuple<T>) cache.get(type);
+    }
+
+    public <T> void register(Class<T> type, Supplier<T> red, Supplier<T> blue, Supplier<T> redCopy) {
+        Tuple<Supplier<?>> tuple = new Tuple<>(red, blue, redCopy);
+        supplierCache.put(type, tuple);
     }
 
     /**
@@ -70,5 +82,10 @@ public class UserPrefabValueProvider implements ValueProvider {
     public <T> void register(Class<T> type, T red, T blue, T redCopy) {
         Tuple<T> tuple = new Tuple<>(red, blue, redCopy);
         cache.put(type, tuple);
+    }
+
+    @Override
+    public boolean canBeCached(Class<?> type) {
+        return !supplierCache.containsKey(type);
     }
 }

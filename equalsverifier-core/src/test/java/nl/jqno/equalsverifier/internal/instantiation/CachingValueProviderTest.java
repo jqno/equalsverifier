@@ -15,9 +15,10 @@ public class CachingValueProviderTest {
     private static final TypeTag FALLBACK_TAG = new TypeTag(int.class);
     private static final TypeTag OTHER_TAG = new TypeTag(short.class);
 
+    private CacheDecider decider = type -> true;
     private FieldCache cache = new FieldCache();
     private ValueProvider fallback = new Fallback();
-    private CachingValueProvider sut = new CachingValueProvider(cache, fallback);
+    private CachingValueProvider sut = new CachingValueProvider(decider, cache, fallback);
 
     @Test
     void noValueAvailable() {

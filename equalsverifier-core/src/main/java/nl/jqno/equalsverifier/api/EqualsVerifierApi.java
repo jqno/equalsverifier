@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.api;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Func.Func1;
@@ -50,6 +51,8 @@ public interface EqualsVerifierApi<T> {
      * @since 0.2
      */
     <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
+
+    <S> EqualsVerifierApi<T> withPrefabValueSupplier(Class<S> otherType, Supplier<S> red, Supplier<S> blue);
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic type parameter that

@@ -33,18 +33,16 @@ public class RecordChecker<T> implements Checker {
             return;
         }
 
-        verifyRecordPrecondition(subjectCreator.plain());
-        verifyRecordPrecondition(subjectCreator.withAllFieldsDefaulted());
+        verifyRecordPrecondition(subjectCreator.plain(), subjectCreator.plain());
+        verifyRecordPrecondition(subjectCreator.withAllFieldsDefaulted(), subjectCreator.withAllFieldsDefaulted());
     }
 
-    private void verifyRecordPrecondition(T original) {
-        Class<T> type = context.getType();
-        T copy = subjectCreator.copy(original);
-
+    private void verifyRecordPrecondition(T original, T copy) {
         if (original.equals(copy)) {
             return;
         }
 
+        Class<T> type = context.getType();
         var failedFields = new ArrayList<String>();
         for (FieldProbe p : FieldIterable.of(type)) {
             Method accessorMethod = getAccessorMethodFor(type, p.getField());
