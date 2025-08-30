@@ -110,7 +110,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
             Class<S> otherType,
             Supplier<S> red,
             Supplier<S> blue) {
-        PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
+        PrefabValuesApi.addResettablePrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 

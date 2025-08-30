@@ -44,13 +44,17 @@ public final class PrefabValuesApi {
         }
     }
 
-    public static <T> void addPrefabValues(
+    public static <T> void addResettablePrefabValues(
             UserPrefabValueProvider userPrefabs,
             Objenesis objenesis,
             Class<T> otherType,
             Supplier<T> red,
             Supplier<T> blue) {
+        Validations.validateNotNull(red, "red supplier is null");
+        Validations.validateNotNull(blue, "blue supplier is null");
         Validations.validateRedAndBluePrefabValues(otherType, red.get(), blue.get());
+        Validations.validateEqual(red.get(), red.get(), "red prefab value is not equal to itself after reset.");
+        Validations.validateEqual(blue.get(), blue.get(), "blue prefab value is not equal to itself after reset.");
 
         userPrefabs.register(otherType, red, blue, red);
     }

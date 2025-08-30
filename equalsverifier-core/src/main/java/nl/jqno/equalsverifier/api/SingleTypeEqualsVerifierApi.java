@@ -147,7 +147,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             Class<S> otherType,
             Supplier<S> red,
             Supplier<S> blue) {
-        PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
+        PrefabValuesApi.addResettablePrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 
