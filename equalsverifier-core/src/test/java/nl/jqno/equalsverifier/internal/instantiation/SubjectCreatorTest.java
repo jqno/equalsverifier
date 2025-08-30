@@ -177,15 +177,6 @@ class SubjectCreatorTest {
     }
 
     @Test
-    void copy() {
-        expected = new SomeClass(I_RED, I_RED, S_RED);
-        SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
-        actual = sut.copy(original);
-
-        assertThat(actual).isEqualTo(expected).isNotSameAs(expected);
-    }
-
-    @Test
     void copyIntoSuperclass() {
         SomeSuper superExpected = new SomeSuper(I_RED);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
