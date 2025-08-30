@@ -106,7 +106,10 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    public <S> ConfiguredEqualsVerifier withPrefabValueSupplier(Class<S> otherType, Supplier<S> red, Supplier<S> blue) {
+    public <S> ConfiguredEqualsVerifier withResettablePrefabValue(
+            Class<S> otherType,
+            Supplier<S> red,
+            Supplier<S> blue) {
         PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }

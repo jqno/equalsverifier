@@ -52,7 +52,7 @@ public interface EqualsVerifierApi<T> {
      */
     <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
 
-    <S> EqualsVerifierApi<T> withPrefabValueSupplier(Class<S> otherType, Supplier<S> red, Supplier<S> blue);
+    <S> EqualsVerifierApi<T> withResettablePrefabValue(Class<S> otherType, Supplier<S> red, Supplier<S> blue);
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic type parameter that

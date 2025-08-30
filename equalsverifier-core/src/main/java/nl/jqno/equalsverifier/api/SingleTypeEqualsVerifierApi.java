@@ -143,7 +143,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
-    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValueSupplier(
+    public <S> SingleTypeEqualsVerifierApi<T> withResettablePrefabValue(
             Class<S> otherType,
             Supplier<S> red,
             Supplier<S> blue) {

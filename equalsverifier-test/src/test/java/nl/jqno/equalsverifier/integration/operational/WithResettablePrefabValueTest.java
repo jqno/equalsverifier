@@ -4,12 +4,12 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
-public class WithPrefabValueSupplierTest {
+public class WithResettablePrefabValueTest {
     @Test
-    void recordWithMutableBackReference() {
+    void succeed_whenRecordHasMutableBackReference() {
         EqualsVerifier
                 .forClass(WithBackReference.class)
-                .withPrefabValueSupplier(
+                .withResettablePrefabValue(
                     BackReferenceContainer.class,
                     () -> new BackReferenceContainer(1),
                     () -> new BackReferenceContainer(2))
