@@ -163,7 +163,7 @@ class ConfiguredEqualsVerifierMultipleTest {
         // should succeed
         ev
                 .forClasses(RecursiveTypeContainer.class, A.class)
-                .withResettablePrefabValue(
+                .withResettablePrefabValues(
                     RecursiveType.class,
                     () -> new RecursiveType(null),
                     () -> new RecursiveType(new RecursiveType(null)))

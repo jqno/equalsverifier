@@ -7,12 +7,12 @@ import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("CheckReturnValue")
-public class WithResettablePrefabValueTest {
+public class WithResettablePrefabValuesTest {
     @Test
     void succeed_whenRecordHasMutableBackReference() {
         EqualsVerifier
                 .forClass(WithBackReference.class)
-                .withResettablePrefabValue(
+                .withResettablePrefabValues(
                     BackReferenceContainer.class,
                     () -> new BackReferenceContainer(1),
                     () -> new BackReferenceContainer(2))
@@ -26,7 +26,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(null, () -> new Object(), () -> new Object()))
+                            .withResettablePrefabValues(null, () -> new Object(), () -> new Object()))
                 .assertThrows(NullPointerException.class)
                 .assertMessageContains("Precondition:", "prefab value type is null");
     }
@@ -37,7 +37,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, null, () -> new Object()))
+                            .withResettablePrefabValues(Object.class, null, () -> new Object()))
                 .assertThrows(NullPointerException.class)
                 .assertMessageContains("Precondition:", "red supplier is null");
     }
@@ -48,7 +48,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, () -> new Object(), null))
+                            .withResettablePrefabValues(Object.class, () -> new Object(), null))
                 .assertThrows(NullPointerException.class)
                 .assertMessageContains("Precondition:", "blue supplier is null");
     }
@@ -59,7 +59,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, () -> null, () -> new Object()))
+                            .withResettablePrefabValues(Object.class, () -> null, () -> new Object()))
                 .assertThrows(NullPointerException.class)
                 .assertMessageContains("Precondition:", "red prefab value", "is null");
     }
@@ -70,7 +70,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, () -> new Object(), () -> null))
+                            .withResettablePrefabValues(Object.class, () -> new Object(), () -> null))
                 .assertThrows(NullPointerException.class)
                 .assertMessageContains("Precondition:", "blue prefab value", "is null");
     }
@@ -82,7 +82,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, () -> constant, () -> constant))
+                            .withResettablePrefabValues(Object.class, () -> constant, () -> constant))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition:", "both prefab values", "are equal");
     }
@@ -94,7 +94,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, () -> new Object(), () -> constant))
+                            .withResettablePrefabValues(Object.class, () -> new Object(), () -> constant))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition:", "red prefab value is not equal to itself after reset");
     }
@@ -106,7 +106,7 @@ public class WithResettablePrefabValueTest {
                 .when(
                     () -> EqualsVerifier
                             .forClass(Point.class)
-                            .withResettablePrefabValue(Object.class, () -> constant, () -> new Object()))
+                            .withResettablePrefabValues(Object.class, () -> constant, () -> new Object()))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition:", "blue prefab value is not equal to itself after reset");
     }
