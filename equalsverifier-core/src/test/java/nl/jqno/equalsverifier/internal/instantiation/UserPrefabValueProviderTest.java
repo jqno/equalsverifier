@@ -21,6 +21,29 @@ public class UserPrefabValueProviderTest {
     }
 
     @Test
+    public void aRegisteredResettableValueCanBeFound() {
+        sut.registerResettable(INT.getType(), () -> 3, () -> 2, () -> 3);
+        assertThat(sut.provide(INT, SOME_FIELDNAME)).contains(new Tuple<>(3, 2, 3));
+    }
+
+    @Test
+    void aNormalValueCanBeCached() {
+        sut.register(INT.getType(), 3, 2, 3);
+        assertThat(sut.canBeCached(INT.getType())).isTrue();
+    }
+
+    @Test
+    void aResettableValueCannotBeCached() {
+        sut.registerResettable(INT.getType(), () -> 3, () -> 2, () -> 3);
+        assertThat(sut.canBeCached(INT.getType())).isFalse();
+    }
+
+    @Test
+    void anUnregisteredValueCanBeCached() {
+        assertThat(sut.canBeCached(INT.getType())).isTrue();
+    }
+
+    @Test
     public void fieldNameIsIgnoredWhenFindingAValue() {
         sut.register(INT.getType(), 3, 2, 3);
         assertThat(sut.provide(INT, "label")).contains(new Tuple<>(3, 2, 3));
@@ -40,6 +63,14 @@ public class UserPrefabValueProviderTest {
     @Test
     public void copy() {
         sut.register(INT.getType(), 1, 2, 1);
+        UserPrefabValueProvider anotherSut = sut.copy();
+
+        assertThat(anotherSut.provide(INT, SOME_FIELDNAME)).contains(new Tuple<>(1, 2, 1));
+    }
+
+    @Test
+    public void copyResettable() {
+        sut.registerResettable(INT.getType(), () -> 1, () -> 2, () -> 1);
         UserPrefabValueProvider anotherSut = sut.copy();
 
         assertThat(anotherSut.provide(INT, SOME_FIELDNAME)).contains(new Tuple<>(1, 2, 1));

@@ -94,6 +94,7 @@ public class UserPrefabValueProvider implements ValueProvider, CacheDecider {
         cache.put(type, tuple);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean canBeCached(Class<?> type) {
         return !supplierCache.containsKey(type);
