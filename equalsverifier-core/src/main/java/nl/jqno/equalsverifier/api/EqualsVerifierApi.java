@@ -52,6 +52,21 @@ public interface EqualsVerifierApi<T> {
      */
     <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
 
+    /**
+     * Adds Suppliers for resettable prefabricated values for instance fields of classes that EqualsVerifier cannot
+     * instantiate by itself. Resettable values are values that are created new every time a new instance of {@code T}
+     * is constructed within EqualsVerifier. This can be useful when {@code T} mutates its instances of {@code S}.
+     *
+     * @param <S>       The class of the prefabricated values.
+     * @param otherType The class of the prefabricated values.
+     * @param red       An instance of {@code S}.
+     * @param blue      Another instance of {@code S}, not equal to {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException     If either {@code otherType}, {@code red}, or {@code blue} is null.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 4.1
+     */
     <S> EqualsVerifierApi<T> withResettablePrefabValue(Class<S> otherType, Supplier<S> red, Supplier<S> blue);
 
     /**

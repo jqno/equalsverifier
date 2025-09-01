@@ -56,7 +56,7 @@ public final class PrefabValuesApi {
         Validations.validateEqual(red.get(), red.get(), "red prefab value is not equal to itself after reset.");
         Validations.validateEqual(blue.get(), blue.get(), "blue prefab value is not equal to itself after reset.");
 
-        userPrefabs.register(otherType, red, blue, red);
+        userPrefabs.registerResettable(otherType, red, blue, red);
     }
 
     public static <T> void addPrefabValuesForField(

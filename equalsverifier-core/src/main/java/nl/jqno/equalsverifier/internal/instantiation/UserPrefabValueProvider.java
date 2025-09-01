@@ -65,7 +65,17 @@ public class UserPrefabValueProvider implements ValueProvider, CacheDecider {
         return (Tuple<T>) cache.get(type);
     }
 
-    public <T> void register(Class<T> type, Supplier<T> red, Supplier<T> blue, Supplier<T> redCopy) {
+    /**
+     * Registers a resettable prefab value.
+     *
+     * @param type    The class of the prefabricated values.
+     * @param red     A Supplier for an instance of {@code T}.
+     * @param blue    A Supplier for another instance of {@code T}, not equal to {@code red}.
+     * @param redCopy A Supplier for an instance of {@code T}, equal to {@code red} but preferably not the same
+     *                    instance.
+     * @param <T>     The type of the instances.
+     */
+    public <T> void registerResettable(Class<T> type, Supplier<T> red, Supplier<T> blue, Supplier<T> redCopy) {
         Tuple<Supplier<?>> tuple = new Tuple<>(red, blue, redCopy);
         supplierCache.put(type, tuple);
     }
