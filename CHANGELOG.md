@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1] - 2025-09-02
+
 ### Added
 
 - `#withResettablePrefabValues()` method to supply values that won't be cached, and that will be re-initialized on each separate test performed by EqualsVerifier. ([Issue 1117](https://github.com/jqno/equalsverifier/issues/1117))
@@ -1451,7 +1453,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.9...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1...HEAD
+[4.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.9...equalsverifier-4.1
 [4.0.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.8...equalsverifier-4.0.9
 [4.0.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.7...equalsverifier-4.0.8
 [4.0.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.6...equalsverifier-4.0.7
