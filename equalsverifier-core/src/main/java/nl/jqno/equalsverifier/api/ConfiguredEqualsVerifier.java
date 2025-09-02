@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.api;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
@@ -99,6 +100,17 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @CheckReturnValue
     public <S> ConfiguredEqualsVerifier withPrefabValues(Class<S> otherType, S red, S blue) {
         PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
+    public <S> ConfiguredEqualsVerifier withResettablePrefabValues(
+            Class<S> otherType,
+            Supplier<S> red,
+            Supplier<S> blue) {
+        PrefabValuesApi.addResettablePrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 

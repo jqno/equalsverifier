@@ -215,6 +215,10 @@ public final class Validations {
         validate(!unknownTypes.isEmpty(), message);
     }
 
+    public static <T> void validateEqual(T red, T blue, String message) {
+        validate(!red.equals(blue), message);
+    }
+
     public static void validateNotNull(Object object, String errormessage) {
         if (object == null) {
             throw new NullPointerException("Precondition: " + errormessage);

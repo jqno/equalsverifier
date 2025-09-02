@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class ExamplesChecker<T> implements Checker {
@@ -36,7 +37,7 @@ public class ExamplesChecker<T> implements Checker {
 
         for (int i = 0; i < equalExamples.size(); i++) {
             T reference = equalExamples.get(i);
-            checkSingle(reference);
+            checkSingle(reference, reference);
 
             for (int j = i + 1; j < equalExamples.size(); j++) {
                 T other = equalExamples.get(j);
@@ -45,20 +46,20 @@ public class ExamplesChecker<T> implements Checker {
             }
         }
 
-        List<T> unequals = ensureEnoughExamples(unequalExamples);
-        for (T reference : unequals) {
-            checkSingle(reference);
+        List<Tuple<T>> unequals = ensureEnoughExamples(unequalExamples);
+        for (var tuple : unequals) {
+            checkSingle(tuple.red(), tuple.blue());
         }
     }
 
-    private List<T> ensureEnoughExamples(List<T> examples) {
+    private List<Tuple<T>> ensureEnoughExamples(List<T> examples) {
         if (examples.size() > 0) {
-            return examples;
+            return examples.stream().map(e -> new Tuple<>(e, e, e)).toList();
         }
 
-        var result = new ArrayList<T>();
-        result.add(subjectCreator.plain());
-        result.add(subjectCreator.withAllFieldsChanged());
+        var result = new ArrayList<Tuple<T>>();
+        result.add(new Tuple<>(subjectCreator.plain(), subjectCreator.plain(), null));
+        result.add(new Tuple<>(subjectCreator.withAllFieldsChanged(), subjectCreator.withAllFieldsChanged(), null));
         return result;
     }
 
@@ -80,9 +81,7 @@ public class ExamplesChecker<T> implements Checker {
             reference.equals(other));
     }
 
-    private void checkSingle(T reference) {
-        final T copy = subjectCreator.copy(reference);
-
+    private void checkSingle(T reference, T copy) {
         checkReflexivity(reference);
         checkNonNullity(reference);
         checkTypeCheck(reference);

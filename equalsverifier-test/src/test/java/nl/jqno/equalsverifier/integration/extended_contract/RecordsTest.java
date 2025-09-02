@@ -42,27 +42,18 @@ class RecordsTest {
     }
 
     @Test
-    void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
-        ExpectedException
-                .when(() -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())
-                .assertFailure()
-                .assertMessageContains("Record invariant", "intField");
+    void succeed_whenIntFieldIsModifiedInConstructor() {
+        EqualsVerifier.forClass(ModifyingIntFieldRecord.class).verify();
     }
 
     @Test
-    void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
-        ExpectedException
-                .when(() -> EqualsVerifier.forClass(BrokenInvariantStringFieldRecord.class).verify())
-                .assertFailure()
-                .assertMessageContains("Record invariant", "stringField");
+    void succeed_whenStringFieldIsModifiedInConstructor() {
+        EqualsVerifier.forClass(ModifyingStringFieldRecord.class).verify();
     }
 
     @Test
-    void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
-        ExpectedException
-                .when(() -> EqualsVerifier.forClass(BrokenInvariantBothRecord.class).verify())
-                .assertFailure()
-                .assertMessageContains("Record invariant", "intField", "stringField");
+    void succeed_whenBothFieldsAreModifiedInConstructor() {
+        EqualsVerifier.forClass(ModifyingBothFieldsRecord.class).verify();
     }
 
     @Test
@@ -95,19 +86,13 @@ class RecordsTest {
     }
 
     @Test
-    void fail_whenRecordAccessorThrows() {
-        ExpectedException
-                .when(() -> EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify())
-                .assertFailure()
-                .assertMessageContains("Record", "failed to run accessor method");
+    void succeed_whenRecordAccessorThrows() {
+        EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify();
     }
 
     @Test
-    void fail_whenRecordAccessorThrowsNpe() {
-        ExpectedException
-                .when(() -> EqualsVerifier.forClass(NullAccessorRecord.class).verify())
-                .assertFailure()
-                .assertMessageContains("Record", "failed to run accessor method", "s()");
+    void succeed_whenRecordAccessorThrowsNpe() {
+        EqualsVerifier.forClass(NullAccessorRecord.class).verify();
     }
 
     @Test
@@ -156,27 +141,27 @@ class RecordsTest {
         }
     }
 
-    record BrokenInvariantIntFieldRecord(int intField, String stringField) {
+    record ModifyingIntFieldRecord(int intField, String stringField) {
 
-        public BrokenInvariantIntFieldRecord(int intField, String stringField) {
+        public ModifyingIntFieldRecord(int intField, String stringField) {
             this.intField = intField + 1;
             this.stringField = stringField;
         }
 
     }
 
-    record BrokenInvariantStringFieldRecord(int intField, String stringField) {
+    record ModifyingStringFieldRecord(int intField, String stringField) {
 
-        public BrokenInvariantStringFieldRecord(int intField, String stringField) {
+        public ModifyingStringFieldRecord(int intField, String stringField) {
             this.intField = intField;
             this.stringField = stringField + "x";
         }
 
     }
 
-    record BrokenInvariantBothRecord(int intField, String stringField) {
+    record ModifyingBothFieldsRecord(int intField, String stringField) {
 
-        public BrokenInvariantBothRecord(int intField, String stringField) {
+        public ModifyingBothFieldsRecord(int intField, String stringField) {
             this.intField = intField + 1;
             this.stringField = stringField + "x";
         }

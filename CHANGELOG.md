@@ -14,6 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `#withResettablePrefabValues()` method to supply values that won't be cached, and that will be re-initialized on each separate test performed by EqualsVerifier. ([Issue 1117](https://github.com/jqno/equalsverifier/issues/1117))
+
+### Changed
+
+- Records with a constructor that changes a parameter's value are now allowed.
+
 ## [4.0.9] - 2025-08-22
 
 ### Fixed

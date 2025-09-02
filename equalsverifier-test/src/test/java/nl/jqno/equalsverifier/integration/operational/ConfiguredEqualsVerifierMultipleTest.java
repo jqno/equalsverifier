@@ -157,6 +157,26 @@ class ConfiguredEqualsVerifierMultipleTest {
     }
 
     @Test
+    void individuallyAddedResettablePrefabValuesAreNotAddedGlobally() {
+        ConfiguredEqualsVerifier ev = EqualsVerifier.configure();
+
+        // should succeed
+        ev
+                .forClasses(RecursiveTypeContainer.class, A.class)
+                .withResettablePrefabValues(
+                    RecursiveType.class,
+                    () -> new RecursiveType(null),
+                    () -> new RecursiveType(new RecursiveType(null)))
+                .verify();
+
+        // PrefabValues are not added to configuration, so should fail
+        ExpectedException
+                .when(() -> ev.forClasses(RecursiveTypeContainer.class, A.class).verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
+    }
+
+    @Test
     void individuallyAddedGenericPrefabValuesAreNotAddedGlobally() {
         ConfiguredEqualsVerifier ev = EqualsVerifier.configure();
 

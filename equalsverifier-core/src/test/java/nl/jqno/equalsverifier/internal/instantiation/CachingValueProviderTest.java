@@ -15,9 +15,10 @@ public class CachingValueProviderTest {
     private static final TypeTag FALLBACK_TAG = new TypeTag(int.class);
     private static final TypeTag OTHER_TAG = new TypeTag(short.class);
 
+    private CacheDecider decider = type -> true;
     private FieldCache cache = new FieldCache();
     private ValueProvider fallback = new Fallback();
-    private CachingValueProvider sut = new CachingValueProvider(cache, fallback);
+    private CachingValueProvider sut = new CachingValueProvider(decider, cache, fallback);
 
     @Test
     void noValueAvailable() {
@@ -27,6 +28,19 @@ public class CachingValueProviderTest {
     @Test
     void useFallbackValueAndCheckCache() {
         assertThat(sut.provide(FALLBACK_TAG, SOME_FIELD)).contains(new Tuple<>(42, 1337, 42));
+    }
+
+    @Test
+    void addsToCache() {
+        sut.provide(FALLBACK_TAG, SOME_FIELD);
+        assertThat(cache.get(SOME_FIELD, FALLBACK_TAG)).isEqualTo(new Tuple<>(42, 1337, 42));
+    }
+
+    @Test
+    void dontCacheValueIfCacheDeciderSaysNotTo() {
+        sut = new CachingValueProvider(t -> false, cache, fallback);
+        sut.provide(FALLBACK_TAG, SOME_FIELD);
+        assertThat(cache.get(SOME_FIELD, FALLBACK_TAG)).isNull();
     }
 
     @Test
@@ -64,7 +78,7 @@ public class CachingValueProviderTest {
         @Override
         @SuppressWarnings("unchecked")
         public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
-            if (int.class.equals(tag.getType())) {
+            if (FALLBACK_TAG.getType().equals(tag.getType())) {
                 return Optional.of((Tuple<T>) new Tuple<>(42, 1337, 42));
             }
             return Optional.empty();

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.api;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Func.Func1;
@@ -50,6 +51,23 @@ public interface EqualsVerifierApi<T> {
      * @since 0.2
      */
     <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
+
+    /**
+     * Adds Suppliers for resettable prefabricated values for instance fields of classes that EqualsVerifier cannot
+     * instantiate by itself. Resettable values are values that are created new every time a new instance of {@code T}
+     * is constructed within EqualsVerifier. This can be useful when {@code T} mutates its instances of {@code S}.
+     *
+     * @param <S>       The class of the prefabricated values.
+     * @param otherType The class of the prefabricated values.
+     * @param red       An instance of {@code S}.
+     * @param blue      Another instance of {@code S}, not equal to {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException     If either {@code otherType}, {@code red}, or {@code blue} is null.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 4.1
+     */
+    <S> EqualsVerifierApi<T> withResettablePrefabValues(Class<S> otherType, Supplier<S> red, Supplier<S> blue);
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic type parameter that

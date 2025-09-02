@@ -12,16 +12,19 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
  */
 public class CachingValueProvider implements ValueProvider {
 
+    private final CacheDecider decider;
     private final FieldCache fieldCache;
     private final ValueProvider fallback;
 
     /**
      * Constructor.
      *
+     * @param decider    Decides whether a value should be cached or not.
      * @param fieldCache The underlying cache of instances.
      * @param fallback   The ValueProvider that provides instances when there's a cache miss.
      */
-    public CachingValueProvider(FieldCache fieldCache, ValueProvider fallback) {
+    public CachingValueProvider(CacheDecider decider, FieldCache fieldCache, ValueProvider fallback) {
+        this.decider = decider;
         this.fieldCache = fieldCache;
         this.fallback = fallback;
     }
@@ -34,7 +37,9 @@ public class CachingValueProvider implements ValueProvider {
         }
 
         var result = fallback.<T>provide(tag, fieldName);
-        result.ifPresent(tuple -> fieldCache.put(fieldName, tag, tuple));
+        if (decider.canBeCached(tag.getType())) {
+            result.ifPresent(tuple -> fieldCache.put(fieldName, tag, tuple));
+        }
         return result;
     }
 }

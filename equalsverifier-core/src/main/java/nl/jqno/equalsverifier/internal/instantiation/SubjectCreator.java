@@ -172,16 +172,6 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates a new instance with all fields set to the same value as their counterparts from {@code original}.
-     *
-     * @param original The instance to copy.
-     * @return A copy of the given original.
-     */
-    public T copy(T original) {
-        return Rethrow.rethrow(() -> instanceCreator.copy(original));
-    }
-
-    /**
      * Creates a new instance of the superclass of the current class, with all fields that exist within that superclass
      * set to the same value as their counterparts from {@code original}.
      *

@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.api;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
@@ -136,6 +137,17 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
         PrefabValuesApi.addPrefabValues(userPrefabs, objenesis, otherType, red, blue);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
+    public <S> SingleTypeEqualsVerifierApi<T> withResettablePrefabValues(
+            Class<S> otherType,
+            Supplier<S> red,
+            Supplier<S> blue) {
+        PrefabValuesApi.addResettablePrefabValues(userPrefabs, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -483,7 +495,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private void verifyWithoutExamples(Context<T> context) {
         Configuration<T> config = context.getConfiguration();
         Checker[] checkers = { new SignatureChecker<>(context), new AbstractDelegationChecker<>(context),
-                new NullChecker<>(context), new RecordChecker<>(context), new CachedHashCodeChecker<>(config) };
+                new NullChecker<>(context), new CachedHashCodeChecker<>(config) };
 
         for (Checker checker : checkers) {
             checker.check();
