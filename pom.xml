@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.jqno.equalsverifier</groupId>
-    <version>4.1</version>
+    <version>4.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <artifactId>equalsverifier-parent</artifactId>
