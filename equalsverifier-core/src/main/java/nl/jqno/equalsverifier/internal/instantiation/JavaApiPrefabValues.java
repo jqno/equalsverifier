@@ -16,6 +16,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFa
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
 /**
@@ -56,6 +57,7 @@ public final class JavaApiPrefabValues {
         addSets();
         addQueues();
         SequencedCollectionsHelper.add(factoryCache);
+        ScopedValuesHelper.add(factoryCache);
         addAtomicClasses();
     }
 
