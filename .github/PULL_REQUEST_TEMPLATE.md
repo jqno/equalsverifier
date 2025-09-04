@@ -13,5 +13,5 @@ Before you continue, please consider the following:
 
 # NOTE
 
-- Please run `mvn spotless:apply` to format the code before opening a PR. Otherwise, GitHub Actions will complain at you 😉.
+- Please run `mvn spotless:apply` (or `just format`) to format the code before opening a PR. Otherwise, GitHub Actions will complain at you 😉.
 - Mutation tests will be run by [PITest](https://pitest.org/) after opening the PR. It will post comments in the PR for each issue found. Please take a look and fix what makes sense, but don't worry about the ones that don't.

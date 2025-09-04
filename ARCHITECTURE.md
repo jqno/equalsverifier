@@ -21,6 +21,8 @@ There are several Maven profiles that can be enabled or disabled:
 
 EqualsVerifier uses [Spotless for Maven](https://github.com/diffplug/spotless/tree/main/plugin-maven) with a custom [Eclipse configuration](https://github.com/jqno/equalsverifier/blob/main/build/eclipse-formatter-config.xml) to format Java files. You can check formatting using `mvn clean verify`, or run `mvn spotless:apply` to fix any formatting issues automatically.
 
+Alternatively, you can use [Just](https://github.com/casey/just) and run `just verify` or `just format`, respectively.
+
 ## Modules
 
 This project is a multi-module project to make it easier to deal with shading and multi-release jar files. See [this question on StackOverflow](https://stackoverflow.com/q/70541340/127863) for the rationale behind it.
