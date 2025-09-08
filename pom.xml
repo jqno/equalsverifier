@@ -80,7 +80,7 @@
         <version.archunit>1.4.1</version.archunit>
         <version.assertj>3.27.4</version.assertj>
         <version.commons-lang3>3.18.0</version.commons-lang3>
-        <version.eclipse-annotation>2.3.100</version.eclipse-annotation>
+        <version.eclipse-annotation>2.4.0</version.eclipse-annotation>
         <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
         <version.jakarta-persistence-api>3.0.0</version.jakarta-persistence-api>
         <version.jakarta-annotation-api>3.0.0</version.jakarta-annotation-api>
