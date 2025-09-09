@@ -15,3 +15,6 @@ verify:
 
 format:
     mvn spotless:apply
+
+pitest:
+    mvn clean test org.pitest:pitest-maven:mutationCoverage
