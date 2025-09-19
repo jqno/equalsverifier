@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
+import nl.jqno.equalsverifier_testhelpers.types.Color;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayEqualsContainer;
 import nl.jqno.equalsverifier_testhelpers.types.SparseArrays.SparseArrayHashCodeContainer;
@@ -122,6 +123,16 @@ class GenericTypesTest {
     @Test
     void succeed_whenFieldHasARecursiveGenericAndAWildcard() {
         EqualsVerifier.forClass(RecursiveGenericWithWildcardContainer.class).verify();
+    }
+
+    @Test
+    void succeed_whenClassHasGenericEnumField() {
+        EqualsVerifier.forClass(GenericEnumContainer.class).usingGetClass().verify();
+    }
+
+    @Test
+    void succeed_whenClassInheritsGenericEnumField() {
+        EqualsVerifier.forClass(ConcreteColorContainer.class).usingGetClass().verify();
     }
 
     static final class GenericContainerWithBuiltin {
@@ -624,6 +635,56 @@ class GenericTypesTest {
         @Override
         public int hashCode() {
             return Objects.hash(rg);
+        }
+    }
+
+    static class GenericEnumContainer<E extends Enum<E>> {
+
+        protected final E ev;
+
+        protected GenericEnumContainer(E ev) {
+            this.ev = ev;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            GenericEnumContainer<?> that = (GenericEnumContainer<?>) o;
+            return Objects.equals(ev, that.ev);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(ev);
+        }
+    }
+
+    static final class ConcreteColorContainer extends GenericEnumContainer<Color> {
+
+        private final int i;
+
+        public ConcreteColorContainer(Color color, int i) {
+            super(color);
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            if (!super.equals(o)) {
+                return false;
+            }
+            ConcreteColorContainer that = (ConcreteColorContainer) o;
+            return i == that.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(super.hashCode(), i);
         }
     }
 }
