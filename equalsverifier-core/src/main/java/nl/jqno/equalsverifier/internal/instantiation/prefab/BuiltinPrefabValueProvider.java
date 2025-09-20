@@ -18,7 +18,7 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 public class BuiltinPrefabValueProvider implements ValueProvider {
 
     private static final Set<Class<?>> EXCEPTIONAL_GENERIC_TYPES =
-            Set.of(Class.class, Constructor.class, SynchronousQueue.class);
+            Set.of(Class.class, Constructor.class, SynchronousQueue.class, Enum.class);
 
     /** {@inheritDoc}} */
     @Override
