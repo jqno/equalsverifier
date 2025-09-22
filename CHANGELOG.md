@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.1] - 2025-09-22
+
+### Fixed
+
+- Classes that extend `Enum` throws `ModuleException`. ([Issue 1122](https://github.com/jqno/equalsverifier/issues/1122))
+
 ## [4.1] - 2025-09-02
 
 ### Added
@@ -1453,7 +1459,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1.1...HEAD
+[4.1.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1...equalsverifier-4.1.1
 [4.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.9...equalsverifier-4.1
 [4.0.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.8...equalsverifier-4.0.9
 [4.0.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.7...equalsverifier-4.0.8
