@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import kotlin.LazyKt;
 import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.*;
 import kotlin.reflect.full.KClasses;
@@ -15,10 +16,16 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 public final class KotlinProbe {
     private KotlinProbe() {}
 
+    public static final Class<?> LAZY = kotlin.Lazy.class;
+
     public static boolean isKotlin(Class<?> type) {
         Class<Annotation> annotation =
                 Util.classForName(SupportedAnnotations.KOTLIN.partialClassNames().iterator().next());
         return annotation != null && type.isAnnotationPresent(annotation);
+    }
+
+    public static <T> kotlin.Lazy<T> lazy(T value) {
+        return LazyKt.lazyOf(value);
     }
 
     public static String getKotlinPropertyNameFor(Field field) {
@@ -39,7 +46,8 @@ public final class KotlinProbe {
         KCallable<?> kField = kType.getMembers().stream().filter(m -> kFieldName.equals(m.getName())).findAny().get();
         KType kReturnType = kField.getReturnType();
 
-        return createTypeTag(kReturnType);
+        TypeTag tag = createTypeTag(kReturnType);
+        return field.getType().equals(LAZY) ? new TypeTag(LAZY, tag) : tag;
     }
 
     private static TypeTag createTypeTag(KType kType) {
