@@ -75,7 +75,7 @@ class KotlinDelegationTest {
 
   @Test
   fun `succeed when class uses map delegation`() {
-    EqualsVerifier.forClass(MapDelegation::class.java).verify()
+    EqualsVerifier.forClass(MapDelegation::class.java).withPrefabValues(Map::class.java, mapOf("foo" to "a"), mapOf("foo" to "b")).verify()
   }
 
   @Test
@@ -214,12 +214,12 @@ class MapDelegation(map: Map<String, Any>) {
   override fun hashCode(): Int = foo.hashCode()
 }
 
-class ReflectionDelegationProvider {
+class ReflectionDelegationProvider(val seed: Int) {
   operator fun getValue(thisRef: Any?, prop: KProperty<*>): String =
-    prop.name
+    "${prop.name}_${seed}"
 }
-class ReflectionDelegation {
-  val foo: String by ReflectionDelegationProvider()
+class ReflectionDelegation(seed: Int) {
+  val foo: String by ReflectionDelegationProvider(seed)
 
   override fun equals(other: Any?): Boolean =
     (other is ReflectionDelegation) && foo == other.foo
