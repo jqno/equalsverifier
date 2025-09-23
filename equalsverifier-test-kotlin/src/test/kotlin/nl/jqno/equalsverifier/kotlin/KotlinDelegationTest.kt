@@ -40,6 +40,11 @@ class KotlinDelegationTest {
   }
 
   @Test
+  fun `succeed when class uses lazy delegate and has prefab values`() {
+    EqualsVerifier.forClass(LazyDelegation::class.java).withPrefabValues(Lazy::class.java, lazy { 1 }, lazy { 2 }).verify()
+  }
+
+  @Test
   fun `succeed when class uses lazy generic delegate`() {
     EqualsVerifier.forClass(LazyGenericDelegation::class.java).verify()
   }
@@ -52,6 +57,11 @@ class KotlinDelegationTest {
   @Test
   fun `succeed when class uses two lazy delegates`() {
     EqualsVerifier.forClass(TwoLazyDelegations::class.java).verify()
+  }
+
+  @Test
+  fun `succeed when class uses two lazy delegates and has generic prefab values`() {
+    EqualsVerifier.forClass(TwoLazyDelegations::class.java).withGenericPrefabValues(Lazy::class.java, { lazy { it } }).verify()
   }
 
   /*
