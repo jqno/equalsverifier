@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: 21
+          java-version: 25
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v11
         with:
