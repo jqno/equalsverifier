@@ -493,7 +493,7 @@
         <profile>
             <id>modules-jdk17</id>
             <activation>
-                <jdk>[17,21)</jdk>
+                <jdk>[17,</jdk>
             </activation>
 
             <modules>
@@ -507,16 +507,23 @@
         <profile>
             <id>modules-jdk21</id>
             <activation>
-                <jdk>[21,)</jdk>
+                <jdk>[21,</jdk>
             </activation>
 
             <modules>
-                <module>equalsverifier-core</module>
-                <module>equalsverifier-testhelpers</module>
-                <module>equalsverifier-test</module>
                 <module>equalsverifier-21</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk25</id>
+            <activation>
+                <jdk>[25,)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-25</module>
                 <module>equalsverifier-test-kotlin</module>
-                <module>equalsverifier-test-mockito</module>
             </modules>
         </profile>
 

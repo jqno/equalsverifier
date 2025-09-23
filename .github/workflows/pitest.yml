@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
       - name: run pitest
         # pitest has been bound to a profile called pitest for normal running
         # we add config to analyse only changes made within a PR and treat surviving mutants as check errors

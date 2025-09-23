@@ -35,6 +35,22 @@
                 </unpackOptions>
             </binaries>
         </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>nl.jqno.equalsverifier:equalsverifier-25</include>
+            </includes>
+            <binaries>
+                <outputDirectory>META-INF/versions/25</outputDirectory>
+                <unpack>true</unpack>
+                <includeDependencies>false</includeDependencies>
+                <unpackOptions>
+                    <excludes>
+                        <exclude>/META-INF/**</exclude>
+                    </excludes>
+                </unpackOptions>
+            </binaries>
+        </moduleSet>
     </moduleSets>
 </component>
 
