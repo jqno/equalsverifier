@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Prefab values for Java 25's `ScopedValue`.
+
 ## [4.1.1] - 2025-09-22
 
 ### Fixed
