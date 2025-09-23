@@ -1,12 +1,67 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import kotlin.jvm.JvmClassMappingKt;
+import kotlin.reflect.*;
+import kotlin.reflect.full.KClasses;
+import kotlin.reflect.jvm.ReflectJvmMapping;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
 public final class KotlinProbe {
     private KotlinProbe() {}
 
-    public static boolean isKotlin(Class<?> type, AnnotationCache annotationCache) {
-        return annotationCache.hasClassAnnotation(type, SupportedAnnotations.KOTLIN);
+    public static boolean isKotlin(Class<?> type) {
+        Class<Annotation> annotation =
+                Util.classForName(SupportedAnnotations.KOTLIN.partialClassNames().iterator().next());
+        return annotation != null && type.isAnnotationPresent(annotation);
+    }
+
+    public static String getKotlinPropertyNameFor(Field field) {
+        Class<?> declaringClass = field.getDeclaringClass();
+        KClass<?> kClass = JvmClassMappingKt.getKotlinClass(declaringClass);
+        for (KProperty<?> prop : KClasses.getMemberProperties(kClass)) {
+            Field backing = ReflectJvmMapping.getJavaField(prop);
+            if (backing != null && backing.equals(field)) {
+                return prop.getName();
+            }
+        }
+        return null;
+    }
+
+    public static TypeTag determineGenerics(Class<?> container, Field field) {
+        KClass<?> kType = JvmClassMappingKt.getKotlinClass(container);
+        String kFieldName = getKotlinPropertyNameFor(field);
+        KCallable<?> kField = kType.getMembers().stream().filter(m -> kFieldName.equals(m.getName())).findAny().get();
+        KType kReturnType = kField.getReturnType();
+
+        return createTypeTag(kReturnType);
+    }
+
+    private static TypeTag createTypeTag(KType kType) {
+        Class<?> rawClass = kTypeToClass(kType);
+
+        if (kType.getArguments().isEmpty()) {
+            return new TypeTag(rawClass);
+        }
+
+        List<TypeTag> genericTypeTags = kType
+                .getArguments()
+                .stream()
+                .map(a -> a.getType())
+                .filter(Objects::nonNull)
+                .map(KotlinProbe::createTypeTag)
+                .collect(Collectors.toList());
+
+        return new TypeTag(rawClass, genericTypeTags);
+    }
+
+    private static Class<?> kTypeToClass(KType ktype) {
+        KClass<?> kclass = (KClass<?>) ktype.getClassifier();
+        return JvmClassMappingKt.getJavaClass(kclass);
     }
 }

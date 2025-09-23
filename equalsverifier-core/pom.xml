@@ -90,6 +90,18 @@
             <version>${version.mockito}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${version.kotlin}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${version.kotlin}</version>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Shared test dependencies -->
         <dependency>
