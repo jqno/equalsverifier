@@ -46,7 +46,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignor
             actualFields);
         Function<String, String> converter =
                 fieldnameToGetter != null ? fieldnameToGetter : Configuration::defaulFieldNameToGetterConverter;
-        boolean isKotlin = KotlinProbe.isKotlin(type, annotationCache);
+        boolean isKotlin = KotlinProbe.isKotlin(type);
 
         if (isKotlin) {
             for (FieldProbe f : FieldIterable.ofKotlin(type)) {
