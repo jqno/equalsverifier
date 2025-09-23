@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
 // CHECKSTYLE OFF: ParameterNumber
@@ -48,7 +46,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignor
             actualFields);
         Function<String, String> converter =
                 fieldnameToGetter != null ? fieldnameToGetter : Configuration::defaulFieldNameToGetterConverter;
-        boolean isKotlin = annotationCache.hasClassAnnotation(type, SupportedAnnotations.KOTLIN);
+        boolean isKotlin = KotlinProbe.isKotlin(type, annotationCache);
 
         if (isKotlin) {
             for (FieldProbe f : FieldIterable.ofKotlin(type)) {
