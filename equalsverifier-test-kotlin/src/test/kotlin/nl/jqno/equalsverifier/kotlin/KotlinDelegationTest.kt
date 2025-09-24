@@ -7,6 +7,16 @@ import org.junit.jupiter.api.Test
 class KotlinDelegationTest {
 
   /*
+   * No delegation
+   */
+
+  @Test
+  fun `succeed when class is normal (sanity test)`() {
+    EqualsVerifier.forClass(Normal::class.java).verify()
+  }
+
+
+  /*
    * Interface delegation
    */
 
@@ -29,6 +39,7 @@ class KotlinDelegationTest {
   fun `succeed when class uses interface delegation with two fields 3`() {
     EqualsVerifier.forClass(TwoFoosDelegation3::class.java).verify()
   }
+
 
   /*
    * Lazy delegation
@@ -64,6 +75,7 @@ class KotlinDelegationTest {
     EqualsVerifier.forClass(TwoLazyDelegations::class.java).withGenericPrefabValues(Lazy::class.java, { lazy { it } }).verify()
   }
 
+
   /*
    * Other kinds of delegation
    */
@@ -94,13 +106,25 @@ class KotlinDelegationTest {
   }
 }
 
-interface Foo {
-  val foo: Int
+/*
+ * No delegation
+ */
+
+class Normal(val foo: Int) {
+
+  override fun equals(other: Any?): Boolean =
+    (other is Normal) && foo == other.foo
+
+  override fun hashCode(): Int = foo
 }
 
 /*
  * Interface delegation
  */
+
+interface Foo {
+  val foo: Int
+}
 
 data class FooImpl(override val foo: Int): Foo
 
