@@ -53,9 +53,13 @@ public final record TypeTag(Class<?> type, List<TypeTag> genericTypes) {
      * @return The TypeTag for the given field.
      */
     public static TypeTag of(Field field, TypeTag enclosingType) {
-        return KotlinScreen.isKotlin(enclosingType.getType())
-                ? KotlinProbe.determineGenerics(enclosingType.getType(), field)
-                : resolve(field.getGenericType(), field.getType(), enclosingType, false);
+        if (KotlinScreen.isKotlin(enclosingType.getType()) && KotlinScreen.isKotlinLazy(field)) {
+            var opt = KotlinProbe.determineType(enclosingType.getType(), field);
+            if (opt.isPresent()) {
+                return opt.get();
+            }
+        }
+        return resolve(field.getGenericType(), field.getType(), enclosingType, false);
     }
 
     private static TypeTag resolve(
