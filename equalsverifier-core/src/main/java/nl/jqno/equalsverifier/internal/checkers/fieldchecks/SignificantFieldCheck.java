@@ -59,7 +59,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void checkValues(T reference, T copy, T changed, FieldProbe probe, boolean testWithNull) {
-        String fieldName = probe.getField().getName();
+        String fieldDisplayName = probe.getDisplayName();
 
         boolean equalToItself = reference.equals(copy);
         boolean equalsChanged = !reference.equals(changed);
@@ -71,9 +71,9 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             hashCodeChanged,
             reference,
             changed,
-            fieldName,
+            fieldDisplayName,
             testWithNull);
-        assertFieldShouldBeIgnored(equalToItself, equalsChanged, reference, probe, fieldName, testWithNull);
+        assertFieldShouldBeIgnored(equalToItself, equalsChanged, reference, probe, fieldDisplayName, testWithNull);
     }
 
     private void assertEqualsAndHashCodeRelyOnSameFields(
@@ -81,7 +81,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             boolean hashCodeChanged,
             T reference,
             T changed,
-            String fieldName,
+            String fieldDisplayName,
             boolean testWithNull) {
         if (equalsChanged != hashCodeChanged) {
             boolean skipEqualsHasMoreThanHashCodeTest =
@@ -93,7 +93,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                             Significant fields: equals relies on %%, but hashCode does not.
                               %% has hashCode %%
                               %% has hashCode %%""",
-                            fieldName,
+                            fieldDisplayName,
                             reference,
                             reference.hashCode(),
                             changed,
@@ -105,7 +105,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                                                These objects are equal, but probably shouldn't be:
                                                  %%
                                                and
-                                                 %%""", fieldName, reference, changed);
+                                                 %%""", fieldDisplayName, reference, changed);
             assertFalse(formatter, hashCodeChanged);
         }
     }
