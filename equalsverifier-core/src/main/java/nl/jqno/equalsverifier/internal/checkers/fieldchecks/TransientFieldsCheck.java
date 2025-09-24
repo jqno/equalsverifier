@@ -35,7 +35,7 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
                 Formatter
                         .of(
                             "Transient field %% should not be included in equals/hashCode contract.",
-                            fieldProbe.getName()));
+                            fieldProbe.getDisplayName()));
         }
     }
 }

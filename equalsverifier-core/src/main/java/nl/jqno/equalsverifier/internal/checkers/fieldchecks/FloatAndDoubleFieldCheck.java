@@ -21,7 +21,7 @@ public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
             T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), Float.NaN);
             T copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), Float.NaN);
             assertEquals(
-                Formatter.of("Float: equals doesn't use Float.compare for field %%.", fieldProbe.getName()),
+                Formatter.of("Float: equals doesn't use Float.compare for field %%.", fieldProbe.getDisplayName()),
                 reference,
                 copy);
         }
@@ -29,7 +29,7 @@ public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
             T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), Double.NaN);
             T copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), Double.NaN);
             assertEquals(
-                Formatter.of("Double: equals doesn't use Double.compare for field %%.", fieldProbe.getName()),
+                Formatter.of("Double: equals doesn't use Double.compare for field %%.", fieldProbe.getDisplayName()),
                 reference,
                 copy);
         }

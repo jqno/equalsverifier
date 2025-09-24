@@ -35,7 +35,7 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
             String message = """
                              Mutability: equals depends on mutable field %%.
                              Make the field final, suppress Warning.NONFINAL_FIELDS or use EqualsVerifier.simple()""";
-            fail(Formatter.of(message, fieldProbe.getName()));
+            fail(Formatter.of(message, fieldProbe.getDisplayName()));
         }
     }
 }
