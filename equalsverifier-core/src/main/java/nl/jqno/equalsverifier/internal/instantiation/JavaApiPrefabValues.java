@@ -14,9 +14,10 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvide
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.reflection.KotlinProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
@@ -144,7 +145,7 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addKotlinClasses() {
-        addFactory(KotlinProbe.LAZY, (tag, pv, stack) -> {
+        addFactory(KotlinScreen.LAZY, (tag, pv, stack) -> {
             TypeTag genericTag = tag.genericTypes().get(0);
             return new Tuple(KotlinProbe.lazy(pv.giveRed(genericTag)),
                     KotlinProbe.lazy(pv.giveBlue(genericTag)),

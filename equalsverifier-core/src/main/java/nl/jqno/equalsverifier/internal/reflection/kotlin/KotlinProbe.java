@@ -1,6 +1,5 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.reflection.kotlin;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
@@ -11,18 +10,10 @@ import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.*;
 import kotlin.reflect.full.KClasses;
 import kotlin.reflect.jvm.ReflectJvmMapping;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public final class KotlinProbe {
     private KotlinProbe() {}
-
-    public static final Class<?> LAZY = kotlin.Lazy.class;
-
-    public static boolean isKotlin(Class<?> type) {
-        Class<Annotation> annotation =
-                Util.classForName(SupportedAnnotations.KOTLIN.partialClassNames().iterator().next());
-        return annotation != null && type.isAnnotationPresent(annotation);
-    }
 
     public static <T> kotlin.Lazy<T> lazy(T value) {
         return LazyKt.lazyOf(value);
@@ -47,7 +38,7 @@ public final class KotlinProbe {
         KType kReturnType = kField.getReturnType();
 
         TypeTag tag = createTypeTag(kReturnType);
-        return field.getType().equals(LAZY) ? new TypeTag(LAZY, tag) : tag;
+        return field.getType().equals(KotlinScreen.LAZY) ? new TypeTag(KotlinScreen.LAZY, tag) : tag;
     }
 
     private static TypeTag createTypeTag(KType kType) {
