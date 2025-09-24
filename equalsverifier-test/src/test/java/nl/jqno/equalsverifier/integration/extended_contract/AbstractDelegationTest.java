@@ -27,7 +27,8 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     EQUALS_DELEGATES,
-                    AbstractEqualsDelegator.class.getSimpleName());
+                    AbstractEqualsDelegator.class.getSimpleName())
+                .assertMessageDoesNotContain(PREFAB);
     }
 
     @Test
@@ -39,7 +40,8 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     HASHCODE_DELEGATES,
-                    AbstractHashCodeDelegator.class.getSimpleName());
+                    AbstractHashCodeDelegator.class.getSimpleName())
+                .assertMessageDoesNotContain(PREFAB);
     }
 
     @Test

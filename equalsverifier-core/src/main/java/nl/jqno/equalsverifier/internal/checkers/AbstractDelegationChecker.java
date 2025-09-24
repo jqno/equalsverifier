@@ -2,6 +2,9 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.*;
@@ -128,14 +131,30 @@ public class AbstractDelegationChecker<T> implements Checker {
             boolean prefabPossible,
             String method,
             String originalMessage) {
-        Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", c.getName());
 
+        // This `prefabbable` logic is needed for Kotlin delegator edge cases
+        String prefabbable = null;
+        if (prefabPossible) {
+            prefabbable = c.getName();
+        }
+        else {
+            Matcher m = Pattern.compile("Receiver class .* ([^\\s]+)\\.$").matcher(originalMessage);
+            if (m.find()) {
+                String receiver = m.group(1);
+                if (!c.getName().equals(receiver)) {
+                    System.out.println(">>> " + c.getName() + ", " + receiver);
+                    prefabbable = receiver;
+                }
+            }
+        }
+
+        Formatter prefabFormatter = Formatter.of("\n\nAdd prefab values for %%.", prefabbable);
         return Formatter
                 .of(
-                    "Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
+                    "Abstract delegation: %%'s %% method delegates to an abstract method:\n   %%%%",
                     c.getSimpleName(),
                     method,
                     originalMessage,
-                    prefabPossible ? prefabFormatter.format() : "");
+                    prefabbable != null ? prefabFormatter.format() : "");
     }
 }
