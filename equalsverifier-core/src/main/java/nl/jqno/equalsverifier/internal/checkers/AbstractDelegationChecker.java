@@ -131,23 +131,7 @@ public class AbstractDelegationChecker<T> implements Checker {
             boolean prefabPossible,
             String method,
             String originalMessage) {
-
-        // This `prefabbable` logic is needed for Kotlin delegator edge cases
-        String prefabbable = null;
-        if (prefabPossible) {
-            prefabbable = c.getName();
-        }
-        else {
-            Matcher m = Pattern.compile("Receiver class .* ([^\\s]+)\\.$").matcher(originalMessage);
-            if (m.find()) {
-                String receiver = m.group(1);
-                if (!c.getName().equals(receiver)) {
-                    System.out.println(">>> " + c.getName() + ", " + receiver);
-                    prefabbable = receiver;
-                }
-            }
-        }
-
+        String prefabbable = determinePrefabValueTypeForErrorMessage(prefabPossible, c.getName(), originalMessage);
         Formatter prefabFormatter = Formatter.of("\n\nAdd prefab values for %%.", prefabbable);
         return Formatter
                 .of(
@@ -156,5 +140,24 @@ public class AbstractDelegationChecker<T> implements Checker {
                     method,
                     originalMessage,
                     prefabbable != null ? prefabFormatter.format() : "");
+    }
+
+    // This logic is needed for Kotlin delegator edge cases
+    private String determinePrefabValueTypeForErrorMessage(
+            boolean prefabPossible,
+            String className,
+            String originalMessage) {
+        if (prefabPossible) {
+            return className;
+        }
+        Matcher m = Pattern.compile("Receiver class .* ([^\\s]+)\\.$").matcher(originalMessage);
+        if (m.find()) {
+            String receiver = m.group(1);
+            if (!className.equals(receiver)) {
+                return receiver;
+            }
+        }
+
+        return null;
     }
 }

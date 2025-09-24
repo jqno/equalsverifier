@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.kotlin
 
 import kotlin.reflect.KProperty
 import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test
 
 class KotlinDelegationTest {
@@ -42,12 +43,18 @@ class KotlinDelegationTest {
 
   @Test
   fun `succeed when class uses interface delegation with two fields supplied as a parameter to an interface`() {
-    EqualsVerifier.forClass(TwoFoosDelegationWithParamToInterface::class.java).verify()
+    ExpectedException
+      .`when` { EqualsVerifier.forClass(TwoFoosDelegationWithParamToInterface::class.java).verify() }
+      .assertFailure()
+      .assertMessageContains("Abstract delegation", "Add prefab values for")
   }
 
   @Test
   fun `succeed when class uses interface delegation with two fields supplied as a field to an interface`() {
-    EqualsVerifier.forClass(TwoFoosDelegationWithFieldToInterface::class.java).verify()
+    ExpectedException
+      .`when` { EqualsVerifier.forClass(TwoFoosDelegationWithFieldToInterface::class.java).verify() }
+      .assertFailure()
+      .assertMessageContains("Abstract delegation", "Add prefab values for")
   }
 
   @Test

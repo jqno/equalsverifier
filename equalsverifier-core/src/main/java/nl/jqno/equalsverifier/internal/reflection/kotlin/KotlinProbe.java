@@ -21,6 +21,10 @@ public final class KotlinProbe {
         return LazyKt.lazyOf(value);
     }
 
+    public static Optional<String> getKotlinPropertyNameFor(Field field) {
+        return getKotlinPropertyFor(field).map(p -> p.getName());
+    }
+
     public static Optional<KProperty<?>> getKotlinPropertyFor(Field field) {
         Class<?> declaringClass = field.getDeclaringClass();
         KClass<?> kClass = JvmClassMappingKt.getKotlinClass(declaringClass);
@@ -31,10 +35,6 @@ public final class KotlinProbe {
             }
         }
         return Optional.empty();
-    }
-
-    public static Optional<String> getKotlinPropertyNameFor(Field field) {
-        return getKotlinPropertyFor(field).map(p -> p.getName());
     }
 
     public static Optional<TypeTag> determineType(Class<?> container, Field field) {
