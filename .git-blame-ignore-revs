@@ -1,3 +1,5 @@
+# Replaces tabs with spaces for indentation
+1f89348d894a2817e73174709d2a6b80f5a52c67
 # Reformats code according to google-java-format rules
 263194cec89d64eeedfb667bfe59c3edd03c711f
 # Cleans up awkwardly formatterd code
