@@ -26,18 +26,42 @@ class KotlinDelegationTest {
   }
 
   @Test
-  fun `succeed when class uses interface delegation with two fields 1`() {
-    EqualsVerifier.forClass(TwoFoosDelegation1::class.java).verify()
+  fun `succeed when class uses interface delegation with two explicit fields`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithExplicitFields::class.java).verify()
   }
 
   @Test
-  fun `succeed when class uses interface delegation with two fields 2`() {
-    EqualsVerifier.forClass(TwoFoosDelegation2::class.java).verify()
+  fun `succeed when class uses interface delegation with two fields supplied as a parameter to a class`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithParamToClass::class.java).verify()
   }
 
   @Test
-  fun `succeed when class uses interface delegation with two fields 3`() {
-    EqualsVerifier.forClass(TwoFoosDelegation3::class.java).verify()
+  fun `succeed when class uses interface delegation with two fields supplied as a field to a class`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithFieldToClass::class.java).verify()
+  }
+
+  @Test
+  fun `succeed when class uses interface delegation with two fields supplied as a parameter to an interface`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithParamToInterface::class.java).verify()
+  }
+
+  @Test
+  fun `succeed when class uses interface delegation with two fields supplied as a field to an interface`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithFieldToInterface::class.java).verify()
+  }
+
+  @Test
+  fun `succeed when class uses interface delegation with two fields supplied as a parameter to an interface with prefab values`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithParamToInterface::class.java)
+      .withPrefabValues(TwoFoos::class.java, TwoFoosImpl(1, "a"), TwoFoosImpl(2, "b"))
+      .verify()
+  }
+
+  @Test
+  fun `succeed when class uses interface delegation with two fields supplied as a field to an interface with prefab values`() {
+    EqualsVerifier.forClass(TwoFoosDelegationWithFieldToInterface::class.java)
+      .withPrefabValues(TwoFoos::class.java, TwoFoosImpl(1, "a"), TwoFoosImpl(2, "b"))
+      .verify()
   }
 
 
@@ -143,23 +167,37 @@ interface TwoFoos {
 
 data class TwoFoosImpl(override val foo: Int, override val bar: String): TwoFoos
 
-class TwoFoosDelegation1(fooValue: Int, barValue: String): TwoFoos by TwoFoosImpl(fooValue, barValue) {
+class TwoFoosDelegationWithExplicitFields(fooValue: Int, barValue: String): TwoFoos by TwoFoosImpl(fooValue, barValue) {
   override fun equals(other: Any?): Boolean =
-    (other is TwoFoosDelegation1) && foo == other.foo && bar == other.bar
+    (other is TwoFoosDelegationWithExplicitFields) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
 
-class TwoFoosDelegation2(baz: TwoFoos): TwoFoos by baz {
+class TwoFoosDelegationWithParamToClass(baz: TwoFoosImpl): TwoFoos by baz {
   override fun equals(other: Any?): Boolean =
-    (other is TwoFoosDelegation2) && foo == other.foo && bar == other.bar
+    (other is TwoFoosDelegationWithParamToClass) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
 
-class TwoFoosDelegation3(val baz: TwoFoos): TwoFoos by baz {
+class TwoFoosDelegationWithFieldToClass(val baz: TwoFoosImpl): TwoFoos by baz {
   override fun equals(other: Any?): Boolean =
-    (other is TwoFoosDelegation2) && foo == other.foo && bar == other.bar
+    (other is TwoFoosDelegationWithFieldToClass) && foo == other.foo && bar == other.bar
+
+  override fun hashCode(): Int = (31 * foo) + bar.hashCode()
+}
+
+class TwoFoosDelegationWithParamToInterface(baz: TwoFoos): TwoFoos by baz {
+  override fun equals(other: Any?): Boolean =
+    (other is TwoFoosDelegationWithParamToInterface) && foo == other.foo && bar == other.bar
+
+  override fun hashCode(): Int = (31 * foo) + bar.hashCode()
+}
+
+class TwoFoosDelegationWithFieldToInterface(val baz: TwoFoos): TwoFoos by baz {
+  override fun equals(other: Any?): Boolean =
+    (other is TwoFoosDelegationWithFieldToInterface) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
