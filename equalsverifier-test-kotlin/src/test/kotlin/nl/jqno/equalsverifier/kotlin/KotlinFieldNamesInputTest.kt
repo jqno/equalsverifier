@@ -47,6 +47,41 @@ class KotlinFieldNamesInputTest {
       .verify()
   }
 
+  @Test
+  fun `withPrefabValuesForField - normal field`() {
+    EqualsVerifier.forClass(Precondition::class.java)
+      .withPrefabValuesForField(Precondition::foo.name, "foo1", "foo2")
+      .verify()
+  }
+
+  @Test
+  fun `withPrefabValuesForField - delegate field with its Kotlin name`() {
+    EqualsVerifier.forClass(PreconditionDelegated::class.java)
+      .withPrefabValuesForField(PreconditionDelegated::foo.name, StringContainer("foo1"), StringContainer("foo2"))
+      .verify()
+  }
+
+  @Test
+  fun `withPrefabValuesForField - delegate field with its bytecode name`() {
+    EqualsVerifier.forClass(PreconditionDelegated::class.java)
+      .withPrefabValuesForField("foo\$receiver", StringContainer("foo1"), StringContainer("foo2"))
+      .verify()
+  }
+
+  @Test
+  fun `withPrefabValuesForField - lazy field with its Kotlin name`() {
+    EqualsVerifier.forClass(PreconditionLazy::class.java)
+      .withPrefabValuesForField(PreconditionLazy::foo.name, lazy { "foo1" }, lazy { "foo2" })
+      .verify()
+  }
+
+  @Test
+  fun `withPrefabValuesForField - lazy field with its bytecode name`() {
+    EqualsVerifier.forClass(PreconditionLazy::class.java)
+      .withPrefabValuesForField("foo\$delegate", lazy { "foo1" }, lazy { "foo2" })
+      .verify()
+  }
+
   data class StringContainer(val foo: String)
   data class IntContainer(val bar: Int)
 
@@ -66,5 +101,37 @@ class KotlinFieldNamesInputTest {
       (other is UnusedDelegatedFoo) && bar == other.bar
 
     override fun hashCode(): Int = Objects.hash(bar)
+  }
+
+  class Precondition(val foo: String) {
+
+    override fun equals(other: Any?): Boolean {
+      require(foo.startsWith("foo")) { "foo must start with 'foo' but was '$foo'" }
+      return (other is Precondition) && foo == other.foo
+    }
+
+    override fun hashCode(): Int = Objects.hash(foo)
+  }
+
+  class PreconditionDelegated(container: StringContainer) {
+    val foo: String by container::foo
+
+    override fun equals(other: Any?): Boolean {
+      require(foo.startsWith("foo")) { "foo must start with 'foo' but was '$foo'" }
+      return (other is PreconditionDelegated) && foo == other.foo
+    }
+
+    override fun hashCode(): Int = Objects.hash(foo)
+  }
+
+  class PreconditionLazy(fooValue: String) {
+    val foo: String by lazy { fooValue }
+
+    override fun equals(other: Any?): Boolean {
+      require(foo.startsWith("foo")) { "foo must start with 'foo' but was '$foo'" }
+      return (other is PreconditionLazy) && foo == other.foo
+    }
+
+    override fun hashCode(): Int = Objects.hash(foo)
   }
 }
