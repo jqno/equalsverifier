@@ -12,15 +12,15 @@ import kotlin.reflect.full.KClasses;
 import kotlin.reflect.jvm.ReflectJvmMapping;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
+/**
+ * Collection of 'dangerous' reflection utilities for Kotlin. Can only be used when we know for sure that the
+ * `kotlin-reflect` library is available on the classpath.
+ */
 public final class KotlinProbe {
     private KotlinProbe() {}
 
     public static <T> Lazy<T> lazy(T value) {
         return LazyKt.lazyOf(value);
-    }
-
-    public static Optional<String> getKotlinPropertyNameFor(Field field) {
-        return getKotlinPropertyFor(field).map(p -> p.getName());
     }
 
     public static List<String> translateKotlinToBytecodeFieldNames(Class<?> container, List<String> fieldNames) {
@@ -38,19 +38,19 @@ public final class KotlinProbe {
         return fieldName;
     }
 
-    public static Optional<KProperty<?>> getKotlinPropertyFor(Field field) {
+    public static Optional<String> getKotlinPropertyNameFor(Field field) {
         Class<?> declaringClass = field.getDeclaringClass();
         KClass<?> kClass = JvmClassMappingKt.getKotlinClass(declaringClass);
         for (KProperty<?> prop : KClasses.getMemberProperties(kClass)) {
             Field backing = ReflectJvmMapping.getJavaField(prop);
             if (backing != null && backing.equals(field)) {
-                return Optional.of(prop);
+                return Optional.of(prop.getName());
             }
         }
         return Optional.empty();
     }
 
-    public static Optional<TypeTag> determineType(Class<?> container, Field field) {
+    public static Optional<TypeTag> determineLazyType(Class<?> container, Field field) {
         KClass<?> kType = JvmClassMappingKt.getKotlinClass(container);
         Optional<String> optKFieldName = getKotlinPropertyNameFor(field);
         if (optKFieldName.isEmpty()) {
@@ -61,12 +61,12 @@ public final class KotlinProbe {
         KType kReturnType = kField.getReturnType();
 
         TypeTag tag = createTypeTag(kReturnType);
-        TypeTag result = field.getType().equals(KotlinScreen.LAZY) ? new TypeTag(KotlinScreen.LAZY, tag) : tag;
-        return Optional.of(result);
+        return Optional.of(new TypeTag(KotlinScreen.LAZY, tag));
     }
 
     private static TypeTag createTypeTag(KType kType) {
-        Class<?> rawClass = kTypeToClass(kType);
+        KClass<?> kclass = (KClass<?>) kType.getClassifier();
+        Class<?> rawClass = JvmClassMappingKt.getJavaClass(kclass);
 
         if (kType.getArguments().isEmpty()) {
             return new TypeTag(rawClass);
@@ -81,10 +81,5 @@ public final class KotlinProbe {
                 .collect(Collectors.toList());
 
         return new TypeTag(rawClass, genericTypeTags);
-    }
-
-    private static Class<?> kTypeToClass(KType ktype) {
-        KClass<?> kclass = (KClass<?>) ktype.getClassifier();
-        return JvmClassMappingKt.getJavaClass(kclass);
     }
 }
