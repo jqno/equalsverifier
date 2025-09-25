@@ -73,7 +73,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             changed,
             fieldDisplayName,
             testWithNull);
-        assertFieldShouldBeIgnored(equalToItself, equalsChanged, reference, probe, fieldDisplayName, testWithNull);
+        assertFieldShouldBeIgnored(equalToItself, equalsChanged, reference, probe, testWithNull);
     }
 
     private void assertEqualsAndHashCodeRelyOnSameFields(
@@ -115,12 +115,13 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             boolean equalsChanged,
             T object,
             FieldProbe fieldProbe,
-            String fieldName,
             boolean testWithNull) {
         if (!shouldAllFieldsBeUsed(fieldProbe) || !isFieldEligible(fieldProbe)) {
             return;
         }
 
+        String fieldName = fieldProbe.getName();
+        String fieldDisplayName = fieldProbe.getDisplayName();
         boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
         boolean thisFieldIsMarkedAsId = annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.ID);
         boolean anotherFieldIsMarkedAsId =
@@ -128,17 +129,19 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
         if (!fieldIsEmptyAndItsOk(thisFieldIsMarkedAsId, fieldProbe, object)) {
             if (!fieldShouldBeIgnored) {
-                assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
+                assertTrue(
+                    Formatter.of("Significant fields: equals does not use %%.", fieldDisplayName),
+                    equalToItself);
             }
             assertFieldShouldHaveBeenUsed(
-                fieldName,
+                fieldDisplayName,
                 equalsChanged,
                 fieldShouldBeIgnored,
                 thisFieldIsMarkedAsId,
                 anotherFieldIsMarkedAsId);
         }
         assertFieldShouldNotBeUsed(
-            fieldName,
+            fieldDisplayName,
             equalsChanged,
             fieldShouldBeIgnored,
             thisFieldIsMarkedAsId,
@@ -171,7 +174,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void assertFieldShouldHaveBeenUsed(
-            String fieldName,
+            String fieldDisplayName,
             boolean equalsChanged,
             boolean fieldShouldBeIgnored,
             boolean thisFieldIsMarkedAsId,
@@ -190,11 +193,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             message = "Significant fields: equals does not use %%, or it is stateless.";
         }
 
-        assertTrue(Formatter.of(message, fieldName), fieldShouldBeIgnored || equalsChanged);
+        assertTrue(Formatter.of(message, fieldDisplayName), fieldShouldBeIgnored || equalsChanged);
     }
 
     private void assertFieldShouldNotBeUsed(
-            String fieldName,
+            String fieldDisplayName,
             boolean equalsChanged,
             boolean fieldShouldBeIgnored,
             boolean thisFieldIsMarkedAsId,
@@ -215,6 +218,6 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             message = "Significant fields: equals should not use %%, but it does.";
         }
 
-        assertTrue(Formatter.of(message, fieldName), !fieldShouldBeIgnored || !equalsChanged || testWithNull);
+        assertTrue(Formatter.of(message, fieldDisplayName), !fieldShouldBeIgnored || !equalsChanged || testWithNull);
     }
 }

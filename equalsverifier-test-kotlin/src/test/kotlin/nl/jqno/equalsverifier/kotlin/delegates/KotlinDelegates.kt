@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.kotlin.delegates
 
+import java.util.Objects
 import kotlin.reflect.KProperty
 
 /*
@@ -170,3 +171,4 @@ class ReflectionDelegation(seed: Int) {
 
   override fun hashCode(): Int = foo.hashCode()
 }
+
