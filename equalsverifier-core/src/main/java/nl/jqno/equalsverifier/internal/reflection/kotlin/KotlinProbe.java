@@ -51,6 +51,9 @@ public final class KotlinProbe {
     }
 
     public static Optional<TypeTag> determineLazyType(Class<?> container, Field field) {
+        if (!field.getType().equals(KotlinScreen.LAZY)) {
+            return Optional.empty();
+        }
         KClass<?> kType = JvmClassMappingKt.getKotlinClass(container);
         Optional<String> optKFieldName = getKotlinPropertyNameFor(field);
         if (optKFieldName.isEmpty()) {
