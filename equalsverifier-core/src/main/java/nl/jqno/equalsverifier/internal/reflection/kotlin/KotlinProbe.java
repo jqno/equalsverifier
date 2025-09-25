@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.kotlin;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kotlin.Lazy;
@@ -23,6 +21,21 @@ public final class KotlinProbe {
 
     public static Optional<String> getKotlinPropertyNameFor(Field field) {
         return getKotlinPropertyFor(field).map(p -> p.getName());
+    }
+
+    public static List<String> translateKotlinToBytecodeFieldNames(Class<?> container, List<String> fieldNames) {
+        return fieldNames.stream().map(fn -> translateKotlinToBytecodeFieldName(container, fn)).toList();
+    }
+
+    public static String translateKotlinToBytecodeFieldName(Class<?> container, String fieldName) {
+        KClass<?> kClass = JvmClassMappingKt.getKotlinClass(container);
+        for (KProperty<?> prop : KClasses.getMemberProperties(kClass)) {
+            if (prop.getName().equals(fieldName)) {
+                Field backing = ReflectJvmMapping.getJavaField(prop);
+                return backing == null ? null : backing.getName();
+            }
+        }
+        return fieldName;
     }
 
     public static Optional<KProperty<?>> getKotlinPropertyFor(Field field) {

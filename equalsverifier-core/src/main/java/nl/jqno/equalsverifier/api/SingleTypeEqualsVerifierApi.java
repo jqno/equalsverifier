@@ -13,6 +13,8 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objenesis.Objenesis;
@@ -241,10 +243,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private SingleTypeEqualsVerifierApi<T> withFieldsAddedAndValidated(
             Set<String> collection,
             List<String> specifiedFields) {
-        collection.addAll(specifiedFields);
+        List<String> translated = KotlinScreen.isKotlin(type)
+                ? KotlinProbe.translateKotlinToBytecodeFieldNames(type, specifiedFields)
+                : specifiedFields;
+        collection.addAll(translated);
 
         Validations.validateFields(allIncludedFields, allExcludedFields);
-        Validations.validateFieldNamesExist(type, specifiedFields, actualFields);
+        Validations.validateFieldNamesExist(type, translated, actualFields);
         Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
         return this;
     }

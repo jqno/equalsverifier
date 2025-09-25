@@ -22,23 +22,23 @@ class KotlinFieldNamesOutputTest {
       .assertFailure()
       .assertMessageContains("hashCode relies on foo, but equals does not")
   }
-}
 
-data class IncorrectStringContainer(val foo: String)
+  data class StringContainer(val foo: String)
 
-class UnusedFoo(val foo: String, val bar: Int) {
+  class UnusedFoo(val foo: String, val bar: Int) {
 
-  override fun equals(other: Any?): Boolean =
-    (other is UnusedFoo) && bar == other.bar
+    override fun equals(other: Any?): Boolean =
+      (other is UnusedFoo) && bar == other.bar
 
-  override fun hashCode(): Int = Objects.hash(foo, bar)
-}
+    override fun hashCode(): Int = Objects.hash(foo, bar)
+  }
 
-class UnusedDelegatedFoo(container: IncorrectStringContainer, val bar: Int) {
-  val foo: String by container::foo
+  class UnusedDelegatedFoo(container: StringContainer, val bar: Int) {
+    val foo: String by container::foo
 
-  override fun equals(other: Any?): Boolean =
-    (other is UnusedDelegatedFoo) && bar == other.bar
+    override fun equals(other: Any?): Boolean =
+      (other is UnusedDelegatedFoo) && bar == other.bar
 
-  override fun hashCode(): Int = Objects.hash(foo, bar)
+    override fun hashCode(): Int = Objects.hash(foo, bar)
+  }
 }
