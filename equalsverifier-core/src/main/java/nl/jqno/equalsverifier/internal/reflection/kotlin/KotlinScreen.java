@@ -27,6 +27,10 @@ public final class KotlinScreen {
         return false;
     }
 
+    public static boolean isSyntheticKotlinDelegate(Field field) {
+        return field.isSynthetic() && field.getName().startsWith("$$delegate_");
+    }
+
     public static boolean isKotlinLazy(Field field) {
         return field.getType().getName().equals("kotlin.Lazy");
     }

@@ -184,21 +184,12 @@ public final class FieldProbe {
      * @return Whether or not the field can be modified reflectively.
      */
     public boolean canBeModifiedReflectively() {
-        if (field.isSynthetic() && !isKotlinDelegate()) {
+        if (field.isSynthetic() && !KotlinScreen.isSyntheticKotlinDelegate(field)) {
             return false;
         }
         if (isFinal() && isStatic()) {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Determines whether the field is a synthetic Kotlin delegate field.
-     *
-     * @return Whether or not the field is a synthetic Kotlin delegate field.
-     */
-    public boolean isKotlinDelegate() {
-        return field.isSynthetic() && field.getName().startsWith("$$delegate_");
     }
 }
