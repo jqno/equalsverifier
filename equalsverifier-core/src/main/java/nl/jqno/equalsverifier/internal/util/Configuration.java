@@ -55,7 +55,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignor
 
         if (isKotlin) {
             for (FieldProbe f : FieldIterable.ofKotlin(type)) {
-                if (f.isKotlinDelegate()) {
+                if (KotlinScreen.isSyntheticKotlinDelegate(f.getField())) {
                     nonnullFields.add(f.getName());
                 }
             }
