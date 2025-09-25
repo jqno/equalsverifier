@@ -170,9 +170,12 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      */
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue) {
-        Validations.validateFieldNamesExist(type, Arrays.asList(fieldName), actualFields);
-        PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
-        return withNonnullFields(fieldName);
+        String translated = KotlinScreen.isKotlin(type)
+                ? KotlinProbe.translateKotlinToBytecodeFieldName(type, fieldName)
+                : fieldName;
+        Validations.validateFieldNamesExist(type, List.of(translated), actualFields);
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, translated, red, blue);
+        return withNonnullFields(translated);
     }
 
     /** {@inheritDoc} */
