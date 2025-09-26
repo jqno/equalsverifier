@@ -4,6 +4,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag
 import nl.jqno.equalsverifier_testhelpers.types.Point
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.reflect.jvm.javaField
 
 class KotlinProbeTest {
   @Test
@@ -39,7 +40,7 @@ class KotlinProbeTest {
 
   @Test
   fun `getKotlinPropertyNameFor - normal field`() {
-    val f = LazyContainer::class.java.getDeclaredField("nonLazy")
+    val f = LazyContainer::nonLazy.javaField
     val actual = KotlinProbe.getKotlinPropertyNameFor(f)
     assertThat(actual).contains("nonLazy")
   }
@@ -53,14 +54,14 @@ class KotlinProbeTest {
 
   @Test
   fun `determineLazyType - field doesn't exist`() {
-    val fromAnotherClass = NestedGenericLazyContainer::class.java.getDeclaredField("nonLazy")
+    val fromAnotherClass = NestedGenericLazyContainer::nonLazy.javaField
     val actual = KotlinProbe.determineLazyType(LazyContainer::class.java, fromAnotherClass)
     assertThat(actual).isEmpty()
   }
 
   @Test
   fun `determineLazyType - not lazy`() {
-    val f = LazyContainer::class.java.getDeclaredField("nonLazy")
+    val f = LazyContainer::nonLazy.javaField
     val actual = KotlinProbe.determineLazyType(LazyContainer::class.java, f)
     assertThat(actual).isEmpty()
   }

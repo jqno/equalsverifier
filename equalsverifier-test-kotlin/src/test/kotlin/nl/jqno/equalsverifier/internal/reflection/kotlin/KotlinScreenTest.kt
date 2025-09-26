@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.kotlin
 
 import nl.jqno.equalsverifier.EqualsVerifier
-import org.junit.jupiter.api.Test
-
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import kotlin.reflect.jvm.javaField
 
 class KotlinScreenTest {
 
@@ -30,7 +30,7 @@ class KotlinScreenTest {
 
   @Test
   fun isNotSyntheticKotlinDelegate() {
-    val f = FooContainer::class.java.getDeclaredField("bar")
+    val f = FooContainer::bar.javaField
     assertThat(KotlinScreen.isSyntheticKotlinDelegate(f)).isFalse()
   }
 
@@ -42,7 +42,7 @@ class KotlinScreenTest {
 
   @Test
   fun isNotLazy() {
-    val f = LazyContainer::class.java.getDeclaredField("nonLazy")
+    val f = LazyContainer::nonLazy.javaField
     assertThat(KotlinScreen.isKotlinLazy(f)).isFalse()
   }
 
