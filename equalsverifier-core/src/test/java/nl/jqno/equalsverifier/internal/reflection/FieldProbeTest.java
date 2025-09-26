@@ -38,6 +38,13 @@ class FieldProbeTest {
     }
 
     @Test
+    void getDisplayName() {
+        // For non-Kotlin delegate fields, it's the same as the normal name.
+        FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
+        assertThat(probe.getName()).isEqualTo(FIELD_NAME);
+    }
+
+    @Test
     void isNotPublic() {
         FieldProbe probe = getProbeFor(DifferentAccessModifiersFieldContainer.class, "K");
         assertThat(probe.isPublic()).isFalse();
