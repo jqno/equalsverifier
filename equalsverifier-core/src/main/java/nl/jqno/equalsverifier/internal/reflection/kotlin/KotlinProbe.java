@@ -90,7 +90,7 @@ public final class KotlinProbe {
     }
 
     private static void assertHasKotlinReflect() {
-        if (!KotlinScreen.hasReflect()) {
+        if (!KotlinScreen.canProbe()) {
             var msg = Formatter
                     .of(
                         "Library org.jetbrains.kotlin:kotlin-reflect required to verify this class. Please add it to your project.");

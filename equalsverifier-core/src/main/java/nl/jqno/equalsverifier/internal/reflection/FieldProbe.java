@@ -80,7 +80,7 @@ public final class FieldProbe {
      * @return The field's display name.
      */
     public String getDisplayName() {
-        if (KotlinScreen.isKotlin(field.getType())) {
+        if (KotlinScreen.isKotlin(field.getType()) && KotlinScreen.canProbe()) {
             return KotlinProbe.getKotlinPropertyNameFor(field).orElse(field.getName());
         }
         return field.getName();

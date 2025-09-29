@@ -17,7 +17,7 @@ public final class KotlinScreen {
 
     public static final Class<?> LAZY = Util.classForName("kotlin.Lazy");
 
-    public static boolean hasReflect() {
+    public static boolean canProbe() {
         return K_CLASSES != null;
     }
 
