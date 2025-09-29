@@ -2,12 +2,13 @@ package nl.jqno.equalsverifier.kotlin
 
 import nl.jqno.equalsverifier.EqualsVerifier
 import nl.jqno.equalsverifier_testhelpers.ExpectedException
-import org.junit.jupiter.api.Disabled
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import org.junit.jupiter.api.Test
 import java.util.Objects
 
 class KotlinWithoutReflectTest {
-  private val ERROR_MESSAGE = "kotlin-reflect required to verify"
+  private val REQUIRED = "required to verify this class"
+  private val DELEGATE = "is a delegate field"
 
   @Test
   fun `Can test Kotlin class with no delegate`() {
@@ -26,22 +27,31 @@ class KotlinWithoutReflectTest {
     ExpectedException
       .`when` { EqualsVerifier.forClass(LazyDelegation::class.java).verify() }
       .assertFailure()
-      .assertMessageContains(ERROR_MESSAGE)
+      .assertMessageContains(KotlinScreen.GAV, REQUIRED)
   }
 
-  @Test@Disabled
+  @Test
   fun `Gives clear error message with ignored lazy delegate`() {
-    EqualsVerifier.forClass(LazyDelegation::class.java)
-      .withIgnoredFields("foo")
-      .verify()
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withIgnoredFields("foo")
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
   }
 
   @Test
   fun `Gives clear error message with lazy delegates ignored by bytecode name`() {
     ExpectedException
-      .`when` { EqualsVerifier.forClass(LazyDelegation::class.java).withIgnoredFields("foo\$delegate").verify() }
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withIgnoredFields("foo\$delegate")
+          .verify()
+      }
       .assertFailure()
-      .assertMessageContains(ERROR_MESSAGE)
+      .assertMessageContains(KotlinScreen.GAV, REQUIRED)
   }
 
   @Test
@@ -49,15 +59,20 @@ class KotlinWithoutReflectTest {
     EqualsVerifier.forClass(ObjectDelegation::class.java).verify()
   }
 
-  @Test@Disabled
+  @Test
   fun `Gives clear error message with ignored object delegate`() {
-    EqualsVerifier.forClass(ObjectDelegationWithIgnoredField::class.java)
-      .withIgnoredFields("foo")
-      .verify()
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(ObjectDelegationWithIgnoredField::class.java)
+          .withIgnoredFields("foo")
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
   }
 
   @Test
-  fun `Gives clear error message with object delegate ignored by bytecode name`() {
+  fun `Can test Kotlin class with object delegate ignored by bytecode name`() {
     EqualsVerifier.forClass(ObjectDelegationWithIgnoredField::class.java)
       .withIgnoredFields("foo\$receiver")
       .verify()
@@ -68,11 +83,16 @@ class KotlinWithoutReflectTest {
     EqualsVerifier.forClass(MemberDelegation::class.java).verify()
   }
 
-  @Test@Disabled
+  @Test
   fun `Gives clear error message with ignored member delegate`() {
-    EqualsVerifier.forClass(MemberDelegation::class.java)
-      .withIgnoredFields("foo")
-      .verify()
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(MemberDelegation::class.java)
+          .withIgnoredFields("foo")
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
   }
 
   class Normal(val foo: Int, val bar: String) {

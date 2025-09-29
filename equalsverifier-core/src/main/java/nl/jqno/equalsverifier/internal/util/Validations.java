@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 public final class Validations {
 
@@ -29,9 +30,12 @@ public final class Validations {
     }
 
     public static void validateFieldNameExists(Class<?> type, String field, Set<String> actualFields) {
-        validate(
-            !actualFields.contains(field),
-            "class " + type.getSimpleName() + " does not contain field " + field + ".");
+        String msg = "class " + type.getSimpleName() + " does not contain field " + field + ".";
+        if (KotlinScreen.isKotlin(type) && !KotlinScreen.canProbe()) {
+            msg += "\n           -> If " + field + " is a delegate field, please add library " + KotlinScreen.GAV
+                    + " to your project so EqualsVerifier can analyse it.";
+        }
+        validate(!actualFields.contains(field), msg);
     }
 
     public static void validateWarnings(Set<Warning> warnings) {

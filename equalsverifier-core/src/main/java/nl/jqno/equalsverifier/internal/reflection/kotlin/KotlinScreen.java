@@ -13,6 +13,8 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 public final class KotlinScreen {
     private KotlinScreen() {}
 
+    public static final String GAV = "org.jetbrains.kotlin:kotlin-reflect";
+
     private static final Object K_CLASSES = Util.classForName("kotlin.reflect.full.KClasses");
 
     public static final Class<?> LAZY = Util.classForName("kotlin.Lazy");
