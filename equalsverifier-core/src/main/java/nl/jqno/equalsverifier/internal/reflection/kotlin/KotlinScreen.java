@@ -13,7 +13,13 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 public final class KotlinScreen {
     private KotlinScreen() {}
 
+    private static final Object K_CLASSES = Util.classForName("kotlin.reflect.full.KClasses");
+
     public static final Class<?> LAZY = Util.classForName("kotlin.Lazy");
+
+    public static boolean hasReflect() {
+        return K_CLASSES != null;
+    }
 
     public static boolean isKotlin(Class<?> type) {
         // We can't use the `AnnotationCache` here because we need to check for Kotlin before the `AnnotationCache`

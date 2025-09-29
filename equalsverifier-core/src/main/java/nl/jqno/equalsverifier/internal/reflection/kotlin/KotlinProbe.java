@@ -11,6 +11,8 @@ import kotlin.reflect.*;
 import kotlin.reflect.full.KClasses;
 import kotlin.reflect.jvm.ReflectJvmMapping;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.util.Assert;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 /**
  * Collection of 'dangerous' reflection utilities for Kotlin. Can only be used when we know for sure that the
@@ -51,6 +53,7 @@ public final class KotlinProbe {
     }
 
     public static Optional<TypeTag> determineLazyType(Class<?> container, Field field) {
+        assertHasKotlinReflect();
         if (!field.getType().equals(KotlinScreen.LAZY)) {
             return Optional.empty();
         }
@@ -84,5 +87,14 @@ public final class KotlinProbe {
                 .collect(Collectors.toList());
 
         return new TypeTag(rawClass, genericTypeTags);
+    }
+
+    private static void assertHasKotlinReflect() {
+        if (!KotlinScreen.hasReflect()) {
+            var msg = Formatter
+                    .of(
+                        "Library org.jetbrains.kotlin:kotlin-reflect required to verify this class. Please add it to your project.");
+            Assert.fail(msg);
+        }
     }
 }

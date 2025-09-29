@@ -246,7 +246,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private SingleTypeEqualsVerifierApi<T> withFieldsAddedAndValidated(
             Set<String> collection,
             List<String> specifiedFields) {
-        List<String> translated = KotlinScreen.isKotlin(type)
+        List<String> translated = KotlinScreen.isKotlin(type) && KotlinScreen.hasReflect()
                 ? KotlinProbe.translateKotlinToBytecodeFieldNames(type, specifiedFields)
                 : specifiedFields;
         collection.addAll(translated);
