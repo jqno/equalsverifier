@@ -16,9 +16,16 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
-  fun `Can test Kotlin class with no delegate with ignored field`() {
+  fun `Can test Kotlin class with no delegate and using withIgnoredFields`() {
     EqualsVerifier.forClass(NormalWithIgnoredField::class.java)
       .withIgnoredFields("foo")
+      .verify()
+  }
+
+  @Test
+  fun `Can test Kotlin class with no delegate and using withOnlyTheseFields`() {
+    EqualsVerifier.forClass(NormalWithIgnoredField::class.java)
+      .withOnlyTheseFields("bar")
       .verify()
   }
 
@@ -31,7 +38,7 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
-  fun `Gives clear error message with ignored lazy delegate`() {
+  fun `Gives clear error message with lazy delegate excluded via withIgnoredFields`() {
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(LazyDelegation::class.java)
@@ -43,11 +50,35 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
-  fun `Gives clear error message with lazy delegates ignored by bytecode name`() {
+  fun `Gives clear error message with lazy delegate included via withOnlyTheseFields`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withOnlyTheseFields("foo")
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+  }
+
+  @Test
+  fun `Gives clear error message with lazy delegates excluded by bytecode name via withIgnoredFields`() {
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(LazyDelegation::class.java)
           .withIgnoredFields("foo\$delegate")
+          .verify()
+      }
+      .assertFailure()
+      .assertMessageContains(KotlinScreen.GAV, REQUIRED)
+  }
+
+  @Test
+  fun `Gives clear error message with lazy delegates included by bytecode name via withOnlyTheseFields`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withOnlyTheseFields("foo\$delegate")
           .verify()
       }
       .assertFailure()
@@ -60,7 +91,7 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
-  fun `Gives clear error message with ignored object delegate`() {
+  fun `Gives clear error message with object delegate excluded via withIgnoredFields`() {
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(ObjectDelegationWithIgnoredField::class.java)
@@ -72,9 +103,28 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
-  fun `Can test Kotlin class with object delegate ignored by bytecode name`() {
+  fun `Can test Kotlin class with object delegate excluded by bytecode name via withIgnoredFields`() {
     EqualsVerifier.forClass(ObjectDelegationWithIgnoredField::class.java)
       .withIgnoredFields("foo\$receiver")
+      .verify()
+  }
+
+  @Test
+  fun `Gives clear error message with object delegate included via withOnlyTheseFields`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(ObjectDelegationWithOnlyThisField::class.java)
+          .withOnlyTheseFields("foo")
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+  }
+
+  @Test
+  fun `Can test Kotlin class with object delegate included by bytecode name via withOnlyTheseFields`() {
+    EqualsVerifier.forClass(ObjectDelegationWithOnlyThisField::class.java)
+      .withOnlyTheseFields("foo\$receiver")
       .verify()
   }
 
@@ -84,11 +134,23 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
-  fun `Gives clear error message with ignored member delegate`() {
+  fun `Gives clear error message with excluded member delegate via withIgnoredFields`() {
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(MemberDelegation::class.java)
           .withIgnoredFields("foo")
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+  }
+
+  @Test
+  fun `Gives clear error message with included member delegate via withOnlyTheseFields`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(MemberDelegation::class.java)
+          .withOnlyTheseFields("foo")
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
@@ -138,6 +200,15 @@ class KotlinWithoutReflectTest {
       (other is ObjectDelegationWithIgnoredField) && bar == other.bar
 
     override fun hashCode(): Int = Objects.hash(bar)
+  }
+
+  class ObjectDelegationWithOnlyThisField(container: IntContainer, val bar: String) {
+    val foo: Int by container::foo
+
+    override fun equals(other: Any?): Boolean =
+      (other is ObjectDelegationWithOnlyThisField) && foo == other.foo
+
+    override fun hashCode(): Int = Objects.hash(foo)
   }
 
   class MemberDelegation(val fooValue: Int, val bar: String) {
