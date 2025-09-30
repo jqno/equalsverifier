@@ -8,6 +8,12 @@ import kotlin.reflect.jvm.javaField
 class KotlinScreenTest {
 
   @Test
+  fun canProbe() {
+    // We're in a Maven module with kotlin-reflect
+    assertThat(KotlinScreen.canProbe()).isTrue()
+  }
+
+  @Test
   fun lazyIsLazy() {
     assertThat(KotlinScreen.LAZY).isEqualTo(Lazy::class.java)
   }
