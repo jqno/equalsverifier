@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.InaccessibleObjectException;
 import java.text.AttributedString;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,8 +22,6 @@ import nl.jqno.equalsverifier_testhelpers.types.Point3D;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
@@ -130,19 +129,16 @@ class InPlaceObjectAccessorScramblingTest {
     }
 
     @Test
-    @DisabledForJreRange(max = JRE.JAVA_11)
     void scrambleSutInaccessible() {
         AttributedString as = new AttributedString("x");
 
         ExpectedException
                 .when(() -> doScramble(as))
-                // InaccessibleObjectException, but it's not available in Java 8
-                .assertThrows(RuntimeException.class)
+                .assertThrows(InaccessibleObjectException.class)
                 .assertMessageContains("accessible: module", "does not \"opens");
     }
 
     @Test
-    @DisabledForJreRange(max = JRE.JAVA_11)
     void scrambleFieldInaccessible() {
         InaccessibleContainer ic = new InaccessibleContainer(new AttributedString("x"));
 
