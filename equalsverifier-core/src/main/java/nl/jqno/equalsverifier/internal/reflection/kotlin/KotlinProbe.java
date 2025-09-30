@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection.kotlin;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import kotlin.Lazy;
-import kotlin.LazyKt;
 import kotlin.jvm.JvmClassMappingKt;
 import kotlin.reflect.*;
 import kotlin.reflect.full.KClasses;
@@ -20,10 +20,6 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
  */
 public final class KotlinProbe {
     private KotlinProbe() {}
-
-    public static <T> Lazy<T> lazy(T value) {
-        return LazyKt.lazyOf(value);
-    }
 
     public static List<String> translateKotlinToBytecodeFieldNames(Class<?> container, List<String> fieldNames) {
         return fieldNames.stream().map(fn -> translateKotlinToBytecodeFieldName(container, fn)).toList();

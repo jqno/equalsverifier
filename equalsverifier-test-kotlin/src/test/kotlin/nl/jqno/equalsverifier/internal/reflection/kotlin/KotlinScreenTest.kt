@@ -29,6 +29,12 @@ class KotlinScreenTest {
   }
 
   @Test
+  fun makeLazy() {
+    val k = KotlinScreen.lazy(42)
+    assertThat(Lazy::class.java.isAssignableFrom(k.javaClass)).isTrue()
+  }
+
+  @Test
   fun isSyntheticKotlinDelegate() {
     val f = FooContainer::class.java.getDeclaredField("\$\$delegate_0")
     assertThat(KotlinScreen.isSyntheticKotlinDelegate(f)).isTrue()

@@ -3,6 +3,8 @@ package nl.jqno.equalsverifier.internal.reflection.kotlin;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import kotlin.Lazy;
+import kotlin.LazyKt;
 import nl.jqno.equalsverifier.internal.reflection.Util;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
@@ -33,6 +35,10 @@ public final class KotlinScreen {
             }
         }
         return false;
+    }
+
+    public static <T> Lazy<T> lazy(T value) {
+        return LazyKt.lazyOf(value);
     }
 
     public static boolean isSyntheticKotlinDelegate(Field field) {

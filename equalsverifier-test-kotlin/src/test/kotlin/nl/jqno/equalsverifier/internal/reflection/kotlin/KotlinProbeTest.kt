@@ -7,11 +7,6 @@ import org.junit.jupiter.api.Test
 import kotlin.reflect.jvm.javaField
 
 class KotlinProbeTest {
-  @Test
-  fun makeLazy() {
-    val k = KotlinProbe.lazy(42)
-    assertThat(Lazy::class.java.isAssignableFrom(k.javaClass)).isTrue()
-  }
 
   @Test
   fun `translateKotlinToBytecodeFieldName - translate Java field`() {
