@@ -29,20 +29,21 @@ This project is a multi-module project to make it easier to deal with shading an
 
 Here's a description of the modules:
 
-| module                        | purpose                                                               |
-| ----------------------------- | --------------------------------------------------------------------- |
-| docs                          | project's Jekyll website                                              |
-| equalsverifier-core           | the actual EqualsVerifier code                                        |
-| equalsverifier-21             | tests for record pattern matching                                     |
-| equalsverifier-testhelpers    | shared types and helpers for use in tests                             |
-| equalsverifier-test           | integration tests (without access to Mockito)                         |
-| equalsverifier-test-jpms      | tests for the Java module system (with access to Mockito)             |
-| equalsverifier-test-kotlin    | tests for Kotlin classes                                              |
-| equalsverifier-test-mockito   | tests for instantiation using Mockito                                 |
-| equalsverifier-aggregator     | generic release assembly description, and shared jacoco configuration |
-| equalsverifier-release-main   | release assembly for jar with dependencies                            |
-| equalsverifier-release-nodep  | release assembly for fat jar (with dependencies shaded in)            |
-| equalsverifier-release-verify | validation tests for the releases                                     |
+| module                        | purpose                                                                      |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| docs                          | project's Jekyll website                                                     |
+| equalsverifier-core           | the actual EqualsVerifier code                                               |
+| equalsverifier-21             | prefab values for SequencedCollections and tests for record pattern matching |
+| equalsverifier-25             | prefab values for ScopedValues                                               |
+| equalsverifier-testhelpers    | shared types and helpers for use in tests                                    |
+| equalsverifier-test           | integration tests (without access to Mockito)                                |
+| equalsverifier-test-jpms      | tests for the Java module system (with access to Mockito)                    |
+| equalsverifier-test-kotlin    | tests for Kotlin classes                                                     |
+| equalsverifier-test-mockito   | tests for instantiation using Mockito                                        |
+| equalsverifier-aggregator     | generic release assembly description, and shared jacoco configuration        |
+| equalsverifier-release-main   | release assembly for jar with dependencies                                   |
+| equalsverifier-release-nodep  | release assembly for fat jar (with dependencies shaded in)                   |
+| equalsverifier-release-verify | validation tests for the releases                                            |
 
 ## Signed JAR
 
