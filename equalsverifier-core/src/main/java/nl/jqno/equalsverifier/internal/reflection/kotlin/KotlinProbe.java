@@ -49,7 +49,7 @@ public final class KotlinProbe {
     }
 
     public static Optional<TypeTag> determineLazyType(Class<?> container, Field field) {
-        assertHasKotlinReflect();
+        assertHasKotlinReflect(field);
         if (!field.getType().equals(KotlinScreen.LAZY)) {
             return Optional.empty();
         }
@@ -85,9 +85,9 @@ public final class KotlinProbe {
         return new TypeTag(rawClass, genericTypeTags);
     }
 
-    private static void assertHasKotlinReflect() {
+    private static void assertHasKotlinReflect(Field f) {
         if (!KotlinScreen.canProbe()) {
-            var msg = "Library " + KotlinScreen.GAV + " required to verify this class. Please add it to your project.";
+            var msg = "Cannot read Kotlin field " + f.getName() + ". " + KotlinScreen.ERROR_MESSAGE;
             Assert.fail(Formatter.of(msg));
         }
     }

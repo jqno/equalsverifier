@@ -14,10 +14,12 @@ public final class KotlinScreen {
     private KotlinScreen() {}
 
     public static final String GAV = "org.jetbrains.kotlin:kotlin-reflect";
-
-    private static final Object K_CLASSES = Util.classForName("kotlin.reflect.full.KClasses");
+    public static final String ERROR_MESSAGE =
+            "Please add library " + KotlinScreen.GAV + " to your project so EqualsVerifier can analyse it.";
 
     public static final Class<?> LAZY = Util.classForName("kotlin.Lazy");
+
+    private static final Object K_CLASSES = Util.classForName("kotlin.reflect.full.KClasses");
 
     public static boolean canProbe() {
         return K_CLASSES != null;

@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Test
 import java.util.Objects
 
 class KotlinWithoutReflectTest {
-  private val FROM_KOTLINPROBE = "required to verify this class"
-  private val FROM_VALIDATIONS = "is a Kotlin delegate field"
-  private val FROM_VALIDATIONS_LAZY = "is a Kotlin lazy delegate field"
 
   /*
    * Normal
@@ -50,7 +47,7 @@ class KotlinWithoutReflectTest {
     ExpectedException
       .`when` { EqualsVerifier.forClass(LazyDelegation::class.java).verify() }
       .assertFailure()
-      .assertMessageContains(KotlinScreen.GAV, FROM_KOTLINPROBE)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -62,7 +59,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -74,7 +71,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -86,7 +83,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -98,7 +95,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertFailure()
-      .assertMessageContains(KotlinScreen.GAV, FROM_KOTLINPROBE)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -110,7 +107,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertFailure()
-      .assertMessageContains(KotlinScreen.GAV, FROM_KOTLINPROBE)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -122,7 +119,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS_LAZY)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   /*
@@ -143,7 +140,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -162,7 +159,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -181,7 +178,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -209,7 +206,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -221,7 +218,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   @Test
@@ -233,7 +230,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
   }
 
   /*
