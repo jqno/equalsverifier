@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.kotlin.delegates
 
-import java.util.Objects
 import kotlin.reflect.KProperty
 
 /*
@@ -23,9 +22,9 @@ interface Foo {
   val foo: Int
 }
 
-data class FooImpl(override val foo: Int): Foo
+data class FooImpl(override val foo: Int) : Foo
 
-class InterfaceDelegation(fooValue: Int): Foo by FooImpl(fooValue) {
+class InterfaceDelegation(fooValue: Int) : Foo by FooImpl(fooValue) {
 
   override fun equals(other: Any?): Boolean =
     (other is InterfaceDelegation) && foo == other.foo
@@ -38,37 +37,38 @@ interface TwoFoos {
   val bar: String
 }
 
-data class TwoFoosImpl(override val foo: Int, override val bar: String): TwoFoos
+data class TwoFoosImpl(override val foo: Int, override val bar: String) : TwoFoos
 
-class TwoFoosDelegationWithExplicitFields(fooValue: Int, barValue: String): TwoFoos by TwoFoosImpl(fooValue, barValue) {
+class TwoFoosDelegationWithExplicitFields(fooValue: Int, barValue: String) :
+  TwoFoos by TwoFoosImpl(fooValue, barValue) {
   override fun equals(other: Any?): Boolean =
     (other is TwoFoosDelegationWithExplicitFields) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
 
-class TwoFoosDelegationWithParamToClass(baz: TwoFoosImpl): TwoFoos by baz {
+class TwoFoosDelegationWithParamToClass(baz: TwoFoosImpl) : TwoFoos by baz {
   override fun equals(other: Any?): Boolean =
     (other is TwoFoosDelegationWithParamToClass) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
 
-class TwoFoosDelegationWithFieldToClass(val baz: TwoFoosImpl): TwoFoos by baz {
+class TwoFoosDelegationWithFieldToClass(val baz: TwoFoosImpl) : TwoFoos by baz {
   override fun equals(other: Any?): Boolean =
     (other is TwoFoosDelegationWithFieldToClass) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
 
-class TwoFoosDelegationWithParamToInterface(baz: TwoFoos): TwoFoos by baz {
+class TwoFoosDelegationWithParamToInterface(baz: TwoFoos) : TwoFoos by baz {
   override fun equals(other: Any?): Boolean =
     (other is TwoFoosDelegationWithParamToInterface) && foo == other.foo && bar == other.bar
 
   override fun hashCode(): Int = (31 * foo) + bar.hashCode()
 }
 
-class TwoFoosDelegationWithFieldToInterface(val baz: TwoFoos): TwoFoos by baz {
+class TwoFoosDelegationWithFieldToInterface(val baz: TwoFoos) : TwoFoos by baz {
   override fun equals(other: Any?): Boolean =
     (other is TwoFoosDelegationWithFieldToInterface) && foo == other.foo && bar == other.bar
 
@@ -120,7 +120,7 @@ class TwoLazyDelegations(fooValue: Int, barValue: String) {
  * Other kinds of delegation
  */
 
-val topLevelFoo: Int = 42
+const val topLevelFoo: Int = 42
 
 class TopLevelDelegation {
   val foo: Int by ::topLevelFoo
@@ -163,6 +163,7 @@ class ReflectionDelegationProvider(val seed: Int) {
   operator fun getValue(thisRef: Any?, prop: KProperty<*>): String =
     "${prop.name}_${seed}"
 }
+
 class ReflectionDelegation(seed: Int) {
   val foo: String by ReflectionDelegationProvider(seed)
 

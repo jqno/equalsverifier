@@ -1,10 +1,9 @@
 package nl.jqno.equalsverifier.kotlin
 
-import java.util.Objects
-
 import nl.jqno.equalsverifier.EqualsVerifier
 import nl.jqno.equalsverifier_testhelpers.ExpectedException
 import org.junit.jupiter.api.Test
+import java.util.*
 
 class KotlinFieldNamesOutputTest {
   @Test

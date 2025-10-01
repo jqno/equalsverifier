@@ -83,7 +83,8 @@ class KotlinDelegationTest {
 
   @Test
   fun `succeed when class uses lazy delegate and has prefab values`() {
-    EqualsVerifier.forClass(LazyDelegation::class.java).withPrefabValues(Lazy::class.java, lazy { 1 }, lazy { 2 }).verify()
+    EqualsVerifier.forClass(LazyDelegation::class.java).withPrefabValues(Lazy::class.java, lazy { 1 }, lazy { 2 })
+      .verify()
   }
 
   @Test
@@ -103,7 +104,8 @@ class KotlinDelegationTest {
 
   @Test
   fun `succeed when class uses two lazy delegates and has generic prefab values`() {
-    EqualsVerifier.forClass(TwoLazyDelegations::class.java).withGenericPrefabValues(Lazy::class.java, { lazy { it } }).verify()
+    EqualsVerifier.forClass(TwoLazyDelegations::class.java).withGenericPrefabValues(Lazy::class.java, { lazy { it } })
+      .verify()
   }
 
 
@@ -128,7 +130,8 @@ class KotlinDelegationTest {
 
   @Test
   fun `succeed when class uses map delegation`() {
-    EqualsVerifier.forClass(MapDelegation::class.java).withPrefabValues(Map::class.java, mapOf("foo" to "a"), mapOf("foo" to "b")).verify()
+    EqualsVerifier.forClass(MapDelegation::class.java)
+      .withPrefabValues(Map::class.java, mapOf("foo" to "a"), mapOf("foo" to "b")).verify()
   }
 
   @Test

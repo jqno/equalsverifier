@@ -56,9 +56,9 @@ class KotlinScreenTest {
     val foo: Int
   }
 
-  data class FooImpl(override val foo: Int): Foo
+  data class FooImpl(override val foo: Int) : Foo
 
-  class FooContainer(fooValue: Int, val bar: Int): Foo by FooImpl(fooValue)
+  class FooContainer(fooValue: Int, val bar: Int) : Foo by FooImpl(fooValue)
 
   class LazyContainer(val nonLazy: Int) {
     val foo: Int by lazy { nonLazy }

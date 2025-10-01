@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.kotlin
 
-import org.junit.jupiter.api.Test
-import java.lang.reflect.Field
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import java.lang.reflect.Field
 
 class KotlinFieldIterableTest {
   val actual = HashSet<Field>()
@@ -13,9 +13,12 @@ class KotlinFieldIterableTest {
     actual.addAll(FieldIterable.ofKotlin(ImplementingDataClass::class.java).map { it.getField() })
 
     assertThat(actual)
-      .isEqualTo(setOf(
-        Base::class.java.getDeclaredField("base"),
-        ImplementingDataClass::class.java.getDeclaredField("toOverride")))
+      .isEqualTo(
+        setOf(
+          Base::class.java.getDeclaredField("base"),
+          ImplementingDataClass::class.java.getDeclaredField("toOverride")
+        )
+      )
   }
 
   @Test
@@ -23,10 +26,13 @@ class KotlinFieldIterableTest {
     actual.addAll(FieldIterable.of(ImplementingDataClass::class.java).map { it.getField() })
 
     assertThat(actual)
-      .isEqualTo(setOf(
-        Base::class.java.getDeclaredField("base"),
-        Base::class.java.getDeclaredField("toOverride"),
-        ImplementingDataClass::class.java.getDeclaredField("toOverride")))
+      .isEqualTo(
+        setOf(
+          Base::class.java.getDeclaredField("base"),
+          Base::class.java.getDeclaredField("toOverride"),
+          ImplementingDataClass::class.java.getDeclaredField("toOverride")
+        )
+      )
   }
 
   sealed class Base(

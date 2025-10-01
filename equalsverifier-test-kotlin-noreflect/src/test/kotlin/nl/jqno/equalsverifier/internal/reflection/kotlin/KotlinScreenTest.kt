@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.kotlin
 
-import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 class KotlinScreenTest {
 

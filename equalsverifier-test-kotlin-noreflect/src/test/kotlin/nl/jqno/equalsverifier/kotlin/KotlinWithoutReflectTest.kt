@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.kotlin
 
 import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen
 import nl.jqno.equalsverifier_testhelpers.ExpectedException
-import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import org.junit.jupiter.api.Test
-import java.util.Objects
+import java.util.*
 
 class KotlinWithoutReflectTest {
 

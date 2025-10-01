@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.kotlin
 
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.junit.jupiter.api.Test
-import java.util.Objects
+import java.util.*
 
 class KotlinFieldNamesInputTest {
   @Test
