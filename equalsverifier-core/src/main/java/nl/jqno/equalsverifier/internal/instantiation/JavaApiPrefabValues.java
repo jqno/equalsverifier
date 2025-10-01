@@ -16,6 +16,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFa
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinLazy;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
@@ -147,9 +148,9 @@ public final class JavaApiPrefabValues {
         if (KotlinScreen.LAZY != null) {
             addFactory(KotlinScreen.LAZY, (tag, pv, stack) -> {
                 TypeTag genericTag = tag.genericTypes().get(0);
-                return new Tuple(KotlinScreen.lazy(pv.giveRed(genericTag)),
-                        KotlinScreen.lazy(pv.giveBlue(genericTag)),
-                        KotlinScreen.lazy(pv.giveRedCopy(genericTag)));
+                return new Tuple(KotlinLazy.lazy(pv.giveRed(genericTag)),
+                        KotlinLazy.lazy(pv.giveBlue(genericTag)),
+                        KotlinLazy.lazy(pv.giveRedCopy(genericTag)));
             });
         }
     }
