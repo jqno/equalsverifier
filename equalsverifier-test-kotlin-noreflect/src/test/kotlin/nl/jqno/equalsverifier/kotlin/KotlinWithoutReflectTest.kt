@@ -7,8 +7,13 @@ import org.junit.jupiter.api.Test
 import java.util.Objects
 
 class KotlinWithoutReflectTest {
-  private val REQUIRED = "required to verify this class"
-  private val DELEGATE = "is a delegate field"
+  private val FROM_KOTLINPROBE = "required to verify this class"
+  private val FROM_VALIDATIONS = "is a Kotlin delegate field"
+  private val FROM_VALIDATIONS_LAZY = "is a Kotlin lazy delegate field"
+
+  /*
+   * Normal
+   */
 
   @Test
   fun `Can test Kotlin class with no delegate`() {
@@ -30,11 +35,22 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
+  fun `Can test Kotlin class with no delegate and using withPrefabValuesForField`() {
+    EqualsVerifier.forClass(Normal::class.java)
+      .withPrefabValuesForField("foo", 42, 1337)
+      .verify()
+  }
+
+  /*
+   * Lazy delegation
+   */
+
+  @Test
   fun `Gives clear error message with lazy delegate`() {
     ExpectedException
       .`when` { EqualsVerifier.forClass(LazyDelegation::class.java).verify() }
       .assertFailure()
-      .assertMessageContains(KotlinScreen.GAV, REQUIRED)
+      .assertMessageContains(KotlinScreen.GAV, FROM_KOTLINPROBE)
   }
 
   @Test
@@ -46,7 +62,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
   }
 
   @Test
@@ -58,11 +74,23 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
   }
 
   @Test
-  fun `Gives clear error message with lazy delegates excluded by bytecode name via withIgnoredFields`() {
+  fun `Gives clear error message with lazy delegate withPrefabValuesForField`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withPrefabValuesForField("foo", lazy { 42 }, lazy { 1337 })
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+  }
+
+  @Test
+  fun `Gives clear error message with lazy delegate excluded by bytecode name via withIgnoredFields`() {
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(LazyDelegation::class.java)
@@ -70,11 +98,11 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertFailure()
-      .assertMessageContains(KotlinScreen.GAV, REQUIRED)
+      .assertMessageContains(KotlinScreen.GAV, FROM_KOTLINPROBE)
   }
 
   @Test
-  fun `Gives clear error message with lazy delegates included by bytecode name via withOnlyTheseFields`() {
+  fun `Gives clear error message with lazy delegate included by bytecode name via withOnlyTheseFields`() {
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(LazyDelegation::class.java)
@@ -82,8 +110,24 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertFailure()
-      .assertMessageContains(KotlinScreen.GAV, REQUIRED)
+      .assertMessageContains(KotlinScreen.GAV, FROM_KOTLINPROBE)
   }
+
+  @Test
+  fun `Gives clear error message with lazy delegate withPrefabValuesForField by bytecode name`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withPrefabValuesForField("foo\$delegate", lazy { 42 }, lazy { 1337 })
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS_LAZY)
+  }
+
+  /*
+   * Object delegation
+   */
 
   @Test
   fun `Can test Kotlin class with object delegate`() {
@@ -99,7 +143,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
   }
 
   @Test
@@ -118,7 +162,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
   }
 
   @Test
@@ -127,6 +171,29 @@ class KotlinWithoutReflectTest {
       .withOnlyTheseFields("foo\$receiver")
       .verify()
   }
+
+  @Test
+  fun `Gives clear error message with object delegate withPrefabValuesForField`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(ObjectDelegation::class.java)
+          .withPrefabValuesForField("foo", IntContainer(42), IntContainer(1337))
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+  }
+
+  @Test
+  fun `Can test Kotlin class with object delegate withPrefabValuesForField by bytecode name`() {
+    EqualsVerifier.forClass(ObjectDelegation::class.java)
+      .withPrefabValuesForField("foo\$receiver", IntContainer(42), IntContainer(1337))
+      .verify()
+  }
+
+  /*
+   * Member delegation
+   */
 
   @Test
   fun `Can test Kotlin class with member delegate`() {
@@ -142,7 +209,7 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
   }
 
   @Test
@@ -154,8 +221,24 @@ class KotlinWithoutReflectTest {
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)
-      .assertMessageContains(KotlinScreen.GAV, DELEGATE)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
   }
+
+  @Test
+  fun `Gives clear error message with member delegate withPrefabValuesForField`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(MemberDelegation::class.java)
+          .withPrefabValuesForField("foo", 42, 1337)
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.GAV, FROM_VALIDATIONS)
+  }
+
+  /*
+   * Helper classes
+   */
 
   class Normal(val foo: Int, val bar: String) {
 

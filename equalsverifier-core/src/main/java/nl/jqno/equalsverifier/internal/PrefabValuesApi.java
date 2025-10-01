@@ -68,6 +68,7 @@ public final class PrefabValuesApi {
             T blue) {
         Validations.validateRedAndBluePrefabValues(fieldName, red, blue);
         Field f = Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        Validations.validateCanProbeKotlinLazyDelegate(type, f);
         TypeTag tag = TypeTag.of(f, new TypeTag(type));
 
         if (red.getClass().isArray()) {

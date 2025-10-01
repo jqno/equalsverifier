@@ -32,10 +32,17 @@ public final class Validations {
     public static void validateFieldNameExists(Class<?> type, String field, Set<String> actualFields) {
         String msg = "class " + type.getSimpleName() + " does not contain field " + field + ".";
         if (KotlinScreen.isKotlin(type) && !KotlinScreen.canProbe()) {
-            msg += "\n           -> If " + field + " is a delegate field, please add library " + KotlinScreen.GAV
+            msg += "\n           -> If " + field + " is a Kotlin delegate field. Please add library " + KotlinScreen.GAV
                     + " to your project so EqualsVerifier can analyse it.";
         }
         validate(!actualFields.contains(field), msg);
+    }
+
+    public static void validateCanProbeKotlinLazyDelegate(Class<?> type, Field field) {
+        validate(
+            KotlinScreen.isKotlin(type) && KotlinScreen.isKotlinLazy(field) && !KotlinScreen.canProbe(),
+            "Field " + field.getName() + " is a Kotlin lazy delegate field. Please add library " + KotlinScreen.GAV
+                    + " to your project so EqualsVerifier can analyse it.");
     }
 
     public static void validateWarnings(Set<Warning> warnings) {
