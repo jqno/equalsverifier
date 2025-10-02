@@ -32,6 +32,14 @@ class InterfaceDelegation(fooValue: Int) : Foo by FooImpl(fooValue) {
   override fun hashCode(): Int = foo
 }
 
+class IncorrectInterfaceDelegation(fooValue: Int) : Foo by FooImpl(fooValue) {
+
+  override fun equals(other: Any?): Boolean =
+    (other is IncorrectInterfaceDelegation) && foo == other.foo
+
+  override fun hashCode(): Int = 42
+}
+
 interface TwoFoos {
   val foo: Int
   val bar: String

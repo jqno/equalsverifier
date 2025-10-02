@@ -39,6 +39,22 @@ class KotlinWithoutReflectTest {
   }
 
   /*
+   * Interface delegation
+   */
+
+  @Test
+  fun `Can test Kotlin class with interface delegate`() {
+    EqualsVerifier.forClass(InterfaceDelegation::class.java).verify()
+  }
+
+  @Test
+  fun `Can test Kotlin class with interface delegate exluded by bytecode name via withIgnoredFields`() {
+    EqualsVerifier.forClass(InterfaceDelegationWithIgnoredField::class.java)
+      .withIgnoredFields("\$\$delegate_0")
+      .verify()
+  }
+
+  /*
    * Lazy delegation
    */
 
@@ -249,6 +265,28 @@ class KotlinWithoutReflectTest {
 
     override fun equals(other: Any?): Boolean =
       (other is NormalWithIgnoredField) && bar == other.bar
+
+    override fun hashCode(): Int = Objects.hash(bar)
+  }
+
+  interface Interface {
+    val foo: Int
+  }
+
+  data class InterfaceImpl(override val foo: Int) : Interface
+
+  class InterfaceDelegation(fooValue: Int) : Interface by InterfaceImpl(fooValue) {
+
+    override fun equals(other: Any?): Boolean =
+      (other is InterfaceDelegation) && foo == other.foo
+
+    override fun hashCode(): Int = foo
+  }
+
+  class InterfaceDelegationWithIgnoredField(fooValue: Int, val bar: String) : Interface by InterfaceImpl(fooValue) {
+
+    override fun equals(other: Any?): Boolean =
+      (other is InterfaceDelegationWithIgnoredField) && bar == other.bar
 
     override fun hashCode(): Int = Objects.hash(bar)
   }

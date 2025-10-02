@@ -71,6 +71,14 @@ class KotlinDelegationTest {
       .verify()
   }
 
+  @Test
+  fun `use cryptic variable name when class using interface delegation fails`() {
+    ExpectedException
+      .`when` { EqualsVerifier.forClass(IncorrectInterfaceDelegation::class.java).verify() }
+      .assertFailure()
+      .assertMessageContains("\$\$delegate_0")
+  }
+
 
   /*
    * Lazy delegation
