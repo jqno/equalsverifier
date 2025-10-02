@@ -151,6 +151,7 @@ If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](ht
 - Bug in `withPrefabValueForField` where in some cases the prefab value is not used.
 
 <a name="ScanOption"/>
+
 ## [3.19] - 2025-02-06
 
 ### Added
