@@ -46,7 +46,7 @@ class KotlinDelegationTest {
     ExpectedException
       .`when` { EqualsVerifier.forClass(TwoFoosDelegationWithParamToInterface::class.java).verify() }
       .assertFailure()
-      .assertMessageContains("Abstract delegation", "Add prefab values for")
+      .assertMessageContains("Abstract delegation", "Add prefab values for ${TwoFoos::class.java.getName()}")
   }
 
   @Test
@@ -54,7 +54,7 @@ class KotlinDelegationTest {
     ExpectedException
       .`when` { EqualsVerifier.forClass(TwoFoosDelegationWithFieldToInterface::class.java).verify() }
       .assertFailure()
-      .assertMessageContains("Abstract delegation", "Add prefab values for")
+      .assertMessageContains("Abstract delegation", "Add prefab values for ${TwoFoos::class.java.getName()}")
   }
 
   @Test
