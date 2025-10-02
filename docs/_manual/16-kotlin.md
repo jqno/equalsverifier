@@ -83,4 +83,4 @@ class InterfaceDelegation(fooValue: Int) : Foo by FooImpl(fooValue) {
 }
 ```
 
-In this case, the `FooImpl` instance will be stored in a field named `$$delegate_0`. Unfortunately, there is no way to reliably translate between this bytecode field and its Kotlin-level corresponding `foo` property. As a result, error messages may be more cryptic. Also, EqualsVerifier might ask more quickly for prefab values for the type that is delegated to (in this case: `FooImpl`).
+In this case, the `FooImpl` instance will be stored in a field named `$$delegate_0`. Unfortunately, there is no way to reliably translate between this bytecode field and its Kotlin-level corresponding `foo` property. As a result, error messages will show these, more cryptic field names. Also, EqualsVerifier might ask more quickly for prefab values for the type that is delegated to (in this case: `FooImpl`).

@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Prefab values for Java 25's `ScopedValue`.
+- Additional support for Kotlin delegate fields: ([Issue 1097](https://github.com/jqno/equalsverifier/issues/1097))
+  - In error messages, you will now see readable Kotlin field names instead of bytecode field names like `foo$delegate`.
+  - In `#withIgnoredFields()`, `#withOnlyTheseFields()` and `#withPrefabValuesForField()`, you can now refer to fields by their Kotlin name instead of their bytecode name.
+  - EqualsVerifier can construct prefab values for lazy delegates.
+  - EqualsVerifier can deal with situations where there are multiple fields delegating to the same class.
+  - For more information, see the [new manual page about Kotlin classes](/equalsverifier/manual/kotlin)
 
 ## [4.1.1] - 2025-09-22
 
