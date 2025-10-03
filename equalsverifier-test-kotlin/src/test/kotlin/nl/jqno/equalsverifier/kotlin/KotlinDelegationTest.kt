@@ -137,6 +137,11 @@ class KotlinDelegationTest {
   }
 
   @Test
+  fun `succeed when class uses delegation for 2 fields from another class`() {
+    EqualsVerifier.forClass(DoubleOtherClassDelegation::class.java).verify()
+  }
+
+  @Test
   fun `succeed when class uses map delegation`() {
     EqualsVerifier.forClass(MapDelegation::class.java)
       .withPrefabValues(Map::class.java, mapOf("foo" to "a"), mapOf("foo" to "b")).verify()

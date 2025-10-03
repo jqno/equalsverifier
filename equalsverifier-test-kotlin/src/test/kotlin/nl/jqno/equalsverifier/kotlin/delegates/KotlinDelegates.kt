@@ -158,6 +158,17 @@ class AnotherClassDelegation(anotherClass: AnotherClass) {
   override fun hashCode(): Int = foo
 }
 
+data class DoubleOtherClass(val foo: Int, val bar: String)
+class DoubleOtherClassDelegation(doubleOtherClass: DoubleOtherClass) {
+  val baz: Int by doubleOtherClass::foo
+  val quux: String by doubleOtherClass::bar
+
+  override fun equals(other: Any?): Boolean =
+    (other is DoubleOtherClassDelegation) && baz == other.baz && quux == other.quux
+
+  override fun hashCode(): Int = (31 * baz) + quux.hashCode()
+}
+
 class MapDelegation(map: Map<String, Any>) {
   val foo: String by map
 

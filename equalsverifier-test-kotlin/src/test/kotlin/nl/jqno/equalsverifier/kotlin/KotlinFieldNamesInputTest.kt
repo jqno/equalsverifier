@@ -27,6 +27,20 @@ class KotlinFieldNamesInputTest {
   }
 
   @Test
+  fun `withIgnoredFields - delegate double field with its Kotlin name`() {
+    EqualsVerifier.forClass(UnusedDelegatedDouble::class.java)
+      .withIgnoredFields(UnusedDelegatedDouble::baz.name)
+      .verify()
+  }
+
+  @Test
+  fun `withIgnoredFields - delegate double field with its bytecode name`() {
+    EqualsVerifier.forClass(UnusedDelegatedDouble::class.java)
+      .withIgnoredFields("baz\$receiver")
+      .verify()
+  }
+
+  @Test
   fun `withOnlyTheseFields - normal field`() {
     EqualsVerifier.forClass(UnusedFoo::class.java)
       .withOnlyTheseFields(UnusedFoo::bar.name)
@@ -44,6 +58,20 @@ class KotlinFieldNamesInputTest {
   fun `withOnlyTheseFields - delegate field with its bytecode name`() {
     EqualsVerifier.forClass(UnusedDelegatedFoo::class.java)
       .withOnlyTheseFields("bar\$receiver")
+      .verify()
+  }
+
+  @Test
+  fun `withOnlyTheseFields - delegate double field with its Kotlin name`() {
+    EqualsVerifier.forClass(UnusedDelegatedDouble::class.java)
+      .withOnlyTheseFields(UnusedDelegatedDouble::quux.name)
+      .verify()
+  }
+
+  @Test
+  fun `withOnlyTheseFields - delegate double field with its bytecode name`() {
+    EqualsVerifier.forClass(UnusedDelegatedDouble::class.java)
+      .withOnlyTheseFields("quux\$receiver")
       .verify()
   }
 
@@ -84,6 +112,7 @@ class KotlinFieldNamesInputTest {
 
   data class StringContainer(val foo: String)
   data class IntContainer(val bar: Int)
+  data class DoubleContainer(val foo: String, val bar: Int)
 
   class UnusedFoo(val foo: String, val bar: Int) {
 
@@ -101,6 +130,16 @@ class KotlinFieldNamesInputTest {
       (other is UnusedDelegatedFoo) && bar == other.bar
 
     override fun hashCode(): Int = Objects.hash(bar)
+  }
+
+  class UnusedDelegatedDouble(container: DoubleContainer) {
+    val baz: String by container::foo
+    val quux: Int by container::bar
+
+    override fun equals(other: Any?): Boolean =
+      (other is UnusedDelegatedDouble) && quux == other.quux
+
+    override fun hashCode(): Int = Objects.hash(quux)
   }
 
   class Precondition(val foo: String) {
