@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2] - 2025-10-03
+
 ### Added
 
 - Prefab values for Java 25's `ScopedValue`.
@@ -1470,7 +1472,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2...HEAD
+[4.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1.1...equalsverifier-4.2
 [4.1.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.1...equalsverifier-4.1.1
 [4.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.9...equalsverifier-4.1
 [4.0.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.0.8...equalsverifier-4.0.9
