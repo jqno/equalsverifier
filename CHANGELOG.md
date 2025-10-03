@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - In `#withIgnoredFields()`, `#withOnlyTheseFields()` and `#withPrefabValuesForField()`, you can now refer to fields by their Kotlin name instead of their bytecode name.
   - EqualsVerifier can construct prefab values for lazy delegates.
   - EqualsVerifier can deal with situations where there are multiple fields delegating to the same class.
-  - For more information, see the [new manual page about Kotlin classes](/equalsverifier/manual/kotlin)
+  - For more information, see the [new manual page about Kotlin classes](https://jqno.nl/equalsverifier/manual/kotlin)
 
 ## [4.1.1] - 2025-09-22
 
@@ -340,7 +340,7 @@ If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](ht
 
 ### Changed
 
--   Check that getters are used for all mapped fields in JPA entities, not just the ones with `FetchType.LAZY`. ([Issue 830](https://github.com/jqno/equalsverifier/issues/830))<br/>Note that this is a **breaking change** for JPA entity tests. This can be disabled by suppressing `Warning.JPA_GETTER`. See the [manual page about JPA entities](/equalsverifier/manual/jpa-entities), specifically the section on Materialized fields, for more details.
+-   Check that getters are used for all mapped fields in JPA entities, not just the ones with `FetchType.LAZY`. ([Issue 830](https://github.com/jqno/equalsverifier/issues/830))<br/>Note that this is a **breaking change** for JPA entity tests. This can be disabled by suppressing `Warning.JPA_GETTER`. See the [manual page about JPA entities](https://jqno.nl/equalsverifier/manual/jpa-entities), specifically the section on Materialized fields, for more details.
 
 ### Added
 
