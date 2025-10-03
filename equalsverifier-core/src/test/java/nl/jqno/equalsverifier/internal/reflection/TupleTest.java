@@ -19,4 +19,10 @@ class TupleTest {
     void redAndRedCopyInvariant() {
         assertThat(tuple.redCopy()).isEqualTo(tuple.red()).isNotSameAs(tuple.red());
     }
+
+    @Test
+    void map() {
+        var actual = tuple.map(s -> s.length());
+        assertThat(actual).isEqualTo(new Tuple<>(3, 4, 3));
+    }
 }
