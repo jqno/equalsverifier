@@ -57,7 +57,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
                                 ERROR_DOC_TITLE
                                         + ": class uses equalsIgnoreCase to compare String field %%, but hashCode is case-sensitive."
                                         + " Use toUpperCase() to determine the hashCode.",
-                                fieldProbe.getName()));
+                                fieldProbe.getDisplayName()));
             }
         }
     }

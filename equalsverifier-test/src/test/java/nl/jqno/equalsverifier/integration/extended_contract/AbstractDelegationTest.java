@@ -11,7 +11,7 @@ class AbstractDelegationTest {
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String EQUALS_DELEGATES = "equals method delegates to an abstract method";
     private static final String HASHCODE_DELEGATES = "hashCode method delegates to an abstract method";
-    private static final String PREFAB = "Add prefab values for";
+    private static final String PREFAB = "Add prefab values for ";
 
     @Test
     void succeed_whenClassHasAFieldOfAnAbstractClass() {
@@ -27,7 +27,8 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     EQUALS_DELEGATES,
-                    AbstractEqualsDelegator.class.getSimpleName());
+                    AbstractEqualsDelegator.class.getSimpleName())
+                .assertMessageDoesNotContain(PREFAB);
     }
 
     @Test
@@ -39,7 +40,8 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     HASHCODE_DELEGATES,
-                    AbstractHashCodeDelegator.class.getSimpleName());
+                    AbstractHashCodeDelegator.class.getSimpleName())
+                .assertMessageDoesNotContain(PREFAB);
     }
 
     @Test
@@ -101,8 +103,7 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     EQUALS_DELEGATES,
-                    PREFAB,
-                    AbstractEqualsDelegator.class.getSimpleName());
+                    PREFAB + AbstractEqualsDelegator.class.getName());
     }
 
     @Test
@@ -125,8 +126,7 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     HASHCODE_DELEGATES,
-                    PREFAB,
-                    AbstractHashCodeDelegator.class.getSimpleName());
+                    PREFAB + AbstractHashCodeDelegator.class.getName());
     }
 
     @Test
@@ -185,8 +185,7 @@ class AbstractDelegationTest {
                 .assertMessageContains(
                     ABSTRACT_DELEGATION,
                     EQUALS_DELEGATES,
-                    PREFAB,
-                    AbstractEqualsWithoutIdentityCheckDelegator.class.getSimpleName());
+                    PREFAB + AbstractEqualsWithoutIdentityCheckDelegator.class.getName());
     }
 
     @Test

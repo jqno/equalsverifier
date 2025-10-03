@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.kotlin
 
-import java.util.Objects
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.junit.jupiter.api.Test
+import java.util.*
 
 class KotlinIntegrationTest {
   @Test
@@ -19,7 +19,7 @@ class KotlinIntegrationTest {
   }
 
   @Test
-  fun `tralalala super's backing field does not affect implementing regular class`() {
+  fun `super's backing field does not affect implementing regular class when there's a precondition and withPrefabValuesForField is given`() {
     EqualsVerifier.forClass(ImplementingPreconditionClass::class.java)
       .withPrefabValuesForField("toOverride", 1337, 1338)
       .verify()

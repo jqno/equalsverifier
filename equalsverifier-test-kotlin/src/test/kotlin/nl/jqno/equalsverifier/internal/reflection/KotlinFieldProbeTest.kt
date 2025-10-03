@@ -1,31 +1,27 @@
 package nl.jqno.equalsverifier.internal.reflection
 
-import nl.jqno.equalsverifier.internal.reflection.FieldProbe
-import org.junit.jupiter.api.Test
-
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import kotlin.reflect.jvm.javaField
 
 class KotlinFieldProbeTest {
+  @Test
+  fun `getDisplayName displays normal field name`() {
+    val f = Container::normal.javaField
+    val probe = FieldProbe.of(f)
+    assertThat(probe.getDisplayName()).isEqualTo("normal")
+  }
 
   @Test
-  fun isKotlinDelegate() {
-    var f = FooContainer::class.java.getDeclaredField("\$\$delegate_0")
-    var probe = FieldProbe.of(f)
-    assertThat(probe.isKotlinDelegate()).isTrue()
+  fun `getDisplayName displays delegate field name`() {
+    val f = Container::delegate.javaField
+    val probe = FieldProbe.of(f)
+    assertThat(probe.getDisplayName()).isEqualTo("delegate")
+    assertThat(probe.getName()).isEqualTo("delegate\$delegate")
   }
 
-  @Test
-  fun isNotKotlinDelegate() {
-    var f = FooContainer::class.java.getDeclaredField("bar")
-    var probe = FieldProbe.of(f)
-    assertThat(probe.isKotlinDelegate()).isFalse()
+  class Container {
+    val normal: Int = 1
+    val delegate: Int by lazy { 1 }
   }
-
-  interface Foo {
-    val foo: Int
-  }
-
-  data class FooImpl(override val foo: Int): Foo
-
-  class FooContainer(fooValue: Int, val bar: Int): Foo by FooImpl(fooValue)
 }

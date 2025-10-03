@@ -45,6 +45,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     @SuppressWarnings("ReturnValueIgnored")
     public void execute(FieldProbe fieldProbe) {
         String fieldName = fieldProbe.getName();
+        String fieldDisplayName = fieldProbe.getDisplayName();
         String getterName = fieldnameToGetter.apply(fieldName);
 
         if (!fieldIsUsed(fieldProbe.getField(), true)
@@ -59,7 +60,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                         "Class %% doesn't contain getter %%() for field %%.",
                         classProbe.getType().getSimpleName(),
                         getterName,
-                        fieldName),
+                        fieldDisplayName),
             classProbe.hasMethod(getterName));
         assertFalse(
             Formatter
@@ -71,7 +72,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                         getterName,
                         classProbe.getType().getSimpleName(),
                         classProbe.getType().getSimpleName(),
-                        fieldName),
+                        fieldDisplayName),
             classProbe.isMethodFinal(getterName));
 
         Class<? extends T> sub = throwingGetterCreator(getterName);
@@ -86,7 +87,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         catch (EqualsVerifierInternalBugException e) {
             equalsExceptionCaught = true;
         }
-        assertEntity(fieldName, "equals", getterName, equalsExceptionCaught);
+        assertEntity(fieldDisplayName, "equals", getterName, equalsExceptionCaught);
 
         boolean usedInHashcode = !strictHashcode || fieldIsUsed(fieldProbe.getField(), false);
         boolean hashCodeExceptionCaught = false;
@@ -96,7 +97,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         catch (EqualsVerifierInternalBugException e) {
             hashCodeExceptionCaught = true;
         }
-        assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught || !usedInHashcode);
+        assertEntity(fieldDisplayName, "hashCode", getterName, hashCodeExceptionCaught || !usedInHashcode);
     }
 
     private boolean fieldIsUsed(Field field, boolean forEquals) {
@@ -126,12 +127,12 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                             .intercept(throwing(EqualsVerifierInternalBugException.class)));
     }
 
-    private void assertEntity(String fieldName, String method, String getterName, boolean assertion) {
+    private void assertEntity(String fieldDisplayName, String method, String getterName, boolean assertion) {
         assertTrue(
             Formatter
                     .of(
                         "JPA Entity: direct reference to field %% used in %% instead of getter %%().",
-                        fieldName,
+                        fieldDisplayName,
                         method,
                         getterName),
             assertion);

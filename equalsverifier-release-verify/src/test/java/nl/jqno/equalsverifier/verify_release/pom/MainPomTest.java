@@ -32,12 +32,17 @@ class MainPomTest {
     void dependencies() {
         assertThat(pom)
                 .satisfies(
-                    p -> p.assertNumberOfDependencies(5),
+                    p -> p.assertNumberOfDependencies(8),
                     p -> p.assertDependencyIsOptional(1), // core
                     p -> p.assertDependencyIsOptional(2), // JDK 21
-                    p -> p.assertDependency(3, "org.objenesis", "objenesis"),
-                    p -> p.assertDependency(4, "net.bytebuddy", "byte-buddy"),
-                    p -> p.assertDependencyIsOptional(5),
-                    p -> p.assertDependency(5, "org.mockito", "mockito-core"));
+                    p -> p.assertDependencyIsOptional(3), // JDK 25
+                    p -> p.assertDependency(4, "org.objenesis", "objenesis"),
+                    p -> p.assertDependency(5, "net.bytebuddy", "byte-buddy"),
+                    p -> p.assertDependencyIsOptional(6),
+                    p -> p.assertDependency(6, "org.mockito", "mockito-core"),
+                    p -> p.assertDependencyIsOptional(7),
+                    p -> p.assertDependency(7, "org.jetbrains.kotlin", "kotlin-stdlib"),
+                    p -> p.assertDependencyIsOptional(8),
+                    p -> p.assertDependency(8, "org.jetbrains.kotlin", "kotlin-reflect"));
     }
 }

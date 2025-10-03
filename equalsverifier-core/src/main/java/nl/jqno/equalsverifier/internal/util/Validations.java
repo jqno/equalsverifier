@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 public final class Validations {
 
@@ -29,9 +30,17 @@ public final class Validations {
     }
 
     public static void validateFieldNameExists(Class<?> type, String field, Set<String> actualFields) {
+        String msg = "class " + type.getSimpleName() + " does not contain field " + field + ".";
+        if (KotlinScreen.isKotlin(type) && !KotlinScreen.canProbe()) {
+            msg += "\n           -> " + field + " may be a Kotlin delegate field. " + KotlinScreen.ERROR_MESSAGE;
+        }
+        validate(!actualFields.contains(field), msg);
+    }
+
+    public static void validateCanProbeKotlinLazyDelegate(Class<?> type, Field field) {
         validate(
-            !actualFields.contains(field),
-            "class " + type.getSimpleName() + " does not contain field " + field + ".");
+            KotlinScreen.isKotlin(type) && KotlinScreen.isKotlinLazy(field) && !KotlinScreen.canProbe(),
+            "Field " + field.getName() + " is a Kotlin lazy delegate field." + KotlinScreen.ERROR_MESSAGE);
     }
 
     public static void validateWarnings(Set<Warning> warnings) {

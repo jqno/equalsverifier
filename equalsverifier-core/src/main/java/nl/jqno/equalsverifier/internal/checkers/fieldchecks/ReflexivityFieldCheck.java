@@ -89,7 +89,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
                     """
                     Reflexivity: == used instead of .equals() on field: %%
                     If this is intentional, consider suppressing Warning.%%""",
-                    probe.getName(),
+                    probe.getDisplayName(),
                     Warning.REFERENCE_EQUALITY.toString());
         assertEquals(f, left, right);
     }

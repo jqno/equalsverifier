@@ -15,6 +15,7 @@ module nl.jqno.equalsverifier {
 
     // Optional dependencies
     requires static org.mockito;
+    requires static kotlin.reflect;
 
     // Built-in prefab values
     requires static java.desktop;

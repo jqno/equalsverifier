@@ -16,6 +16,8 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFa
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinLazy;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
@@ -59,6 +61,7 @@ public final class JavaApiPrefabValues {
         SequencedCollectionsHelper.add(factoryCache);
         ScopedValuesHelper.add(factoryCache);
         addAtomicClasses();
+        addKotlinClasses();
     }
 
     private void addNonCollectionClasses() {
@@ -130,14 +133,26 @@ public final class JavaApiPrefabValues {
         addFactory(AtomicReference.class, simple(AtomicReference::new, null));
         addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
         addFactory(AtomicReferenceArray.class, (tag, pv, stack) -> {
-            TypeTag y = tag.genericTypes().get(0);
-            Object[] red = new Object[] { pv.giveRed(y) };
-            Object[] blue = new Object[] { pv.giveBlue(y) };
-            Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
+            TypeTag genericTag = tag.genericTypes().get(0);
+            Object[] red = new Object[] { pv.giveRed(genericTag) };
+            Object[] blue = new Object[] { pv.giveBlue(genericTag) };
+            Object[] redCopy = new Object[] { pv.giveRedCopy(genericTag) };
             return new Tuple(new AtomicReferenceArray(red),
                     new AtomicReferenceArray(blue),
                     new AtomicReferenceArray(redCopy));
         });
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void addKotlinClasses() {
+        if (KotlinScreen.LAZY != null) {
+            addFactory(KotlinScreen.LAZY, (tag, pv, stack) -> {
+                TypeTag genericTag = tag.genericTypes().get(0);
+                return new Tuple(KotlinLazy.lazy(pv.giveRed(genericTag)),
+                        KotlinLazy.lazy(pv.giveBlue(genericTag)),
+                        KotlinLazy.lazy(pv.giveRedCopy(genericTag)));
+            });
+        }
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {

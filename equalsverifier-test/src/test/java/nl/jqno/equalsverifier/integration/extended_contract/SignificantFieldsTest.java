@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Color;
 import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
@@ -204,7 +205,8 @@ class SignificantFieldsTest {
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains(
                     "Precondition",
-                    "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+                    "you can call either withOnlyTheseFields or withIgnoredFields, but not both.")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -216,7 +218,8 @@ class SignificantFieldsTest {
                             .withIgnoredFields("colorNotUsed")
                             .verify())
                 .assertFailure()
-                .assertMessageContains("Significant fields", "equals does not use", "colorAlsoNotUsed");
+                .assertMessageContains("Significant fields", "equals does not use", "colorAlsoNotUsed")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -224,7 +227,8 @@ class SignificantFieldsTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalPoint.class).withIgnoredFields("x").verify())
                 .assertFailure()
-                .assertMessageContains("Significant fields", "equals should not use", "x", "but it does");
+                .assertMessageContains("Significant fields", "equals should not use", "x", "but it does")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -233,7 +237,8 @@ class SignificantFieldsTest {
                 .when(
                     () -> EqualsVerifier.forClass(OneFieldUnused.class).withIgnoredFields("x", "colorNotUsed").verify())
                 .assertFailure()
-                .assertMessageContains("Significant fields", "equals should not use", "x", "but it does");
+                .assertMessageContains("Significant fields", "equals should not use", "x", "but it does")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -241,9 +246,8 @@ class SignificantFieldsTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalPoint.class).withIgnoredFields("thisFieldDoesNotExist"))
                 .assertThrows(IllegalStateException.class)
-                .assertMessageContains(
-                    "Precondition",
-                    "class FinalPoint does not contain field thisFieldDoesNotExist.");
+                .assertMessageContains("Precondition", "class FinalPoint does not contain field thisFieldDoesNotExist.")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -256,7 +260,8 @@ class SignificantFieldsTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalPoint.class).withOnlyTheseFields("x").verify())
                 .assertFailure()
-                .assertMessageContains("Significant fields", "equals should not use", "y", "but it does");
+                .assertMessageContains("Significant fields", "equals should not use", "y", "but it does")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -268,7 +273,8 @@ class SignificantFieldsTest {
                             .withOnlyTheseFields("x", "y", "colorNotUsed")
                             .verify())
                 .assertFailure()
-                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
+                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -276,9 +282,8 @@ class SignificantFieldsTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalPoint.class).withOnlyTheseFields("thisFieldDoesNotExist"))
                 .assertThrows(IllegalStateException.class)
-                .assertMessageContains(
-                    "Precondition",
-                    "class FinalPoint does not contain field thisFieldDoesNotExist.");
+                .assertMessageContains("Precondition", "class FinalPoint does not contain field thisFieldDoesNotExist.")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -288,7 +293,8 @@ class SignificantFieldsTest {
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains(
                     "Precondition",
-                    "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+                    "you can call either withOnlyTheseFields or withIgnoredFields, but not both.")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test
@@ -298,7 +304,8 @@ class SignificantFieldsTest {
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains(
                     "Precondition",
-                    "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+                    "you can call either withOnlyTheseFields or withIgnoredFields, but not both.")
+                .assertMessageDoesNotContain(KotlinScreen.GAV);
     }
 
     @Test

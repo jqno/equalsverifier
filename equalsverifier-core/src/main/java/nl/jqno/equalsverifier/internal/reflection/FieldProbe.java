@@ -9,6 +9,8 @@ import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 /**
@@ -69,6 +71,18 @@ public final class FieldProbe {
      * @return The field's name.
      */
     public String getName() {
+        return field.getName();
+    }
+
+    /**
+     * Returns the field's display name. This accounts for Kotlin delegates.
+     *
+     * @return The field's display name.
+     */
+    public String getDisplayName() {
+        if (KotlinScreen.isKotlin(field.getType()) && KotlinScreen.canProbe()) {
+            return KotlinProbe.getKotlinPropertyNameFor(field).orElse(field.getName());
+        }
         return field.getName();
     }
 
@@ -170,21 +184,12 @@ public final class FieldProbe {
      * @return Whether or not the field can be modified reflectively.
      */
     public boolean canBeModifiedReflectively() {
-        if (field.isSynthetic() && !isKotlinDelegate()) {
+        if (field.isSynthetic() && !KotlinScreen.isSyntheticKotlinDelegate(field)) {
             return false;
         }
         if (isFinal() && isStatic()) {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Determines whether the field is a synthetic Kotlin delegate field.
-     *
-     * @return Whether or not the field is a synthetic Kotlin delegate field.
-     */
-    public boolean isKotlinDelegate() {
-        return field.isSynthetic() && field.getName().startsWith("$$delegate_");
     }
 }

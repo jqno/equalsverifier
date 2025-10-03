@@ -85,7 +85,7 @@ public final class Formatter {
         boolean foundFields = false;
         for (FieldProbe probe : FieldIterable.of(type)) {
             foundFields = true;
-            String fieldName = probe.getName();
+            String fieldName = probe.getDisplayName();
             result.append(" ");
             result.append(fieldName);
             result.append("=");

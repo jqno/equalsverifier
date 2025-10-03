@@ -524,6 +524,7 @@
             <modules>
                 <module>equalsverifier-25</module>
                 <module>equalsverifier-test-kotlin</module>
+                <module>equalsverifier-test-kotlin-noreflect</module>
             </modules>
         </profile>
 

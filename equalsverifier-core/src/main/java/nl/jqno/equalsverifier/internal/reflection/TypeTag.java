@@ -6,6 +6,8 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 /**
  * Represents a generic type, including raw type and generic type parameters.
@@ -51,6 +53,12 @@ public final record TypeTag(Class<?> type, List<TypeTag> genericTypes) {
      * @return The TypeTag for the given field.
      */
     public static TypeTag of(Field field, TypeTag enclosingType) {
+        if (KotlinScreen.isKotlin(enclosingType.getType()) && KotlinScreen.isKotlinLazy(field)) {
+            var opt = KotlinProbe.determineLazyType(enclosingType.getType(), field);
+            if (opt.isPresent()) {
+                return opt.get();
+            }
+        }
         return resolve(field.getGenericType(), field.getType(), enclosingType, false);
     }
 

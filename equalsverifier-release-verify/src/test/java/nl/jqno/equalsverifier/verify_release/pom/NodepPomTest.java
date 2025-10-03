@@ -32,10 +32,15 @@ class NodepPomTest {
     void noDependencies() {
         assertThat(pom)
                 .satisfies(
-                    p -> p.assertNumberOfDependencies(3),
+                    p -> p.assertNumberOfDependencies(6),
                     p -> p.assertDependencyIsOptional(1), // core
                     p -> p.assertDependencyIsOptional(2), // JDK 21
-                    p -> p.assertDependencyIsOptional(3),
-                    p -> p.assertDependency(3, "org.mockito", "mockito-core"));
+                    p -> p.assertDependencyIsOptional(3), // JDK 25
+                    p -> p.assertDependencyIsOptional(4),
+                    p -> p.assertDependency(4, "org.mockito", "mockito-core"),
+                    p -> p.assertDependencyIsOptional(5),
+                    p -> p.assertDependency(5, "org.jetbrains.kotlin", "kotlin-stdlib"),
+                    p -> p.assertDependencyIsOptional(6),
+                    p -> p.assertDependency(6, "org.jetbrains.kotlin", "kotlin-reflect"));
     }
 }

@@ -20,4 +20,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [Dealing with legacy systems](/equalsverifier/manual/legacy-systems)
 * [The Java Platform Module System](/equalsverifier/manual/jpms)
 * [What are these prefab values?](/equalsverifier/manual/prefab-values)
+* [Kotlin support](/equalsverifier/manual/kotlin)
 * [Additional resources](/equalsverifier/resources)
