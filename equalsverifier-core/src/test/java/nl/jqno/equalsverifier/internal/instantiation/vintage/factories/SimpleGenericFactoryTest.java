@@ -44,15 +44,15 @@ class SimpleGenericFactoryTest {
         valueProvider =
                 new VintageValueProvider(new BuiltinPrefabValueProvider(), new FactoryCache(), new ObjenesisStd());
 
-        Tuple<String> strings = valueProvider.giveTuple(STRING_TYPETAG);
+        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, null);
         redString = strings.red();
         blueString = strings.blue();
 
-        Tuple<Integer> ints = valueProvider.giveTuple(INTEGER_TYPETAG);
+        Tuple<Integer> ints = valueProvider.provideOrThrow(INTEGER_TYPETAG, null);
         redInt = ints.red();
         blueInt = ints.blue();
 
-        Tuple<Object> objects = valueProvider.giveTuple(OBJECT_TYPETAG);
+        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, null);
         redObject = objects.red();
         blueObject = objects.blue();
     }

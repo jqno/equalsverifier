@@ -28,7 +28,7 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
 
-        Tuple<?> tuple = valueProvider.giveTuple(entryTag);
+        Tuple<?> tuple = valueProvider.provideOrThrow(entryTag, null);
         return tuple.map(v -> factory.apply(Set.of(v)));
     }
 }

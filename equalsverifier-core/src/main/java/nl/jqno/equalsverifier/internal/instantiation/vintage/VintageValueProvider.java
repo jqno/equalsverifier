@@ -46,18 +46,7 @@ public class VintageValueProvider implements ValueProvider {
     /** {@inheritDoc} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
-        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag)));
-    }
-
-    /**
-     * Returns a tuple of prefabricated values of the specified type.
-     *
-     * @param <T> The values in the tuple are cast to this type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return A tuple of prefabricated values.
-     */
-    public <T> Tuple<T> giveTuple(TypeTag tag) {
-        return giveTuple(tag, new LinkedHashSet<>());
+        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, new LinkedHashSet<>())));
     }
 
     @SuppressWarnings("unchecked")

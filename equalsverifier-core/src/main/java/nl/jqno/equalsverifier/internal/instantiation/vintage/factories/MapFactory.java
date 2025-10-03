@@ -27,8 +27,8 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
-        Tuple<?> keyTuple = valueProvider.giveTuple(keyTag);
-        Tuple<?> valueTuple = valueProvider.giveTuple(valueTag);
+        Tuple<?> keyTuple = valueProvider.provideOrThrow(keyTag, null);
+        Tuple<?> valueTuple = valueProvider.provideOrThrow(valueTag, null);
 
         // Use red for key and blue for value in the Red map to avoid having identical keys and
         // values.

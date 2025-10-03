@@ -47,33 +47,33 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void simple() {
-        Tuple<Point> tuple = valueProvider.giveTuple(POINT_TAG);
+        Tuple<Point> tuple = valueProvider.provideOrThrow(POINT_TAG, null);
         assertThat(tuple.blue()).isNotEqualTo(tuple.red());
     }
 
     @Test
     void createSecondTimeIsNoOp() {
-        Tuple<Point> tuple = valueProvider.giveTuple(POINT_TAG);
-        assertThat(valueProvider.giveTuple(POINT_TAG)).isSameAs(tuple);
+        Tuple<Point> tuple = valueProvider.provideOrThrow(POINT_TAG, null);
+        assertThat(valueProvider.provideOrThrow(POINT_TAG, null)).isSameAs(tuple);
     }
 
     @Test
     void createEnum() {
-        Tuple<SimpleEnum> tuple = valueProvider.giveTuple(ENUM_TAG);
+        Tuple<SimpleEnum> tuple = valueProvider.provideOrThrow(ENUM_TAG, null);
         assertThat(tuple.red()).isNotNull();
         assertThat(tuple.blue()).isNotNull();
     }
 
     @Test
     void createOneElementEnum() {
-        Tuple<OneElementEnum> tuple = valueProvider.giveTuple(ONE_ELT_ENUM_TAG);
+        Tuple<OneElementEnum> tuple = valueProvider.provideOrThrow(ONE_ELT_ENUM_TAG, null);
         assertThat(tuple.red()).isNotNull();
         assertThat(tuple.blue()).isNotNull();
     }
 
     @Test
     void createEmptyEnum() {
-        Tuple<EmptyEnum> tuple = valueProvider.giveTuple(EMPTY_ENUM_TAG);
+        Tuple<EmptyEnum> tuple = valueProvider.provideOrThrow(EMPTY_ENUM_TAG, null);
         assertThat(tuple.red()).isNull();
         assertThat(tuple.blue()).isNull();
     }
@@ -82,12 +82,14 @@ class VintageValueProviderCreatorTest {
     void oneStepRecursiveType() {
         factoryCache.put(Node.class, values(new Node(null), new Node(new Node(null)), new Node(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.giveTuple(NODE_TAG);
+        valueProvider.provideOrThrow(NODE_TAG, null);
     }
 
     @Test
     void dontAddOneStepRecursiveType() {
-        ExpectedException.when(() -> valueProvider.giveTuple(NODE_TAG)).assertThrows(RecursionException.class);
+        ExpectedException
+                .when(() -> valueProvider.provideOrThrow(NODE_TAG, null))
+                .assertThrows(RecursionException.class);
     }
 
     @Test
@@ -97,12 +99,14 @@ class VintageValueProviderCreatorTest {
                     NodeArray.class,
                     values(new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.giveTuple(NODE_ARRAY_TAG);
+        valueProvider.provideOrThrow(NODE_ARRAY_TAG, null);
     }
 
     @Test
     void dontAddOneStepRecursiveArrayType() {
-        ExpectedException.when(() -> valueProvider.giveTuple(NODE_ARRAY_TAG)).assertThrows(RecursionException.class);
+        ExpectedException
+                .when(() -> valueProvider.provideOrThrow(NODE_ARRAY_TAG, null))
+                .assertThrows(RecursionException.class);
     }
 
     @Test
@@ -112,13 +116,13 @@ class VintageValueProviderCreatorTest {
                     TwoStepNodeB.class,
                     values(new TwoStepNodeB(null), new TwoStepNodeB(new TwoStepNodeA(null)), new TwoStepNodeB(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.giveTuple(TWOSTEP_NODE_A_TAG);
+        valueProvider.provideOrThrow(TWOSTEP_NODE_A_TAG, null);
     }
 
     @Test
     void dontAddTwoStepRecursiveType() {
         ExpectedException
-                .when(() -> valueProvider.giveTuple(TWOSTEP_NODE_A_TAG))
+                .when(() -> valueProvider.provideOrThrow(TWOSTEP_NODE_A_TAG, null))
                 .assertThrows(RecursionException.class);
     }
 
@@ -132,24 +136,24 @@ class VintageValueProviderCreatorTest {
                         new TwoStepNodeArrayB(new TwoStepNodeArrayA[] {}),
                         new TwoStepNodeArrayB(null)));
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.giveTuple(TWOSTEP_NODE_ARRAY_A_TAG);
+        valueProvider.provideOrThrow(TWOSTEP_NODE_ARRAY_A_TAG, null);
     }
 
     @Test
     void dontAddTwoStepRecursiveArrayType() {
         ExpectedException
-                .when(() -> valueProvider.giveTuple(TWOSTEP_NODE_ARRAY_A_TAG))
+                .when(() -> valueProvider.provideOrThrow(TWOSTEP_NODE_ARRAY_A_TAG, null))
                 .assertThrows(RecursionException.class);
     }
 
     @Test
     void sameClassTwiceButNoRecursion() {
-        valueProvider.giveTuple(new TypeTag(NotRecursiveA.class));
+        valueProvider.provideOrThrow(new TypeTag(NotRecursiveA.class), null);
     }
 
     @Test
     void recursiveWithAnotherFieldFirst() {
-        assertThatThrownBy(() -> valueProvider.giveTuple(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
+        assertThatThrownBy(() -> valueProvider.provideOrThrow(new TypeTag(RecursiveWithAnotherFieldFirst.class), null))
                 .isInstanceOf(RecursionException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()
@@ -159,7 +163,7 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void exceptionMessage() {
-        assertThatThrownBy(() -> valueProvider.giveTuple(TWOSTEP_NODE_A_TAG))
+        assertThatThrownBy(() -> valueProvider.provideOrThrow(TWOSTEP_NODE_A_TAG, null))
                 .isInstanceOf(RecursionException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()
@@ -168,7 +172,7 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void skipStaticFinal() {
-        valueProvider.giveTuple(new TypeTag(StaticFinalContainer.class));
+        valueProvider.provideOrThrow(new TypeTag(StaticFinalContainer.class), null);
     }
 
     static class StaticFinalContainer {
