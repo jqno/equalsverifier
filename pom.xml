@@ -103,7 +103,7 @@
         <version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.14.1</version.maven-compiler-plugin>
-        <version.maven-enforcer-plugin>3.6.1</version.maven-enforcer-plugin>
+        <version.maven-enforcer-plugin>3.6.2</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.4.2</version.maven-jar-plugin>
         <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
         <version.maven-shade-plugin>3.6.1</version.maven-shade-plugin>
@@ -111,7 +111,7 @@
         <version.maven-surefire-plugin>3.5.4</version.maven-surefire-plugin>
         <version.mockito>5.20.0</version.mockito>
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
-        <version.pitest.maven>1.20.3</version.pitest.maven>
+        <version.pitest.maven>1.20.4</version.pitest.maven>
         <version.spotbugs>4.9.6</version.spotbugs>
         <version.spotless>3.0.0</version.spotless>
     </properties>
