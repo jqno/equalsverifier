@@ -42,11 +42,17 @@ class MapFactoryTest {
     void setUp() {
         valueProvider =
                 new VintageValueProvider(new BuiltinPrefabValueProvider(), new FactoryCache(), new ObjenesisStd());
-        red = valueProvider.giveRed(STRING_TYPETAG);
-        blue = valueProvider.giveBlue(STRING_TYPETAG);
-        redObject = valueProvider.giveRed(OBJECT_TYPETAG);
-        blueObject = valueProvider.giveBlue(OBJECT_TYPETAG);
-        redEnum = valueProvider.giveBlue(ONEELEMENTENUM_TYPETAG);
+
+        Tuple<String> strings = valueProvider.giveTuple(STRING_TYPETAG);
+        red = strings.red();
+        blue = strings.blue();
+
+        Tuple<Object> objects = valueProvider.giveTuple(OBJECT_TYPETAG);
+        redObject = objects.red();
+        blueObject = objects.blue();
+
+        Tuple<OneElementEnum> enums = valueProvider.giveTuple(ONEELEMENTENUM_TYPETAG);
+        redEnum = enums.blue();
     }
 
     @Test

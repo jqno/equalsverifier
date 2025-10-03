@@ -28,10 +28,7 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
 
-        Collection red = Set.of(valueProvider.<T>giveRed(entryTag));
-        Collection blue = Set.of(valueProvider.<T>giveBlue(entryTag));
-        Collection redCopy = Set.of(valueProvider.<T>giveRed(entryTag));
-
-        return new Tuple<>(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
+        Tuple<?> tuple = valueProvider.giveTuple(entryTag);
+        return tuple.map(v -> factory.apply(Set.of(v)));
     }
 }

@@ -63,13 +63,14 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         TypeTag componentTag = new TypeTag(componentType);
         valueProvider.realizeCacheFor(componentTag, typeStack);
 
+        Tuple<?> tuple = valueProvider.giveTuple(componentTag);
         T red = (T) Array.newInstance(componentType, 1);
-        Array.set(red, 0, valueProvider.giveRed(componentTag));
+        Array.set(red, 0, tuple.red());
         T blue = (T) Array.newInstance(componentType, 2);
-        Array.set(blue, 0, valueProvider.giveBlue(componentTag));
-        Array.set(blue, 1, valueProvider.giveRed(componentTag));
+        Array.set(blue, 0, tuple.blue());
+        Array.set(blue, 1, tuple.red());
         T redCopy = (T) Array.newInstance(componentType, 1);
-        Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
+        Array.set(redCopy, 0, tuple.red());
 
         return new Tuple<>(red, blue, redCopy);
     }

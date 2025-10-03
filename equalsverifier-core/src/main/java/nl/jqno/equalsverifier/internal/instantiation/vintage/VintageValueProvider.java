@@ -50,48 +50,20 @@ public class VintageValueProvider implements ValueProvider {
     }
 
     /**
-     * Returns the "red" prefabricated value of the specified type.
+     * Returns a tuple of prefabricated values of the specified type.
      *
-     * <p>
-     * It's always a different value from the "blue" one.
-     *
-     * @param <T> The return value is cast to this type.
+     * @param <T> The values in the tuple are cast to this type.
      * @param tag A description of the desired type, including generic parameters.
-     * @return The "red" prefabricated value.
+     * @return A tuple of prefabricated values.
      */
-    @SuppressWarnings("TypeParameterUnusedInFormals")
-    public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag).red();
+    public <T> Tuple<T> giveTuple(TypeTag tag) {
+        return giveTuple(tag, new LinkedHashSet<>());
     }
 
-    /**
-     * Returns the "blue" prefabricated value of the specified type.
-     *
-     * <p>
-     * It's always a different value from the "red" one.
-     *
-     * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return The "blue" prefabricated value.
-     */
-    @SuppressWarnings("TypeParameterUnusedInFormals")
-    public <T> T giveBlue(TypeTag tag) {
-        return this.<T>giveTuple(tag).blue();
-    }
-
-    /**
-     * Returns a shallow copy of the "red" prefabricated value of the specified type.
-     *
-     * <p>
-     * When possible, it's equal to but not the same as the "red" object.
-     *
-     * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return A shallow copy of the "red" prefabricated value.
-     */
-    @SuppressWarnings("TypeParameterUnusedInFormals")
-    public <T> T giveRedCopy(TypeTag tag) {
-        return this.<T>giveTuple(tag).redCopy();
+    @SuppressWarnings("unchecked")
+    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, typeStack);
+        return (Tuple<T>) valueCache.get(tag);
     }
 
     /**
@@ -154,16 +126,6 @@ public class VintageValueProvider implements ValueProvider {
             Tuple<T> tuple = createTuple(tag, typeStack);
             valueCache.put(tag, tuple);
         }
-    }
-
-    private <T> Tuple<T> giveTuple(TypeTag tag) {
-        return giveTuple(tag, new LinkedHashSet<>());
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        realizeCacheFor(tag, typeStack);
-        return (Tuple<T>) valueCache.get(tag);
     }
 
     private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {

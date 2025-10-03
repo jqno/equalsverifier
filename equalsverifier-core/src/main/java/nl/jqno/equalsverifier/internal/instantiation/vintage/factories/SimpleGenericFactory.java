@@ -32,8 +32,9 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         for (int i = 0; i < n; i++) {
             TypeTag paramTag = determineAndCacheActualTypeTag(i, tag, valueProvider, clone);
 
-            Object redValue = valueProvider.giveRed(paramTag);
-            Object blueValue = valueProvider.giveBlue(paramTag);
+            Tuple<?> tuple = valueProvider.giveTuple(paramTag);
+            Object redValue = tuple.red();
+            Object blueValue = tuple.blue();
             if (redValue.equals(blueValue)) { // This happens with single-element enums
                 useEmpty = true;
             }
