@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.RecursingValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -26,7 +27,7 @@ class SubjectCreatorTest {
     private static final String S_BLUE = "xyz";
 
     private final Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
-    private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
+    private final RecursingValueProvider valueProvider = new RecursingValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
     private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis);
 
@@ -39,6 +40,7 @@ class SubjectCreatorTest {
 
     @BeforeEach
     void setup() throws NoSuchFieldException {
+        valueProvider.setRecurse(new SubjectCreatorTestValueProvider());
         fieldX = SomeSuper.class.getDeclaredField("x");
         fieldI = SomeClass.class.getDeclaredField("i");
         fieldS = SomeClass.class.getDeclaredField("s");
@@ -198,7 +200,9 @@ class SubjectCreatorTest {
 
     @Test
     void noValueFound() {
-        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
+        var vp = new RecursingValueProvider();
+        vp.setRecurse(new NoValueProvider());
+        sut = new SubjectCreator<>(config, vp, objenesis);
 
         assertThatThrownBy(() -> sut.plain())
                 .isInstanceOf(NoValueException.class)

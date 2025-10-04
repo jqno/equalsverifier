@@ -48,7 +48,7 @@ public final class Context<T> {
         recursing.setRecurse(caching);
 
         this.valueProvider = caching;
-        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
+        this.subjectCreator = new SubjectCreator<>(configuration, recursing, objenesis);
     }
 
     public Class<T> getType() {

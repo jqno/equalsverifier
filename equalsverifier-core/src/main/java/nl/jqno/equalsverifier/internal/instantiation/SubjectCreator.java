@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.RecursingValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
@@ -20,7 +21,7 @@ public class SubjectCreator<T> {
     private final Class<T> type;
     private final Class<? extends T> actualType;
     private final Configuration<T> config;
-    private final ValueProvider valueProvider;
+    private final RecursingValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
     private final Objenesis objenesis;
     private final InstanceCreator<T> instanceCreator;
@@ -32,7 +33,7 @@ public class SubjectCreator<T> {
      * @param valueProvider To provide values for the fields of the subject.
      * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
      */
-    public SubjectCreator(Configuration<T> config, ValueProvider valueProvider, Objenesis objenesis) {
+    public SubjectCreator(Configuration<T> config, RecursingValueProvider valueProvider, Objenesis objenesis) {
         this.typeTag = config.typeTag();
         this.type = typeTag.getType();
         this.config = config;
@@ -243,6 +244,7 @@ public class SubjectCreator<T> {
         String fieldName = f.getName();
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
+            valueProvider.clear();
             return valueProvider.provideOrThrow(fieldTag, fieldName);
         }
         catch (ModuleException e) {
