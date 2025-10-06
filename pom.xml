@@ -111,7 +111,7 @@
         <version.maven-surefire-plugin>3.5.4</version.maven-surefire-plugin>
         <version.mockito>5.20.0</version.mockito>
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
-        <version.pitest.maven>1.20.4</version.pitest.maven>
+        <version.pitest.maven>1.20.5</version.pitest.maven>
         <version.spotbugs>4.9.6</version.spotbugs>
         <version.spotless>3.0.0</version.spotless>
     </properties>
