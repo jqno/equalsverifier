@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -28,7 +29,7 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
 
-        Tuple<?> tuple = valueProvider.provideOrThrow(entryTag, null);
+        Tuple<?> tuple = valueProvider.provideOrThrow(entryTag, Attributes.empty());
         return tuple.map(v -> factory.apply(Set.of(v)));
     }
 }

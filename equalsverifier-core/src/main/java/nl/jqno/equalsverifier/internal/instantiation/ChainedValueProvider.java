@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -25,10 +26,10 @@ public class ChainedValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         return providers
                 .stream()
-                .map(vp -> vp.<T>provide(tag, fieldName))
+                .map(vp -> vp.<T>provide(tag, attributes))
                 .filter(Optional::isPresent)
                 .findFirst()
                 .orElse(Optional.empty());

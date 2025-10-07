@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 import java.lang.reflect.Array;
 import java.util.LinkedHashSet;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -63,7 +64,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         TypeTag componentTag = new TypeTag(componentType);
         valueProvider.realizeCacheFor(componentTag, typeStack);
 
-        Tuple<?> tuple = valueProvider.provideOrThrow(componentTag, null);
+        Tuple<?> tuple = valueProvider.provideOrThrow(componentTag, Attributes.empty());
         T red = (T) Array.newInstance(componentType, 1);
         Array.set(red, 0, tuple.red());
         T blue = (T) Array.newInstance(componentType, 2);

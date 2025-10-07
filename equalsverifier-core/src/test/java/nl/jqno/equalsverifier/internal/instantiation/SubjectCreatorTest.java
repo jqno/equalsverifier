@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -213,7 +214,7 @@ class SubjectCreatorTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
             if (int.class.equals(tag.getType())) {
                 return Optional.of((Tuple<T>) new Tuple<>(I_RED, I_BLUE, I_RED));
             }
@@ -227,7 +228,7 @@ class SubjectCreatorTest {
     static class NoValueProvider implements ValueProvider {
 
         @Override
-        public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
             return Optional.empty();
         }
     }

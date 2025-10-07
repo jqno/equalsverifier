@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
 
@@ -34,13 +35,13 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsEmptyWhenTagIsUnknown() {
         var tag = new TypeTag(getClass());
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isEmpty();
+        assertThat(sut.provide(tag, Attributes.named(SOME_FIELDNAME))).isEmpty();
     }
 
     @Test
     void returnsEmptyWhenTagIsGeneric() {
         var tag = new TypeTag(List.class, new TypeTag(Integer.class));
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isEmpty();
+        assertThat(sut.provide(tag, Attributes.named(SOME_FIELDNAME))).isEmpty();
     }
 
     @Test
@@ -160,6 +161,6 @@ public class BuiltinPrefabValueProviderTest {
 
     private void check(Class<?> type) {
         var tag = new TypeTag(type);
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
+        assertThat(sut.provide(tag, Attributes.named(SOME_FIELDNAME))).isNotEmpty();
     }
 }

@@ -25,19 +25,19 @@ public class ChainedValueProviderTest {
     @Test
     public void returnsValueIfMatch() {
         sut = new ChainedValueProvider(intProvider);
-        assertThat(sut.provideOrThrow(INT, SOME_FIELDNAME).red()).isEqualTo(1);
+        assertThat(sut.provideOrThrow(INT, Attributes.named(SOME_FIELDNAME)).red()).isEqualTo(1);
     }
 
     @Test
     public void returnsEmptyIfNoMatch() {
         sut = new ChainedValueProvider(stringProvider);
-        assertThat(sut.provide(INT, SOME_FIELDNAME)).isEmpty();
+        assertThat(sut.provide(INT, Attributes.named(SOME_FIELDNAME))).isEmpty();
     }
 
     @Test
     public void throwsExceptionIfNoMatch() {
         sut = new ChainedValueProvider(stringProvider);
-        assertThatThrownBy(() -> sut.provideOrThrow(INT, SOME_FIELDNAME))
+        assertThatThrownBy(() -> sut.provideOrThrow(INT, Attributes.named(SOME_FIELDNAME)))
                 .isInstanceOf(NoValueException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()
@@ -47,7 +47,7 @@ public class ChainedValueProviderTest {
     @Test
     public void skipsNonMatchingValue() {
         sut = new ChainedValueProvider(stringProvider, intProvider);
-        assertThat(sut.provideOrThrow(INT, SOME_FIELDNAME).red()).isEqualTo(1);
+        assertThat(sut.provideOrThrow(INT, Attributes.named(SOME_FIELDNAME)).red()).isEqualTo(1);
         assertThat(stringProvider.called).isEqualTo(1);
         assertThat(intProvider.called).isEqualTo(1);
     }
@@ -56,7 +56,7 @@ public class ChainedValueProviderTest {
     public void returnsValueFromFirstMatch() {
         var anotherIntProvider = new SingleTypeValueProvider<>(int.class, 1, 2, 1);
         sut = new ChainedValueProvider(intProvider, anotherIntProvider);
-        assertThat(sut.provideOrThrow(INT, SOME_FIELDNAME).red()).isEqualTo(1);
+        assertThat(sut.provideOrThrow(INT, Attributes.named(SOME_FIELDNAME)).red()).isEqualTo(1);
         assertThat(intProvider.called).isEqualTo(1);
         assertThat(anotherIntProvider.called).isEqualTo(0);
     }
@@ -74,7 +74,7 @@ public class ChainedValueProviderTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
             called++;
             if (tag.getType().equals(type)) {
                 return Optional.of((Tuple<T>) values);

@@ -134,7 +134,7 @@ public final class JavaApiPrefabValues {
         addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
         addFactory(AtomicReferenceArray.class, (tag, pv, stack) -> {
             TypeTag genericTag = tag.genericTypes().get(0);
-            Tuple<?> tup = pv.provideOrThrow(genericTag, null);
+            Tuple<?> tup = pv.provideOrThrow(genericTag, Attributes.empty());
             return tup.map(v -> new AtomicReferenceArray<>(new Object[] { v }));
         });
     }
@@ -144,7 +144,7 @@ public final class JavaApiPrefabValues {
         if (KotlinScreen.LAZY != null) {
             addFactory(KotlinScreen.LAZY, (tag, pv, stack) -> {
                 TypeTag genericTag = tag.genericTypes().get(0);
-                Tuple tup = pv.provideOrThrow(genericTag, null);
+                Tuple tup = pv.provideOrThrow(genericTag, Attributes.empty());
                 return tup.map(v -> KotlinLazy.lazy(v));
             });
         }

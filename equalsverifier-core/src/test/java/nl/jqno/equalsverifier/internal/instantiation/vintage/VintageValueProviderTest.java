@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 import java.util.*;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -44,31 +45,31 @@ class VintageValueProviderTest {
 
     @Test
     void provide() {
-        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG, null);
+        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG, Attributes.empty());
         assertThat(actual).contains(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
     }
 
     @Test
     void giveTupleFromFactory() {
-        assertThat(vp.<String>provideOrThrow(STRING_TAG, null)).isEqualTo(new Tuple<>("r", "b", "r"));
+        assertThat(vp.<String>provideOrThrow(STRING_TAG, Attributes.empty())).isEqualTo(new Tuple<>("r", "b", "r"));
     }
 
     @Test
     void giveTupleFromCache() {
-        vp.provideOrThrow(STRING_TAG, null);
-        assertThat(vp.<String>provideOrThrow(STRING_TAG, null)).isEqualTo(new Tuple<>("r", "b", "r"));
+        vp.provideOrThrow(STRING_TAG, Attributes.empty());
+        assertThat(vp.<String>provideOrThrow(STRING_TAG, Attributes.empty())).isEqualTo(new Tuple<>("r", "b", "r"));
     }
 
     @Test
     void giveTupleFromFallbackFactory() {
-        Tuple<Point> actual = vp.provideOrThrow(POINT_TAG, null);
+        Tuple<Point> actual = vp.provideOrThrow(POINT_TAG, Attributes.empty());
         assertThat(actual).isEqualTo(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
     }
 
     @Test
     void fallbackDoesNotAffectStaticFields() {
         int expected = StaticContainer.staticInt;
-        vp.provideOrThrow(new TypeTag(StaticContainer.class), null);
+        vp.provideOrThrow(new TypeTag(StaticContainer.class), Attributes.empty());
         assertThat(StaticContainer.staticInt).isEqualTo(expected);
     }
 
@@ -77,8 +78,8 @@ class VintageValueProviderTest {
         factoryCache.put(List.class, new ListTestFactory());
         vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
 
-        List<String> strings = vp.<List<String>>provideOrThrow(new TypeTag(List.class, STRING_TAG), null).red();
-        List<Integer> ints = vp.<List<Integer>>provideOrThrow(new TypeTag(List.class, INT_TAG), null).red();
+        List<String> strings = vp.<List<String>>provideOrThrow(new TypeTag(List.class, STRING_TAG), Attributes.empty()).red();
+        List<Integer> ints = vp.<List<Integer>>provideOrThrow(new TypeTag(List.class, INT_TAG), Attributes.empty()).red();
 
         assertThat(strings.get(0)).isEqualTo("r");
         assertThat((int) ints.get(0)).isEqualTo(42);
@@ -93,7 +94,7 @@ class VintageValueProviderTest {
     void addingATypeTwiceOverrulesTheExistingOne() {
         prefabs.register(int.class, -1, -2, -1);
         vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        assertThat(vp.provideOrThrow(INT_TAG, null)).isEqualTo(new Tuple<>(-1, -2, -1));
+        assertThat(vp.provideOrThrow(INT_TAG, Attributes.empty())).isEqualTo(new Tuple<>(-1, -2, -1));
     }
 
     @Test
@@ -101,7 +102,7 @@ class VintageValueProviderTest {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         prefabs.register(Lazy.class, Lazy.X, Lazy.Y, Lazy.X);
         vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        assertThat(vp.<Lazy>provideOrThrow(lazyTag, null)).isEqualTo(new Tuple<>(Lazy.X, Lazy.Y, Lazy.X));
+        assertThat(vp.<Lazy>provideOrThrow(lazyTag, Attributes.empty())).isEqualTo(new Tuple<>(Lazy.X, Lazy.Y, Lazy.X));
     }
 
     @Test
@@ -117,7 +118,7 @@ class VintageValueProviderTest {
 
         // Should throw, because `giveTuple` does instantiate objects:
         try {
-            vp.provideOrThrow(throwingInitializerTag, null);
+            vp.provideOrThrow(throwingInitializerTag, Attributes.empty());
             fail("Expected an exception");
         }
         catch (Error e) {
@@ -183,7 +184,7 @@ class VintageValueProviderTest {
                 LinkedHashSet<TypeTag> typeStack) {
             TypeTag subtag = tag.genericTypes().get(0);
 
-            return valueProvider.<Object>provideOrThrow(subtag, null).map(v -> List.of(v));
+            return valueProvider.<Object>provideOrThrow(subtag, Attributes.empty()).map(v -> List.of(v));
         }
     }
 

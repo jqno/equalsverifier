@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -32,7 +33,7 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         for (int i = 0; i < n; i++) {
             TypeTag paramTag = determineAndCacheActualTypeTag(i, tag, valueProvider, clone);
 
-            Tuple<?> tuple = valueProvider.provideOrThrow(paramTag, null);
+            Tuple<?> tuple = valueProvider.provideOrThrow(paramTag, Attributes.empty());
             Object redValue = tuple.red();
             Object blueValue = tuple.blue();
             if (redValue.equals(blueValue)) { // This happens with single-element enums

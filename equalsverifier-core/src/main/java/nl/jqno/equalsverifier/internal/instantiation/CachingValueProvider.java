@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -31,12 +32,13 @@ public class CachingValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+        var fieldName = attributes.fieldName();
         if (fieldCache.contains(fieldName, tag)) {
             return Optional.of(fieldCache.get(fieldName, tag));
         }
 
-        var result = fallback.<T>provide(tag, fieldName);
+        var result = fallback.<T>provide(tag, attributes);
         if (decider.canBeCached(tag.getType())) {
             result.ifPresent(tuple -> fieldCache.put(fieldName, tag, tuple));
         }

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.SynchronousQueue;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -22,7 +23,7 @@ public class BuiltinPrefabValueProvider implements ValueProvider {
 
     /** {@inheritDoc}} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
         if (!tag.genericTypes().isEmpty() && !EXCEPTIONAL_GENERIC_TYPES.contains(type)) {
             return Optional.empty();

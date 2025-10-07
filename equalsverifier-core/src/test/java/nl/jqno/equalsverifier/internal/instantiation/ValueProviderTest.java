@@ -16,7 +16,7 @@ public class ValueProviderTest {
     void errorMessage() {
         var sut = new EmptyValueProvider();
         var tag = new TypeTag(ArrayList.class);
-        assertThatThrownBy(() -> sut.provideOrThrow(tag, ""))
+        assertThatThrownBy(() -> sut.provideOrThrow(tag, Attributes.named("")))
                 .isInstanceOf(NoValueException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()
@@ -25,7 +25,7 @@ public class ValueProviderTest {
 
     private static final class EmptyValueProvider implements ValueProvider {
         @Override
-        public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
             return Optional.empty();
         }
     }

@@ -8,6 +8,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.*;
@@ -79,7 +80,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Field field = probe.getField();
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Tuple<?> tuple = valueProvider.provideOrThrow(tag, fieldName);
+        Tuple<?> tuple = valueProvider.provideOrThrow(tag, Attributes.named(fieldName));
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.red());
         Object right = subjectCreator.withFieldSetTo(field, tuple.redCopy());

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.withSettings;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MockitoException;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -31,7 +32,7 @@ public class MockitoValueProvider implements ValueProvider {
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         if (disable) {
             return Optional.empty();
         }
@@ -44,8 +45,8 @@ public class MockitoValueProvider implements ValueProvider {
         }
 
         try {
-            var red = buildMock(type, fieldName);
-            var blue = buildMock(type, fieldName);
+            var red = buildMock(type, attributes.fieldName());
+            var blue = buildMock(type, attributes.fieldName());
             if (!red.equals(blue) && red.hashCode() != blue.hashCode()) {
                 // Only return mocked values if they're properly unequal.
                 // They should be, but I think this is undocumented behaviour, so best to be safe.

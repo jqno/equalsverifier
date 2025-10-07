@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
@@ -43,15 +44,15 @@ class MapFactoryTest {
         valueProvider =
                 new VintageValueProvider(new BuiltinPrefabValueProvider(), new FactoryCache(), new ObjenesisStd());
 
-        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, null);
+        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, Attributes.empty());
         red = strings.red();
         blue = strings.blue();
 
-        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, null);
+        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, Attributes.empty());
         redObject = objects.red();
         blueObject = objects.blue();
 
-        Tuple<OneElementEnum> enums = valueProvider.provideOrThrow(ONEELEMENTENUM_TYPETAG, null);
+        Tuple<OneElementEnum> enums = valueProvider.provideOrThrow(ONEELEMENTENUM_TYPETAG, Attributes.empty());
         redEnum = enums.blue();
     }
 
