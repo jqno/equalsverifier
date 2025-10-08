@@ -154,7 +154,8 @@ class VintageValueProviderCreatorTest {
 
     @Test
     void recursiveWithAnotherFieldFirst() {
-        assertThatThrownBy(() -> valueProvider.provideOrThrow(new TypeTag(RecursiveWithAnotherFieldFirst.class), Attributes.empty()))
+        assertThatThrownBy(
+            () -> valueProvider.provideOrThrow(new TypeTag(RecursiveWithAnotherFieldFirst.class), Attributes.empty()))
                 .isInstanceOf(RecursionException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()

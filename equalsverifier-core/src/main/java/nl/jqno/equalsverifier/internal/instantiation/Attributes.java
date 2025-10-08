@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public record Attributes(String fieldName, LinkedHashSet<TypeTag> typeStack) {

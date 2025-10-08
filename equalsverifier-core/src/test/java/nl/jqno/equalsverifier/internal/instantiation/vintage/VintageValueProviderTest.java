@@ -78,8 +78,10 @@ class VintageValueProviderTest {
         factoryCache.put(List.class, new ListTestFactory());
         vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
 
-        List<String> strings = vp.<List<String>>provideOrThrow(new TypeTag(List.class, STRING_TAG), Attributes.empty()).red();
-        List<Integer> ints = vp.<List<Integer>>provideOrThrow(new TypeTag(List.class, INT_TAG), Attributes.empty()).red();
+        List<String> strings =
+                vp.<List<String>>provideOrThrow(new TypeTag(List.class, STRING_TAG), Attributes.empty()).red();
+        List<Integer> ints =
+                vp.<List<Integer>>provideOrThrow(new TypeTag(List.class, INT_TAG), Attributes.empty()).red();
 
         assertThat(strings.get(0)).isEqualTo("r");
         assertThat((int) ints.get(0)).isEqualTo(42);
