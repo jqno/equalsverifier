@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class OthersValueSupplier<T> extends ValueSupplier<T> {
+public class OthersValueSupplier<T> extends ValueSupplier<T> {
     public OthersValueSupplier(Class<T> type) {
         super(type);
     }

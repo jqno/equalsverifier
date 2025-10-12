@@ -7,8 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;

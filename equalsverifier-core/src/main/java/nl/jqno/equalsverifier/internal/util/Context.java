@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.instantiation.*;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;

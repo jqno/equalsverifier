@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation.prefab;
+package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
 

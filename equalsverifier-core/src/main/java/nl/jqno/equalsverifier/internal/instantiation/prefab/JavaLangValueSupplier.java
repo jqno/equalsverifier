@@ -6,7 +6,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
 // CHECKSTYLE OFF: NPathComplexity
 
-class JavaLangValueSupplier<T> extends ValueSupplier<T> {
+public class JavaLangValueSupplier<T> extends ValueSupplier<T> {
     public JavaLangValueSupplier(Class<T> type) {
         super(type);
     }

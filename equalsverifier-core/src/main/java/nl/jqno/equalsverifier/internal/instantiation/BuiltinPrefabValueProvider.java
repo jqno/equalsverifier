@@ -1,12 +1,11 @@
-package nl.jqno.equalsverifier.internal.instantiation.prefab;
+package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.SynchronousQueue;
 
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;

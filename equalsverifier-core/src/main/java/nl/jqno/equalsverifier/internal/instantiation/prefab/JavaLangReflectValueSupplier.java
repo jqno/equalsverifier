@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
+public class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
     public JavaLangReflectValueSupplier(Class<T> type) {
         super(type);
     }

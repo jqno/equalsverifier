@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
 
-class JavaUtilConcurrentValueSupplier<T> extends ValueSupplier<T> {
+public class JavaUtilConcurrentValueSupplier<T> extends ValueSupplier<T> {
     public JavaUtilConcurrentValueSupplier(Class<T> type) {
         super(type);
     }

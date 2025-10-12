@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 // CHECKSTYLE OFF: NPathComplexity
 // CHECKSTYLE OFF: ExecutableStatementCount
 
-class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
+public class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
     public JavaUtilValueSupplier(Class<T> type) {
         super(type);
     }

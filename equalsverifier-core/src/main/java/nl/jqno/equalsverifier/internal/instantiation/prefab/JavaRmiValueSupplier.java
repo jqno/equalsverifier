@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaRmiValueSupplier<T> extends ValueSupplier<T> {
+public class JavaRmiValueSupplier<T> extends ValueSupplier<T> {
 
     public JavaRmiValueSupplier(Class<T> type) {
         super(type);

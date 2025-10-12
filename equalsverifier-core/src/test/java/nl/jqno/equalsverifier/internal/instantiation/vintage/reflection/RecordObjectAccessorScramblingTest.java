@@ -5,10 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
 
-import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;

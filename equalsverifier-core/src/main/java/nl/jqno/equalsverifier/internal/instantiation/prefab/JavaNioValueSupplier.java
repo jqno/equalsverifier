@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
 
-class JavaNioValueSupplier<T> extends ValueSupplier<T> {
+public class JavaNioValueSupplier<T> extends ValueSupplier<T> {
     public JavaNioValueSupplier(Class<T> type) {
         super(type);
     }
