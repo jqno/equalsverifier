@@ -1,7 +1,9 @@
 package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -25,5 +27,14 @@ public abstract class GenericValueSupplier<T> {
 
     protected Optional<Tuple<T>> valGeneric1(TypeTag tag, Attributes attributes, Function<Object, T> construct) {
         return vp.provide(tag.genericTypes().get(0), attributes.clearName()).map(tup -> tup.map(construct));
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Optional<Tuple<T>> list(TypeTag tag, Attributes attributes, Supplier<Collection<Object>> construct) {
+        return valGeneric1(tag, attributes, val -> {
+            var list = construct.get();
+            list.add(val);
+            return (T) list;
+        });
     }
 }
