@@ -1,7 +1,10 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import java.util.*;
+import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericEmptyValueSupplier;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericJavaLangValueSupplier;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericJavaUtilValueSupplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -12,23 +15,17 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
         this.vp = vp;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        if (tag.getType().equals(List.class)
-                || tag.getType().equals(Iterable.class)
-                || tag.getType().equals(Collection.class)) {
-            Optional<Tuple<T>> element = vp.provide(tag.genericTypes().get(0), attributes.clearName());
-            if (element.isEmpty()) {
-                return Optional.empty();
-            }
-            Tuple result = element.get().map(val -> {
-                var r = new ArrayList();
-                r.add(val);
-                return r;
-            });
-            return Optional.of(result);
+        Class<T> type = tag.getType();
+        if (tag.genericTypes().isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        var supplier = switch (type.getPackageName()) {
+            case "java.lang" -> new GenericJavaLangValueSupplier<>(type, vp);
+            case "java.util" -> new GenericJavaUtilValueSupplier<>(type, vp);
+            default -> new GenericEmptyValueSupplier<>(type, vp);
+        };
+        return supplier.get(tag, attributes);
     }
 }

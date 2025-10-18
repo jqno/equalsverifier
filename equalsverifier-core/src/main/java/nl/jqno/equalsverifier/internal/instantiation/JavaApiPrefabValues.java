@@ -53,7 +53,6 @@ public final class JavaApiPrefabValues {
 
     private void addJavaClasses() {
         addNonCollectionClasses();
-        addCollection();
         addLists();
         addMaps();
         addSets();
@@ -72,17 +71,9 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressWarnings("unchecked")
-    private void addCollection() {
-        // addFactory(Iterable.class, simple(a -> List.of(a), ArrayList::new));
-        // addFactory(Collection.class, collection(ArrayList::new));
-    }
-
-    @SuppressWarnings("unchecked")
     private void addLists() {
-        // addFactory(List.class, collection(ArrayList::new));
         addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
         addFactory(LinkedList.class, collection(LinkedList::new));
-        addFactory(ArrayList.class, collection(ArrayList::new));
         addFactory(Vector.class, collection(Vector::new));
         addFactory(Stack.class, collection(Stack::new));
     }
