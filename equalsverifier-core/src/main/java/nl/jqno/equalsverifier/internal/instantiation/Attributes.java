@@ -28,6 +28,10 @@ public final class Attributes {
         return fieldName;
     }
 
+    public Attributes clearName() {
+        return new Attributes(null, preTypeStack, typeStack());
+    }
+
     public Attributes addToStack(TypeTag tag) {
         // In order to work with VintageValueProvider, we can only add the latest typeTag to the stack
         // _after_ it has been processed. In order to achieve that, we keep it in a separate variable

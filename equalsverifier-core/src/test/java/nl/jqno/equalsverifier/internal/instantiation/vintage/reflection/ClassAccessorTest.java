@@ -46,11 +46,13 @@ class ClassAccessorTest {
     @Test
     @SuppressWarnings("rawtypes")
     void getRedObjectGeneric() {
-        ClassAccessor<GenericTypeVariableListContainer> accessor =
-                ClassAccessor.of(GenericTypeVariableListContainer.class, valueProvider, objenesis);
-        GenericTypeVariableListContainer foo = accessor
-                .getRedObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)), empty);
-        assertThat(foo.tList.get(0).getClass()).isEqualTo(String.class);
+        ClassAccessor<GenericTypeVariableContainerContainer> accessor =
+                ClassAccessor.of(GenericTypeVariableContainerContainer.class, valueProvider, objenesis);
+        GenericTypeVariableContainerContainer foo = accessor
+                .getRedObject(
+                    new TypeTag(GenericTypeVariableContainerContainer.class, new TypeTag(String.class)),
+                    empty);
+        assertThat(foo.container.t.getClass()).isEqualTo(String.class);
     }
 
     @Test
@@ -68,11 +70,13 @@ class ClassAccessorTest {
     @Test
     @SuppressWarnings("rawtypes")
     void getBlueObjectGeneric() {
-        ClassAccessor<GenericTypeVariableListContainer> accessor =
-                ClassAccessor.of(GenericTypeVariableListContainer.class, valueProvider, objenesis);
-        GenericTypeVariableListContainer foo = accessor
-                .getBlueObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)), empty);
-        assertThat(foo.tList.get(0).getClass()).isEqualTo(String.class);
+        ClassAccessor<GenericTypeVariableContainerContainer> accessor =
+                ClassAccessor.of(GenericTypeVariableContainerContainer.class, valueProvider, objenesis);
+        GenericTypeVariableContainerContainer foo = accessor
+                .getBlueObject(
+                    new TypeTag(GenericTypeVariableContainerContainer.class, new TypeTag(String.class)),
+                    empty);
+        assertThat(foo.container.t.getClass()).isEqualTo(String.class);
     }
 
     @Test

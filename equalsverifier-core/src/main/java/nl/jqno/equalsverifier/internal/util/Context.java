@@ -28,22 +28,25 @@ public final class Context<T> {
         this.classProbe = ClassProbe.of(configuration.type());
         var modes = configuration.modes();
 
+        var recursionDetector = new RecursionDetectingValueProvider();
         var mockito =
                 new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
 
         var vintageRecursionDetector = new RecursionDetectingValueProvider();
         var vintageBuiltinPrefabs = new BuiltinPrefabValueProvider();
-        var vintageChain = new ChainedValueProvider(userPrefabs, vintageBuiltinPrefabs, mockito);
+        var vintageGenericBuiltinPrefabs = new BuiltinGenericPrefabValueProvider(recursionDetector);
+        var vintageChain =
+                new ChainedValueProvider(userPrefabs, vintageBuiltinPrefabs, vintageGenericBuiltinPrefabs, mockito);
 
         vintageRecursionDetector.setValueProvider(vintageChain);
 
-        var recursionDetector = new RecursionDetectingValueProvider();
         var builtinPrefabs = new BuiltinPrefabValueProvider();
+        var builtinGenericPrefabs = new BuiltinGenericPrefabValueProvider(recursionDetector);
 
         var cache = JavaApiPrefabValues.build().merge(factoryCache);
         var vintage = new VintageValueProvider(vintageRecursionDetector, cache, objenesis);
 
-        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito, vintage);
+        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, builtinGenericPrefabs, mockito, vintage);
         var caching = new CachingValueProvider(userPrefabs, fieldCache, mainChain);
 
         recursionDetector.setValueProvider(caching);

@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier_testhelpers.types;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier_testhelpers.annotations.*;
@@ -206,9 +204,14 @@ public class TypeHelper {
         public AbstractClass field;
     }
 
-    public static final class GenericTypeVariableListContainer<T> {
+    public static final class GenericTypeVariableContainerContainer<T> {
 
-        public List<T> tList = new ArrayList<>();
+        public GenericTypeVariableContainer<T> container = new GenericTypeVariableContainer<>();
+    }
+
+    public static final class GenericTypeVariableContainer<T> {
+
+        public T t = null;
     }
 
     public static final class ObjectContainer {
