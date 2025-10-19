@@ -18,7 +18,7 @@ public class GenericJavaLangValueSupplier<T> extends GenericValueSupplier<T> {
     @Override
     public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
         if (is(Iterable.class)) {
-            return list(tag, attributes, ArrayList::new);
+            return collection(tag, attributes, ArrayList::new);
         }
         return Optional.empty();
     }

@@ -73,9 +73,6 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addLists() {
         addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
-        addFactory(LinkedList.class, collection(LinkedList::new));
-        addFactory(Vector.class, collection(Vector::new));
-        addFactory(Stack.class, collection(Stack::new));
     }
 
     @SuppressWarnings("unchecked")
@@ -96,12 +93,7 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addSets() {
-        addFactory(Set.class, collection(HashSet::new));
-        addFactory(SortedSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
-        addFactory(NavigableSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
         addFactory(CopyOnWriteArraySet.class, collection(CopyOnWriteArraySet::new));
-        addFactory(HashSet.class, collection(HashSet::new));
-        addFactory(TreeSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
         addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
     }
 
