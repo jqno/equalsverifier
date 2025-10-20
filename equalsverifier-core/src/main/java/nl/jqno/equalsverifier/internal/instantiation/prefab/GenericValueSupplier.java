@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
@@ -25,29 +24,24 @@ public abstract class GenericValueSupplier<T> {
         return type.equals(otherType);
     }
 
-    protected Optional<Tuple<T>> valGeneric1(
-            TypeTag tag,
-            Attributes attributes,
-            Supplier<T> empty,
-            Function<Object, T> construct) {
-        return vp.provide(tag.genericTypes().get(0), attributes.clearName()).map(tup -> {
-            var t = tup;
-            if (tup.red().equals(tup.blue())) {
-                t = new Tuple<>(tup.red(), empty.get(), tup.redCopy());
-            }
-            return t.map(construct);
-        });
-    }
-
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> collection(
             TypeTag tag,
             Attributes attributes,
-            Supplier<Collection<Object>> construct) {
-        return valGeneric1(tag, attributes, () -> (T) construct.get(), val -> {
-            var list = construct.get();
-            list.add(val);
-            return (T) list;
-        });
+            Supplier<? extends Collection> construct) {
+        var elements = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName());
+
+        var red = construct.get();
+        red.add(elements.red());
+
+        var blue = construct.get();
+        if (!elements.red().equals(elements.blue())) { // This happens with single-element enums
+            blue.add(elements.blue());
+        }
+
+        var redCopy = construct.get();
+        redCopy.add(elements.redCopy());
+
+        return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
     }
 }

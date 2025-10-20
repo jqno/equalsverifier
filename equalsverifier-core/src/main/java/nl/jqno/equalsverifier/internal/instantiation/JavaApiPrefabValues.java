@@ -56,7 +56,6 @@ public final class JavaApiPrefabValues {
         addLists();
         addMaps();
         addSets();
-        addQueues();
         SequencedCollectionsHelper.add(factoryCache);
         ScopedValuesHelper.add(factoryCache);
         addAtomicClasses();
@@ -72,7 +71,6 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addLists() {
-        addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
         addFactory(Vector.class, collection(Vector::new)); // Keep this line until FallbackFactory no longer produces Arrays
     }
 
@@ -94,21 +92,7 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addSets() {
-        addFactory(CopyOnWriteArraySet.class, collection(CopyOnWriteArraySet::new));
         addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void addQueues() {
-        addFactory(Queue.class, collection(() -> new ArrayBlockingQueue<>(1)));
-        addFactory(BlockingQueue.class, collection(() -> new ArrayBlockingQueue<>(1)));
-        addFactory(Deque.class, collection(() -> new ArrayDeque<>(1)));
-        addFactory(BlockingDeque.class, collection(() -> new LinkedBlockingDeque<>(1)));
-        addFactory(ArrayBlockingQueue.class, collection(() -> new ArrayBlockingQueue<>(1)));
-        addFactory(ConcurrentLinkedQueue.class, collection(ConcurrentLinkedQueue::new));
-        addFactory(DelayQueue.class, collection(DelayQueue::new));
-        addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
-        addFactory(PriorityBlockingQueue.class, collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

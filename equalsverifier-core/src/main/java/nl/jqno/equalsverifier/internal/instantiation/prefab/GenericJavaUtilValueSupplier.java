@@ -60,6 +60,20 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return collection(tag, attributes, () -> new TreeSet<>(OBJECT_COMPARATOR));
         }
 
+        // Queues
+        if (is(Queue.class)) {
+            return collection(tag, attributes, PriorityQueue::new);
+        }
+        if (is(Deque.class)) {
+            return collection(tag, attributes, () -> new ArrayDeque<>(1));
+        }
+        if (is(ArrayDeque.class)) {
+            return collection(tag, attributes, () -> new ArrayDeque<>(1));
+        }
+        if (is(PriorityQueue.class)) {
+            return collection(tag, attributes, PriorityQueue::new);
+        }
+
         return Optional.empty();
     }
 }

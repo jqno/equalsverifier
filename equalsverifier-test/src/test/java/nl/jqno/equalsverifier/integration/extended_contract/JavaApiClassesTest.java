@@ -246,37 +246,49 @@ class JavaApiClassesTest {
 
     static final class QueueContainer {
 
-        private final Queue<String> queue;
-        private final BlockingQueue<String> blockingQueue;
-        private final Deque<String> deque;
-        private final BlockingDeque<String> blockingDeque;
         private final ArrayBlockingQueue<String> arrayBlockingQueue;
+        private final ArrayDeque<String> arrayDeque;
+        private final BlockingDeque<String> blockingDeque;
+        private final BlockingQueue<String> blockingQueue;
+        private final ConcurrentLinkedDeque<String> concurrentLinkedDeque;
         private final ConcurrentLinkedQueue<String> concurrentLinkedQueue;
         private final DelayQueue<Delayed> delayQueue;
+        private final Deque<String> deque;
         private final LinkedBlockingQueue<String> linkedBlockingQueue;
+        private final LinkedTransferQueue<String> linkedTransferQueue;
         private final PriorityBlockingQueue<String> priorityBlockingQueue;
+        private final PriorityQueue<String> priorityQueue;
+        private final Queue<String> queue;
         private final SynchronousQueue<String> synchronousQueue;
 
         public QueueContainer(
-                Queue<String> queue,
-                BlockingQueue<String> blockingQueue,
-                Deque<String> deque,
-                BlockingDeque<String> blockingDeque,
                 ArrayBlockingQueue<String> arrayBlockingQueue,
+                ArrayDeque<String> arrayDeque,
+                BlockingDeque<String> blockingDeque,
+                BlockingQueue<String> blockingQueue,
+                ConcurrentLinkedDeque<String> concurrentLinkedDeque,
                 ConcurrentLinkedQueue<String> concurrentLinkedQueue,
                 DelayQueue<Delayed> delayQueue,
+                Deque<String> deque,
                 LinkedBlockingQueue<String> linkedBlockingQueue,
+                LinkedTransferQueue<String> linkedTransferQueue,
                 PriorityBlockingQueue<String> priorityBlockingQueue,
+                PriorityQueue<String> priorityQueue,
+                Queue<String> queue,
                 SynchronousQueue<String> synchronousQueue) {
-            this.queue = queue;
-            this.blockingQueue = blockingQueue;
-            this.deque = deque;
-            this.blockingDeque = blockingDeque;
             this.arrayBlockingQueue = arrayBlockingQueue;
+            this.arrayDeque = arrayDeque;
+            this.blockingDeque = blockingDeque;
+            this.blockingQueue = blockingQueue;
+            this.concurrentLinkedDeque = concurrentLinkedDeque;
             this.concurrentLinkedQueue = concurrentLinkedQueue;
             this.delayQueue = delayQueue;
+            this.deque = deque;
             this.linkedBlockingQueue = linkedBlockingQueue;
+            this.linkedTransferQueue = linkedTransferQueue;
             this.priorityBlockingQueue = priorityBlockingQueue;
+            this.priorityQueue = priorityQueue;
+            this.queue = queue;
             this.synchronousQueue = synchronousQueue;
         }
 
@@ -286,15 +298,19 @@ class JavaApiClassesTest {
                 return false;
             }
             QueueContainer other = (QueueContainer) obj;
-            return Objects.equals(queue, other.queue)
-                    && Objects.equals(blockingQueue, other.blockingQueue)
-                    && Objects.equals(deque, other.deque)
+            return Objects.equals(arrayBlockingQueue, other.arrayBlockingQueue)
+                    && Objects.equals(arrayDeque, other.arrayDeque)
                     && Objects.equals(blockingDeque, other.blockingDeque)
-                    && Objects.equals(arrayBlockingQueue, other.arrayBlockingQueue)
+                    && Objects.equals(blockingQueue, other.blockingQueue)
+                    && Objects.equals(concurrentLinkedDeque, other.concurrentLinkedDeque)
                     && Objects.equals(concurrentLinkedQueue, other.concurrentLinkedQueue)
                     && Objects.equals(delayQueue, other.delayQueue)
+                    && Objects.equals(deque, other.deque)
                     && Objects.equals(linkedBlockingQueue, other.linkedBlockingQueue)
+                    && Objects.equals(linkedTransferQueue, other.linkedTransferQueue)
                     && Objects.equals(priorityBlockingQueue, other.priorityBlockingQueue)
+                    && Objects.equals(priorityQueue, other.priorityQueue)
+                    && Objects.equals(queue, other.queue)
                     && Objects.equals(synchronousQueue, other.synchronousQueue);
         }
 
@@ -306,15 +322,19 @@ class JavaApiClassesTest {
             callIterator(synchronousQueue);
             return Objects
                     .hash(
-                        queue,
-                        blockingQueue,
-                        deque,
-                        blockingDeque,
                         arrayBlockingQueue,
+                        arrayDeque,
+                        blockingDeque,
+                        blockingQueue,
+                        concurrentLinkedDeque,
                         concurrentLinkedQueue,
                         delayQueue,
+                        deque,
                         linkedBlockingQueue,
+                        linkedTransferQueue,
                         priorityBlockingQueue,
+                        priorityQueue,
+                        queue,
                         synchronousQueue);
         }
     }

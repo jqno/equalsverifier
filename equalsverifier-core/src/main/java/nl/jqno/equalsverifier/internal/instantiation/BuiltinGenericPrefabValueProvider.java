@@ -2,9 +2,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericEmptyValueSupplier;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericJavaLangValueSupplier;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericJavaUtilValueSupplier;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -24,6 +22,7 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
         var supplier = switch (type.getPackageName()) {
             case "java.lang" -> new GenericJavaLangValueSupplier<>(type, vp);
             case "java.util" -> new GenericJavaUtilValueSupplier<>(type, vp);
+            case "java.util.concurrent" -> new GenericJavaUtilConcurrentValueSupplier<>(type, vp);
             default -> new GenericEmptyValueSupplier<>(type, vp);
         };
         return supplier.get(tag, attributes);
