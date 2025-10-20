@@ -73,6 +73,7 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addLists() {
         addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
+        addFactory(Vector.class, collection(Vector::new)); // Keep this line until FallbackFactory no longer produces Arrays
     }
 
     @SuppressWarnings("unchecked")
