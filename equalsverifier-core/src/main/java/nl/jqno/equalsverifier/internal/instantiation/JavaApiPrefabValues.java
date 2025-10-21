@@ -1,11 +1,10 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.collection;
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.map;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.simple;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.*;
 import java.util.function.Supplier;
 
@@ -30,8 +29,6 @@ import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelpe
  */
 @SuppressWarnings("JdkObsolete")
 public final class JavaApiPrefabValues {
-
-    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
     private final FactoryCache factoryCache;
 
@@ -76,17 +73,6 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addMaps() {
-        addFactory(Map.class, map(HashMap::new));
-        addFactory(SortedMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(NavigableMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(ConcurrentNavigableMap.class, map(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR)));
-        addFactory(ConcurrentHashMap.class, map(ConcurrentHashMap::new));
-        addFactory(HashMap.class, map(HashMap::new));
-        addFactory(Hashtable.class, map(Hashtable::new));
-        addFactory(LinkedHashMap.class, map(LinkedHashMap::new));
-        addFactory(Properties.class, map(Properties::new));
-        addFactory(TreeMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(WeakHashMap.class, map(WeakHashMap::new));
         addFactory(EnumMap.class, new EnumMapFactory<>(EnumMap::new));
     }
 

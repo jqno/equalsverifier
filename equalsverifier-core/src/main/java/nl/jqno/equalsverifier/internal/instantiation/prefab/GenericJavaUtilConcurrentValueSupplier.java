@@ -29,6 +29,15 @@ public class GenericJavaUtilConcurrentValueSupplier<T> extends GenericValueSuppl
         if (is(CopyOnWriteArraySet.class)) {
             return collection(tag, attributes, CopyOnWriteArraySet::new);
         }
+        if (is(ConcurrentHashMap.class)) {
+            return map(tag, attributes, ConcurrentHashMap::new);
+        }
+        if (is(ConcurrentNavigableMap.class)) {
+            return map(tag, attributes, () -> new ConcurrentSkipListMap<>());
+        }
+        if (is(ConcurrentSkipListMap.class)) {
+            return map(tag, attributes, () -> new ConcurrentSkipListMap<>());
+        }
 
         // Queues
         if (is(ArrayBlockingQueue.class)) {

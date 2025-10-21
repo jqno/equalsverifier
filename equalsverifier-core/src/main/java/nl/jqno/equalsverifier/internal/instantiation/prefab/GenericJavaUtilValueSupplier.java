@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
+// CHECKSTYLE OFF: ExecutableStatementCount
 
 @SuppressWarnings("JdkObsolete")
 public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
@@ -41,6 +42,32 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
         }
         if (is(Vector.class)) {
             return collection(tag, attributes, Vector::new);
+        }
+
+        // Maps
+        if (is(Map.class)) {
+            return map(tag, attributes, HashMap::new);
+        }
+        if (is(LinkedHashMap.class)) {
+            return map(tag, attributes, LinkedHashMap::new);
+        }
+        if (is(HashMap.class)) {
+            return map(tag, attributes, HashMap::new);
+        }
+        if (is(Hashtable.class)) {
+            return map(tag, attributes, Hashtable::new);
+        }
+        if (is(NavigableMap.class)) {
+            return map(tag, attributes, () -> new TreeMap<>(OBJECT_COMPARATOR));
+        }
+        if (is(SortedMap.class)) {
+            return map(tag, attributes, () -> new TreeMap<>(OBJECT_COMPARATOR));
+        }
+        if (is(TreeMap.class)) {
+            return map(tag, attributes, () -> new TreeMap<>(OBJECT_COMPARATOR));
+        }
+        if (is(WeakHashMap.class)) {
+            return map(tag, attributes, WeakHashMap::new);
         }
 
         // Sets

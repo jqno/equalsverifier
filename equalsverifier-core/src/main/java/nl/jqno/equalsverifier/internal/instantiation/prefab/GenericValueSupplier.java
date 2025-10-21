@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -41,6 +42,32 @@ public abstract class GenericValueSupplier<T> {
 
         var redCopy = construct.get();
         redCopy.add(elements.redCopy());
+
+        return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected Optional<Tuple<T>> map(TypeTag tag, Attributes attributes, Supplier<Map> construct) {
+        var keys = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName());
+        var values = vp.provideOrThrow(tag.genericTypes().get(1), attributes.clearName());
+
+        // Use red for key and blue for value in the Red map to avoid having identical keys and values.
+        // But don't do it in the Blue map, or they may cancel each other out again.
+
+        var redKey = keys.red();
+        var blueKey = keys.blue();
+        var blueValue = values.blue();
+
+        var red = construct.get();
+        red.put(redKey, blueValue);
+
+        var blue = construct.get();
+        if (!redKey.equals(blueKey)) { // This happens with single-element enums
+            blue.put(blueKey, blueValue);
+        }
+
+        var redCopy = construct.get();
+        redCopy.put(redKey, blueValue);
 
         return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
     }

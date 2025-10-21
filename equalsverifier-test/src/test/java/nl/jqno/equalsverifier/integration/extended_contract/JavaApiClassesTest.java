@@ -346,6 +346,7 @@ class JavaApiClassesTest {
         private final SortedMap<String, String> sortedMap;
         private final NavigableMap<String, String> navigableMap;
         private final ConcurrentNavigableMap<String, String> concurrentNavigableMap;
+        private final ConcurrentSkipListMap<String, String> concurrentSkipListMap;
         private final ConcurrentHashMap<String, String> concurrentHashMap;
         private final HashMap<String, String> hashMap;
         private final Hashtable<String, String> hashtable;
@@ -360,6 +361,7 @@ class JavaApiClassesTest {
                 SortedMap<String, String> sortedMap,
                 NavigableMap<String, String> navigableMap,
                 ConcurrentNavigableMap<String, String> concurrentNavigableMap,
+                ConcurrentSkipListMap<String, String> concurrentSkipListMap,
                 ConcurrentHashMap<String, String> concurrentHashMap,
                 HashMap<String, String> hashMap,
                 Hashtable<String, String> hashtable,
@@ -372,6 +374,7 @@ class JavaApiClassesTest {
             this.sortedMap = sortedMap;
             this.navigableMap = navigableMap;
             this.concurrentNavigableMap = concurrentNavigableMap;
+            this.concurrentSkipListMap = concurrentSkipListMap;
             this.concurrentHashMap = concurrentHashMap;
             this.hashMap = hashMap;
             this.hashtable = hashtable;
@@ -392,6 +395,7 @@ class JavaApiClassesTest {
                     && Objects.equals(sortedMap, other.sortedMap)
                     && Objects.equals(navigableMap, other.navigableMap)
                     && Objects.equals(concurrentNavigableMap, other.concurrentNavigableMap)
+                    && Objects.equals(concurrentSkipListMap, other.concurrentSkipListMap)
                     && Objects.equals(concurrentHashMap, other.concurrentHashMap)
                     && Objects.equals(hashMap, other.hashMap)
                     && Objects.equals(hashtable, other.hashtable)
@@ -415,6 +419,7 @@ class JavaApiClassesTest {
                         sortedMap,
                         navigableMap,
                         concurrentNavigableMap,
+                        concurrentSkipListMap,
                         concurrentHashMap,
                         hashMap,
                         hashtable,
