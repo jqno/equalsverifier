@@ -1,21 +1,16 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.collection;
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.simple;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Vector;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinLazy;
-import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
@@ -48,20 +43,11 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJavaClasses() {
-        addNonCollectionClasses();
         addLists();
         addMaps();
         addSets();
         SequencedCollectionsHelper.add(factoryCache);
         ScopedValuesHelper.add(factoryCache);
-        addKotlinClasses();
-    }
-
-    private void addNonCollectionClasses() {
-        addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
-        addFactory(Optional.class, simple(Optional::of, Optional::empty));
-        addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
-        addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
     }
 
     @SuppressWarnings("unchecked")
@@ -77,17 +63,6 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addSets() {
         addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void addKotlinClasses() {
-        if (KotlinScreen.LAZY != null) {
-            addFactory(KotlinScreen.LAZY, (tag, pv, stack) -> {
-                TypeTag genericTag = tag.genericTypes().get(0);
-                Tuple tup = pv.provideOrThrow(genericTag, Attributes.empty());
-                return tup.map(v -> KotlinLazy.lazy(v));
-            });
-        }
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {

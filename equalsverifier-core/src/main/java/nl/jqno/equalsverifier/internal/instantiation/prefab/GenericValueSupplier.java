@@ -31,6 +31,18 @@ public abstract class GenericValueSupplier<T> {
         return Optional.of(tup);
     }
 
+    protected Optional<Tuple<T>> generic(
+            TypeTag tag,
+            Attributes attributes,
+            Func1<Object, T> construct,
+            Supplier<T> empty) {
+        var tup = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName()).map(construct::supply);
+        if (tup.red().equals(tup.blue())) {
+            return Optional.of(new Tuple<T>(tup.red(), empty.get(), tup.redCopy()));
+        }
+        return Optional.of(tup);
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> collection(
             TypeTag tag,
