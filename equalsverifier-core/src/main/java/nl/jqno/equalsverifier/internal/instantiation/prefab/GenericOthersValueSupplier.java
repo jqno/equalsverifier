@@ -20,11 +20,11 @@ public class GenericOthersValueSupplier<T> extends GenericValueSupplier<T> {
     @Override
     public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
         if (is(Supplier.class)) {
-            return generic(tag, attributes, val -> (T) supplier(val), () -> (T) supplier(null));
+            return generic(tag, attributes, val -> supplier(val), () -> supplier(null));
         }
 
         if (is(KotlinScreen.LAZY)) {
-            return generic(tag, attributes, val -> (T) KotlinLazy.lazy(val));
+            return generic(tag, attributes, val -> KotlinLazy.lazy(val));
         }
 
         return Optional.empty();

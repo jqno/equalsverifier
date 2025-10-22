@@ -26,19 +26,25 @@ public abstract class GenericValueSupplier<T> {
         return type.equals(otherType);
     }
 
-    protected Optional<Tuple<T>> generic(TypeTag tag, Attributes attributes, Func1<Object, T> construct) {
-        var tup = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName()).map(construct::supply);
+    @SuppressWarnings("unchecked")
+    protected Optional<Tuple<T>> generic(TypeTag tag, Attributes attributes, Func1<Object, ?> construct) {
+        var tup = vp
+                .provideOrThrow(tag.genericTypes().get(0), attributes.clearName())
+                .map(val -> (T) construct.supply(val));
         return Optional.of(tup);
     }
 
+    @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(
             TypeTag tag,
             Attributes attributes,
-            Func1<Object, T> construct,
-            Supplier<T> empty) {
-        var tup = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName()).map(construct::supply);
+            Func1<Object, ?> construct,
+            Supplier<?> empty) {
+        var tup = vp
+                .provideOrThrow(tag.genericTypes().get(0), attributes.clearName())
+                .map(val -> (T) construct.supply(val));
         if (tup.red().equals(tup.blue())) {
-            return Optional.of(new Tuple<T>(tup.red(), empty.get(), tup.redCopy()));
+            return Optional.of(new Tuple<T>(tup.red(), (T) empty.get(), tup.redCopy()));
         }
         return Optional.of(tup);
     }

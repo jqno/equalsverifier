@@ -21,7 +21,7 @@ public class GenericJavaLangValueSupplier<T> extends GenericValueSupplier<T> {
             return collection(tag, attributes, ArrayList::new);
         }
         if (is(ThreadLocal.class)) {
-            return generic(tag, attributes, val -> (T) ThreadLocal.withInitial(() -> val));
+            return generic(tag, attributes, val -> ThreadLocal.withInitial(() -> val));
         }
         return Optional.empty();
     }

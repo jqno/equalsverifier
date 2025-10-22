@@ -23,7 +23,7 @@ public class GenericJavaUtilConcurrentValueSupplier<T> extends GenericValueSuppl
     public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
 
         if (is(CompletableFuture.class)) {
-            return generic(tag, attributes, ignored -> (T) new CompletableFuture<>());
+            return generic(tag, attributes, ignored -> new CompletableFuture<>());
         }
 
         // Traditional collections

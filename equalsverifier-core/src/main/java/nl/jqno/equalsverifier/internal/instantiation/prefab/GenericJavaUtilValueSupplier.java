@@ -24,7 +24,7 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
     @Override
     public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
         if (is(Optional.class)) {
-            return generic(tag, attributes, val -> (T) Optional.of(val), () -> (T) Optional.empty());
+            return generic(tag, attributes, val -> Optional.of(val), () -> Optional.empty());
         }
         if (is(Collection.class)) {
             return collection(tag, attributes, ArrayList::new);

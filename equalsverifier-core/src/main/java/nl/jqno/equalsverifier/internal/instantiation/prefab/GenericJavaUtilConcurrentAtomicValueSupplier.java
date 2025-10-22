@@ -18,16 +18,16 @@ public class GenericJavaUtilConcurrentAtomicValueSupplier<T> extends GenericValu
     @Override
     public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
         if (is(AtomicMarkableReference.class)) {
-            return generic(tag, attributes, val -> (T) new AtomicMarkableReference<>(val, true));
+            return generic(tag, attributes, val -> new AtomicMarkableReference<>(val, true));
         }
         if (is(AtomicReference.class)) {
-            return generic(tag, attributes, val -> (T) new AtomicReference<>(val));
+            return generic(tag, attributes, val -> new AtomicReference<>(val));
         }
         if (is(AtomicStampedReference.class)) {
-            return generic(tag, attributes, val -> (T) new AtomicStampedReference<>(val, 0));
+            return generic(tag, attributes, val -> new AtomicStampedReference<>(val, 0));
         }
         if (is(AtomicReferenceArray.class)) {
-            return generic(tag, attributes, val -> (T) new AtomicReferenceArray<>(new Object[] { val }));
+            return generic(tag, attributes, val -> new AtomicReferenceArray<>(new Object[] { val }));
         }
         return Optional.empty();
     }
