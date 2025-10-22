@@ -5,7 +5,6 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Fa
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.*;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
@@ -55,7 +54,6 @@ public final class JavaApiPrefabValues {
         addSets();
         SequencedCollectionsHelper.add(factoryCache);
         ScopedValuesHelper.add(factoryCache);
-        addAtomicClasses();
         addKotlinClasses();
     }
 
@@ -79,18 +77,6 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addSets() {
         addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void addAtomicClasses() {
-        addFactory(AtomicMarkableReference.class, simple(r -> new AtomicMarkableReference(r, true), null));
-        addFactory(AtomicReference.class, simple(AtomicReference::new, null));
-        addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
-        addFactory(AtomicReferenceArray.class, (tag, pv, stack) -> {
-            TypeTag genericTag = tag.genericTypes().get(0);
-            Tuple<?> tup = pv.provideOrThrow(genericTag, Attributes.empty());
-            return tup.map(v -> new AtomicReferenceArray<>(new Object[] { v }));
-        });
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

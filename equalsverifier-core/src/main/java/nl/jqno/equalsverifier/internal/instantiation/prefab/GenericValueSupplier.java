@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -23,6 +24,11 @@ public abstract class GenericValueSupplier<T> {
 
     protected boolean is(Class<?> otherType) {
         return type.equals(otherType);
+    }
+
+    protected Optional<Tuple<T>> generic(TypeTag tag, Attributes attributes, Func1<Object, T> construct) {
+        var tup = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName()).map(construct::supply);
+        return Optional.of(tup);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

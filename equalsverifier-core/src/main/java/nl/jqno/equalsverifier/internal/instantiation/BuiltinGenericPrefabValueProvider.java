@@ -23,6 +23,7 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
             case "java.lang" -> new GenericJavaLangValueSupplier<>(type, vp);
             case "java.util" -> new GenericJavaUtilValueSupplier<>(type, vp);
             case "java.util.concurrent" -> new GenericJavaUtilConcurrentValueSupplier<>(type, vp);
+            case "java.util.concurrent.atomic" -> new GenericJavaUtilConcurrentAtomicValueSupplier<>(type, vp);
             default -> new GenericEmptyValueSupplier<>(type, vp);
         };
         return supplier.get(tag, attributes);
