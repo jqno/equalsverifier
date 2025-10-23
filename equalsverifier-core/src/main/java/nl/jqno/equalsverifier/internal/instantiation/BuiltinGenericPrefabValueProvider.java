@@ -5,6 +5,8 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.instantiation.prefab.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesValueSupplier;
+import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsValueSupplier;
 
 public class BuiltinGenericPrefabValueProvider implements ValueProvider {
     private final ValueProvider vp;
@@ -26,6 +28,9 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
             case "java.util.concurrent.atomic" -> new GenericJavaUtilConcurrentAtomicValueSupplier<>(type, vp);
             default -> new GenericOthersValueSupplier<>(type, vp);
         };
-        return supplier.get(tag, attributes);
+        return supplier
+                .get(tag, attributes)
+                .or(() -> new SequencedCollectionsValueSupplier<>(type, vp).get(tag, attributes))
+                .or(() -> new ScopedValuesValueSupplier<>(type, vp).get(tag, attributes));
     }
 }

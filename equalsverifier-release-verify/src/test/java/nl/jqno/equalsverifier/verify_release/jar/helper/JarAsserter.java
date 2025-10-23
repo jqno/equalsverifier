@@ -26,8 +26,8 @@ public class JarAsserter {
 
     public void assertPresenceOfMultiReleaseClasses() {
         assertPresenceOf(
-            "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class",
-            "/META-INF/versions/25" + EV + "/internal/versionspecific/ScopedValuesHelper.class");
+            "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsValueSupplier.class",
+            "/META-INF/versions/25" + EV + "/internal/versionspecific/ScopedValuesValueSupplier.class");
     }
 
     public void assertAbsenceOfMetainfStuff() {
@@ -95,7 +95,8 @@ public class JarAsserter {
                     b -> assertVersionOfClassFile(61, EV + "/EqualsVerifier.class"),
                     b -> assertVersionOfClassFile(
                         65,
-                        "/META-INF/versions/21" + EV + "/internal/versionspecific/SequencedCollectionsHelper.class"));
+                        "/META-INF/versions/21" + EV
+                                + "/internal/versionspecific/SequencedCollectionsValueSupplier.class"));
     }
 
     public void assertVersionsOfEmbeddedClassFiles() {

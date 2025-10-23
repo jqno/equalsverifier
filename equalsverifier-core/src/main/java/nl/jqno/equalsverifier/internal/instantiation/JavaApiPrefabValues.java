@@ -6,8 +6,6 @@ import java.util.Vector;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
-import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
 /**
  * Creates instances of classes for use in a {@link VintageValueProvider} object.
@@ -39,8 +37,5 @@ public final class JavaApiPrefabValues {
 
     private void addJavaClasses() {
         factoryCache.put(Vector.class, collection(Vector::new)); // Keep this line until FallbackFactory no longer produces Arrays
-
-        SequencedCollectionsHelper.add(factoryCache);
-        ScopedValuesHelper.add(factoryCache);
     }
 }
