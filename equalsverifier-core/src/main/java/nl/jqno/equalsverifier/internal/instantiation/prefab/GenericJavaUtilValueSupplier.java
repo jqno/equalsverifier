@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
 // CHECKSTYLE OFF: ExecutableStatementCount
+// CHECKSTYLE OFF: JavaNCSS
 
 @SuppressWarnings("JdkObsolete")
 public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
@@ -72,6 +73,10 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
         if (is(WeakHashMap.class)) {
             return map(tag, attributes, WeakHashMap::new);
         }
+        if (is(EnumMap.class)) {
+            var asHashMap = map(tag, attributes, HashMap::new);
+            return asHashMap.map(t -> t.map(e -> (T) new EnumMap<>((Map) e)));
+        }
 
         // Sets
         if (is(Set.class)) {
@@ -88,6 +93,10 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
         }
         if (is(TreeSet.class)) {
             return collection(tag, attributes, () -> new TreeSet<>(OBJECT_COMPARATOR));
+        }
+        if (is(EnumSet.class)) {
+            var asHashSet = collection(tag, attributes, HashSet::new);
+            return asHashSet.map(t -> t.map(e -> (T) EnumSet.copyOf((Set) e)));
         }
 
         // Queues

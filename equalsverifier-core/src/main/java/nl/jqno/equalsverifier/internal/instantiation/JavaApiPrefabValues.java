@@ -2,15 +2,10 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.collection;
 
-import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.Vector;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumMapFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.EnumSetFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesHelper;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
@@ -43,29 +38,9 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJavaClasses() {
-        addLists();
-        addMaps();
-        addSets();
+        factoryCache.put(Vector.class, collection(Vector::new)); // Keep this line until FallbackFactory no longer produces Arrays
+
         SequencedCollectionsHelper.add(factoryCache);
         ScopedValuesHelper.add(factoryCache);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void addLists() {
-        addFactory(Vector.class, collection(Vector::new)); // Keep this line until FallbackFactory no longer produces Arrays
-    }
-
-    @SuppressWarnings("unchecked")
-    private void addMaps() {
-        addFactory(EnumMap.class, new EnumMapFactory<>(EnumMap::new));
-    }
-
-    @SuppressWarnings("unchecked")
-    private void addSets() {
-        addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
-    }
-
-    private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
-        factoryCache.put(type, factory);
     }
 }
