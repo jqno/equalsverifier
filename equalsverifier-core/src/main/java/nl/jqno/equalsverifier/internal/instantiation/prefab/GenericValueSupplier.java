@@ -43,29 +43,19 @@ public abstract class GenericValueSupplier<T> {
     protected Optional<Tuple<T>> generic(Func1<Object, ?> construct, Supplier<?> empty) {
         var tup = vp
                 .provideOrThrow(determineGenericType(0), attributes.clearName())
-                .map(val -> (T) construct.supply(val));
-        if (tup.red().equals(tup.blue())) {
-            return Optional.of(new Tuple<T>(tup.red(), (T) empty.get(), tup.redCopy()));
-        }
+                .map(val -> (T) construct.supply(val))
+                .swapBlueIfEqualToRed(() -> (T) empty.get());
         return Optional.of(tup);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> collection(Supplier<? extends Collection> construct) {
-        var elements = vp.provideOrThrow(determineGenericType(0), attributes.clearName());
-
-        var red = construct.get();
-        red.add(elements.red());
-
-        var blue = construct.get();
-        if (!elements.red().equals(elements.blue())) { // This happens with single-element enums
-            blue.add(elements.blue());
-        }
-
-        var redCopy = construct.get();
-        redCopy.add(elements.redCopy());
-
-        return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
+        var tup = vp.provideOrThrow(determineGenericType(0), attributes.clearName()).map(e -> {
+            var coll = construct.get();
+            coll.add(e);
+            return (T) coll;
+        }).swapBlueIfEqualToRed(() -> (T) construct.get());
+        return Optional.of(tup);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -76,22 +66,13 @@ public abstract class GenericValueSupplier<T> {
         // Use red for key and blue for value in the Red map to avoid having identical keys and values.
         // But don't do it in the Blue map, or they may cancel each other out again.
 
-        var redKey = keys.red();
-        var blueKey = keys.blue();
-        var blueValue = values.blue();
+        var tup = keys.map(e -> {
+            var map = construct.get();
+            map.put(e, values.blue());
+            return (T) map;
+        }).swapBlueIfEqualToRed(() -> (T) construct.get());
 
-        var red = construct.get();
-        red.put(redKey, blueValue);
-
-        var blue = construct.get();
-        if (!redKey.equals(blueKey)) { // This happens with single-element enums
-            blue.put(blueKey, blueValue);
-        }
-
-        var redCopy = construct.get();
-        redCopy.put(redKey, blueValue);
-
-        return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
+        return Optional.of(tup);
     }
 
     private TypeTag determineGenericType(int index) {
