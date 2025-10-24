@@ -18,6 +18,7 @@ public class GenericJavaUtilConcurrentValueSupplier<T> extends GenericValueSuppl
         super(tag, vp, attributes);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Optional<Tuple<T>> get() {
 
@@ -71,7 +72,8 @@ public class GenericJavaUtilConcurrentValueSupplier<T> extends GenericValueSuppl
             return collection(PriorityBlockingQueue::new);
         }
         if (is(SynchronousQueue.class)) {
-            return collection(SynchronousQueue::new);
+            var red = new SynchronousQueue<>();
+            return Optional.of(new Tuple<>((T) red, (T) new SynchronousQueue<>(), (T) red));
         }
 
         return Optional.empty();

@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.SynchronousQueue;
 
 import nl.jqno.equalsverifier.internal.instantiation.prefab.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -17,8 +16,7 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  */
 public class BuiltinPrefabValueProvider implements ValueProvider {
 
-    private static final Set<Class<?>> EXCEPTIONAL_GENERIC_TYPES =
-            Set.of(Class.class, Constructor.class, SynchronousQueue.class, Enum.class);
+    private static final Set<Class<?>> EXCEPTIONAL_GENERIC_TYPES = Set.of(Class.class, Constructor.class, Enum.class);
 
     /** {@inheritDoc}} */
     @Override

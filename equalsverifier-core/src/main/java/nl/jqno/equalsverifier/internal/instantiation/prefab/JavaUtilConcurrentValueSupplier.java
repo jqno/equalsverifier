@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.StampedLock;
@@ -23,10 +22,6 @@ public class JavaUtilConcurrentValueSupplier<T> extends ValueSupplier<T> {
         if (is(Semaphore.class)) {
             var red = new Semaphore(1);
             return val(red, new Semaphore(1), red);
-        }
-        if (is(SynchronousQueue.class)) {
-            var red = new SynchronousQueue<>();
-            return val(red, new SynchronousQueue<>(), red);
         }
 
         // java.util.concurrent.atomic
