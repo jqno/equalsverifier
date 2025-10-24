@@ -18,9 +18,6 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
-        if (tag.genericTypes().isEmpty()) {
-            return Optional.empty();
-        }
         var supplier = switch (type.getPackageName()) {
             case "java.lang" -> new GenericJavaLangValueSupplier<>(type, vp);
             case "java.util" -> new GenericJavaUtilValueSupplier<>(type, vp);

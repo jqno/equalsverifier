@@ -12,6 +12,9 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public abstract class GenericValueSupplier<T> {
+
+    private static final TypeTag OBJECT = new TypeTag(Object.class);
+
     private final Class<T> type;
     private final ValueProvider vp;
 
@@ -29,7 +32,7 @@ public abstract class GenericValueSupplier<T> {
     @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(TypeTag tag, Attributes attributes, Func1<Object, ?> construct) {
         var tup = vp
-                .provideOrThrow(tag.genericTypes().get(0), attributes.clearName())
+                .provideOrThrow(determineGenericType(tag, 0), attributes.clearName())
                 .map(val -> (T) construct.supply(val));
         return Optional.of(tup);
     }
@@ -41,7 +44,7 @@ public abstract class GenericValueSupplier<T> {
             Func1<Object, ?> construct,
             Supplier<?> empty) {
         var tup = vp
-                .provideOrThrow(tag.genericTypes().get(0), attributes.clearName())
+                .provideOrThrow(determineGenericType(tag, 0), attributes.clearName())
                 .map(val -> (T) construct.supply(val));
         if (tup.red().equals(tup.blue())) {
             return Optional.of(new Tuple<T>(tup.red(), (T) empty.get(), tup.redCopy()));
@@ -54,7 +57,7 @@ public abstract class GenericValueSupplier<T> {
             TypeTag tag,
             Attributes attributes,
             Supplier<? extends Collection> construct) {
-        var elements = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName());
+        var elements = vp.provideOrThrow(determineGenericType(tag, 0), attributes.clearName());
 
         var red = construct.get();
         red.add(elements.red());
@@ -72,8 +75,8 @@ public abstract class GenericValueSupplier<T> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> map(TypeTag tag, Attributes attributes, Supplier<Map> construct) {
-        var keys = vp.provideOrThrow(tag.genericTypes().get(0), attributes.clearName());
-        var values = vp.provideOrThrow(tag.genericTypes().get(1), attributes.clearName());
+        var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes.clearName());
+        var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes.clearName());
 
         // Use red for key and blue for value in the Red map to avoid having identical keys and values.
         // But don't do it in the Blue map, or they may cancel each other out again.
@@ -94,5 +97,12 @@ public abstract class GenericValueSupplier<T> {
         redCopy.put(redKey, blueValue);
 
         return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
+    }
+
+    private TypeTag determineGenericType(TypeTag tag, int index) {
+        if (tag.genericTypes().size() <= index) {
+            return OBJECT;
+        }
+        return tag.genericTypes().get(index);
     }
 }

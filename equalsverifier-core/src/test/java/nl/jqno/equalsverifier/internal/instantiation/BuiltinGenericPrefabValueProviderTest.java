@@ -23,6 +23,9 @@ public class BuiltinGenericPrefabValueProviderTest {
     @BeforeEach
     public void setUp() {
         underlying.register(String.class, "red", "blue", "red");
+
+        var red = new Object();
+        underlying.register(Object.class, red, new Object(), red);
     }
 
     @Test
@@ -37,9 +40,9 @@ public class BuiltinGenericPrefabValueProviderTest {
     }
 
     @Test
-    void returnsEmptyWhenTagIsGenericButRaw() {
+    void returnsSomethingEmptyWhenTagIsGenericButRaw() {
         var tag = new TypeTag(List.class);
-        assertThat(sut.provide(tag, SOME_ATTRIBUTES)).isEmpty();
+        assertThat(sut.provide(tag, SOME_ATTRIBUTES)).isNotEmpty();
     }
 
     @Test
