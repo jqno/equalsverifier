@@ -17,100 +17,100 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
-    public GenericJavaUtilValueSupplier(Class<T> type, ValueProvider vp) {
-        super(type, vp);
+    public GenericJavaUtilValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
+        super(tag, vp, attributes);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+    public Optional<Tuple<T>> get() {
         if (is(Optional.class)) {
-            return generic(tag, attributes, val -> Optional.of(val), () -> Optional.empty());
+            return generic(val -> Optional.of(val), () -> Optional.empty());
         }
         if (is(Collection.class)) {
-            return collection(tag, attributes, ArrayList::new);
+            return collection(ArrayList::new);
         }
 
         // Lists
         if (is(List.class)) {
-            return collection(tag, attributes, ArrayList::new);
+            return collection(ArrayList::new);
         }
         if (is(ArrayList.class)) {
-            return collection(tag, attributes, ArrayList::new);
+            return collection(ArrayList::new);
         }
         if (is(LinkedList.class)) {
-            return collection(tag, attributes, LinkedList::new);
+            return collection(LinkedList::new);
         }
         if (is(Stack.class)) {
-            return collection(tag, attributes, Stack::new);
+            return collection(Stack::new);
         }
         if (is(Vector.class)) {
-            return collection(tag, attributes, Vector::new);
+            return collection(Vector::new);
         }
 
         // Maps
         if (is(Map.class)) {
-            return map(tag, attributes, HashMap::new);
+            return map(HashMap::new);
         }
         if (is(LinkedHashMap.class)) {
-            return map(tag, attributes, LinkedHashMap::new);
+            return map(LinkedHashMap::new);
         }
         if (is(HashMap.class)) {
-            return map(tag, attributes, HashMap::new);
+            return map(HashMap::new);
         }
         if (is(Hashtable.class)) {
-            return map(tag, attributes, Hashtable::new);
+            return map(Hashtable::new);
         }
         if (is(NavigableMap.class)) {
-            return map(tag, attributes, () -> new TreeMap<>(OBJECT_COMPARATOR));
+            return map(() -> new TreeMap<>(OBJECT_COMPARATOR));
         }
         if (is(SortedMap.class)) {
-            return map(tag, attributes, () -> new TreeMap<>(OBJECT_COMPARATOR));
+            return map(() -> new TreeMap<>(OBJECT_COMPARATOR));
         }
         if (is(TreeMap.class)) {
-            return map(tag, attributes, () -> new TreeMap<>(OBJECT_COMPARATOR));
+            return map(() -> new TreeMap<>(OBJECT_COMPARATOR));
         }
         if (is(WeakHashMap.class)) {
-            return map(tag, attributes, WeakHashMap::new);
+            return map(WeakHashMap::new);
         }
         if (is(EnumMap.class)) {
-            var asHashMap = map(tag, attributes, HashMap::new);
+            var asHashMap = map(HashMap::new);
             return asHashMap.map(t -> t.map(e -> (T) new EnumMap<>((Map) e)));
         }
 
         // Sets
         if (is(Set.class)) {
-            return collection(tag, attributes, HashSet::new);
+            return collection(HashSet::new);
         }
         if (is(SortedSet.class)) {
-            return collection(tag, attributes, () -> new TreeSet<>(OBJECT_COMPARATOR));
+            return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }
         if (is(NavigableSet.class)) {
-            return collection(tag, attributes, () -> new TreeSet<>(OBJECT_COMPARATOR));
+            return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }
         if (is(HashSet.class)) {
-            return collection(tag, attributes, HashSet::new);
+            return collection(HashSet::new);
         }
         if (is(TreeSet.class)) {
-            return collection(tag, attributes, () -> new TreeSet<>(OBJECT_COMPARATOR));
+            return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }
         if (is(EnumSet.class)) {
-            var asHashSet = collection(tag, attributes, HashSet::new);
+            var asHashSet = collection(HashSet::new);
             return asHashSet.map(t -> t.map(e -> (T) EnumSet.copyOf((Set) e)));
         }
 
         // Queues
         if (is(Queue.class)) {
-            return collection(tag, attributes, PriorityQueue::new);
+            return collection(PriorityQueue::new);
         }
         if (is(Deque.class)) {
-            return collection(tag, attributes, () -> new ArrayDeque<>(1));
+            return collection(() -> new ArrayDeque<>(1));
         }
         if (is(ArrayDeque.class)) {
-            return collection(tag, attributes, () -> new ArrayDeque<>(1));
+            return collection(() -> new ArrayDeque<>(1));
         }
         if (is(PriorityQueue.class)) {
-            return collection(tag, attributes, PriorityQueue::new);
+            return collection(PriorityQueue::new);
         }
 
         return Optional.empty();

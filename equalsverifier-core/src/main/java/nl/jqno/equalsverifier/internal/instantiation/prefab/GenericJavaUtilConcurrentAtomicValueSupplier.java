@@ -10,24 +10,23 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public class GenericJavaUtilConcurrentAtomicValueSupplier<T> extends GenericValueSupplier<T> {
 
-    public GenericJavaUtilConcurrentAtomicValueSupplier(Class<T> type, ValueProvider vp) {
-        super(type, vp);
+    public GenericJavaUtilConcurrentAtomicValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
+        super(tag, vp, attributes);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+    public Optional<Tuple<T>> get() {
         if (is(AtomicMarkableReference.class)) {
-            return generic(tag, attributes, val -> new AtomicMarkableReference<>(val, true));
+            return generic(val -> new AtomicMarkableReference<>(val, true));
         }
         if (is(AtomicReference.class)) {
-            return generic(tag, attributes, val -> new AtomicReference<>(val));
+            return generic(val -> new AtomicReference<>(val));
         }
         if (is(AtomicStampedReference.class)) {
-            return generic(tag, attributes, val -> new AtomicStampedReference<>(val, 0));
+            return generic(val -> new AtomicStampedReference<>(val, 0));
         }
         if (is(AtomicReferenceArray.class)) {
-            return generic(tag, attributes, val -> new AtomicReferenceArray<>(new Object[] { val }));
+            return generic(val -> new AtomicReferenceArray<>(new Object[] { val }));
         }
         return Optional.empty();
     }

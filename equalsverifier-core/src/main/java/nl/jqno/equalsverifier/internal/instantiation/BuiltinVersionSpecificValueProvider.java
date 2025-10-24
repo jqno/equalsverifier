@@ -16,9 +16,8 @@ public class BuiltinVersionSpecificValueProvider implements ValueProvider {
 
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        Class<T> type = tag.getType();
-        return new SequencedCollectionsValueSupplier<>(type, vp)
-                .get(tag, attributes)
-                .or(() -> new ScopedValuesValueSupplier<>(type, vp).get(tag, attributes));
+        return new SequencedCollectionsValueSupplier<T>(tag, vp, attributes)
+                .get()
+                .or(() -> new ScopedValuesValueSupplier<T>(tag, vp, attributes).get());
     }
 }

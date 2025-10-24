@@ -10,18 +10,17 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public class GenericJavaLangValueSupplier<T> extends GenericValueSupplier<T> {
 
-    public GenericJavaLangValueSupplier(Class<T> type, ValueProvider vp) {
-        super(type, vp);
+    public GenericJavaLangValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
+        super(tag, vp, attributes);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+    public Optional<Tuple<T>> get() {
         if (is(Iterable.class)) {
-            return collection(tag, attributes, ArrayList::new);
+            return collection(ArrayList::new);
         }
         if (is(ThreadLocal.class)) {
-            return generic(tag, attributes, val -> ThreadLocal.withInitial(() -> val));
+            return generic(val -> ThreadLocal.withInitial(() -> val));
         }
         return Optional.empty();
     }

@@ -17,12 +17,13 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
         var supplier = switch (type.getPackageName()) {
-            case "java.lang" -> new GenericJavaLangValueSupplier<>(type, vp);
-            case "java.util" -> new GenericJavaUtilValueSupplier<>(type, vp);
-            case "java.util.concurrent" -> new GenericJavaUtilConcurrentValueSupplier<>(type, vp);
-            case "java.util.concurrent.atomic" -> new GenericJavaUtilConcurrentAtomicValueSupplier<>(type, vp);
-            default -> new GenericOthersValueSupplier<>(type, vp);
+            case "java.lang" -> new GenericJavaLangValueSupplier<T>(tag, vp, attributes);
+            case "java.util" -> new GenericJavaUtilValueSupplier<T>(tag, vp, attributes);
+            case "java.util.concurrent" -> new GenericJavaUtilConcurrentValueSupplier<T>(tag, vp, attributes);
+            case "java.util.concurrent.atomic" ->
+                    new GenericJavaUtilConcurrentAtomicValueSupplier<T>(tag, vp, attributes);
+            default -> new GenericOthersValueSupplier<T>(tag, vp, attributes);
         };
-        return supplier.get(tag, attributes);
+        return supplier.get();
     }
 }

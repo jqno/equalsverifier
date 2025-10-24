@@ -27,11 +27,6 @@ public class GenericValueSupplierTest {
 
     private UserPrefabValueProvider underlying = new UserPrefabValueProvider();
 
-    @SuppressWarnings("rawtypes")
-    private GenericValueSupplier<List> sut = new Sut<>(List.class, underlying);
-    @SuppressWarnings("rawtypes")
-    private GenericValueSupplier<Map> mapSut = new Sut<>(Map.class, underlying);
-
     @BeforeEach
     public void setUp() {
         underlying.register(String.class, RED_STRING, BLUE_STRING, RED_STRING);
@@ -41,35 +36,36 @@ public class GenericValueSupplierTest {
 
     @Test
     void is() {
-        assertThat(sut.is(List.class)).isTrue();
+        var sut = sut(new TypeTag(String.class));
+        assertThat(sut.is(String.class)).isTrue();
         assertThat(sut.is(int.class)).isFalse();
     }
 
     @Test
     void genericWithoutEmpty_String() {
-        var tag = new TypeTag(List.class, STRING);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of);
+        var sut = sut(new TypeTag(List.class, STRING));
+        var actual = sut.generic(List::of);
         assertThat(actual).contains(new Tuple<>(List.of(RED_STRING), List.of(BLUE_STRING), List.of(RED_STRING)));
     }
 
     @Test
     void genericWithoutEmpty_Wildcard() {
-        var tag = new TypeTag(List.class, WILDCARD);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of);
+        var sut = sut(new TypeTag(List.class, WILDCARD));
+        var actual = sut.generic(List::of);
         assertThat(actual).contains(new Tuple<>(List.of(RED_OBJECT), List.of(BLUE_OBJECT), List.of(RED_OBJECT)));
     }
 
     @Test
     void genericWithoutEmpty_Raw() {
-        var tag = new TypeTag(List.class);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of);
+        var sut = sut(new TypeTag(List.class));
+        var actual = sut.generic(List::of);
         assertThat(actual).contains(new Tuple<>(List.of(RED_OBJECT), List.of(BLUE_OBJECT), List.of(RED_OBJECT)));
     }
 
     @Test
     void genericWithoutEmpty_EqualRedAndBlueYieldsEqualRedAndBlue() {
-        var tag = new TypeTag(List.class, SINGLETON);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of);
+        var sut = sut(new TypeTag(List.class, SINGLETON));
+        var actual = sut.generic(List::of);
         assertThat(actual)
                 .contains(
                     new Tuple<>(List.of(OneElementEnum.ONE), List.of(OneElementEnum.ONE), List.of(OneElementEnum.ONE)));
@@ -77,64 +73,64 @@ public class GenericValueSupplierTest {
 
     @Test
     void genericWithEmpty_String() {
-        var tag = new TypeTag(List.class, STRING);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of, List::of);
+        var sut = sut(new TypeTag(List.class, STRING));
+        var actual = sut.generic(List::of, List::of);
         assertThat(actual).contains(new Tuple<>(List.of(RED_STRING), List.of(BLUE_STRING), List.of(RED_STRING)));
     }
 
     @Test
     void genericWithEmpty_Wildcard() {
-        var tag = new TypeTag(List.class, WILDCARD);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of, List::of);
+        var sut = sut(new TypeTag(List.class, WILDCARD));
+        var actual = sut.generic(List::of, List::of);
         assertThat(actual).contains(new Tuple<>(List.of(RED_OBJECT), List.of(BLUE_OBJECT), List.of(RED_OBJECT)));
     }
 
     @Test
     void genericWithEmpty_Raw() {
-        var tag = new TypeTag(List.class);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of, List::of);
+        var sut = sut(new TypeTag(List.class));
+        var actual = sut.generic(List::of, List::of);
         assertThat(actual).contains(new Tuple<>(List.of(RED_OBJECT), List.of(BLUE_OBJECT), List.of(RED_OBJECT)));
     }
 
     @Test
     void genericWithEmpty_EqualRedAndBlueYieldsEmptyBlue() {
-        var tag = new TypeTag(List.class, SINGLETON);
-        var actual = sut.generic(tag, SOME_ATTRIBUTES, List::of, List::of);
+        var sut = sut(new TypeTag(List.class, SINGLETON));
+        var actual = sut.generic(List::of, List::of);
         assertThat(actual).contains(new Tuple<>(List.of(OneElementEnum.ONE), List.of(), List.of(OneElementEnum.ONE)));
     }
 
     @Test
     void collection_String() {
-        var tag = new TypeTag(List.class, STRING);
-        var actual = sut.collection(tag, SOME_ATTRIBUTES, ArrayList::new);
+        var sut = sut(new TypeTag(List.class, STRING));
+        var actual = sut.collection(ArrayList::new);
         assertThat(actual).contains(new Tuple<>(List.of(RED_STRING), List.of(BLUE_STRING), List.of(RED_STRING)));
     }
 
     @Test
     void collection_Wildcard() {
-        var tag = new TypeTag(List.class, WILDCARD);
-        var actual = sut.collection(tag, SOME_ATTRIBUTES, ArrayList::new);
+        var sut = sut(new TypeTag(List.class, WILDCARD));
+        var actual = sut.collection(ArrayList::new);
         assertThat(actual).contains(new Tuple<>(List.of(RED_OBJECT), List.of(BLUE_OBJECT), List.of(RED_OBJECT)));
     }
 
     @Test
     void collection_Raw() {
-        var tag = new TypeTag(List.class);
-        var actual = sut.collection(tag, SOME_ATTRIBUTES, ArrayList::new);
+        var sut = sut(new TypeTag(List.class));
+        var actual = sut.collection(ArrayList::new);
         assertThat(actual).contains(new Tuple<>(List.of(RED_OBJECT), List.of(BLUE_OBJECT), List.of(RED_OBJECT)));
     }
 
     @Test
     void collection_EqualRedAndBlueYieldsEmptyBlue() {
-        var tag = new TypeTag(List.class, SINGLETON);
-        var actual = sut.collection(tag, SOME_ATTRIBUTES, ArrayList::new);
+        var sut = sut(new TypeTag(List.class, SINGLETON));
+        var actual = sut.collection(ArrayList::new);
         assertThat(actual).contains(new Tuple<>(List.of(OneElementEnum.ONE), List.of(), List.of(OneElementEnum.ONE)));
     }
 
     @Test
     void map_String() {
-        var tag = new TypeTag(Map.class, STRING, STRING);
-        var actual = mapSut.map(tag, SOME_ATTRIBUTES, HashMap::new);
+        var sut = sut(new TypeTag(Map.class, STRING, STRING));
+        var actual = sut.map(HashMap::new);
         assertThat(actual)
                 .contains(
                     new Tuple<>(Map.of(RED_STRING, BLUE_STRING),
@@ -144,8 +140,8 @@ public class GenericValueSupplierTest {
 
     @Test
     void map_Wildcard() {
-        var tag = new TypeTag(Map.class, WILDCARD, WILDCARD);
-        var actual = mapSut.map(tag, SOME_ATTRIBUTES, HashMap::new);
+        var sut = sut(new TypeTag(Map.class, WILDCARD, WILDCARD));
+        var actual = sut.map(HashMap::new);
         assertThat(actual)
                 .contains(
                     new Tuple<>(Map.of(RED_OBJECT, BLUE_OBJECT),
@@ -155,8 +151,8 @@ public class GenericValueSupplierTest {
 
     @Test
     void map_Raw() {
-        var tag = new TypeTag(Map.class);
-        var actual = mapSut.map(tag, SOME_ATTRIBUTES, HashMap::new);
+        var sut = sut(new TypeTag(Map.class));
+        var actual = sut.map(HashMap::new);
         assertThat(actual)
                 .contains(
                     new Tuple<>(Map.of(RED_OBJECT, BLUE_OBJECT),
@@ -166,8 +162,8 @@ public class GenericValueSupplierTest {
 
     @Test
     void map_EqualRedAndBlueYieldsEmptyBlue() {
-        var tag = new TypeTag(Map.class, SINGLETON, STRING);
-        var actual = mapSut.map(tag, SOME_ATTRIBUTES, HashMap::new);
+        var sut = sut(new TypeTag(Map.class, SINGLETON, STRING));
+        var actual = sut.map(HashMap::new);
         assertThat(actual)
                 .contains(
                     new Tuple<>(Map.of(OneElementEnum.ONE, BLUE_STRING),
@@ -175,14 +171,18 @@ public class GenericValueSupplierTest {
                             Map.of(OneElementEnum.ONE, BLUE_STRING)));
     }
 
+    private <T> GenericValueSupplier<T> sut(TypeTag tag) {
+        return new Sut<>(tag, underlying, SOME_ATTRIBUTES);
+    }
+
     static class Sut<T> extends GenericValueSupplier<T> {
 
-        public Sut(Class<T> type, ValueProvider vp) {
-            super(type, vp);
+        public Sut(TypeTag tag, ValueProvider vp, Attributes attributes) {
+            super(tag, vp, attributes);
         }
 
         @Override
-        public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+        public Optional<Tuple<T>> get() {
             return Optional.empty();
         }
     }

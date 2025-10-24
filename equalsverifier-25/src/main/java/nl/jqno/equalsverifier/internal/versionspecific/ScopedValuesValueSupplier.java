@@ -10,13 +10,13 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public final class ScopedValuesValueSupplier<T> extends GenericValueSupplier<T> {
 
-    public ScopedValuesValueSupplier(Class<T> type, ValueProvider vp) {
-        super(type, vp);
+    public ScopedValuesValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
+        super(tag, vp, attributes);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+    public Optional<Tuple<T>> get() {
         if (is(ScopedValue.class)) {
             T red = (T) ScopedValue.newInstance();
             T blue = (T) ScopedValue.newInstance();

@@ -14,65 +14,64 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 @SuppressWarnings("JdkObsolete")
 public class GenericJavaUtilConcurrentValueSupplier<T> extends GenericValueSupplier<T> {
 
-    public GenericJavaUtilConcurrentValueSupplier(Class<T> type, ValueProvider vp) {
-        super(type, vp);
+    public GenericJavaUtilConcurrentValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
+        super(tag, vp, attributes);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+    public Optional<Tuple<T>> get() {
 
         if (is(CompletableFuture.class)) {
-            return generic(tag, attributes, ignored -> new CompletableFuture<>());
+            return generic(ignored -> new CompletableFuture<>());
         }
 
         // Traditional collections
         if (is(CopyOnWriteArrayList.class)) {
-            return collection(tag, attributes, CopyOnWriteArrayList::new);
+            return collection(CopyOnWriteArrayList::new);
         }
         if (is(CopyOnWriteArraySet.class)) {
-            return collection(tag, attributes, CopyOnWriteArraySet::new);
+            return collection(CopyOnWriteArraySet::new);
         }
         if (is(ConcurrentHashMap.class)) {
-            return map(tag, attributes, ConcurrentHashMap::new);
+            return map(ConcurrentHashMap::new);
         }
         if (is(ConcurrentNavigableMap.class)) {
-            return map(tag, attributes, () -> new ConcurrentSkipListMap<>());
+            return map(() -> new ConcurrentSkipListMap<>());
         }
         if (is(ConcurrentSkipListMap.class)) {
-            return map(tag, attributes, () -> new ConcurrentSkipListMap<>());
+            return map(() -> new ConcurrentSkipListMap<>());
         }
 
         // Queues
         if (is(ArrayBlockingQueue.class)) {
-            return collection(tag, attributes, () -> new ArrayBlockingQueue<>(1));
+            return collection(() -> new ArrayBlockingQueue<>(1));
         }
         if (is(BlockingDeque.class)) {
-            return collection(tag, attributes, () -> new LinkedBlockingDeque<>(1));
+            return collection(() -> new LinkedBlockingDeque<>(1));
         }
         if (is(BlockingQueue.class)) {
-            return collection(tag, attributes, () -> new ArrayBlockingQueue<>(1));
+            return collection(() -> new ArrayBlockingQueue<>(1));
         }
         if (is(ConcurrentLinkedDeque.class)) {
-            return collection(tag, attributes, ConcurrentLinkedDeque::new);
+            return collection(ConcurrentLinkedDeque::new);
         }
         if (is(ConcurrentLinkedQueue.class)) {
-            return collection(tag, attributes, ConcurrentLinkedQueue::new);
+            return collection(ConcurrentLinkedQueue::new);
         }
         if (is(DelayQueue.class)) {
-            return collection(tag, attributes, DelayQueue::new);
+            return collection(DelayQueue::new);
         }
         if (is(LinkedBlockingQueue.class)) {
-            return collection(tag, attributes, LinkedBlockingQueue::new);
+            return collection(LinkedBlockingQueue::new);
         }
         if (is(LinkedTransferQueue.class)) {
-            return collection(tag, attributes, LinkedTransferQueue::new);
+            return collection(LinkedTransferQueue::new);
         }
         if (is(PriorityBlockingQueue.class)) {
-            return collection(tag, attributes, PriorityBlockingQueue::new);
+            return collection(PriorityBlockingQueue::new);
         }
         if (is(SynchronousQueue.class)) {
-            return collection(tag, attributes, SynchronousQueue::new);
+            return collection(SynchronousQueue::new);
         }
 
         return Optional.empty();

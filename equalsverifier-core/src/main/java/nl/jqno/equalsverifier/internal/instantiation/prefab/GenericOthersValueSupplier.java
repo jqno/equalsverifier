@@ -12,19 +12,18 @@ import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 public class GenericOthersValueSupplier<T> extends GenericValueSupplier<T> {
 
-    public GenericOthersValueSupplier(Class<T> type, ValueProvider vp) {
-        super(type, vp);
+    public GenericOthersValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
+        super(tag, vp, attributes);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Optional<Tuple<T>> get(TypeTag tag, Attributes attributes) {
+    public Optional<Tuple<T>> get() {
         if (is(Supplier.class)) {
-            return generic(tag, attributes, val -> supplier(val), () -> supplier(null));
+            return generic(val -> supplier(val), () -> supplier(null));
         }
 
         if (is(KotlinScreen.LAZY)) {
-            return generic(tag, attributes, val -> KotlinLazy.lazy(val));
+            return generic(val -> KotlinLazy.lazy(val));
         }
 
         return Optional.empty();
