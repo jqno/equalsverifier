@@ -69,7 +69,7 @@
         <argline.mockito />
         <argline.full>${argline.preview} ${argline.experimental}</argline.full>
 
-        <analysis.jacoco.threshold>0.96</analysis.jacoco.threshold>
+        <analysis.jacoco.threshold>0.97</analysis.jacoco.threshold>
         <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
         <analysis.spotless.formatter.config>build/eclipse-formatter-config.xml</analysis.spotless.formatter.config>
         <analysis.spotless.importorder.config>build/eclipse-formatter-config.importorder</analysis.spotless.importorder.config>
