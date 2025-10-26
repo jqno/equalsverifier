@@ -31,6 +31,16 @@ public abstract class GenericValueSupplier<T> {
         return tag.getType().equals(otherType);
     }
 
+    /*
+     * T is an unknown type at compile-time, but the types of the three parameters are known at compile-time. The
+     * compiler thinks these are not the same as T, even though we know they are. Therefore, we must trick the compiler
+     * by introducing type parameter S and casting the values.
+     */
+    @SuppressWarnings("unchecked")
+    protected <S> Optional<Tuple<T>> val(S red, S blue, S redCopy) {
+        return Optional.of(new Tuple<>((T) red, (T) blue, (T) redCopy));
+    }
+
     @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(Func1<Object, ?> construct) {
         var tup = vp

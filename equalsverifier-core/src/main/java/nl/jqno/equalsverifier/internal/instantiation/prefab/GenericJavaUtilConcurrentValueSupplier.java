@@ -73,7 +73,7 @@ public class GenericJavaUtilConcurrentValueSupplier<T> extends GenericValueSuppl
         }
         if (is(SynchronousQueue.class)) {
             var red = new SynchronousQueue<>();
-            return Optional.of(new Tuple<>((T) red, (T) new SynchronousQueue<>(), (T) red));
+            return val(red, new SynchronousQueue<>(), red);
         }
 
         return Optional.empty();

@@ -37,7 +37,6 @@ public class TypeHelper {
         public SimpleEnum _enum = SimpleEnum.FIRST;
         public int[] _array = { 1, 2, 3 };
         public Object _object = OBJECT;
-        public Class<?> _type = Class.class;
         public String _string = "";
 
         // CHECKSTYLE ON: MemberName
@@ -69,7 +68,6 @@ public class TypeHelper {
             result &= _enum == other._enum;
             result &= Arrays.equals(_array, other._array);
             result &= Objects.equals(_object, other._object);
-            result &= _type == other._type;
             result &= Objects.equals(_string, other._string);
             return result;
         }
@@ -100,7 +98,6 @@ public class TypeHelper {
         SimpleEnum[] enums = { SimpleEnum.FIRST };
         int[][] arrays = { { 1 } };
         Object[] objects = { OBJECT };
-        Class<?>[] classes = { Class.class };
         String[] strings = { "1" };
 
         @Override
@@ -130,7 +127,6 @@ public class TypeHelper {
             result &= Arrays.equals(enums, other.enums);
             result &= Arrays.deepEquals(arrays, other.arrays);
             result &= Arrays.equals(objects, other.objects);
-            result &= Arrays.equals(classes, other.classes);
             result &= Arrays.equals(strings, other.strings);
             return result;
         }

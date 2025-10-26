@@ -18,9 +18,9 @@ public final class ScopedValuesValueSupplier<T> extends GenericValueSupplier<T> 
     @Override
     public Optional<Tuple<T>> get() {
         if (is(ScopedValue.class)) {
-            T red = (T) ScopedValue.newInstance();
-            T blue = (T) ScopedValue.newInstance();
-            return Optional.of(new Tuple<>(red, blue, red));
+            var red = ScopedValue.newInstance();
+            var blue = ScopedValue.newInstance();
+            return val(red, blue, red);
         }
         return Optional.empty();
     }

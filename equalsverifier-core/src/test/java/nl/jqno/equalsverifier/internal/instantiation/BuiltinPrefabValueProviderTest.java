@@ -44,11 +44,6 @@ public class BuiltinPrefabValueProviderTest {
     }
 
     @Test
-    void returnsExceptionalClass() {
-        check(Class.class);
-    }
-
-    @Test
     void returnsValueFromOtherPackage() {
         check(Pattern.class);
     }

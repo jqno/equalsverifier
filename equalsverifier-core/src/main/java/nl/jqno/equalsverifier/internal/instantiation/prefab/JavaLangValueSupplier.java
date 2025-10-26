@@ -18,12 +18,6 @@ public class JavaLangValueSupplier<T> extends ValueSupplier<T> {
             return val(red, new Object(), red);
         }
 
-        if (is(Class.class)) {
-            return val(Class.class, Object.class, Class.class);
-        }
-        if (is(Enum.class)) {
-            return val(Dummy.RED, Dummy.BLUE, Dummy.RED);
-        }
         if (is(Exception.class)) {
             var red = new Exception();
             return val(red, new Exception(), red);
@@ -47,9 +41,5 @@ public class JavaLangValueSupplier<T> extends ValueSupplier<T> {
         }
 
         return Optional.empty();
-    }
-
-    private enum Dummy {
-        RED, BLUE
     }
 }

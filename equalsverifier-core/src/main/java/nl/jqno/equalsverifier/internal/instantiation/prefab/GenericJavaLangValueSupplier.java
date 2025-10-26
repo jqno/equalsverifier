@@ -16,6 +16,12 @@ public class GenericJavaLangValueSupplier<T> extends GenericValueSupplier<T> {
 
     @Override
     public Optional<Tuple<T>> get() {
+        if (is(Class.class)) {
+            return val(Class.class, Object.class, Class.class);
+        }
+        if (is(Enum.class)) {
+            return val(Dummy.RED, Dummy.BLUE, Dummy.RED);
+        }
         if (is(Iterable.class)) {
             return collection(ArrayList::new);
         }
@@ -25,4 +31,7 @@ public class GenericJavaLangValueSupplier<T> extends GenericValueSupplier<T> {
         return Optional.empty();
     }
 
+    private enum Dummy {
+        RED, BLUE
+    }
 }
