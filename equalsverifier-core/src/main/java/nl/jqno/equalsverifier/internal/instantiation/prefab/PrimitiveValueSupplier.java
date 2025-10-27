@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
 
-class PrimitiveValueSupplier<T> extends ValueSupplier<T> {
+public class PrimitiveValueSupplier<T> extends ValueSupplier<T> {
     public PrimitiveValueSupplier(Class<T> type) {
         super(type);
     }

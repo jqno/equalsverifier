@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaAwtValueSupplier<T> extends ValueSupplier<T> {
+public class JavaAwtValueSupplier<T> extends ValueSupplier<T> {
 
     private static final int CS_RED = ColorSpace.CS_sRGB;
     private static final int CS_BLUE = ColorSpace.CS_LINEAR_RGB;

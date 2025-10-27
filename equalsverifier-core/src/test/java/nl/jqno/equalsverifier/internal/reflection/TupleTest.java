@@ -25,4 +25,17 @@ class TupleTest {
         var actual = tuple.map(s -> s.length());
         assertThat(actual).isEqualTo(new Tuple<>(3, 4, 3));
     }
+
+    @Test
+    void swapBlueIfEqualToRed_not_EqualToRed() {
+        var actual = tuple.swapBlueIfEqualToRed(() -> "green");
+        assertThat(actual).isSameAs(tuple);
+    }
+
+    @Test
+    void swapBlueIfEqualToRed_equalToRed() {
+        var equal = new Tuple<>("red", "red", new String("red"));
+        var actual = equal.swapBlueIfEqualToRed(() -> "green");
+        assertThat(actual).isEqualTo(new Tuple<>("red", "green", new String("red")));
+    }
 }

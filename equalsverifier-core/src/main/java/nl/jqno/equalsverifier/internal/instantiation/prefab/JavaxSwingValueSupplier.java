@@ -5,7 +5,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaxSwingValueSupplier<T> extends ValueSupplier<T> {
+public class JavaxSwingValueSupplier<T> extends ValueSupplier<T> {
 
     public JavaxSwingValueSupplier(Class<T> type) {
         super(type);

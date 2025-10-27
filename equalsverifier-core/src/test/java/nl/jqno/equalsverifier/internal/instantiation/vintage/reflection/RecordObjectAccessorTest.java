@@ -7,8 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -69,7 +69,7 @@ class RecordObjectAccessorTest {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class, objenesis).instantiate();
 
         VintageValueProvider vp =
-                new VintageValueProvider(new BuiltinPrefabValueProvider(), JavaApiPrefabValues.build(), objenesis);
+                new VintageValueProvider(new BuiltinPrefabValueProvider(), new FactoryCache(), objenesis);
         ExpectedException
                 .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
                 .assertThrows(ReflectionException.class)

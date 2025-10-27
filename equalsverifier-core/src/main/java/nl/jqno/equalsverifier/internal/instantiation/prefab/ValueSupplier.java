@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-abstract class ValueSupplier<T> implements Supplier<Optional<Tuple<T>>> {
+public abstract class ValueSupplier<T> implements Supplier<Optional<Tuple<T>>> {
     private final Class<T> type;
 
     public ValueSupplier(Class<T> type) {

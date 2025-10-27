@@ -7,8 +7,9 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 // CHECKSTYLE OFF: CyclomaticComplexity
 // CHECKSTYLE OFF: NPathComplexity
 // CHECKSTYLE OFF: ExecutableStatementCount
+// CHECKSTYLE OFF: JavaNCSS
 
-class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
+public class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
     public JavaUtilValueSupplier(Class<T> type) {
         super(type);
     }
@@ -75,6 +76,15 @@ class JavaUtilValueSupplier<T> extends ValueSupplier<T> {
         }
         if (is(OptionalLong.class)) {
             return val(OptionalLong.of(1), OptionalLong.of(2), OptionalLong.of(1));
+        }
+        if (is(Properties.class)) {
+            var red = new Properties();
+            red.put("red", "ff0000");
+            var blue = new Properties();
+            blue.put("blue", "0000ff");
+            var redCopy = new Properties();
+            redCopy.put("red", "ff0000");
+            return val(red, blue, redCopy);
         }
         if (is(Scanner.class)) {
             return val(new Scanner("one"), new Scanner("two"), new Scanner("one"));

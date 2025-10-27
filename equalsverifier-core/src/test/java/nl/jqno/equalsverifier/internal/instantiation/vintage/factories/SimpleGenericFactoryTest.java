@@ -5,7 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -44,15 +45,15 @@ class SimpleGenericFactoryTest {
         valueProvider =
                 new VintageValueProvider(new BuiltinPrefabValueProvider(), new FactoryCache(), new ObjenesisStd());
 
-        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, null);
+        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, Attributes.empty());
         redString = strings.red();
         blueString = strings.blue();
 
-        Tuple<Integer> ints = valueProvider.provideOrThrow(INTEGER_TYPETAG, null);
+        Tuple<Integer> ints = valueProvider.provideOrThrow(INTEGER_TYPETAG, Attributes.empty());
         redInt = ints.red();
         blueInt = ints.blue();
 
-        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, null);
+        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, Attributes.empty());
         redObject = objects.red();
         blueObject = objects.blue();
     }

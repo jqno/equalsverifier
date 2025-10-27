@@ -4,6 +4,7 @@ import java.util.*;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
@@ -45,8 +46,8 @@ public class VintageValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
-        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, new LinkedHashSet<>())));
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, attributes.typeStack())));
     }
 
     @SuppressWarnings("unchecked")
@@ -122,7 +123,7 @@ public class VintageValueProvider implements ValueProvider {
             throw new RecursionException(typeStack);
         }
 
-        var userPrefab = prefabs.provide(tag, null); // Prefabs aren't linked to a field, so null is fine
+        var userPrefab = prefabs.provide(tag, Attributes.empty()); // Prefabs aren't linked to a field, so empty is fine
         if (userPrefab.isPresent()) {
             @SuppressWarnings("unchecked")
             var result = (Tuple<T>) userPrefab.get();

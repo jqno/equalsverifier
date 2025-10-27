@@ -6,13 +6,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.InaccessibleObjectException;
 import java.text.AttributedString;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -35,7 +33,7 @@ class InPlaceObjectAccessorScramblingTest {
     void setup() {
         var prefabs = new UserPrefabValueProvider();
         var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
-        FactoryCache factoryCache = JavaApiPrefabValues.build();
+        FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
         valueProviderTest = new VintageValueProvider(chain, factoryCache, objenesis);
@@ -115,17 +113,17 @@ class InPlaceObjectAccessorScramblingTest {
 
     @Test
     void scrambleNestedGenerics() {
-        GenericContainerContainer foo = new GenericContainerContainer();
+        GenericContainerContainerContainer foo = new GenericContainerContainerContainer();
 
-        assertThat(foo.strings.ts).isEmpty();
-        assertThat(foo.points.ts).isEmpty();
+        assertThat(foo.strings.ts.t).isNull();
+        assertThat(foo.points.ts.t).isNull();
 
         doScramble(foo);
 
-        assertThat(foo.strings.ts).isNotEmpty();
-        assertThat(foo.strings.ts.get(0).getClass()).isEqualTo(String.class);
-        assertThat(foo.points.ts).isNotEmpty();
-        assertThat(foo.points.ts.get(0).getClass()).isEqualTo(Point.class);
+        assertThat(foo.strings.ts.t).isNotNull();
+        assertThat(foo.strings.ts.t.getClass()).isEqualTo(String.class);
+        assertThat(foo.points.ts.t).isNotNull();
+        assertThat(foo.points.ts.t.getClass()).isEqualTo(Point.class);
     }
 
     @Test
@@ -173,18 +171,28 @@ class InPlaceObjectAccessorScramblingTest {
         private final Point p = new Point(2, 3);
     }
 
-    static final class GenericContainerContainer {
+    static final class GenericContainerContainerContainer {
 
-        private final GenericContainer<String> strings = new GenericContainer<>(List.of());
-        private final GenericContainer<Point> points = new GenericContainer<>(List.of());
+        private final GenericContainerContainer<String> strings =
+                new GenericContainerContainer<>(new GenericContainer<>(null));
+        private final GenericContainerContainer<Point> points =
+                new GenericContainerContainer<>(new GenericContainer<>(null));
+    }
+
+    static final class GenericContainerContainer<T> {
+
+        private GenericContainer<T> ts;
+
+        public GenericContainerContainer(GenericContainer<T> ts) {
+            this.ts = ts;
+        }
     }
 
     static final class GenericContainer<T> {
+        private T t;
 
-        private List<T> ts;
-
-        public GenericContainer(List<T> ts) {
-            this.ts = ts;
+        public GenericContainer(T t) {
+            this.t = t;
         }
     }
 

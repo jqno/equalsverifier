@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
@@ -243,7 +244,7 @@ public class SubjectCreator<T> {
         String fieldName = f.getName();
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
-            return valueProvider.provideOrThrow(fieldTag, fieldName);
+            return valueProvider.provideOrThrow(fieldTag, Attributes.named(fieldName));
         }
         catch (ModuleException e) {
             throw new ModuleException("Field " + f.getName() + " of type " + f.getType().getName()

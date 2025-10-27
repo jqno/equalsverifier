@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaMathValueSupplier<T> extends ValueSupplier<T> {
+public class JavaMathValueSupplier<T> extends ValueSupplier<T> {
     public JavaMathValueSupplier(Class<T> type) {
         super(type);
     }

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaTextValueSupplier<T> extends ValueSupplier<T> {
+public class JavaTextValueSupplier<T> extends ValueSupplier<T> {
     public JavaTextValueSupplier(Class<T> type) {
         super(type);
     }

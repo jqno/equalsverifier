@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier_testhelpers.types;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier_testhelpers.annotations.*;
@@ -39,7 +37,6 @@ public class TypeHelper {
         public SimpleEnum _enum = SimpleEnum.FIRST;
         public int[] _array = { 1, 2, 3 };
         public Object _object = OBJECT;
-        public Class<?> _type = Class.class;
         public String _string = "";
 
         // CHECKSTYLE ON: MemberName
@@ -71,7 +68,6 @@ public class TypeHelper {
             result &= _enum == other._enum;
             result &= Arrays.equals(_array, other._array);
             result &= Objects.equals(_object, other._object);
-            result &= _type == other._type;
             result &= Objects.equals(_string, other._string);
             return result;
         }
@@ -102,7 +98,6 @@ public class TypeHelper {
         SimpleEnum[] enums = { SimpleEnum.FIRST };
         int[][] arrays = { { 1 } };
         Object[] objects = { OBJECT };
-        Class<?>[] classes = { Class.class };
         String[] strings = { "1" };
 
         @Override
@@ -132,7 +127,6 @@ public class TypeHelper {
             result &= Arrays.equals(enums, other.enums);
             result &= Arrays.deepEquals(arrays, other.arrays);
             result &= Arrays.equals(objects, other.objects);
-            result &= Arrays.equals(classes, other.classes);
             result &= Arrays.equals(strings, other.strings);
             return result;
         }
@@ -206,9 +200,14 @@ public class TypeHelper {
         public AbstractClass field;
     }
 
-    public static final class GenericTypeVariableListContainer<T> {
+    public static final class GenericTypeVariableContainerContainer<T> {
 
-        public List<T> tList = new ArrayList<>();
+        public GenericTypeVariableContainer<T> container = new GenericTypeVariableContainer<>();
+    }
+
+    public static final class GenericTypeVariableContainer<T> {
+
+        public T t = null;
     }
 
     public static final class ObjectContainer {

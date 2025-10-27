@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import java.util.Locale;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -33,7 +34,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);
-            String red = valueProvider.<String>provideOrThrow(string, fieldProbe.getName()).red();
+            String red = valueProvider.<String>provideOrThrow(string, Attributes.named(fieldProbe.getName())).red();
 
             final T reference;
             final T copy;

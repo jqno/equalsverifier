@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.instantiation.*;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
@@ -29,19 +28,37 @@ public final class Context<T> {
         this.classProbe = ClassProbe.of(configuration.type());
         var modes = configuration.modes();
 
+        var recursionDetector = new RecursionDetectingValueProvider();
+
         var builtinPrefabs = new BuiltinPrefabValueProvider();
+        var builtinGenericPrefabs = new BuiltinGenericPrefabValueProvider(recursionDetector);
+        var versionSpecificBuiltinPrefabs = new BuiltinVersionSpecificValueProvider(recursionDetector);
         var mockito =
                 new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
 
-        var vintageChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito);
-        var cache = JavaApiPrefabValues.build().merge(factoryCache);
-        var vintage = new VintageValueProvider(vintageChain, cache, objenesis);
+        var vintageRecursionDetector = new RecursionDetectingValueProvider();
+        var vintageChain = new ChainedValueProvider(userPrefabs,
+                builtinPrefabs,
+                builtinGenericPrefabs,
+                versionSpecificBuiltinPrefabs,
+                mockito);
 
-        var mainChain = new ChainedValueProvider(userPrefabs, builtinPrefabs, mockito, vintage);
+        vintageRecursionDetector.setValueProvider(vintageChain);
+
+        var vintage = new VintageValueProvider(vintageRecursionDetector, factoryCache, objenesis);
+
+        var mainChain = new ChainedValueProvider(userPrefabs,
+                builtinPrefabs,
+                builtinGenericPrefabs,
+                versionSpecificBuiltinPrefabs,
+                mockito,
+                vintage);
         var caching = new CachingValueProvider(userPrefabs, fieldCache, mainChain);
 
+        recursionDetector.setValueProvider(caching);
+
         this.valueProvider = caching;
-        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
+        this.subjectCreator = new SubjectCreator<>(configuration, recursionDetector, objenesis);
     }
 
     public Class<T> getType() {

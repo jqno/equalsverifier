@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -46,7 +47,7 @@ public class UserPrefabValueProvider implements ValueProvider, CacheDecider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
         Tuple<T> result = attempt(type);
         Class<?> boxed = PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(tag.getType());

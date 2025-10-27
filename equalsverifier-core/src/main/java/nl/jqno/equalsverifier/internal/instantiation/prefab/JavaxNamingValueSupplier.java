@@ -5,7 +5,7 @@ import javax.naming.Reference;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaxNamingValueSupplier<T> extends ValueSupplier<T> {
+public class JavaxNamingValueSupplier<T> extends ValueSupplier<T> {
 
     public JavaxNamingValueSupplier(Class<T> type) {
         super(type);

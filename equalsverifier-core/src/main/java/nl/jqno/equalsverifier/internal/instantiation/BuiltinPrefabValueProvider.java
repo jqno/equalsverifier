@@ -1,11 +1,8 @@
-package nl.jqno.equalsverifier.internal.instantiation.prefab;
+package nl.jqno.equalsverifier.internal.instantiation;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.SynchronousQueue;
 
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.prefab.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -17,14 +14,11 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  */
 public class BuiltinPrefabValueProvider implements ValueProvider {
 
-    private static final Set<Class<?>> EXCEPTIONAL_GENERIC_TYPES =
-            Set.of(Class.class, Constructor.class, SynchronousQueue.class, Enum.class);
-
     /** {@inheritDoc}} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String fieldName) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
-        if (!tag.genericTypes().isEmpty() && !EXCEPTIONAL_GENERIC_TYPES.contains(type)) {
+        if (!tag.genericTypes().isEmpty()) {
             return Optional.empty();
         }
         if (PrimitiveMappers.DEFAULT_WRAPPED_VALUE_MAPPER.containsKey(type)) {

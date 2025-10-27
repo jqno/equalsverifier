@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation.prefab;
+package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,18 +34,13 @@ public class BuiltinPrefabValueProviderTest {
     @Test
     void returnsEmptyWhenTagIsUnknown() {
         var tag = new TypeTag(getClass());
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isEmpty();
+        assertThat(sut.provide(tag, Attributes.named(SOME_FIELDNAME))).isEmpty();
     }
 
     @Test
     void returnsEmptyWhenTagIsGeneric() {
         var tag = new TypeTag(List.class, new TypeTag(Integer.class));
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isEmpty();
-    }
-
-    @Test
-    void returnsExceptionalClass() {
-        check(Class.class);
+        assertThat(sut.provide(tag, Attributes.named(SOME_FIELDNAME))).isEmpty();
     }
 
     @Test
@@ -160,6 +155,6 @@ public class BuiltinPrefabValueProviderTest {
 
     private void check(Class<?> type) {
         var tag = new TypeTag(type);
-        assertThat(sut.provide(tag, SOME_FIELDNAME)).isNotEmpty();
+        assertThat(sut.provide(tag, Attributes.named(SOME_FIELDNAME))).isNotEmpty();
     }
 }

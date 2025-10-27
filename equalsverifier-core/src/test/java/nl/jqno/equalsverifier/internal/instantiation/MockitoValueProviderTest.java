@@ -68,17 +68,17 @@ public class MockitoValueProviderTest {
     @Test
     void provideNothingWhenDisabled() {
         var disabled = new MockitoValueProvider(true);
-        var actual = disabled.provide(new TypeTag(Point.class), SOME_FIELD_NAME);
+        var actual = disabled.provide(new TypeTag(Point.class), Attributes.named(SOME_FIELD_NAME));
         assertThat(actual).isEmpty();
     }
 
     private void check(Class<?> type) {
-        var tuple = sut.provide(new TypeTag(type), SOME_FIELD_NAME).get();
+        var tuple = sut.provide(new TypeTag(type), Attributes.named(SOME_FIELD_NAME)).get();
         assertThat(tuple.red()).isNotEqualTo(tuple.blue()).isEqualTo(tuple.redCopy());
     }
 
     private void checkEmpty(Class<?> type) {
-        var optional = sut.provide(new TypeTag(type), SOME_FIELD_NAME);
+        var optional = sut.provide(new TypeTag(type), Attributes.named(SOME_FIELD_NAME));
         assertThat(optional).isEmpty();
     }
 }

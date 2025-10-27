@@ -2,27 +2,19 @@ package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
+public class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
     public JavaLangReflectValueSupplier(Class<T> type) {
         super(type);
     }
 
     @Override
     public Optional<Tuple<T>> get() {
-        if (is(Constructor.class)) {
-            return rethrow(() -> {
-                Constructor<?> c1 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
-                Constructor<?> c2 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
-                return val(c1, c2, c1);
-            }, e -> "Can't add prefab values for java.lang.reflect.Constructor");
-        }
         if (is(Field.class)) {
             return rethrow(() -> {
                 Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
@@ -42,15 +34,11 @@ class JavaLangReflectValueSupplier<T> extends ValueSupplier<T> {
     }
 
     @SuppressWarnings("unused")
-    private static class JavaApiReflectionClassesContainer {
+    private static final class JavaApiReflectionClassesContainer {
 
         Object a;
 
         Object b;
-
-        JavaApiReflectionClassesContainer() {}
-
-        JavaApiReflectionClassesContainer(Object o) {}
 
         void m1() {}
 

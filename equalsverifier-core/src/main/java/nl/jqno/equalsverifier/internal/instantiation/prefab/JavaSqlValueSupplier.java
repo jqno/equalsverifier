@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-class JavaSqlValueSupplier<T> extends ValueSupplier<T> {
+public class JavaSqlValueSupplier<T> extends ValueSupplier<T> {
     public JavaSqlValueSupplier(Class<T> type) {
         super(type);
     }
