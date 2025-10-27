@@ -8,7 +8,9 @@ import java.text.AttributedString;
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
-import nl.jqno.equalsverifier.internal.instantiation.*;
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -31,7 +33,7 @@ class InPlaceObjectAccessorScramblingTest {
     void setup() {
         var prefabs = new UserPrefabValueProvider();
         var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
-        FactoryCache factoryCache = JavaApiPrefabValues.build();
+        FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
         valueProviderTest = new VintageValueProvider(chain, factoryCache, objenesis);

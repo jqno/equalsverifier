@@ -45,8 +45,7 @@ public final class Context<T> {
 
         vintageRecursionDetector.setValueProvider(vintageChain);
 
-        var cache = JavaApiPrefabValues.build().merge(factoryCache);
-        var vintage = new VintageValueProvider(vintageRecursionDetector, cache, objenesis);
+        var vintage = new VintageValueProvider(vintageRecursionDetector, factoryCache, objenesis);
 
         var mainChain = new ChainedValueProvider(userPrefabs,
                 builtinPrefabs,

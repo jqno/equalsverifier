@@ -32,7 +32,7 @@ class ClassAccessorTest {
         empty = new LinkedHashSet<>();
         prefabs = new UserPrefabValueProvider();
         var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
-        factoryCache = JavaApiPrefabValues.build();
+        factoryCache = new FactoryCache();
         objenesis = new ObjenesisStd();
         valueProvider = new VintageValueProvider(chain, factoryCache, objenesis);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
