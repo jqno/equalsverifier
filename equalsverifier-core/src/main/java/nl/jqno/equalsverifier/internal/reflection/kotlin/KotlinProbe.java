@@ -67,8 +67,7 @@ public final class KotlinProbe {
     }
 
     private static TypeTag createTypeTag(KType kType) {
-        KClass<?> kclass = (KClass<?>) kType.getClassifier();
-        Class<?> rawClass = JvmClassMappingKt.getJavaClass(kclass);
+        Class<?> rawClass = determineClass(kType);
 
         if (kType.getArguments().isEmpty()) {
             return new TypeTag(rawClass);
@@ -83,6 +82,28 @@ public final class KotlinProbe {
                 .collect(Collectors.toList());
 
         return new TypeTag(rawClass, genericTypeTags);
+    }
+
+    private static Class<?> determineClass(KType kType) {
+        // The logic in this method follows that of TypeTag's inner methods
+        var classifier = kType.getClassifier();
+
+        if (classifier instanceof KClass<?>) {
+            var kclass = (KClass<?>) classifier;
+            return JvmClassMappingKt.getJavaClass(kclass);
+        }
+
+        if (classifier instanceof KTypeParameter) {
+            var kTypeParameter = (KTypeParameter) classifier;
+            for (KType b : kTypeParameter.getUpperBounds()) {
+                var upper = determineClass(b);
+                if (!Object.class.equals(upper)) {
+                    return upper;
+                }
+            }
+        }
+
+        return Object.class;
     }
 
     private static void assertHasKotlinReflect(Field f) {
