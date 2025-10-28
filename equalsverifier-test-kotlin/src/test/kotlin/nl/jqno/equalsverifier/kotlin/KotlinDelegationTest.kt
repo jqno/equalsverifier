@@ -96,13 +96,23 @@ class KotlinDelegationTest {
   }
 
   @Test
-  fun `succeed when class uses lazy generic delegate`() {
-    EqualsVerifier.forClass(LazyGenericDelegation::class.java).verify()
+  fun `succeed when class uses lazy delegate with generic value`() {
+    EqualsVerifier.forClass(LazyDelegationWithGenericValue::class.java).verify()
   }
 
   @Test
-  fun `succeed when class uses nested lazy generic delegate`() {
-    EqualsVerifier.forClass(NestedLazyGenericDelegation::class.java).verify()
+  fun `succeed when class uses lazy delegate with nested lazy value`() {
+    EqualsVerifier.forClass(LazyDelegationWithNestedGenericValue::class.java).verify()
+  }
+
+  @Test
+  fun `succeed when class is generic and uses that generic in its value`() {
+    EqualsVerifier.forClass(LazyDelegationWithGenericClass::class.java).verify()
+  }
+
+  @Test
+  fun `succeed when class is generic with bound and uses that generic in its value`() {
+    EqualsVerifier.forClass(LazyDelegationWithBoundedGenericClass::class.java).verify()
   }
 
   @Test

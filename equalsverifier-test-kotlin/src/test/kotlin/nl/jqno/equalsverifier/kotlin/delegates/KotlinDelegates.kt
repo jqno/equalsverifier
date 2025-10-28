@@ -96,20 +96,38 @@ class LazyDelegation(fooValue: Int) {
   override fun hashCode(): Int = foo
 }
 
-class LazyGenericDelegation(fooValue: List<Int>) {
+class LazyDelegationWithGenericValue(fooValue: List<Int>) {
   val foo: List<Int> by lazy { fooValue }
 
   override fun equals(other: Any?): Boolean =
-    (other is LazyGenericDelegation) && foo == other.foo
+    (other is LazyDelegationWithGenericValue) && foo == other.foo
 
   override fun hashCode(): Int = foo.hashCode()
 }
 
-class NestedLazyGenericDelegation(fooValue: List<List<List<Int>>>) {
+class LazyDelegationWithNestedGenericValue(fooValue: List<List<List<Int>>>) {
   val foo: List<List<List<Int>>> by lazy { fooValue }
 
   override fun equals(other: Any?): Boolean =
-    (other is NestedLazyGenericDelegation) && foo == other.foo
+    (other is LazyDelegationWithNestedGenericValue) && foo == other.foo
+
+  override fun hashCode(): Int = foo.hashCode()
+}
+
+class LazyDelegationWithGenericClass<T>(fooValue: T) {
+  val foo: T by lazy { fooValue }
+
+  override fun equals(other: Any?): Boolean =
+    (other is LazyDelegationWithGenericClass<*>) && foo == other.foo
+
+  override fun hashCode(): Int = foo.hashCode()
+}
+
+class LazyDelegationWithBoundedGenericClass<T : Comparable<T>>(fooValue: T) {
+  val foo: T by lazy { fooValue }
+
+  override fun equals(other: Any?): Boolean =
+    (other is LazyDelegationWithBoundedGenericClass<*>) && foo == other.foo
 
   override fun hashCode(): Int = foo.hashCode()
 }
