@@ -21,7 +21,7 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
         super(tag, vp, attributes);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Optional<Tuple<T>> get() {
         if (is(Optional.class)) {
@@ -74,8 +74,19 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return map(WeakHashMap::new);
         }
         if (is(EnumMap.class)) {
-            var asHashMap = map(HashMap::new);
-            return asHashMap.map(t -> t.map(e -> (T) new EnumMap<>((Map) e)));
+            var keys = vp.provideOrThrow(determineGenericType(0), attributes.clearName()).map(e -> (Enum) e);
+            var values = vp.provideOrThrow(determineGenericType(1), attributes.clearName());
+
+            // Use red for key and blue for value in the Red map to avoid having identical keys and values.
+            // But don't do it in the Blue map, or they may cancel each other out again.
+
+            var tup = keys.map(e -> {
+                var map = new EnumMap(keys.red().getDeclaringClass());
+                map.put(e, values.blue());
+                return (T) map;
+            }).swapBlueIfEqualToRed(() -> (T) new EnumMap(keys.red().getDeclaringClass()));
+
+            return Optional.of(tup);
         }
 
         // Sets
@@ -95,8 +106,11 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }
         if (is(EnumSet.class)) {
-            var asHashSet = collection(HashSet::new);
-            return asHashSet.map(t -> t.map(e -> (T) EnumSet.copyOf((Set) e)));
+            var elts = vp.provideOrThrow(determineGenericType(0), attributes.clearName()).map(e -> (Enum) e);
+            var tup = elts
+                    .map(e -> (T) EnumSet.of(e))
+                    .swapBlueIfEqualToRed(() -> (T) EnumSet.noneOf(elts.blue().getDeclaringClass()));
+            return Optional.of(tup);
         }
 
         // Queues

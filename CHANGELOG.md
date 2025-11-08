@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Failure with EnumSets and EnumMaps for single-value enums. ([Issue 1140](https://github.com/jqno/equalsverifier/issues/1140))
+
 ## [4.2.1] - 2025-10-29
 
 ### Fixed

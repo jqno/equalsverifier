@@ -15,9 +15,9 @@ public abstract class GenericValueSupplier<T> {
 
     private static final TypeTag OBJECT = new TypeTag(Object.class);
 
-    private final TypeTag tag;
-    private final ValueProvider vp;
-    private final Attributes attributes;
+    protected final TypeTag tag;
+    protected final ValueProvider vp;
+    protected final Attributes attributes;
 
     public GenericValueSupplier(TypeTag tag, ValueProvider vp, Attributes attributes) {
         this.tag = tag;
@@ -85,7 +85,7 @@ public abstract class GenericValueSupplier<T> {
         return Optional.of(tup);
     }
 
-    private TypeTag determineGenericType(int index) {
+    protected TypeTag determineGenericType(int index) {
         if (tag.genericTypes().size() <= index) {
             return OBJECT;
         }

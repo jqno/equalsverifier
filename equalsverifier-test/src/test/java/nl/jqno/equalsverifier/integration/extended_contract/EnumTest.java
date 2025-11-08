@@ -44,8 +44,18 @@ class EnumTest {
     }
 
     @Test
+    void succeed_whenClassHasSingletonEnumSet() {
+        EqualsVerifier.forClass(SingletonEnumSetContainer.class).verify();
+    }
+
+    @Test
     void succeed_whenClassHasMapWithSingletonKey() {
         EqualsVerifier.forClass(SingletonKeyMapContainer.class).verify();
+    }
+
+    @Test
+    void succeed_whenClassHasEnumMapWithSingletonKey() {
+        EqualsVerifier.forClass(SingletonKeyEnumMapContainer.class).verify();
     }
 
     @Test
@@ -193,6 +203,25 @@ class EnumTest {
         }
     }
 
+    static final class SingletonEnumSetContainer {
+
+        private final EnumSet<Singleton> singletonSet;
+
+        public SingletonEnumSetContainer(EnumSet<Singleton> singletonSet) {
+            this.singletonSet = singletonSet;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof SingletonEnumSetContainer other && Objects.equals(singletonSet, other.singletonSet);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(singletonSet);
+        }
+    }
+
     static final class SingletonKeyMapContainer {
 
         private final Map<Singleton, Object> singletonKeyMap;
@@ -204,6 +233,26 @@ class EnumTest {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof SingletonKeyMapContainer other
+                    && Objects.equals(singletonKeyMap, other.singletonKeyMap);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(singletonKeyMap);
+        }
+    }
+
+    static final class SingletonKeyEnumMapContainer {
+
+        private final EnumMap<Singleton, Object> singletonKeyMap;
+
+        public SingletonKeyEnumMapContainer(EnumMap<Singleton, Object> singletonKeyMap) {
+            this.singletonKeyMap = singletonKeyMap;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof SingletonKeyEnumMapContainer other
                     && Objects.equals(singletonKeyMap, other.singletonKeyMap);
         }
 
