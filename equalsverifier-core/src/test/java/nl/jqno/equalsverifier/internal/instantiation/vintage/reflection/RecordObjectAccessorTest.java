@@ -55,16 +55,6 @@ class RecordObjectAccessorTest {
     }
 
     @Test
-    void fail_whenConstructorThrowsOnZero() {
-        Object instance = Instantiator.of(ZeroThrowingConstructorRecord.class, objenesis).instantiate();
-
-        ExpectedException
-                .when(() -> accessorFor(instance).copy(objenesis))
-                .assertThrows(ReflectionException.class)
-                .assertMessageContains("Record:", "failed to run constructor", "Warning.ZERO_FIELDS");
-    }
-
-    @Test
     void fail_whenConstructorThrowsOnSomethingElse() {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class, objenesis).instantiate();
 

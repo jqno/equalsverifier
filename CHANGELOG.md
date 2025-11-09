@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Failure with EnumSets and EnumMaps for single-value enums. ([Issue 1140](https://github.com/jqno/equalsverifier/issues/1140))
+- An error message refers to `Warning.ZERO_FIELDS`, which was removed in version 4.0. ([Issue 1143](https://github.com/jqno/equalsverifier/issues/1143))
 
 ## [4.2.1] - 2025-10-29
 
