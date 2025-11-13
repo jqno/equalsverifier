@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- EqualsVerifier's version number was reported as 'null' when run on the modulepath.
+
 ## [4.2.2] - 2025-11-09
 
 ### Fixed

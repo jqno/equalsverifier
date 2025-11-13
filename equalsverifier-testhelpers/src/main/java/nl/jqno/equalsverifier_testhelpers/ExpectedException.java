@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier_testhelpers;
 
+import java.util.regex.Pattern;
+
 public final class ExpectedException {
 
     private final Throwable e;
@@ -86,6 +88,14 @@ public final class ExpectedException {
             if (!message.contains(fragment)) {
                 fail("Message [" + message + "] does not contain [" + fragment + "]");
             }
+        }
+        return this;
+    }
+
+    public ExpectedException assertMessageMatches(Pattern regex) {
+        String message = e.getMessage();
+        if (!regex.matcher(message).find()) {
+            fail("Message [" + message + "] does not match regex /" + regex + "/");
         }
         return this;
     }
