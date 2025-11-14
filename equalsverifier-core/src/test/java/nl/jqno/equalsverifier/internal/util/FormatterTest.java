@@ -88,8 +88,8 @@ class FormatterTest {
         ThrowingContainer tc = new ThrowingContainer(i.instantiate());
         Formatter f = Formatter.of("TC: %%", tc);
         String expected =
-                "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
-        assertThat(f.format()).contains(expected);
+                "TC: \\[ThrowingContainer t=Throwing@.*-throws IllegalStateException\\(msg\\)\\]-throws IllegalStateException\\(msg\\)";
+        assertThat(f.format()).matches(expected);
     }
 
     @Test
@@ -98,7 +98,7 @@ class FormatterTest {
         AbstractContainer ac = new AbstractContainer(i.instantiate());
 
         Formatter f = Formatter.of("AC: %%", ac);
-        assertThat(f.format()).contains("AC: [AbstractContainer ad=[AbstractDelegation y=0]]");
+        assertThat(f.format()).matches("AC: \\[AbstractContainer ad=AbstractDelegation.*\\]");
     }
 
     @Test
@@ -107,10 +107,9 @@ class FormatterTest {
         mix.throwing = new Throwing(42, "empty");
 
         Formatter f = Formatter.of("%%", mix);
-        String expected =
-                "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]"
-                        + "-throws UnsupportedOperationException(null)";
-        assertThat(f.format()).contains(expected);
+        String expected = "\\[Mix i=42 s=null t=not null throwing=Throwing@.*-throws IllegalStateException\\(msg\\)\\]"
+                + "-throws UnsupportedOperationException\\(null\\)";
+        assertThat(f.format()).matches(expected);
     }
 
     @Test

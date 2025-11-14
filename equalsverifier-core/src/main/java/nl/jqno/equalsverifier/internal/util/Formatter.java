@@ -47,7 +47,7 @@ public final class Formatter {
     public String format() {
         String result = message;
         for (Object object : objects) {
-            String s = result.replaceFirst("%%", Matcher.quoteReplacement(stringify(object)));
+            String s = result.replaceFirst("%%", Matcher.quoteReplacement(stringify(object, true)));
             if (result.equals(s)) {
                 throw new IllegalStateException("Too many parameters");
             }
@@ -59,7 +59,7 @@ public final class Formatter {
         return result;
     }
 
-    private String stringify(Object obj) {
+    private String stringify(Object obj, boolean recurse) {
         if (obj == null) {
             return "null";
         }
@@ -67,10 +67,11 @@ public final class Formatter {
             return obj.toString();
         }
         catch (AbstractMethodError e) {
-            return stringifyByReflection(obj);
+            return recurse ? stringifyByReflection(obj) : objectToString(obj);
         }
         catch (Throwable e) {
-            return stringifyByReflection(obj) + "-throws " + e.getClass().getSimpleName() + "(" + e.getMessage() + ")";
+            var throwsClause = "-throws " + e.getClass().getSimpleName() + "(" + e.getMessage() + ")";
+            return (recurse ? stringifyByReflection(obj) : objectToString(obj)) + throwsClause;
         }
     }
 
@@ -91,7 +92,7 @@ public final class Formatter {
             result.append("=");
 
             Object value = probe.getValue(obj);
-            result.append(stringify(value));
+            result.append(stringify(value, false));
         }
 
         if (!foundFields) {
@@ -100,5 +101,9 @@ public final class Formatter {
 
         result.append("]");
         return result.toString();
+    }
+
+    private String objectToString(Object obj) {
+        return obj.getClass().getSimpleName() + "@" + Integer.toHexString(System.identityHashCode(obj));
     }
 }

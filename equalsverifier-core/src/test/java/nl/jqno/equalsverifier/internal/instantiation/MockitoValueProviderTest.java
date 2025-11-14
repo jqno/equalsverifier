@@ -72,6 +72,14 @@ public class MockitoValueProviderTest {
         assertThat(actual).isEmpty();
     }
 
+    @Test
+    void canCallToStringOnMock() {
+        var tuple = sut.provide(new TypeTag(Point.class), Attributes.empty()).get();
+        assertThat(tuple.red().toString()).isEqualTo("[red mock for Point]");
+        assertThat(tuple.blue().toString()).isEqualTo("[blue mock for Point]");
+        assertThat(tuple.redCopy().toString()).isEqualTo("[red mock for Point]");
+    }
+
     private void check(Class<?> type) {
         var tuple = sut.provide(new TypeTag(type), Attributes.named(SOME_FIELD_NAME)).get();
         assertThat(tuple.red()).isNotEqualTo(tuple.blue()).isEqualTo(tuple.redCopy());

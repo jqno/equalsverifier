@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MockitoException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -45,8 +45,8 @@ public class MockitoValueProvider implements ValueProvider {
         }
 
         try {
-            var red = buildMock(type, attributes.fieldName());
-            var blue = buildMock(type, attributes.fieldName());
+            var red = buildMock(type, attributes.fieldName(), "red");
+            var blue = buildMock(type, attributes.fieldName(), "blue");
             if (!red.equals(blue) && red.hashCode() != blue.hashCode()) {
                 // Only return mocked values if they're properly unequal.
                 // They should be, but I think this is undocumented behaviour, so best to be safe.
@@ -61,10 +61,12 @@ public class MockitoValueProvider implements ValueProvider {
         return Optional.empty();
     }
 
-    private <T> T buildMock(Class<T> type, String fieldName) {
-        return mock(type, withSettings().defaultAnswer(invocation -> {
+    private <T> T buildMock(Class<T> type, String fieldName, String color) {
+        var m = mock(type, withSettings().defaultAnswer(invocation -> {
             // Throw an exception on any method except equals and hashCode
             throw new MockitoException(fieldName, type.getSimpleName(), invocation.getMethod().getName());
         }));
+        doReturn("[" + color + " mock for " + type.getSimpleName() + "]").when(m).toString();
+        return m;
     }
 }
