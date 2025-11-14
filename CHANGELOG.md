@@ -16,7 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- When running on the modulepath, in some cases an `InaccessibleObjectException` is thrown when reporting an error. ([Issue 1142](https://github.com/jqno/equalsverifier/issues/1142))
 - EqualsVerifier's version number was reported as 'null' when run on the modulepath.
+
+## Changed
+
+- Mockito mocks now get a proper `toString()` which is useful in error messages. ([Issue 1142](https://github.com/jqno/equalsverifier/issues/1142))
 
 ## [4.2.2] - 2025-11-09
 
