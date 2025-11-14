@@ -55,7 +55,6 @@ public class MockitoValueProvider implements ValueProvider {
         }
         catch (RuntimeException ignored) {
             // I would prefer to catch MockitoException, but that leads to class loading errors in modules that don't have Mockito
-            ignored.printStackTrace();
             return Optional.empty();
         }
 
