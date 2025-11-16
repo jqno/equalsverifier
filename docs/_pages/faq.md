@@ -11,10 +11,8 @@ permalink: /faq/
 * [Error messages](#errormessages)
     * [Can you explain the error message I just got?](#explainerrormessages)
     * [I'm testing java.lang.String, but it fails](#testingString)
-    * [Why did you remove `#forExamples`?](#forExamples)
 * [Build](#build)
     * [How do I build EqualsVerifier?](#howtobuild)
-    * [I get generics errors while building](#genericserrors)
 
 
 <a id="philosophy"></a>
@@ -94,15 +92,6 @@ Sure! Just take a look at [the Error Messages page](/equalsverifier/errormessage
 ### I'm testing `java.lang.String`, but it fails.
 Please don't test `java.lang.String`, because indeed it fails. Please see the section on [false negatives](#falsenegatives) above.
 
-<a id="forExamples"></a>
-
-### Why did you remove `#forExamples`?
-At first, the main raison-d'être for `#forExamples` was that I wasn't sure I could make `#forClass` work for under all circumstances. By EqualsVerifier 1.0, I was convinced that I could, but by then a lot of people were already using it.
-
-Later, I (and other users) started noticing it could cause some hard-to-debug problems, so version 2.0 seemed like a good moment to clean up the API and remove it. 
-
-The issues that `#forExamples` caused, mainly had to do with static values. As part of the verification process, EqualsVerifier will assign values to all fields of the class under test, including static fields (but not static final fields). These values are unpredictable, may break your class invariants, and may even be invalid under normal conditions. If you used `EqualsVerifier.forExamples`, and you re-used the instances of the class under test, this could impact other tests that also used these instances and expected them to have different values.
-
 
 <a id="build"></a>
 
@@ -111,12 +100,6 @@ Build
 <a id="howtobuild"></a>
 
 ### How do I build EqualsVerifier?
-First, check out the code. You can open the project in Eclipse or IntelliJ, or you can run Maven from the command-line. Note that Java 7 or higher is required to compile the project.
+First, check out the code. You can open the project in Eclipse or IntelliJ, or you can run Maven from the command-line. You can also use [just](https://github.com/casey/just) to run Maven commands tailored to EqualsVerifier - or read the `justfile` in the project's root directory how you can do it directly.
 
-<a id="genericserrors"></a>
-
-### I get generics errors while building
-    type parameters of <S>S cannot be determined; no unique maximal instance exists for 
-    type variable S with upper bounds T,java.lang.Object
-
-EqualsVerifier makes heavy use of generics. Sun's Java compiler has a known bug regarding generics. Since I use Eclipse and OpenJDK, which do not exhibit this bug, it's possible I write code that triggers the bug, and the code might not compile. If this happens, please let me know in an issue and I'll fix it.
+Note that Java 17 or higher is required to compile the project.
