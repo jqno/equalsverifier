@@ -211,12 +211,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     /**
-     * Signals that all given fields are not relevant for the {@code equals} contract. {@code
-     * EqualsVerifier} will not fail if one of these fields does not affect the outcome of {@code
-     * equals}, but it will fail if one of these fields does affect the outcome of {@code equals}.
+     * Signals that all given fields are not relevant for the {@code equals} contract. {@code EqualsVerifier} will not
+     * fail if one of these fields does not affect the outcome of {@code equals}, but it will fail if one of these
+     * fields does affect the outcome of {@code equals}.
      *
      * <p>
-     * Note that these fields will still be used to test for null-ness, among other things.
+     * Note that these fields will still be used to test for null-ness, among other things. Therefore, EqualsVerifier
+     * needs values for these fields, and will ask for prefab values if it can't make them.
      *
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.

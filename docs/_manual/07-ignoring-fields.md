@@ -19,6 +19,8 @@ It accepts a varargs argument, so you can specify as many fields as you like. If
 
 If you do this, EqualsVerifier assumes that the fields `bar` and `baz` don't participate in `equals`. If EqualsVerifier now notices that they do participate, EqualsVerifier will fail the test.
 
+Note that this doesn't mean that EqualsVerifier doesn't need values for these fields: it does! This is counter-intuitive, but EqualsVerifier still wants to check that these fields can't cause NullPointerExceptions, and it wants to check that the field indeed doesn't participate in `equals`. For that, it needs values. Like with other fields, it will try to create them, but if it can't, EqualsVerifier _will_ ask for prefab values for these fields.
+
 
 ### Including fields
 If your class has a lot of fields, but it determines equality based on only a few of them, you can also turn it around and specify precisely the fields you want:

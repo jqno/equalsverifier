@@ -19,6 +19,7 @@ Before you continue, please check your class's `toString` method. Since EqualsVe
 This is not a complete list. I'll add to it as needed, so if you need help with an error message, please [file an issue](https://github.com/jqno/equalsverifier/issues) or let me know on the [discussion group](https://github.com/jqno/equalsverifier/discussions), and I'll add an explanation as soon as possible.
 
 * [Abstract delegation](/equalsverifier/errormessages/abstract-delegation)
+* [Add prefab values for one of the following types](/equalsverifier/errormessages/add-prefab-values-for-one-of-the-following-types)
 * [BigDecimal equality](/equalsverifier/errormessages/bigdecimal-equality)
 * [ClassCastException: java.lang.Object cannot be cast to …](/equalsverifier/errormessages/classcastexception)
 * [Class is not accessible via the Java Module system. Consider opening the module that contains it.](/equalsverifier/errormessages/class-or-field-is-not-accessible-jpms)

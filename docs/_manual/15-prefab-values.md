@@ -124,6 +124,10 @@ In this situation, EqualsVerifier expects `red` and `blue` to have exactly the s
 
 Since EqualsVerifier can now take valid values from these two instances `red` and `blue`, it will not have to ask for prefab values.
 
+## Special case: ignored fields
+
+If you use `#withIgnoredFields()`, you might still be asked to provide prefab values. This is counter-intuitive, but EqualsVerifier still wants to check that these fields can't cause `NullPointerException`s, and it wants to check that the field indeed doesn't participate in `equals`. For that, it needs values. Like with other fields, it will try to create them, but if it can't, EqualsVerifier _will_ ask for prefab values for these fields.
+
 ## Special case: internal invariants
 
 If your class has an internal invariant, i.e. some condition that must always be true, this might cause a problem for EqualsVerifier. For example, if you have a record like this:
