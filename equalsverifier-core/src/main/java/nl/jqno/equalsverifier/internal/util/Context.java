@@ -35,13 +35,15 @@ public final class Context<T> {
         var versionSpecificBuiltinPrefabs = new BuiltinVersionSpecificValueProvider(recursionDetector);
         var mockito =
                 new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
+        var array = new ArrayValueProvider(recursionDetector);
 
         var vintageRecursionDetector = new RecursionDetectingValueProvider();
         var vintageChain = new ChainedValueProvider(userPrefabs,
                 builtinPrefabs,
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
-                mockito);
+                mockito,
+                array);
 
         vintageRecursionDetector.setValueProvider(vintageChain);
 
@@ -52,6 +54,7 @@ public final class Context<T> {
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
                 mockito,
+                array,
                 vintage);
         var caching = new CachingValueProvider(userPrefabs, fieldCache, mainChain);
 
