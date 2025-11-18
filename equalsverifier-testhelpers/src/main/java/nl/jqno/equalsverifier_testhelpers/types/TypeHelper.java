@@ -1,13 +1,10 @@
 package nl.jqno.equalsverifier_testhelpers.types;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier_testhelpers.annotations.*;
 
 public class TypeHelper {
-
-    private static final Object OBJECT = new Object();
 
     public enum SimpleEnum {
         FIRST, SECOND
@@ -16,120 +13,57 @@ public class TypeHelper {
     public static final class AllTypesContainer {
 
         // CHECKSTYLE OFF: MemberName
-        public boolean _boolean = false;
-        public byte _byte = 0;
-        public char _char = '\u0000';
-        public double _double = 0.0D;
-        public float _float = 0.0F;
-        public int _int = 0;
-        public long _long = 0L;
-        public short _short = 0;
+        public boolean _boolean;
+        public byte _byte;
+        public char _char;
+        public double _double;
+        public float _float;
+        public int _int;
+        public long _long;
+        public short _short;
 
-        public Boolean _Boolean = false;
-        public Byte _Byte = 0;
-        public Character _Char = '\u0000';
-        public Double _Double = 0.0D;
-        public Float _Float = 0.0F;
-        public Integer _Int = 0;
-        public Long _Long = 0L;
-        public Short _Short = 0;
+        public Boolean _Boolean;
+        public Byte _Byte;
+        public Character _Char;
+        public Double _Double;
+        public Float _Float;
+        public Integer _Int;
+        public Long _Long;
+        public Short _Short;
 
-        public SimpleEnum _enum = SimpleEnum.FIRST;
-        public int[] _array = { 1, 2, 3 };
-        public Object _object = OBJECT;
-        public String _string = "";
-
+        public SimpleEnum _enum;
+        public int[] _array;
+        public Object _object;
+        public String _string;
         // CHECKSTYLE ON: MemberName
-
-        @Override
-        @SuppressWarnings("EqualsHashCode")
-        public boolean equals(Object obj) {
-            if (!(obj instanceof AllTypesContainer)) {
-                return false;
-            }
-            AllTypesContainer other = (AllTypesContainer) obj;
-            boolean result = true;
-            result &= _boolean == other._boolean;
-            result &= _byte == other._byte;
-            result &= _char == other._char;
-            result &= Double.compare(_double, other._double) == 0;
-            result &= Float.compare(_float, other._float) == 0;
-            result &= _int == other._int;
-            result &= _long == other._long;
-            result &= _short == other._short;
-            result &= Objects.equals(_Boolean, other._Boolean);
-            result &= Objects.equals(_Byte, other._Byte);
-            result &= Objects.equals(_Char, other._Char);
-            result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
-            result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
-            result &= Objects.equals(_Int, other._Int);
-            result &= Objects.equals(_Long, other._Long);
-            result &= Objects.equals(_Short, other._Short);
-            result &= _enum == other._enum;
-            result &= Arrays.equals(_array, other._array);
-            result &= Objects.equals(_object, other._object);
-            result &= Objects.equals(_string, other._string);
-            return result;
-        }
     }
 
     public static final class AllArrayTypesContainer {
 
-        boolean[] booleans = { true };
-        byte[] bytes = { 1 };
-        char[] chars = { 'a' };
-        double[] doubles = { 1.0D };
-        float[] floats = { 1.0F };
-        int[] ints = { 1 };
-        long[] longs = { 1L };
-        short[] shorts = { 1 };
+        public boolean[] booleans;
+        public byte[] bytes;
+        public char[] chars;
+        public double[] doubles;
+        public float[] floats;
+        public int[] ints;
+        public long[] longs;
+        public short[] shorts;
 
         // CHECKSTYLE OFF: MemberName
-        Boolean[] Booleans = { true };
-        Byte[] Bytes = { 1 };
-        Character[] Characters = { 'a' };
-        Double[] Doubles = { 1.0D };
-        Float[] Floats = { 1.0F };
-        Integer[] Integers = { 1 };
-        Long[] Longs = { 1L };
-        Short[] Shorts = { 1 };
+        public Boolean[] Booleans;
+        public Byte[] Bytes;
+        public Character[] Characters;
+        public Double[] Doubles;
+        public Float[] Floats;
+        public Integer[] Integers;
+        public Long[] Longs;
+        public Short[] Shorts;
         // CHECKSTYLE ON: MemberName
 
-        SimpleEnum[] enums = { SimpleEnum.FIRST };
-        int[][] arrays = { { 1 } };
-        Object[] objects = { OBJECT };
-        String[] strings = { "1" };
-
-        @Override
-        @SuppressWarnings("EqualsHashCode")
-        public boolean equals(Object obj) {
-            if (!(obj instanceof AllArrayTypesContainer)) {
-                return false;
-            }
-            AllArrayTypesContainer other = (AllArrayTypesContainer) obj;
-            boolean result = true;
-            result &= Arrays.equals(booleans, other.booleans);
-            result &= Arrays.equals(bytes, other.bytes);
-            result &= Arrays.equals(chars, other.chars);
-            result &= Arrays.equals(doubles, other.doubles);
-            result &= Arrays.equals(floats, other.floats);
-            result &= Arrays.equals(ints, other.ints);
-            result &= Arrays.equals(longs, other.longs);
-            result &= Arrays.equals(shorts, other.shorts);
-            result &= Arrays.equals(Booleans, other.Booleans);
-            result &= Arrays.equals(Bytes, other.Bytes);
-            result &= Arrays.equals(Characters, other.Characters);
-            result &= Arrays.equals(Doubles, other.Doubles);
-            result &= Arrays.equals(Floats, other.Floats);
-            result &= Arrays.equals(Integers, other.Integers);
-            result &= Arrays.equals(Longs, other.Longs);
-            result &= Arrays.equals(Shorts, other.Shorts);
-            result &= Arrays.equals(enums, other.enums);
-            result &= Arrays.deepEquals(arrays, other.arrays);
-            result &= Arrays.equals(objects, other.objects);
-            result &= Arrays.equals(strings, other.strings);
-            return result;
-        }
+        public SimpleEnum[] enums;
+        public int[][] arrays;
+        public Object[] objects;
+        public String[] strings;
     }
 
     @SuppressWarnings("unused")

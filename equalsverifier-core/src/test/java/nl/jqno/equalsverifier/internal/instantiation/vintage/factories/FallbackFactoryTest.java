@@ -16,7 +16,6 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.Node;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
@@ -59,13 +58,6 @@ class FallbackFactoryTest {
     }
 
     @Test
-    void giveArray() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
-        assertThat((int[]) tuple.red()).containsExactly(new int[] { 42 });
-        assertThat((int[]) tuple.blue()).containsExactly(new int[] { 1337, 42 });
-    }
-
-    @Test
     void giveClassWithFields() {
         assertCorrectTuple(IntContainer.class, new IntContainer(42, 42), new IntContainer(1337, 1337));
         // Assert that static fields are untouched
@@ -95,13 +87,6 @@ class FallbackFactoryTest {
                 .asString()
                 .contains("TwoStepNodeA")
                 .contains("TwoStepNodeB");
-    }
-
-    @Test
-    void dontGiveRecursiveArray() {
-        ExpectedException
-                .when(() -> factory.createValues(new TypeTag(NodeArray.class), valueProvider, typeStack))
-                .assertThrows(RecursionException.class);
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {

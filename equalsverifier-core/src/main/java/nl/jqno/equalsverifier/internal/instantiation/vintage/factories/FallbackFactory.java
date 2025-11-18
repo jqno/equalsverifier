@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
-import java.lang.reflect.Array;
 import java.util.LinkedHashSet;
 
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -36,9 +34,6 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         if (type.isEnum()) {
             return giveEnumInstances(tag);
         }
-        if (type.isArray()) {
-            return giveArrayInstances(tag, valueProvider, clone);
-        }
 
         return giveInstances(tag, valueProvider, clone);
     }
@@ -52,28 +47,6 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             case 1 -> new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
             default -> new Tuple<>(enumConstants[0], enumConstants[1], enumConstants[0]);
         };
-    }
-
-    @SuppressWarnings("unchecked")
-    private Tuple<T> giveArrayInstances(
-            TypeTag tag,
-            VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack) {
-        Class<T> type = tag.getType();
-        Class<?> componentType = type.getComponentType();
-        TypeTag componentTag = new TypeTag(componentType);
-        valueProvider.realizeCacheFor(componentTag, typeStack);
-
-        Tuple<?> tuple = valueProvider.provideOrThrow(componentTag, Attributes.empty());
-        T red = (T) Array.newInstance(componentType, 1);
-        Array.set(red, 0, tuple.red());
-        T blue = (T) Array.newInstance(componentType, 2);
-        Array.set(blue, 0, tuple.blue());
-        Array.set(blue, 1, tuple.red());
-        T redCopy = (T) Array.newInstance(componentType, 1);
-        Array.set(redCopy, 0, tuple.red());
-
-        return new Tuple<>(red, blue, redCopy);
     }
 
     private Tuple<T> giveInstances(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {

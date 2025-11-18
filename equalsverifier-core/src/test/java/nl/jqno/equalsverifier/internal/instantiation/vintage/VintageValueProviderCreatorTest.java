@@ -29,9 +29,7 @@ class VintageValueProviderCreatorTest {
     private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
     private static final TypeTag EMPTY_ENUM_TAG = new TypeTag(EmptyEnum.class);
     private static final TypeTag NODE_TAG = new TypeTag(Node.class);
-    private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
-    private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
     private ValueProvider prefabs;
     private FactoryCache factoryCache;
@@ -94,23 +92,6 @@ class VintageValueProviderCreatorTest {
     }
 
     @Test
-    void oneStepRecursiveArrayType() {
-        factoryCache
-                .put(
-                    NodeArray.class,
-                    values(new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null)));
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.provideOrThrow(NODE_ARRAY_TAG, Attributes.empty());
-    }
-
-    @Test
-    void dontAddOneStepRecursiveArrayType() {
-        ExpectedException
-                .when(() -> valueProvider.provideOrThrow(NODE_ARRAY_TAG, Attributes.empty()))
-                .assertThrows(RecursionException.class);
-    }
-
-    @Test
     void addTwoStepRecursiveType() {
         factoryCache
                 .put(
@@ -124,26 +105,6 @@ class VintageValueProviderCreatorTest {
     void dontAddTwoStepRecursiveType() {
         ExpectedException
                 .when(() -> valueProvider.provideOrThrow(TWOSTEP_NODE_A_TAG, Attributes.empty()))
-                .assertThrows(RecursionException.class);
-    }
-
-    @Test
-    void twoStepRecursiveArrayType() {
-        factoryCache
-                .put(
-                    TwoStepNodeArrayB.class,
-                    values(
-                        new TwoStepNodeArrayB(null),
-                        new TwoStepNodeArrayB(new TwoStepNodeArrayA[] {}),
-                        new TwoStepNodeArrayB(null)));
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.provideOrThrow(TWOSTEP_NODE_ARRAY_A_TAG, Attributes.empty());
-    }
-
-    @Test
-    void dontAddTwoStepRecursiveArrayType() {
-        ExpectedException
-                .when(() -> valueProvider.provideOrThrow(TWOSTEP_NODE_ARRAY_A_TAG, Attributes.empty()))
                 .assertThrows(RecursionException.class);
     }
 

@@ -94,16 +94,6 @@ class ClassAccessorTest {
     }
 
     @Test
-    void instantiateAllTypes() {
-        ClassAccessor.of(AllTypesContainer.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
-    }
-
-    @Test
-    void instantiateArrayTypes() {
-        ClassAccessor.of(AllArrayTypesContainer.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
-    }
-
-    @Test
     void instantiateRecursiveTypeUsingPrefabValue() {
         prefabs
                 .register(
