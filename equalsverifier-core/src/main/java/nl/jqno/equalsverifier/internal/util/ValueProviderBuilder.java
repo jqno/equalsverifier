@@ -9,10 +9,10 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvide
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import org.objenesis.Objenesis;
 
-public final class ValueProviderCreator {
-    private ValueProviderCreator() {}
+public final class ValueProviderBuilder {
+    private ValueProviderBuilder() {}
 
-    public static ValueProvider create(
+    public static ValueProvider build(
             Set<Mode> modes,
             UserPrefabValueProvider userPrefabs,
             FactoryCache factoryCache,

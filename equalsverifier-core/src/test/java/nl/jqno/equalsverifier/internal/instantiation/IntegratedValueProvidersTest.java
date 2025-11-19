@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.util.ValueProviderCreator;
+import nl.jqno.equalsverifier.internal.util.ValueProviderBuilder;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayA;
@@ -30,8 +30,8 @@ public class IntegratedValueProvidersTest {
     private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
     private UserPrefabValueProvider userPrefabs = new UserPrefabValueProvider();
-    private ValueProvider sut = ValueProviderCreator
-            .create(SKIP_MOCKITO, userPrefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
+    private ValueProvider sut = ValueProviderBuilder
+            .build(SKIP_MOCKITO, userPrefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
 
     @Test
     void instantiateAllTypes() {

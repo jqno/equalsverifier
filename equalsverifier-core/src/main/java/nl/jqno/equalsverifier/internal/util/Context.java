@@ -28,7 +28,7 @@ public final class Context<T> {
         this.classProbe = ClassProbe.of(configuration.type());
         var modes = configuration.modes();
 
-        this.valueProvider = ValueProviderCreator.create(modes, userPrefabs, factoryCache, fieldCache, objenesis);
+        this.valueProvider = ValueProviderBuilder.build(modes, userPrefabs, factoryCache, fieldCache, objenesis);
         this.subjectCreator = new SubjectCreator<>(configuration, this.valueProvider, objenesis);
     }
 
