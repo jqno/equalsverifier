@@ -6,7 +6,6 @@ import static org.mockito.Mockito.withSettings;
 import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MockitoException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 

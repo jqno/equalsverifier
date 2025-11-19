@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
