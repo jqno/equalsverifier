@@ -14,9 +14,6 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SimpleEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -25,9 +22,6 @@ import org.objenesis.ObjenesisStd;
 class VintageValueProviderCreatorTest {
 
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
-    private static final TypeTag ENUM_TAG = new TypeTag(SimpleEnum.class);
-    private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
-    private static final TypeTag EMPTY_ENUM_TAG = new TypeTag(EmptyEnum.class);
     private static final TypeTag NODE_TAG = new TypeTag(Node.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
 
@@ -54,27 +48,6 @@ class VintageValueProviderCreatorTest {
     void createSecondTimeIsNoOp() {
         Tuple<Point> tuple = valueProvider.provideOrThrow(POINT_TAG, Attributes.empty());
         assertThat(valueProvider.provideOrThrow(POINT_TAG, Attributes.empty())).isSameAs(tuple);
-    }
-
-    @Test
-    void createEnum() {
-        Tuple<SimpleEnum> tuple = valueProvider.provideOrThrow(ENUM_TAG, Attributes.empty());
-        assertThat(tuple.red()).isNotNull();
-        assertThat(tuple.blue()).isNotNull();
-    }
-
-    @Test
-    void createOneElementEnum() {
-        Tuple<OneElementEnum> tuple = valueProvider.provideOrThrow(ONE_ELT_ENUM_TAG, Attributes.empty());
-        assertThat(tuple.red()).isNotNull();
-        assertThat(tuple.blue()).isNotNull();
-    }
-
-    @Test
-    void createEmptyEnum() {
-        Tuple<EmptyEnum> tuple = valueProvider.provideOrThrow(EMPTY_ENUM_TAG, Attributes.empty());
-        assertThat(tuple.red()).isNull();
-        assertThat(tuple.blue()).isNull();
     }
 
     @Test

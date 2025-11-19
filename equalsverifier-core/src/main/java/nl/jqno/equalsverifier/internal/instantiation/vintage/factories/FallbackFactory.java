@@ -30,23 +30,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>) typeStack.clone();
         clone.add(tag);
 
-        Class<T> type = tag.getType();
-        if (type.isEnum()) {
-            return giveEnumInstances(tag);
-        }
-
         return giveInstances(tag, valueProvider, clone);
-    }
-
-    private Tuple<T> giveEnumInstances(TypeTag tag) {
-        Class<T> type = tag.getType();
-        T[] enumConstants = type.getEnumConstants();
-
-        return switch (enumConstants.length) {
-            case 0 -> new Tuple<>(null, null, null);
-            case 1 -> new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
-            default -> new Tuple<>(enumConstants[0], enumConstants[1], enumConstants[0]);
-        };
     }
 
     private Tuple<T> giveInstances(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {

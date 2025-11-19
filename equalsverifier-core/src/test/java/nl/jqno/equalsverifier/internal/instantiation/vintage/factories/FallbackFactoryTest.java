@@ -17,9 +17,6 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -40,21 +37,6 @@ class FallbackFactoryTest {
         var prefabs = new UserPrefabValueProvider();
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         typeStack = new LinkedHashSet<>();
-    }
-
-    @Test
-    void giveNullInsteadOfEmptyEnum() {
-        assertCorrectTuple(EmptyEnum.class, null, null);
-    }
-
-    @Test
-    void giveOneElementEnum() {
-        assertCorrectTuple(OneElementEnum.class, OneElementEnum.ONE, OneElementEnum.ONE);
-    }
-
-    @Test
-    void giveMultiElementEnum() {
-        assertCorrectTuple(TwoElementEnum.class, TwoElementEnum.ONE, TwoElementEnum.TWO);
     }
 
     @Test

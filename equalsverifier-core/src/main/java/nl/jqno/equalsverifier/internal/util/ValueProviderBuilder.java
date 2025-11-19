@@ -26,6 +26,7 @@ public final class ValueProviderBuilder {
         var versionSpecificBuiltinPrefabs = new BuiltinVersionSpecificValueProvider(recursionDetector);
         var mockito =
                 new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
+        var enumeration = new EnumValueProvider();
         var array = new ArrayValueProvider(recursionDetector);
 
         var vintageRecursionDetector = new RecursionDetectingValueProvider();
@@ -34,6 +35,7 @@ public final class ValueProviderBuilder {
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
                 mockito,
+                enumeration,
                 array);
 
         vintageRecursionDetector.setValueProvider(vintageChain);
@@ -45,6 +47,7 @@ public final class ValueProviderBuilder {
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
                 mockito,
+                enumeration,
                 array,
                 vintage);
         var caching = new CachingValueProvider(userPrefabs, fieldCache, mainChain);
