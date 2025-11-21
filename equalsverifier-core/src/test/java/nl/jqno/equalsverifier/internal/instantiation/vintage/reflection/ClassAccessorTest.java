@@ -12,7 +12,9 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.GenericTypeVariableContainerContainer;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.InterfaceContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -22,7 +24,8 @@ class ClassAccessorTest {
 
     private Objenesis objenesis;
     private LinkedHashSet<TypeTag> empty;
-    private UserPrefabValueProvider prefabs;
+    private UserPrefabValueCaches prefabs;
+    private UserPrefabValueProvider prefabValueProvider;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
     private ClassAccessor<PointContainer> pointContainerAccessor;
@@ -30,8 +33,9 @@ class ClassAccessorTest {
     @BeforeEach
     void setup() {
         empty = new LinkedHashSet<>();
-        prefabs = new UserPrefabValueProvider();
-        var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
+        prefabs = new UserPrefabValueCaches();
+        prefabValueProvider = new UserPrefabValueProvider(prefabs);
+        var chain = new ChainedValueProvider(prefabValueProvider, new BuiltinPrefabValueProvider());
         factoryCache = new FactoryCache();
         objenesis = new ObjenesisStd();
         valueProvider = new VintageValueProvider(chain, factoryCache, objenesis);
@@ -101,7 +105,7 @@ class ClassAccessorTest {
                     new TwoStepNodeB(null),
                     new TwoStepNodeB(new TwoStepNodeA(null)),
                     new TwoStepNodeB(null));
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
         ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
     }
 
@@ -111,7 +115,7 @@ class ClassAccessorTest {
                 .put(
                     TwoStepNodeB.class,
                     values(new TwoStepNodeB(null), new TwoStepNodeB(new TwoStepNodeA(null)), new TwoStepNodeB(null)));
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        valueProvider = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
         ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
     }
 

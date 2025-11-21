@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
@@ -37,7 +37,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
-    private UserPrefabValueProvider userPrefabs = new UserPrefabValueProvider();
+    private UserPrefabValueCaches userPrefabs = new UserPrefabValueCaches();
     private FactoryCache factoryCache = new FactoryCache();
     private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
@@ -82,8 +82,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param userPrefabs        Prefab values provided by the user.
      * @param factoryCache       Factories that can be used to create values.
      * @param objenesis          To instantiate non-record classes.
-     * @param usingGetClass      Whether {@code getClass} is used in the implementation of the {@code
-     *     equals}            method, instead of an {@code instanceof} check.
+     * @param usingGetClass      Whether {@code getClass} is used in the implementation of the {@code equals} method,
+     *                               instead of an {@code instanceof} check.
      * @param converter          A function that converts from field name to getter name.
      */
     // CHECKSTYLE OFF: ParameterNumber
@@ -91,7 +91,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
             Set<Mode> modes,
-            UserPrefabValueProvider userPrefabs,
+            UserPrefabValueCaches userPrefabs,
             FactoryCache factoryCache,
             Objenesis objenesis,
             boolean usingGetClass,

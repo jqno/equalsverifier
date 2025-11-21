@@ -29,9 +29,9 @@ public class IntegratedValueProvidersTest {
     private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
-    private UserPrefabValueProvider userPrefabs = new UserPrefabValueProvider();
-    private ValueProvider sut = ValueProviderBuilder
-            .build(SKIP_MOCKITO, userPrefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
+    private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
+    private ValueProvider sut =
+            ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
 
     @Test
     void instantiateAllTypes() {
@@ -94,8 +94,7 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void instantiateOneStepRecursiveArray() {
-        userPrefabs
-                .register(NodeArray.class, new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null));
+        prefabs.register(NodeArray.class, new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null));
         var actual = sut.<NodeArray>provideOrThrow(NODE_ARRAY_TAG, SOME_ATTRIBUTES);
         assertThat(actual.blue()).isEqualTo(new NodeArray(new NodeArray[] {}));
     }
@@ -109,7 +108,7 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void instantiateTwoStepRecursiveArray() {
-        userPrefabs
+        prefabs
                 .register(
                     TwoStepNodeArrayB.class,
                     new TwoStepNodeArrayB(null),
