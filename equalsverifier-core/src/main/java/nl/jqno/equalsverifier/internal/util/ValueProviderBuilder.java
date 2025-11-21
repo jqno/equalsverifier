@@ -14,13 +14,14 @@ public final class ValueProviderBuilder {
 
     public static ValueProvider build(
             Set<Mode> modes,
-            UserPrefabValueProvider userPrefabs,
+            UserPrefabValueCaches userPrefabCaches,
             FactoryCache factoryCache,
             FieldCache fieldCache,
             Objenesis objenesis) {
 
         var recursionDetector = new RecursionDetectingValueProvider();
 
+        var userPrefabs = new UserPrefabValueProvider(userPrefabCaches);
         var builtinPrefabs = new BuiltinPrefabValueProvider();
         var builtinGenericPrefabs = new BuiltinGenericPrefabValueProvider(recursionDetector);
         var versionSpecificBuiltinPrefabs = new BuiltinVersionSpecificValueProvider(recursionDetector);
@@ -50,7 +51,7 @@ public final class ValueProviderBuilder {
                 enumeration,
                 array,
                 vintage);
-        var caching = new CachingValueProvider(userPrefabs, fieldCache, mainChain);
+        var caching = new CachingValueProvider(userPrefabCaches, fieldCache, mainChain);
 
         recursionDetector.setValueProvider(caching);
 

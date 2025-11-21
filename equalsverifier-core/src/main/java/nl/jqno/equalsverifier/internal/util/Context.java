@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
@@ -19,7 +17,7 @@ public final class Context<T> {
 
     public Context(
             Configuration<T> configuration,
-            UserPrefabValueProvider userPrefabs,
+            UserPrefabValueCaches userPrefabs,
             FactoryCache factoryCache,
             FieldCache fieldCache,
             Objenesis objenesis) {

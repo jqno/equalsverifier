@@ -5,9 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
 
-import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -18,14 +16,14 @@ import org.objenesis.ObjenesisStd;
 class RecordObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
-    private UserPrefabValueProvider prefabs;
+    private UserPrefabValueCaches prefabs;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
 
     @BeforeEach
     void setup() throws Exception {
-        prefabs = new UserPrefabValueProvider();
-        var chain = new ChainedValueProvider(prefabs, new BuiltinPrefabValueProvider());
+        prefabs = new UserPrefabValueCaches();
+        var chain = new ChainedValueProvider(new UserPrefabValueProvider(prefabs), new BuiltinPrefabValueProvider());
         factoryCache = new FactoryCache();
         valueProvider = new VintageValueProvider(chain, factoryCache, new ObjenesisStd());
     }

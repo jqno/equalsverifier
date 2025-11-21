@@ -17,8 +17,9 @@ public class BuiltinGenericPrefabValueProviderTest {
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
 
-    private UserPrefabValueProvider underlying = new UserPrefabValueProvider();
-    private BuiltinGenericPrefabValueProvider sut = new BuiltinGenericPrefabValueProvider(underlying);
+    private UserPrefabValueCaches underlying = new UserPrefabValueCaches();
+    private BuiltinGenericPrefabValueProvider sut =
+            new BuiltinGenericPrefabValueProvider(new UserPrefabValueProvider(underlying));
 
     @BeforeEach
     public void setUp() {

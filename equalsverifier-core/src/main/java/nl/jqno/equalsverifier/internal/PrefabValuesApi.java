@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
@@ -23,7 +23,7 @@ public final class PrefabValuesApi {
     private PrefabValuesApi() {}
 
     public static <T> void addPrefabValues(
-            UserPrefabValueProvider userPrefabs,
+            UserPrefabValueCaches caches,
             Objenesis objenesis,
             Class<T> otherType,
             T red,
@@ -31,21 +31,21 @@ public final class PrefabValuesApi {
         Validations.validateRedAndBluePrefabValues(otherType, red, blue);
 
         if (red.getClass().isArray()) {
-            userPrefabs.register(otherType, red, blue, red);
+            caches.register(otherType, red, blue, red);
         }
         else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                userPrefabs.register(otherType, red, blue, redCopy);
+                caches.register(otherType, red, blue, redCopy);
             }
             catch (InaccessibleObjectException ignored) {
-                userPrefabs.register(otherType, red, blue, red);
+                caches.register(otherType, red, blue, red);
             }
         }
     }
 
     public static <T> void addResettablePrefabValues(
-            UserPrefabValueProvider userPrefabs,
+            UserPrefabValueCaches caches,
             Objenesis objenesis,
             Class<T> otherType,
             Supplier<T> red,
@@ -56,7 +56,7 @@ public final class PrefabValuesApi {
         Validations.validateEqual(red.get(), red.get(), "red prefab value is not equal to itself after reset.");
         Validations.validateEqual(blue.get(), blue.get(), "blue prefab value is not equal to itself after reset.");
 
-        userPrefabs.registerResettable(otherType, red, blue, red);
+        caches.registerResettable(otherType, red, blue, red);
     }
 
     public static <T> void addPrefabValuesForField(

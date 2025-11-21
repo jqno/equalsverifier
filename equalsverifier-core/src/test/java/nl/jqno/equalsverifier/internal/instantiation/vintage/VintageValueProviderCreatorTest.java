@@ -6,9 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
@@ -32,7 +30,7 @@ class VintageValueProviderCreatorTest {
 
     @BeforeEach
     void setup() {
-        prefabs = new UserPrefabValueProvider();
+        prefabs = new UserPrefabValueProvider(new UserPrefabValueCaches());
         factoryCache = cacheWithPrimitiveFactories();
         objenesis = new ObjenesisStd();
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);

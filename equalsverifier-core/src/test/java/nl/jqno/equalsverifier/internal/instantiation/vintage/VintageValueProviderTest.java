@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.fail;
 import java.util.*;
 
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
+import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -23,7 +24,8 @@ class VintageValueProviderTest {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
-    private final UserPrefabValueProvider prefabs = new UserPrefabValueProvider();
+    private final UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
+    private final UserPrefabValueProvider prefabValueProvider = new UserPrefabValueProvider(prefabs);
     private final FactoryCache factoryCache = new FactoryCache();
     private final Objenesis objenesis = new ObjenesisStd();
     private VintageValueProvider vp;
@@ -32,7 +34,7 @@ class VintageValueProviderTest {
     void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         prefabs.register(int.class, 42, 1337, 42);
-        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
     }
 
     @Test
@@ -76,7 +78,7 @@ class VintageValueProviderTest {
     @Test
     void stringListIsSeparateFromIntegerList() {
         factoryCache.put(List.class, new ListTestFactory());
-        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
 
         List<String> strings =
                 vp.<List<String>>provideOrThrow(new TypeTag(List.class, STRING_TAG), Attributes.empty()).red();
@@ -95,7 +97,7 @@ class VintageValueProviderTest {
     @Test
     void addingATypeTwiceOverrulesTheExistingOne() {
         prefabs.register(int.class, -1, -2, -1);
-        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
         assertThat(vp.provideOrThrow(INT_TAG, Attributes.empty())).isEqualTo(new Tuple<>(-1, -2, -1));
     }
 
@@ -103,7 +105,7 @@ class VintageValueProviderTest {
     void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         prefabs.register(Lazy.class, Lazy.X, Lazy.Y, Lazy.X);
-        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
         assertThat(vp.<Lazy>provideOrThrow(lazyTag, Attributes.empty())).isEqualTo(new Tuple<>(Lazy.X, Lazy.Y, Lazy.X));
     }
 
@@ -116,7 +118,7 @@ class VintageValueProviderTest {
                 .put(
                     ThrowingInitializer.class.getName(),
                     (t, p, ts) -> new Tuple<>(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
-        vp = new VintageValueProvider(prefabs, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
 
         // Should throw, because `giveTuple` does instantiate objects:
         try {

@@ -12,77 +12,78 @@ public class UserPrefabValueProviderTest {
     private static final TypeTag INT = new TypeTag(int.class);
     private static final TypeTag INTEGER = new TypeTag(Integer.class);
 
-    private UserPrefabValueProvider sut = new UserPrefabValueProvider();
+    private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
+    private UserPrefabValueProvider provider = new UserPrefabValueProvider(prefabs);
 
     @Test
     public void aRegisteredValueCanBeFound() {
-        sut.register(INT.getType(), 3, 2, 3);
-        assertThat(sut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 2, 3));
+        prefabs.register(INT.getType(), 3, 2, 3);
+        assertThat(provider.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 2, 3));
     }
 
     @Test
     public void aRegisteredResettableValueCanBeFound() {
-        sut.registerResettable(INT.getType(), () -> 3, () -> 2, () -> 3);
-        assertThat(sut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 2, 3));
+        prefabs.registerResettable(INT.getType(), () -> 3, () -> 2, () -> 3);
+        assertThat(provider.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 2, 3));
     }
 
     @Test
     void aNormalValueCanBeCached() {
-        sut.register(INT.getType(), 3, 2, 3);
-        assertThat(sut.canBeCached(INT.getType())).isTrue();
+        prefabs.register(INT.getType(), 3, 2, 3);
+        assertThat(prefabs.canBeCached(INT.getType())).isTrue();
     }
 
     @Test
     void aResettableValueCannotBeCached() {
-        sut.registerResettable(INT.getType(), () -> 3, () -> 2, () -> 3);
-        assertThat(sut.canBeCached(INT.getType())).isFalse();
+        prefabs.registerResettable(INT.getType(), () -> 3, () -> 2, () -> 3);
+        assertThat(prefabs.canBeCached(INT.getType())).isFalse();
     }
 
     @Test
     void anUnregisteredValueCanBeCached() {
-        assertThat(sut.canBeCached(INT.getType())).isTrue();
+        assertThat(prefabs.canBeCached(INT.getType())).isTrue();
     }
 
     @Test
     public void fieldNameIsIgnoredWhenFindingAValue() {
-        sut.register(INT.getType(), 3, 2, 3);
-        assertThat(sut.provide(INT, Attributes.named("label"))).contains(new Tuple<>(3, 2, 3));
+        prefabs.register(INT.getType(), 3, 2, 3);
+        assertThat(provider.provide(INT, Attributes.named("label"))).contains(new Tuple<>(3, 2, 3));
     }
 
     @Test
     public void itFallsBackToBoxedType() {
-        sut.register(INTEGER.getType(), 3, 2, 3);
-        assertThat(sut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 2, 3));
+        prefabs.register(INTEGER.getType(), 3, 2, 3);
+        assertThat(provider.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 2, 3));
     }
 
     @Test
     public void anUnregisteredValueCanNotBeFound() {
-        assertThat(sut.provide(INT, Attributes.named(SOME_FIELDNAME))).isEmpty();
+        assertThat(provider.provide(INT, Attributes.named(SOME_FIELDNAME))).isEmpty();
     }
 
     @Test
     public void copy() {
-        sut.register(INT.getType(), 1, 2, 1);
-        UserPrefabValueProvider anotherSut = sut.copy();
+        prefabs.register(INT.getType(), 1, 2, 1);
+        UserPrefabValueProvider anotherSut = provider.copy();
 
         assertThat(anotherSut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(1, 2, 1));
     }
 
     @Test
     public void copyResettable() {
-        sut.registerResettable(INT.getType(), () -> 1, () -> 2, () -> 1);
-        UserPrefabValueProvider anotherSut = sut.copy();
+        prefabs.registerResettable(INT.getType(), () -> 1, () -> 2, () -> 1);
+        UserPrefabValueProvider anotherSut = provider.copy();
 
         assertThat(anotherSut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(1, 2, 1));
     }
 
     @Test
     public void copyDoesNotReflectLaterChangesToOriginal() {
-        sut.register(INT.getType(), 1, 2, 1);
-        UserPrefabValueProvider anotherSut = sut.copy();
-        sut.register(INT.getType(), 3, 4, 3);
+        prefabs.register(INT.getType(), 1, 2, 1);
+        UserPrefabValueProvider anotherSut = provider.copy();
+        prefabs.register(INT.getType(), 3, 4, 3);
 
         assertThat(anotherSut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(1, 2, 1));
-        assertThat(sut.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 4, 3));
+        assertThat(provider.provide(INT, Attributes.named(SOME_FIELDNAME))).contains(new Tuple<>(3, 4, 3));
     }
 }
