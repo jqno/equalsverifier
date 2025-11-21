@@ -17,7 +17,6 @@ import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SimpleEnum;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
@@ -120,7 +119,6 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
-    @Disabled("Restore when FallbackFactory no longer creates new normal object")
     void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveArray() {
         ExpectedException
                 .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
