@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
-public class UserPrefabValueCaches implements CacheDecider {
+public class UserPrefabValueCaches {
     private final Map<Class<?>, Tuple<?>> cache = new HashMap<>();
     private final Map<Class<?>, Tuple<Supplier<?>>> supplierCache = new HashMap<>();
 
@@ -82,8 +82,12 @@ public class UserPrefabValueCaches implements CacheDecider {
         return supplierCache.get(type);
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Whether instances of {@code type} should be cached.
+     *
+     * @param type The type whose instances should or should not be cached.
+     * @return Whether or not the given type should be cached.
+     */
     public boolean canBeCached(Class<?> type) {
         return !supplierCache.containsKey(type);
     }
