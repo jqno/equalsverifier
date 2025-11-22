@@ -182,7 +182,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
-        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(userPrefabs, factoryCache, otherType, factory);
         return this;
     }
 
@@ -190,7 +190,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
-        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(userPrefabs, factoryCache, otherType, factory);
         return this;
     }
 

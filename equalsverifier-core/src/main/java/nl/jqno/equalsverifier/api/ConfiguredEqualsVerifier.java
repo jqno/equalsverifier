@@ -114,7 +114,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @Override
     @CheckReturnValue
     public <S> ConfiguredEqualsVerifier withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
-        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(userPrefabs, factoryCache, otherType, factory);
         return this;
     }
 
@@ -122,7 +122,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @Override
     @CheckReturnValue
     public <S> ConfiguredEqualsVerifier withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
-        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(userPrefabs, factoryCache, otherType, factory);
         return this;
     }
 

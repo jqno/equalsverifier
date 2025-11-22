@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
 public class UserPrefabValueCaches {
     private final Map<Class<?>, Tuple<?>> cache = new HashMap<>();
     private final Map<Class<?>, Tuple<Supplier<?>>> supplierCache = new HashMap<>();
+    private final Map<Class<?>, Func<?>> genericCache = new HashMap<>();
 
     /** Constructor. */
     public UserPrefabValueCaches() {}
@@ -63,6 +65,18 @@ public class UserPrefabValueCaches {
     }
 
     /**
+     * Registers a generic prefab value.
+     *
+     * @param <T>     The class of the prefabricated value.
+     * @param type    The class of the prefabricated value.
+     * @param factory A factory that can turn generic values into an instance of {@code type} with the appropriate
+     *                    generic values.
+     */
+    public <T> void registerGeneric(Class<T> type, Func<?> factory) {
+        genericCache.put(type, factory);
+    }
+
+    /**
      * Retrieves a tuple of prefabricated values from the regular cache.
      *
      * @param type The type of the desired prefabricated values.
@@ -80,6 +94,18 @@ public class UserPrefabValueCaches {
      */
     public Tuple<Supplier<?>> getResettable(Class<?> type) {
         return supplierCache.get(type);
+    }
+
+    /**
+     * Retrieves a factory to construct prefabricated values from the generic cache.
+     *
+     * @param <T>  The type of the desired prefabricated values.
+     * @param type The type of the desired prefabricated values.
+     * @return A factory to construct prefabricated values.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Func<T> getGeneric(Class<T> type) {
+        return (Func<T>) genericCache.get(type);
     }
 
     /**
