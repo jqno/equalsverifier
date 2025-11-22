@@ -22,6 +22,7 @@ public final class ValueProviderBuilder {
         var recursionDetector = new RecursionDetectingValueProvider();
 
         var userPrefabs = new UserPrefabValueProvider(userPrefabCaches);
+        var userGenericPrefabs = new UserGenericPrefabValueProvider(userPrefabCaches, recursionDetector);
         var builtinPrefabs = new BuiltinPrefabValueProvider();
         var builtinGenericPrefabs = new BuiltinGenericPrefabValueProvider(recursionDetector);
         var versionSpecificBuiltinPrefabs = new BuiltinVersionSpecificValueProvider(recursionDetector);
@@ -32,6 +33,7 @@ public final class ValueProviderBuilder {
 
         var vintageRecursionDetector = new RecursionDetectingValueProvider();
         var vintageChain = new ChainedValueProvider(userPrefabs,
+                userGenericPrefabs,
                 builtinPrefabs,
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
@@ -44,6 +46,7 @@ public final class ValueProviderBuilder {
         var vintage = new VintageValueProvider(vintageRecursionDetector, factoryCache, objenesis);
 
         var mainChain = new ChainedValueProvider(userPrefabs,
+                userGenericPrefabs,
                 builtinPrefabs,
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
