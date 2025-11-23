@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func;
+import nl.jqno.equalsverifier.Func.Func1;
+import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
 public class UserPrefabValueCaches {
@@ -65,14 +67,26 @@ public class UserPrefabValueCaches {
     }
 
     /**
-     * Registers a generic prefab value.
+     * Registers a generic prefab value of arity 1.
      *
      * @param <T>     The class of the prefabricated value.
      * @param type    The class of the prefabricated value.
      * @param factory A factory that can turn generic values into an instance of {@code type} with the appropriate
      *                    generic values.
      */
-    public <T> void registerGeneric(Class<T> type, Func<?> factory) {
+    public <T> void registerGeneric(Class<T> type, Func1<?, T> factory) {
+        genericCache.put(type, factory);
+    }
+
+    /**
+     * Registers a generic prefab value of arity 2.
+     *
+     * @param <T>     The class of the prefabricated value.
+     * @param type    The class of the prefabricated value.
+     * @param factory A factory that can turn generic values into an instance of {@code type} with the appropriate
+     *                    generic values.
+     */
+    public <T> void registerGeneric(Class<T> type, Func2<?, ?, T> factory) {
         genericCache.put(type, factory);
     }
 
