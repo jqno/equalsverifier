@@ -2,21 +2,20 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Objects;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.ValueProviderBuilder;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.NodeArray;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayA;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayB;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AllTypesContainer;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SimpleEnum;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
@@ -26,6 +25,10 @@ public class IntegratedValueProvidersTest {
     private static final Set<Mode> SKIP_MOCKITO = Set.of(Mode.skipMockito());
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
+    private static final TypeTag STRING_TAG = new TypeTag(String.class);
+    private static final TypeTag POINT_TAG = new TypeTag(Point.class);
+    private static final TypeTag NODE_TAG = new TypeTag(Node.class);
+    private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
     private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
@@ -93,6 +96,85 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
+    void redIsDifferentFromBlue() {
+        var tuple = sut.<Point>provideOrThrow(POINT_TAG, SOME_ATTRIBUTES);
+        assertThat(tuple.red()).isNotEqualTo(tuple.blue());
+    }
+
+    @Test
+    void redHasSameValueButIsNotSameObjectAsRedCopy() {
+        var tuple = sut.<Point>provideOrThrow(POINT_TAG, SOME_ATTRIBUTES);
+        assertThat(tuple.red()).isEqualTo(tuple.redCopy()).isNotSameAs(tuple.redCopy());
+    }
+
+    @Test
+    void doesntTouchStaticFields() {
+        var tuple = sut.<IntContainer>provideOrThrow(new TypeTag(IntContainer.class), SOME_ATTRIBUTES);
+        assertThat(tuple)
+                .isEqualTo(new Tuple<>(new IntContainer(1, 1), new IntContainer(2, 2), new IntContainer(1, 1)));
+        // Assert that static fields are untouched
+        assertThat(IntContainer.staticI).isEqualTo(-100);
+        assertThat(IntContainer.STATIC_FINAL_I).isEqualTo(-10);
+    }
+
+    @Test
+    void instantiateFromCache() {
+        prefabs.register(String.class, "x", "y", "x");
+        var actual = sut.<String>provideOrThrow(STRING_TAG, SOME_ATTRIBUTES);
+        assertThat(actual).isEqualTo(new Tuple<>("x", "y", "x"));
+    }
+
+    @Test
+    void instantiateFromGenericCache_withArity1() {
+        prefabs.registerGeneric(Generic1.class, Generic1::new);
+        var actual = sut.<Generic1<String>>provideOrThrow(new TypeTag(Generic1.class, STRING_TAG), SOME_ATTRIBUTES);
+        assertThat(actual.red().t).isEqualTo("one");
+    }
+
+    @Test
+    void instantiateFromGenericCache_withArity2() {
+        prefabs.registerGeneric(Generic2.class, Generic2::new);
+        var actual = sut
+                .<Generic2<String, String>>provideOrThrow(
+                    new TypeTag(Generic2.class, STRING_TAG, STRING_TAG),
+                    SOME_ATTRIBUTES);
+        assertThat(actual.red().t).isEqualTo("one");
+        assertThat(actual.red().u).isEqualTo("one");
+    }
+
+    @Test
+    void instantiateOneStepRecursiveObject() {
+        prefabs.register(Node.class, new Node(null), new Node(new Node(null)), new Node(null));
+        var actual = sut.<Node>provideOrThrow(NODE_TAG, SOME_ATTRIBUTES);
+        assertThat(actual.blue()).isEqualTo(new Node(new Node(null)));
+    }
+
+    @Test
+    void throwRecursionException_whenAttemptingToInstantiateOneStepRecursiveObject() {
+        ExpectedException.when(() -> sut.provide(NODE_TAG, SOME_ATTRIBUTES)).assertThrows(RecursionException.class);
+    }
+
+    @Test
+    void instantiateTwoStepRecursiveObject() {
+        prefabs
+                .register(
+                    TwoStepNodeB.class,
+                    new TwoStepNodeB(null),
+                    new TwoStepNodeB(new TwoStepNodeA(null)),
+                    new TwoStepNodeB(null));
+        var actual = sut.<TwoStepNodeA>provideOrThrow(TWOSTEP_NODE_A_TAG, SOME_ATTRIBUTES);
+        assertThat(actual.red()).isEqualTo(new TwoStepNodeA(new TwoStepNodeB(null)));
+    }
+
+    @Test
+    @Disabled("Restore when FallbackFactory no longer creates new normal object")
+    void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveObject() {
+        ExpectedException
+                .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
+                .assertThrows(RecursionException.class);
+    }
+
+    @Test
     void instantiateOneStepRecursiveArray() {
         prefabs.register(NodeArray.class, new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null));
         var actual = sut.<NodeArray>provideOrThrow(NODE_ARRAY_TAG, SOME_ATTRIBUTES);
@@ -125,5 +207,34 @@ public class IntegratedValueProvidersTest {
         ExpectedException
                 .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
                 .assertThrows(RecursionException.class);
+    }
+
+    private static final class IntContainer {
+
+        @SuppressWarnings("unused")
+        private static int staticI = -100;
+
+        private static final int STATIC_FINAL_I = -10;
+
+        @SuppressWarnings("unused")
+        private final int finalI;
+
+        @SuppressWarnings("unused")
+        private int i;
+
+        private IntContainer(int finalI, int i) {
+            this.finalI = finalI;
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof IntContainer other && finalI == other.finalI && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(finalI, i);
+        }
     }
 }

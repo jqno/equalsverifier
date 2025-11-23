@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
@@ -105,16 +104,6 @@ class ClassAccessorTest {
                     new TwoStepNodeB(null),
                     new TwoStepNodeB(new TwoStepNodeA(null)),
                     new TwoStepNodeB(null));
-        valueProvider = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
-        ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
-    }
-
-    @Test
-    void instantiateRecursiveTypeUsingFactoryCache() {
-        factoryCache
-                .put(
-                    TwoStepNodeB.class,
-                    values(new TwoStepNodeB(null), new TwoStepNodeB(new TwoStepNodeA(null)), new TwoStepNodeB(null)));
         valueProvider = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
         ClassAccessor.of(TwoStepNodeA.class, valueProvider, objenesis).getRedObject(TypeTag.NULL, empty);
     }

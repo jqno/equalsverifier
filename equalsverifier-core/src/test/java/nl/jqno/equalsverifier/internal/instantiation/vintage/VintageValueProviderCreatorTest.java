@@ -1,16 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.*;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier_testhelpers.ExpectedException;
-import nl.jqno.equalsverifier_testhelpers.types.Point;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +15,6 @@ import org.objenesis.ObjenesisStd;
 
 class VintageValueProviderCreatorTest {
 
-    private static final TypeTag POINT_TAG = new TypeTag(Point.class);
-    private static final TypeTag NODE_TAG = new TypeTag(Node.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
 
     private ValueProvider prefabs;
@@ -34,49 +28,6 @@ class VintageValueProviderCreatorTest {
         factoryCache = cacheWithPrimitiveFactories();
         objenesis = new ObjenesisStd();
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-    }
-
-    @Test
-    void simple() {
-        Tuple<Point> tuple = valueProvider.provideOrThrow(POINT_TAG, Attributes.empty());
-        assertThat(tuple.blue()).isNotEqualTo(tuple.red());
-    }
-
-    @Test
-    void createSecondTimeIsNoOp() {
-        Tuple<Point> tuple = valueProvider.provideOrThrow(POINT_TAG, Attributes.empty());
-        assertThat(valueProvider.provideOrThrow(POINT_TAG, Attributes.empty())).isSameAs(tuple);
-    }
-
-    @Test
-    void oneStepRecursiveType() {
-        factoryCache.put(Node.class, values(new Node(null), new Node(new Node(null)), new Node(null)));
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.provideOrThrow(NODE_TAG, Attributes.empty());
-    }
-
-    @Test
-    void dontAddOneStepRecursiveType() {
-        ExpectedException
-                .when(() -> valueProvider.provideOrThrow(NODE_TAG, Attributes.empty()))
-                .assertThrows(RecursionException.class);
-    }
-
-    @Test
-    void addTwoStepRecursiveType() {
-        factoryCache
-                .put(
-                    TwoStepNodeB.class,
-                    values(new TwoStepNodeB(null), new TwoStepNodeB(new TwoStepNodeA(null)), new TwoStepNodeB(null)));
-        valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
-        valueProvider.provideOrThrow(TWOSTEP_NODE_A_TAG, Attributes.empty());
-    }
-
-    @Test
-    void dontAddTwoStepRecursiveType() {
-        ExpectedException
-                .when(() -> valueProvider.provideOrThrow(TWOSTEP_NODE_A_TAG, Attributes.empty()))
-                .assertThrows(RecursionException.class);
     }
 
     @Test

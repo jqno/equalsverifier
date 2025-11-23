@@ -3,6 +3,8 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.Generic1;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.Generic2;
 import org.junit.jupiter.api.Test;
 
 public class UserGenericPrefabValueProviderTest {
@@ -63,23 +65,5 @@ public class UserGenericPrefabValueProviderTest {
                 .red();
         assertThat(strings.t).isEqualTo('α');
         assertThat(strings.u).isEqualTo(0.5);
-    }
-
-    static class Generic1<T> {
-        private final T t;
-
-        Generic1(T t) {
-            this.t = t;
-        }
-    }
-
-    static class Generic2<T, U> {
-        private final T t;
-        private final U u;
-
-        Generic2(T t, U u) {
-            this.t = t;
-            this.u = u;
-        }
     }
 }

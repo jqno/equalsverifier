@@ -1,11 +1,9 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.LinkedHashSet;
-import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
@@ -13,7 +11,6 @@ import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.Node;
@@ -41,21 +38,6 @@ class FallbackFactoryTest {
     }
 
     @Test
-    void giveClassWithFields() {
-        assertCorrectTuple(IntContainer.class, new IntContainer(42, 42), new IntContainer(1337, 1337));
-        // Assert that static fields are untouched
-        assertThat(IntContainer.staticI).isEqualTo(-100);
-        assertThat(IntContainer.STATIC_FINAL_I).isEqualTo(-10);
-    }
-
-    @Test
-    void redCopyIsNotSameAsRed() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(IntContainer.class), valueProvider, typeStack);
-
-        assertThat(tuple.redCopy()).isEqualTo(tuple.red()).isNotSameAs(tuple.red());
-    }
-
-    @Test
     void dontGiveRecursiveClass() {
         ExpectedException
                 .when(() -> factory.createValues(new TypeTag(Node.class), valueProvider, typeStack))
@@ -70,41 +52,5 @@ class FallbackFactoryTest {
                 .asString()
                 .contains("TwoStepNodeA")
                 .contains("TwoStepNodeB");
-    }
-
-    private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {
-        Tuple<?> tuple = factory.createValues(new TypeTag(type), valueProvider, typeStack);
-        assertThat(tuple.red()).isEqualTo(expectedRed);
-        assertThat(tuple.blue()).isEqualTo(expectedBlue);
-        assertThat(tuple.redCopy()).isEqualTo(expectedRed);
-    }
-
-    private static final class IntContainer {
-
-        @SuppressWarnings("unused")
-        private static int staticI = -100;
-
-        private static final int STATIC_FINAL_I = -10;
-
-        @SuppressWarnings("unused")
-        private final int finalI;
-
-        @SuppressWarnings("unused")
-        private int i;
-
-        private IntContainer(int finalI, int i) {
-            this.finalI = finalI;
-            this.i = i;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof IntContainer other && finalI == other.finalI && i == other.i;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(finalI, i);
-        }
     }
 }

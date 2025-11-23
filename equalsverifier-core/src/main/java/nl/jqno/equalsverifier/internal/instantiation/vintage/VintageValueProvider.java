@@ -28,7 +28,6 @@ public class VintageValueProvider implements ValueProvider {
     private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
 
     private final ValueProvider prefabs;
-    private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
     /**
@@ -40,7 +39,6 @@ public class VintageValueProvider implements ValueProvider {
      */
     public VintageValueProvider(ValueProvider prefabs, FactoryCache factoryCache, Objenesis objenesis) {
         this.prefabs = prefabs;
-        this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
 
@@ -128,12 +126,6 @@ public class VintageValueProvider implements ValueProvider {
             @SuppressWarnings("unchecked")
             var result = (Tuple<T>) userPrefab.get();
             return result;
-        }
-
-        Class<T> type = tag.getType();
-        if (factoryCache.contains(type)) {
-            PrefabValueFactory<T> factory = factoryCache.get(type);
-            return factory.createValues(tag, this, typeStack);
         }
 
         @SuppressWarnings("unchecked")

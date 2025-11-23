@@ -144,6 +144,24 @@ public class TypeHelper {
         public T t = null;
     }
 
+    public static class Generic1<T> {
+        public final T t;
+
+        public Generic1(T t) {
+            this.t = t;
+        }
+    }
+
+    public static class Generic2<T, U> {
+        public final T t;
+        public final U u;
+
+        public Generic2(T t, U u) {
+            this.t = t;
+            this.u = u;
+        }
+    }
+
     public static final class ObjectContainer {
 
         public Object field = new Object();

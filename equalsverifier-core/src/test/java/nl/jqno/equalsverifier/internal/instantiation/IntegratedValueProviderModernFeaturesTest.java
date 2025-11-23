@@ -1,42 +1,45 @@
-package nl.jqno.equalsverifier.internal.instantiation.vintage.factories;
+package nl.jqno.equalsverifier.internal.instantiation;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import org.junit.jupiter.api.BeforeEach;
+import nl.jqno.equalsverifier.internal.util.ValueProviderBuilder;
 import org.junit.jupiter.api.Test;
-import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-class SealedTypesFallbackFactoryTest {
+public class IntegratedValueProviderModernFeaturesTest {
 
-    private FallbackFactory<?> factory;
-    private VintageValueProvider valueProvider;
-    private LinkedHashSet<TypeTag> typeStack;
+    private static final Set<Mode> SKIP_MOCKITO = Set.of(Mode.skipMockito());
+    private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
-    @BeforeEach
-    void setUp() {
-        Objenesis objenesis = new ObjenesisStd();
-        factory = new FallbackFactory<>(objenesis);
-        FactoryCache factoryCache = new FactoryCache();
-        factoryCache.put(int.class, values(42, 1337, 42));
-        var prefabs = new UserPrefabValueCaches();
-        valueProvider = new VintageValueProvider(new UserPrefabValueProvider(prefabs), factoryCache, objenesis);
-        typeStack = new LinkedHashSet<>();
+    private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
+    private ValueProvider sut =
+            ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
+
+    @Test
+    void valuesAreASubtypeOfSealedType() {
+        var tuple = sut
+                .<SealedParentWithFinalChild>provideOrThrow(
+                    new TypeTag(SealedParentWithFinalChild.class),
+                    SOME_ATTRIBUTES);
+
+        assertThat(tuple.red().getClass())
+                .isAssignableTo(SealedParentWithFinalChild.class)
+                .isNotEqualTo(SealedParentWithFinalChild.class);
     }
 
     @Test
     void redCopyHasTheSameValuesAsRed_whenSutIsAbstractSealedAndPermittedTypeAddsField() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(SealedParentWithFinalChild.class), valueProvider, typeStack);
+        var tuple = sut
+                .<SealedParentWithFinalChild>provideOrThrow(
+                    new TypeTag(SealedParentWithFinalChild.class),
+                    SOME_ATTRIBUTES);
 
         assertThat(tuple.redCopy()).isEqualTo(tuple.red());
         assertThat(tuple.redCopy()).isNotSameAs(tuple.red());
