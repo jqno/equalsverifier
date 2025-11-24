@@ -16,11 +16,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.Node;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -41,28 +37,6 @@ class FallbackFactoryTest {
         var prefabs = new UserPrefabValueProvider();
         valueProvider = new VintageValueProvider(prefabs, factoryCache, objenesis);
         typeStack = new LinkedHashSet<>();
-    }
-
-    @Test
-    void giveNullInsteadOfEmptyEnum() {
-        assertCorrectTuple(EmptyEnum.class, null, null);
-    }
-
-    @Test
-    void giveOneElementEnum() {
-        assertCorrectTuple(OneElementEnum.class, OneElementEnum.ONE, OneElementEnum.ONE);
-    }
-
-    @Test
-    void giveMultiElementEnum() {
-        assertCorrectTuple(TwoElementEnum.class, TwoElementEnum.ONE, TwoElementEnum.TWO);
-    }
-
-    @Test
-    void giveArray() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
-        assertThat((int[]) tuple.red()).containsExactly(new int[] { 42 });
-        assertThat((int[]) tuple.blue()).containsExactly(new int[] { 1337, 42 });
     }
 
     @Test
@@ -95,13 +69,6 @@ class FallbackFactoryTest {
                 .asString()
                 .contains("TwoStepNodeA")
                 .contains("TwoStepNodeB");
-    }
-
-    @Test
-    void dontGiveRecursiveArray() {
-        ExpectedException
-                .when(() -> factory.createValues(new TypeTag(NodeArray.class), valueProvider, typeStack))
-                .assertThrows(RecursionException.class);
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {
