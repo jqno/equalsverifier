@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.4] - 2025-11-25
+
 ### Fixed
 
 - Mockito throws `UnnecessaryStubbingException` when `equals` is correct when running in strict mode (which is activated by using `@RunWith(MockitoExtension.class)`) ([Issue 1148](https://github.com/jqno/equalsverifier/issues/1148))
@@ -1508,7 +1510,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.3...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.4...HEAD
+[4.2.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.3...equalsverifier-4.2.4
 [4.2.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.2...equalsverifier-4.2.3
 [4.2.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.1...equalsverifier-4.2.2
 [4.2.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2...equalsverifier-4.2.1
