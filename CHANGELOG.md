@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Mockito throws `UnnecessaryStubbingException` when `equals` is correct when running in strict mode (which is activated by using `@RunWith(MockitoExtension.class)`) ([Issue 1148](https://github.com/jqno/equalsverifier/issues/1148))
+
 ### Changed
 
 - Expands Javadoc for `#withIgnoredFields()` to make it more clear that even ignored fields sometimes need prefab values. See [the error message explanation](https://jqno.nl/equalsverifier/errormessages/add-prefab-values-for-one-of-the-following-types) for the reasoning. ([Issue 1141](https://github.com/jqno/equalsverifier/issues/1141))

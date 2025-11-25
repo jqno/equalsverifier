@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
@@ -66,7 +66,7 @@ public class MockitoValueProvider implements ValueProvider {
             // Throw an exception on any method except equals and hashCode
             throw new MockitoException(fieldName, type.getSimpleName(), invocation.getMethod().getName());
         }));
-        doReturn("[" + color + " mock for " + type.getSimpleName() + "]").when(m).toString();
+        lenient().doReturn("[" + color + " mock for " + type.getSimpleName() + "]").when(m).toString();
         return m;
     }
 }
