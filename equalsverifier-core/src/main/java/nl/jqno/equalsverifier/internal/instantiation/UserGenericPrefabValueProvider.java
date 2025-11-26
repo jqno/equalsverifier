@@ -7,6 +7,9 @@ import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
+/**
+ * A ValueProvider for generic classes for which the user has provided a factory.
+ */
 public class UserGenericPrefabValueProvider implements ValueProvider {
 
     private static final TypeTag OBJECT = new TypeTag(Object.class);
@@ -19,6 +22,7 @@ public class UserGenericPrefabValueProvider implements ValueProvider {
         this.vp = vp;
     }
 
+    /** {@inheritDoc}} */
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {

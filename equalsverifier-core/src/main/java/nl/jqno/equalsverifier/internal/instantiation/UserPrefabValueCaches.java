@@ -9,6 +9,9 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 
+/**
+ * Contains various caches of prefab values, or of factories for prefab values.
+ */
 public class UserPrefabValueCaches {
     private final Map<Class<?>, Tuple<?>> cache = new HashMap<>();
     private final Map<Class<?>, Tuple<Supplier<?>>> supplierCache = new HashMap<>();

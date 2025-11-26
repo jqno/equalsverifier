@@ -10,6 +10,9 @@ import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
+/**
+ * A ValueProvider that can instantiate regular objects.
+ */
 public class ObjectValueProvider implements ValueProvider {
 
     private final ValueProvider vp;
@@ -20,6 +23,7 @@ public class ObjectValueProvider implements ValueProvider {
         this.objenesis = objenesis;
     }
 
+    /** {@inheritDoc}} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         var instanceCreator = new InstanceCreator<T>(ClassProbe.of(tag.getType()), objenesis);
