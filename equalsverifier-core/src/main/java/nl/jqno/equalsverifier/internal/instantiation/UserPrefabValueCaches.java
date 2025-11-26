@@ -26,6 +26,7 @@ public class UserPrefabValueCaches {
         this();
         cache.putAll(other.cache);
         supplierCache.putAll(other.supplierCache);
+        genericCache.putAll(other.genericCache);
     }
 
     /**
