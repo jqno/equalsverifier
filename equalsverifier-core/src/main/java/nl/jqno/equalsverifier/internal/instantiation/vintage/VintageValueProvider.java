@@ -128,8 +128,6 @@ public class VintageValueProvider implements ValueProvider {
             return result;
         }
 
-        @SuppressWarnings("unchecked")
-        var result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
-        return result;
+        return null;
     }
 }

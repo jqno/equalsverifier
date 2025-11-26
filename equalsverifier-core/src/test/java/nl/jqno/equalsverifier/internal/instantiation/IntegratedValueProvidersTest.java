@@ -1,11 +1,15 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.text.AttributedString;
 import java.util.Objects;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Mode;
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
@@ -143,6 +147,53 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
+    void instantiateNestedGenerics() {
+        var actual = sut
+                .<GenericContainerContainerContainer>provideOrThrow(
+                    new TypeTag(GenericContainerContainerContainer.class),
+                    SOME_ATTRIBUTES)
+                .red();
+
+        assertThat(actual.strings.ts.t).isNotNull();
+        assertThat(actual.strings.ts.t.getClass()).isEqualTo(String.class);
+        assertThat(actual.points.ts.t).isNotNull();
+        assertThat(actual.points.ts.t.getClass()).isEqualTo(Point.class);
+    }
+
+    @Test
+    void instantiateInterfaceField() {
+        var actual =
+                sut.<InterfaceContainer>provideOrThrow(new TypeTag(InterfaceContainer.class), SOME_ATTRIBUTES).red();
+        assertThat(actual.field).isNotNull();
+        assertThat(actual.field.getClass()).isAssignableTo(Interface.class);
+    }
+
+    @Test
+    void instantiateAbstractClassField() {
+        var actual = sut
+                .<AbstractClassContainer>provideOrThrow(new TypeTag(AbstractClassContainer.class), SOME_ATTRIBUTES)
+                .red();
+        assertThat(actual.field).isNotNull();
+        assertThat(actual.field.getClass()).isAssignableTo(AbstractClass.class);
+    }
+
+    @Test
+    void instantiateSameClassTwiceButNoRecursion() {
+        sut.provideOrThrow(new TypeTag(NotRecursiveA.class), Attributes.empty());
+    }
+
+    @Test
+    void recursiveWithAnotherFieldFirst() {
+        assertThatThrownBy(
+            () -> sut.provideOrThrow(new TypeTag(RecursiveWithAnotherFieldFirst.class), Attributes.empty()))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+                .doesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
+    }
+
+    @Test
     void instantiateOneStepRecursiveObject() {
         prefabs.register(Node.class, new Node(null), new Node(new Node(null)), new Node(null));
         var actual = sut.<Node>provideOrThrow(NODE_TAG, SOME_ATTRIBUTES);
@@ -167,11 +218,20 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
-    @Disabled("Restore when FallbackFactory no longer creates new normal object")
     void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveObject() {
         ExpectedException
                 .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
                 .assertThrows(RecursionException.class);
+    }
+
+    @Test
+    @Disabled("Find out why the second class isn't mentioned")
+    void recursionExceptionHasProperErrorMessage() {
+        assertThatThrownBy(() -> sut.provideOrThrow(TWOSTEP_NODE_A_TAG, Attributes.empty()))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
     }
 
     @Test
@@ -202,11 +262,24 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
-    @Disabled("Restore when FallbackFactory no longer creates new normal object")
     void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveArray() {
         ExpectedException
                 .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
                 .assertThrows(RecursionException.class);
+    }
+
+    @Test
+    void throwModuleException_whenAttemptingToInstantiateSomethingOutOfModule() {
+        ExpectedException
+                .when(() -> sut.provide(new TypeTag(AttributedString.class), SOME_ATTRIBUTES))
+                .assertThrows(ModuleException.class);
+    }
+
+    @Test
+    void throwModuleException_whenAttemptingToInstantiateSomethingThatContainsSomethingOutOfModule() {
+        ExpectedException
+                .when(() -> sut.provide(new TypeTag(InaccessibleContainer.class), SOME_ATTRIBUTES))
+                .assertThrows(ModuleException.class);
     }
 
     private static final class IntContainer {
@@ -235,6 +308,41 @@ public class IntegratedValueProvidersTest {
         @Override
         public int hashCode() {
             return Objects.hash(finalI, i);
+        }
+    }
+
+    static final class GenericContainerContainerContainer {
+
+        private final GenericContainerContainer<String> strings =
+                new GenericContainerContainer<>(new GenericContainer<>(null));
+        private final GenericContainerContainer<Point> points =
+                new GenericContainerContainer<>(new GenericContainer<>(null));
+    }
+
+    static final class GenericContainerContainer<T> {
+
+        private GenericContainer<T> ts;
+
+        public GenericContainerContainer(GenericContainer<T> ts) {
+            this.ts = ts;
+        }
+    }
+
+    static final class GenericContainer<T> {
+        private T t;
+
+        public GenericContainer(T t) {
+            this.t = t;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static final class InaccessibleContainer {
+
+        private AttributedString as;
+
+        public InaccessibleContainer(AttributedString as) {
+            this.as = as;
         }
     }
 }

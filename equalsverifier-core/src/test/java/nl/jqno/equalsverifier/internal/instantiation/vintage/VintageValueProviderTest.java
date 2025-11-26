@@ -1,9 +1,10 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
@@ -11,17 +12,13 @@ import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier_testhelpers.types.Point;
-import nl.jqno.equalsverifier_testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 class VintageValueProviderTest {
 
-    private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
     private final UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
@@ -46,31 +43,6 @@ class VintageValueProviderTest {
     }
 
     @Test
-    void provide() {
-        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG, Attributes.empty());
-        assertThat(actual).contains(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
-    }
-
-    @Test
-    void giveTupleFromFactory() {
-        assertThat(vp.<StaticContainer>provideOrThrow(new TypeTag(StaticContainer.class), Attributes.empty()).red())
-                .isInstanceOf(StaticContainer.class);
-    }
-
-    @Test
-    void giveTupleFromFallbackFactory() {
-        Tuple<Point> actual = vp.provideOrThrow(POINT_TAG, Attributes.empty());
-        assertThat(actual).isEqualTo(new Tuple<>(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
-    }
-
-    @Test
-    void fallbackDoesNotAffectStaticFields() {
-        int expected = StaticContainer.staticInt;
-        vp.provideOrThrow(new TypeTag(StaticContainer.class), Attributes.empty());
-        assertThat(StaticContainer.staticInt).isEqualTo(expected);
-    }
-
-    @Test
     void addingNullDoesntBreakAnything() {
         factoryCache.put((Class<?>) null, new ListTestFactory());
     }
@@ -88,28 +60,6 @@ class VintageValueProviderTest {
         prefabs.register(Lazy.class, Lazy.X, Lazy.Y, Lazy.X);
         vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
         assertThat(vp.<Lazy>provideOrThrow(lazyTag, Attributes.empty())).isEqualTo(new Tuple<>(Lazy.X, Lazy.Y, Lazy.X));
-    }
-
-    @Test
-    @Disabled
-    void addLazyFactoryIsLazy() {
-        TypeTag throwingInitializerTag = new TypeTag(ThrowingInitializer.class);
-
-        // Shouldn't throw, because declaring Factories doesn't instantiate objects:
-        factoryCache
-                .put(
-                    ThrowingInitializer.class.getName(),
-                    (t, p, ts) -> new Tuple<>(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
-        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
-
-        // Should throw, because `giveTuple` does instantiate objects:
-        try {
-            vp.provideOrThrow(throwingInitializerTag, Attributes.empty());
-            fail("Expected an exception");
-        }
-        catch (Error e) {
-            // succeed
-        }
     }
 
     public static class NpeThrowing {
@@ -172,14 +122,6 @@ class VintageValueProviderTest {
 
             return valueProvider.<Object>provideOrThrow(subtag, Attributes.empty()).map(v -> List.of(v));
         }
-    }
-
-    private static final class StaticContainer {
-
-        static int staticInt = 2;
-
-        @SuppressWarnings("unused")
-        int regularInt = 3;
     }
 
     @SuppressWarnings("unused")

@@ -23,6 +23,15 @@ public class IntegratedValueProviderModernFeaturesTest {
             ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
 
     @Test
+    void redCopyHasTheSameValuesAsRed_whenSutContainsGenericValueThatNeedsToBeIdenticalInRedAndRedCopy() {
+        var tuple =
+                sut.<GenericRecordContainer>provideOrThrow(new TypeTag(GenericRecordContainer.class), SOME_ATTRIBUTES);
+
+        assertThat(tuple.redCopy()).isEqualTo(tuple.red());
+        assertThat(tuple.redCopy()).isNotSameAs(tuple.red());
+    }
+
+    @Test
     void valuesAreASubtypeOfSealedType() {
         var tuple = sut
                 .<SealedParentWithFinalChild>provideOrThrow(
@@ -44,6 +53,10 @@ public class IntegratedValueProviderModernFeaturesTest {
         assertThat(tuple.redCopy()).isEqualTo(tuple.red());
         assertThat(tuple.redCopy()).isNotSameAs(tuple.red());
     }
+
+    record GenericRecord<T>(T t) {}
+
+    record GenericRecordContainer(GenericRecord<?> bgr) {}
 
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {
 
