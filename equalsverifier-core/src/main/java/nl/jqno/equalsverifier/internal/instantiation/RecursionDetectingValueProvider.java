@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 /**
- * A ValueProvider that detects recursion, and throws a {@see RecursionException} if it does.
+ * A ValueProvider that detects recursion, and throws a {@link RecursionException} if it does.
  */
 public class RecursionDetectingValueProvider implements ValueProvider {
 
