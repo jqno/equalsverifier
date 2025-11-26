@@ -29,20 +29,13 @@ public class IntegratedValueProvidersTest {
     private static final Set<Mode> SKIP_MOCKITO = Set.of(Mode.skipMockito());
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
-    private static final TypeTag STRING_TAG = new TypeTag(String.class);
-    private static final TypeTag POINT_TAG = new TypeTag(Point.class);
-    private static final TypeTag NODE_TAG = new TypeTag(Node.class);
-    private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
-    private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
-    private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
-
     private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
     private ValueProvider sut =
             ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
 
     @Test
     void instantiateAllTypes() {
-        var actual = sut.<AllTypesContainer>provide(new TypeTag(AllTypesContainer.class), SOME_ATTRIBUTES).get().red();
+        var actual = provide(AllTypesContainer.class).red();
 
         assertThat(actual._boolean).isTrue();
         assertThat(actual._byte).isEqualTo((byte) 1);
@@ -70,10 +63,7 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void instantiateArrayTypes() {
-        var actual = sut
-                .<AllArrayTypesContainer>provide(new TypeTag(AllArrayTypesContainer.class), SOME_ATTRIBUTES)
-                .get()
-                .red();
+        var actual = provide(AllArrayTypesContainer.class).red();
 
         assertThat(actual.booleans).isEqualTo(new boolean[] { true });
         assertThat(actual.bytes).isEqualTo(new byte[] { 1 });
@@ -101,19 +91,19 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void redIsDifferentFromBlue() {
-        var tuple = sut.<Point>provideOrThrow(POINT_TAG, SOME_ATTRIBUTES);
+        var tuple = provide(Point.class);
         assertThat(tuple.red()).isNotEqualTo(tuple.blue());
     }
 
     @Test
     void redHasSameValueButIsNotSameObjectAsRedCopy() {
-        var tuple = sut.<Point>provideOrThrow(POINT_TAG, SOME_ATTRIBUTES);
+        var tuple = provide(Point.class);
         assertThat(tuple.red()).isEqualTo(tuple.redCopy()).isNotSameAs(tuple.redCopy());
     }
 
     @Test
     void doesntTouchStaticFields() {
-        var tuple = sut.<IntContainer>provideOrThrow(new TypeTag(IntContainer.class), SOME_ATTRIBUTES);
+        var tuple = provide(IntContainer.class);
         assertThat(tuple)
                 .isEqualTo(new Tuple<>(new IntContainer(1, 1), new IntContainer(2, 2), new IntContainer(1, 1)));
         // Assert that static fields are untouched
@@ -124,14 +114,17 @@ public class IntegratedValueProvidersTest {
     @Test
     void instantiateFromCache() {
         prefabs.register(String.class, "x", "y", "x");
-        var actual = sut.<String>provideOrThrow(STRING_TAG, SOME_ATTRIBUTES);
+        var actual = provide(String.class);
         assertThat(actual).isEqualTo(new Tuple<>("x", "y", "x"));
     }
 
     @Test
     void instantiateFromGenericCache_withArity1() {
         prefabs.registerGeneric(Generic1.class, Generic1::new);
-        var actual = sut.<Generic1<String>>provideOrThrow(new TypeTag(Generic1.class, STRING_TAG), SOME_ATTRIBUTES);
+        var actual = sut
+                .<Generic1<String>>provideOrThrow(
+                    new TypeTag(Generic1.class, new TypeTag(String.class)),
+                    SOME_ATTRIBUTES);
         assertThat(actual.red().t).isEqualTo("one");
     }
 
@@ -140,7 +133,7 @@ public class IntegratedValueProvidersTest {
         prefabs.registerGeneric(Generic2.class, Generic2::new);
         var actual = sut
                 .<Generic2<String, String>>provideOrThrow(
-                    new TypeTag(Generic2.class, STRING_TAG, STRING_TAG),
+                    new TypeTag(Generic2.class, new TypeTag(String.class), new TypeTag(String.class)),
                     SOME_ATTRIBUTES);
         assertThat(actual.red().t).isEqualTo("one");
         assertThat(actual.red().u).isEqualTo("one");
@@ -148,11 +141,7 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void instantiateNestedGenerics() {
-        var actual = sut
-                .<GenericContainerContainerContainer>provideOrThrow(
-                    new TypeTag(GenericContainerContainerContainer.class),
-                    SOME_ATTRIBUTES)
-                .red();
+        var actual = provide(GenericContainerContainerContainer.class).red();
 
         assertThat(actual.strings.ts.t).isNotNull();
         assertThat(actual.strings.ts.t.getClass()).isEqualTo(String.class);
@@ -162,30 +151,26 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void instantiateInterfaceField() {
-        var actual =
-                sut.<InterfaceContainer>provideOrThrow(new TypeTag(InterfaceContainer.class), SOME_ATTRIBUTES).red();
+        var actual = provide(InterfaceContainer.class).red();
         assertThat(actual.field).isNotNull();
         assertThat(actual.field.getClass()).isAssignableTo(Interface.class);
     }
 
     @Test
     void instantiateAbstractClassField() {
-        var actual = sut
-                .<AbstractClassContainer>provideOrThrow(new TypeTag(AbstractClassContainer.class), SOME_ATTRIBUTES)
-                .red();
+        var actual = provide(AbstractClassContainer.class).red();
         assertThat(actual.field).isNotNull();
         assertThat(actual.field.getClass()).isAssignableTo(AbstractClass.class);
     }
 
     @Test
     void instantiateSameClassTwiceButNoRecursion() {
-        sut.provideOrThrow(new TypeTag(NotRecursiveA.class), Attributes.empty());
+        provide(NotRecursiveA.class);
     }
 
     @Test
     void recursiveWithAnotherFieldFirst() {
-        assertThatThrownBy(
-            () -> sut.provideOrThrow(new TypeTag(RecursiveWithAnotherFieldFirst.class), Attributes.empty()))
+        assertThatThrownBy(() -> provide(RecursiveWithAnotherFieldFirst.class))
                 .isInstanceOf(RecursionException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()
@@ -196,13 +181,13 @@ public class IntegratedValueProvidersTest {
     @Test
     void instantiateOneStepRecursiveObject() {
         prefabs.register(Node.class, new Node(null), new Node(new Node(null)), new Node(null));
-        var actual = sut.<Node>provideOrThrow(NODE_TAG, SOME_ATTRIBUTES);
+        var actual = provide(Node.class);
         assertThat(actual.blue()).isEqualTo(new Node(new Node(null)));
     }
 
     @Test
     void throwRecursionException_whenAttemptingToInstantiateOneStepRecursiveObject() {
-        ExpectedException.when(() -> sut.provide(NODE_TAG, SOME_ATTRIBUTES)).assertThrows(RecursionException.class);
+        ExpectedException.when(() -> provide(Node.class)).assertThrows(RecursionException.class);
     }
 
     @Test
@@ -213,21 +198,19 @@ public class IntegratedValueProvidersTest {
                     new TwoStepNodeB(null),
                     new TwoStepNodeB(new TwoStepNodeA(null)),
                     new TwoStepNodeB(null));
-        var actual = sut.<TwoStepNodeA>provideOrThrow(TWOSTEP_NODE_A_TAG, SOME_ATTRIBUTES);
+        var actual = provide(TwoStepNodeA.class);
         assertThat(actual.red()).isEqualTo(new TwoStepNodeA(new TwoStepNodeB(null)));
     }
 
     @Test
     void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveObject() {
-        ExpectedException
-                .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
-                .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> provide(TwoStepNodeA.class)).assertThrows(RecursionException.class);
     }
 
     @Test
     @Disabled("Find out why the second class isn't mentioned")
     void recursionExceptionHasProperErrorMessage() {
-        assertThatThrownBy(() -> sut.provideOrThrow(TWOSTEP_NODE_A_TAG, Attributes.empty()))
+        assertThatThrownBy(() -> provide(TwoStepNodeA.class))
                 .isInstanceOf(RecursionException.class)
                 .extracting(e -> ((MessagingException) e).getDescription())
                 .asString()
@@ -237,15 +220,13 @@ public class IntegratedValueProvidersTest {
     @Test
     void instantiateOneStepRecursiveArray() {
         prefabs.register(NodeArray.class, new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null));
-        var actual = sut.<NodeArray>provideOrThrow(NODE_ARRAY_TAG, SOME_ATTRIBUTES);
+        var actual = provide(NodeArray.class);
         assertThat(actual.blue()).isEqualTo(new NodeArray(new NodeArray[] {}));
     }
 
     @Test
     void throwRecursionException_whenAttemptingToInstantiateOneStepRecursiveArray() {
-        ExpectedException
-                .when(() -> sut.provide(NODE_ARRAY_TAG, SOME_ATTRIBUTES))
-                .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> provide(NodeArray.class)).assertThrows(RecursionException.class);
     }
 
     @Test
@@ -256,30 +237,28 @@ public class IntegratedValueProvidersTest {
                     new TwoStepNodeArrayB(null),
                     new TwoStepNodeArrayB(new TwoStepNodeArrayA[] {}),
                     new TwoStepNodeArrayB(null));
-        var actual = sut.<TwoStepNodeArrayA>provideOrThrow(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES);
+        var actual = provide(TwoStepNodeArrayA.class);
         assertThat(actual.red())
                 .isEqualTo(new TwoStepNodeArrayA(new TwoStepNodeArrayB[] { new TwoStepNodeArrayB(null) }));
     }
 
     @Test
     void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveArray() {
-        ExpectedException
-                .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
-                .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> provide(TwoStepNodeArrayA.class)).assertThrows(RecursionException.class);
     }
 
     @Test
     void throwModuleException_whenAttemptingToInstantiateSomethingOutOfModule() {
-        ExpectedException
-                .when(() -> sut.provide(new TypeTag(AttributedString.class), SOME_ATTRIBUTES))
-                .assertThrows(ModuleException.class);
+        ExpectedException.when(() -> provide(AttributedString.class)).assertThrows(ModuleException.class);
     }
 
     @Test
     void throwModuleException_whenAttemptingToInstantiateSomethingThatContainsSomethingOutOfModule() {
-        ExpectedException
-                .when(() -> sut.provide(new TypeTag(InaccessibleContainer.class), SOME_ATTRIBUTES))
-                .assertThrows(ModuleException.class);
+        ExpectedException.when(() -> provide(InaccessibleContainer.class)).assertThrows(ModuleException.class);
+    }
+
+    private <T> Tuple<T> provide(Class<T> type) {
+        return sut.provideOrThrow(new TypeTag(type), SOME_ATTRIBUTES);
     }
 
     private static final class IntContainer {
