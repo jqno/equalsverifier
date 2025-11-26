@@ -24,8 +24,8 @@ public class InstanceCreator<T> {
      * @param objenesis To instantiate non-record classes.
      */
     public InstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
-        this.probe = probe;
         this.instantiator = Instantiator.of(probe.getType(), objenesis);
+        this.probe = ClassProbe.of(instantiator.getType());
         this.type = instantiator.getType();
     }
 

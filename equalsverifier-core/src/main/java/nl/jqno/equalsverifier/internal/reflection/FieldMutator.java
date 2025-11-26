@@ -4,6 +4,8 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 /**
  * Allows for a field in an object reference to be set to another value.
  */
@@ -32,7 +34,21 @@ public class FieldMutator {
         rethrow(() -> {
             if (probe.canBeModifiedReflectively()) {
                 field.setAccessible(true);
-                field.set(object, newValue);
+                try {
+                    field.set(object, newValue);
+                }
+                catch (IllegalArgumentException e) {
+                    String msg = e.getMessage();
+                    if (msg.startsWith("Can not set") || msg.startsWith("Can not get")) {
+                        throw new ReflectionException(
+                                "Reflection error: try adding a prefab value for field " + field.getName() + " of type "
+                                        + field.getType().getName(),
+                                e);
+                    }
+                    else {
+                        throw e;
+                    }
+                }
             }
         });
     }
