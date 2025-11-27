@@ -20,7 +20,6 @@ import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
@@ -208,7 +207,6 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
-    @Disabled("Find out why the second class isn't mentioned")
     void recursionExceptionHasProperErrorMessage() {
         assertThatThrownBy(() -> provide(TwoStepNodeA.class))
                 .isInstanceOf(RecursionException.class)
