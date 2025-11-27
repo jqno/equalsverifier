@@ -38,9 +38,9 @@ public final class ValueProviderBuilder {
                 builtinPrefabs,
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
-                mockito,
                 enumeration,
                 array,
+                mockito,
                 object);
 
         vintageRecursionDetector.setValueProvider(vintageChain);
@@ -52,9 +52,9 @@ public final class ValueProviderBuilder {
                 builtinPrefabs,
                 builtinGenericPrefabs,
                 versionSpecificBuiltinPrefabs,
-                mockito,
                 enumeration,
                 array,
+                mockito,
                 object,
                 vintage);
         var caching = new CachingValueProvider(userPrefabCaches, fieldCache, mainChain);
