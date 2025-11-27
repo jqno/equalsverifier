@@ -7,11 +7,11 @@ public class MockitoException extends MessagingException {
         super(Formatter
                 .of(
                     """
-                    Unable to use Mockito to mock field %%:
+                    Unable to use Mockito %%:
                        tried to call method %%.%%, which EqualsVerifier can't mock.
                        Please provide a prefab value for type %%,
                        or use #set(Mode.skipMockito()) to skip using Mockito altogether.""",
-                    fieldName,
+                    fieldName == null ? "to mock unknown field" : "to mock field " + fieldName,
                     typeName,
                     methodName,
                     typeName)

@@ -38,7 +38,7 @@ public class ObjectValueProvider implements ValueProvider {
 
         for (var p : FieldIterable.ofIgnoringStatic(actualType)) {
             var field = p.getField();
-            var value = InstantiationUtil.valuesFor(field, tag, vp, attributes.clearName());
+            var value = InstantiationUtil.valuesFor(field, tag, vp, attributes);
 
             red.put(field, value.red());
             blue.put(field, value.blue());

@@ -76,8 +76,8 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return map(WeakHashMap::new);
         }
         if (is(EnumMap.class)) {
-            var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes.clearName()).map(e -> (Enum) e);
-            var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes.clearName());
+            var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(e -> (Enum) e);
+            var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes);
 
             // Use red for key and blue for value in the Red map to avoid having identical keys and values.
             // But don't do it in the Blue map, or they may cancel each other out again.
@@ -108,7 +108,7 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }
         if (is(EnumSet.class)) {
-            var elts = vp.provideOrThrow(determineGenericType(tag, 0), attributes.clearName()).map(e -> (Enum) e);
+            var elts = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(e -> (Enum) e);
             var tup = elts
                     .map(e -> (T) EnumSet.of(e))
                     .swapBlueIfEqualToRed(() -> (T) EnumSet.noneOf(elts.blue().getDeclaringClass()));

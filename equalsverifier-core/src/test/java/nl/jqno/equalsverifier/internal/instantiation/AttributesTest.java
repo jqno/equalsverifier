@@ -13,6 +13,7 @@ class AttributesTest {
     @Test
     void emptyFactory_createsCorrectInstance() {
         var attrs = Attributes.empty();
+        assertThat(attrs.cacheKey()).isNull();
         assertThat(attrs.fieldName()).isNull();
     }
 
@@ -20,6 +21,15 @@ class AttributesTest {
     void namedFactory_createsCorrectInstance() {
         var fieldName = "testField";
         var attrs = Attributes.named(fieldName);
+        assertThat(attrs.cacheKey()).isEqualTo(fieldName);
+        assertThat(attrs.fieldName()).isEqualTo(fieldName);
+    }
+
+    @Test
+    void clearCacheKey_clearsCacheKeyButNotFieldName() {
+        var fieldName = "testField";
+        var attrs = Attributes.named(fieldName).clearCacheKey();
+        assertThat(attrs.cacheKey()).isNull();
         assertThat(attrs.fieldName()).isEqualTo(fieldName);
     }
 
@@ -40,7 +50,7 @@ class AttributesTest {
 
         var actual = original.addToStack(tag);
 
-        assertThat(actual.fieldName()).isEqualTo("test");
+        assertThat(actual.cacheKey()).isEqualTo("test");
     }
 
     @Test

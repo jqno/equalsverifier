@@ -28,7 +28,7 @@ public class ArrayValueProvider implements ValueProvider {
         Class<?> componentType = type.getComponentType();
         TypeTag componentTag = new TypeTag(componentType);
 
-        Tuple<?> tuple = vp.provideOrThrow(componentTag, attributes.clearName());
+        Tuple<?> tuple = vp.provideOrThrow(componentTag, attributes);
         T red = (T) Array.newInstance(componentType, 1);
         Array.set(red, 0, tuple.red());
         T blue = (T) Array.newInstance(componentType, 2);

@@ -6,34 +6,40 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 @SuppressWarnings("NonApiType")
 public final class Attributes {
+    private final String cacheKey;
     private final String fieldName;
     private final LinkedHashSet<TypeTag> typeStack;
 
-    private Attributes(String fieldName, LinkedHashSet<TypeTag> typeStack) {
+    private Attributes(String cacheKey, String fieldName, LinkedHashSet<TypeTag> typeStack) {
+        this.cacheKey = cacheKey;
         this.fieldName = fieldName;
         this.typeStack = typeStack;
     }
 
     public static Attributes empty() {
-        return new Attributes(null, new LinkedHashSet<>());
+        return new Attributes(null, null, new LinkedHashSet<>());
     }
 
     public static Attributes named(String fieldName) {
-        return new Attributes(fieldName, new LinkedHashSet<>());
+        return new Attributes(fieldName, fieldName, new LinkedHashSet<>());
+    }
+
+    public String cacheKey() {
+        return cacheKey;
+    }
+
+    public Attributes clearCacheKey() {
+        return new Attributes(null, fieldName, typeStack());
     }
 
     public String fieldName() {
         return fieldName;
     }
 
-    public Attributes clearName() {
-        return new Attributes(null, typeStack());
-    }
-
     public Attributes addToStack(TypeTag tag) {
         var newStack = copyTypeStack();
         newStack.add(tag);
-        return new Attributes(fieldName, newStack);
+        return new Attributes(cacheKey, fieldName, newStack);
     }
 
     public boolean typeStackContains(TypeTag tag) {

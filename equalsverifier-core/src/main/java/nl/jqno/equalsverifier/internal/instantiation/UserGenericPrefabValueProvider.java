@@ -35,7 +35,7 @@ public class UserGenericPrefabValueProvider implements ValueProvider {
         int n = tag.getType().getTypeParameters().length;
         for (int i = 0; i < n; i++) {
             TypeTag paramTag = InstantiationUtil.determineGenericType(tag, i);
-            Tuple<Object> tuple = vp.provideOrThrow(paramTag, attributes.clearName());
+            Tuple<Object> tuple = vp.provideOrThrow(paramTag, attributes);
 
             reds.add(tuple.red());
             blues.add(tuple.blue());

@@ -32,12 +32,12 @@ public class CachingValueProvider implements ValueProvider {
     /** {@inheritDoc} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        var fieldName = attributes.fieldName();
+        var fieldName = attributes.cacheKey();
         if (fieldCache.contains(fieldName, tag)) {
             return Optional.of(fieldCache.get(fieldName, tag));
         }
 
-        var result = fallback.<T>provide(tag, attributes);
+        var result = fallback.<T>provide(tag, attributes.clearCacheKey());
         if (prefabCaches.canBeCached(tag.getType())) {
             result.ifPresent(tuple -> fieldCache.put(fieldName, tag, tuple));
         }

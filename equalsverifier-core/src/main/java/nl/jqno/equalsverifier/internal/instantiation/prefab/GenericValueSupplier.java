@@ -43,16 +43,14 @@ public abstract class GenericValueSupplier<T> {
 
     @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(Func1<Object, ?> construct) {
-        var tup = vp
-                .provideOrThrow(determineGenericType(tag, 0), attributes.clearName())
-                .map(val -> (T) construct.supply(val));
+        var tup = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(val -> (T) construct.supply(val));
         return Optional.of(tup);
     }
 
     @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(Func1<Object, ?> construct, Supplier<?> empty) {
         var tup = vp
-                .provideOrThrow(determineGenericType(tag, 0), attributes.clearName())
+                .provideOrThrow(determineGenericType(tag, 0), attributes)
                 .map(val -> (T) construct.supply(val))
                 .swapBlueIfEqualToRed(() -> (T) empty.get());
         return Optional.of(tup);
@@ -60,7 +58,7 @@ public abstract class GenericValueSupplier<T> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> collection(Supplier<? extends Collection> construct) {
-        var tup = vp.provideOrThrow(determineGenericType(tag, 0), attributes.clearName()).map(e -> {
+        var tup = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(e -> {
             var coll = construct.get();
             coll.add(e);
             return (T) coll;
@@ -70,8 +68,8 @@ public abstract class GenericValueSupplier<T> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> map(Supplier<Map> construct) {
-        var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes.clearName());
-        var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes.clearName());
+        var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes);
+        var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes);
 
         // Use red for key and blue for value in the Red map to avoid having identical keys and values.
         // But don't do it in the Blue map, or they may cancel each other out again.
