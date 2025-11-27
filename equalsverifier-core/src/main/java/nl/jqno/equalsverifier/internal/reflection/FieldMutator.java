@@ -34,22 +34,26 @@ public class FieldMutator {
         rethrow(() -> {
             if (probe.canBeModifiedReflectively()) {
                 field.setAccessible(true);
-                try {
-                    field.set(object, newValue);
-                }
-                catch (IllegalArgumentException e) {
-                    String msg = e.getMessage();
-                    if (msg.startsWith("Can not set") || msg.startsWith("Can not get")) {
-                        throw new ReflectionException(
-                                "Reflection error: try adding a prefab value for field " + field.getName() + " of type "
-                                        + field.getType().getName(),
-                                e);
-                    }
-                    else {
-                        throw e;
-                    }
-                }
+                safelySetField(object, newValue);
             }
         });
+    }
+
+    private void safelySetField(Object object, Object newValue) throws IllegalAccessException {
+        try {
+            field.set(object, newValue);
+        }
+        catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            if (msg.startsWith("Can not set") || msg.startsWith("Can not get")) {
+                throw new ReflectionException(
+                        "Reflection error: try adding a prefab value for field " + field.getName() + " of type "
+                                + field.getType().getName(),
+                        e);
+            }
+            else {
+                throw e;
+            }
+        }
     }
 }

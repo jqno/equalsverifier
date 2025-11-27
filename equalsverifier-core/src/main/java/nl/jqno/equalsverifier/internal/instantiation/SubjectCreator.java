@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
@@ -240,15 +239,6 @@ public class SubjectCreator<T> {
     }
 
     private Tuple<?> valuesFor(Field f) {
-        String fieldName = f.getName();
-        try {
-            TypeTag fieldTag = TypeTag.of(f, typeTag);
-            return valueProvider.provideOrThrow(fieldTag, Attributes.named(fieldName));
-        }
-        catch (ModuleException e) {
-            throw new ModuleException("Field " + f.getName() + " of type " + f.getType().getName()
-                    + " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type "
-                    + f.getType().getName() + ".", e);
-        }
+        return InstantiationUtil.valuesFor(f, typeTag, valueProvider, Attributes.named(f.getName()));
     }
 }

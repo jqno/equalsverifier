@@ -153,14 +153,14 @@ public class IntegratedValueProvidersTest {
     void instantiateInterfaceField() {
         var actual = provide(InterfaceContainer.class).red();
         assertThat(actual.field).isNotNull();
-        assertThat(actual.field.getClass()).isAssignableTo(Interface.class);
+        assertThat(actual.field.getClass()).isNotEqualTo(Interface.class).isAssignableTo(Interface.class);
     }
 
     @Test
     void instantiateAbstractClassField() {
         var actual = provide(AbstractClassContainer.class).red();
         assertThat(actual.field).isNotNull();
-        assertThat(actual.field.getClass()).isAssignableTo(AbstractClass.class);
+        assertThat(actual.field.getClass()).isNotEqualTo(AbstractClass.class).isAssignableTo(AbstractClass.class);
     }
 
     @Test

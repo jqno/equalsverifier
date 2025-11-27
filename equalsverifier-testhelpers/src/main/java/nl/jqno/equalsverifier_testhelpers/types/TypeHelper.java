@@ -109,7 +109,7 @@ public class TypeHelper {
 
     public abstract static class AbstractClass {
 
-        int field;
+        public int field;
     }
 
     public static class Outer {

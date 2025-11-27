@@ -12,8 +12,6 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
  */
 public class UserGenericPrefabValueProvider implements ValueProvider {
 
-    private static final TypeTag OBJECT = new TypeTag(Object.class);
-
     private final UserPrefabValueCaches prefabs;
     private final ValueProvider vp;
 
@@ -36,7 +34,7 @@ public class UserGenericPrefabValueProvider implements ValueProvider {
         var blues = new ArrayList<Object>();
         int n = tag.getType().getTypeParameters().length;
         for (int i = 0; i < n; i++) {
-            TypeTag paramTag = determineGenericType(tag, i);
+            TypeTag paramTag = InstantiationUtil.determineGenericType(tag, i);
             Tuple<Object> tuple = vp.provideOrThrow(paramTag, attributes.clearName());
 
             reds.add(tuple.red());
@@ -48,12 +46,5 @@ public class UserGenericPrefabValueProvider implements ValueProvider {
         T redCopy = genericFactory.apply(reds);
 
         return Optional.of(new Tuple<>(red, blue, redCopy));
-    }
-
-    protected TypeTag determineGenericType(TypeTag tag, int index) {
-        if (tag.genericTypes().size() <= index) {
-            return OBJECT;
-        }
-        return tag.genericTypes().get(index);
     }
 }

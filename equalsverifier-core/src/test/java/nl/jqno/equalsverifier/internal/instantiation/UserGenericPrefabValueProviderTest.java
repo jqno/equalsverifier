@@ -25,8 +25,9 @@ public class UserGenericPrefabValueProviderTest {
     void returnsIntInstance_givenRegisteredGenericWithArity1() {
         prefabs.registerGeneric(Generic1.class, Generic1::new);
         var actual = sut
-                .<Generic1<Integer>>provide(new TypeTag(Generic1.class, new TypeTag(Integer.class)), SOME_ATTRIBUTES)
-                .get()
+                .<Generic1<Integer>>provideOrThrow(
+                    new TypeTag(Generic1.class, new TypeTag(Integer.class)),
+                    SOME_ATTRIBUTES)
                 .red();
         assertThat(actual.t).isEqualTo(1000);
     }
@@ -35,8 +36,9 @@ public class UserGenericPrefabValueProviderTest {
     void returnsStringInstance_givenRegisteredGenericWithArity1() {
         prefabs.registerGeneric(Generic1.class, Generic1::new);
         var strings = sut
-                .<Generic1<String>>provide(new TypeTag(Generic1.class, new TypeTag(String.class)), SOME_ATTRIBUTES)
-                .get()
+                .<Generic1<String>>provideOrThrow(
+                    new TypeTag(Generic1.class, new TypeTag(String.class)),
+                    SOME_ATTRIBUTES)
                 .red();
         assertThat(strings.t).isEqualTo("one");
     }
@@ -45,10 +47,9 @@ public class UserGenericPrefabValueProviderTest {
     void returnsIntStringInstance_givenRegisteredGenericWithArity2() {
         prefabs.registerGeneric(Generic2.class, Generic2::new);
         var actual = sut
-                .<Generic2<Integer, String>>provide(
+                .<Generic2<Integer, String>>provideOrThrow(
                     new TypeTag(Generic2.class, new TypeTag(Integer.class), new TypeTag(String.class)),
                     SOME_ATTRIBUTES)
-                .get()
                 .red();
         assertThat(actual.t).isEqualTo(1000);
         assertThat(actual.u).isEqualTo("one");
@@ -58,10 +59,9 @@ public class UserGenericPrefabValueProviderTest {
     void returnsCharDoubleInstance_givenRegisteredGenericWithArity2() {
         prefabs.registerGeneric(Generic2.class, Generic2::new);
         var strings = sut
-                .<Generic2<Character, Double>>provide(
+                .<Generic2<Character, Double>>provideOrThrow(
                     new TypeTag(Generic2.class, new TypeTag(Character.class), new TypeTag(Double.class)),
                     SOME_ATTRIBUTES)
-                .get()
                 .red();
         assertThat(strings.t).isEqualTo('α');
         assertThat(strings.u).isEqualTo(0.5);

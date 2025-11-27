@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
@@ -39,7 +38,7 @@ public class ObjectValueProvider implements ValueProvider {
 
         for (var p : FieldIterable.ofIgnoringStatic(actualType)) {
             var field = p.getField();
-            var value = valuesFor(field, tag, attributes.clearName());
+            var value = InstantiationUtil.valuesFor(field, tag, vp, attributes.clearName());
 
             red.put(field, value.red());
             blue.put(field, value.blue());
@@ -47,17 +46,5 @@ public class ObjectValueProvider implements ValueProvider {
         }
 
         return new Tuple<>(red, blue, redCopy);
-    }
-
-    private Tuple<Object> valuesFor(Field f, TypeTag tag, Attributes attributes) {
-        try {
-            TypeTag fieldTag = TypeTag.of(f, tag);
-            return vp.provideOrThrow(fieldTag, attributes);
-        }
-        catch (ModuleException e) {
-            throw new ModuleException("Field " + f.getName() + " of type " + f.getType().getName()
-                    + " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type "
-                    + f.getType().getName() + ".", e);
-        }
     }
 }
