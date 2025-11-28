@@ -27,13 +27,11 @@ public final class Instantiator<T> {
     private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
     private final Class<T> type;
-    private final Objenesis objenesis;
     private final ObjectInstantiator<T> objenesisInstantiator;
 
     /** Private constructor. Call {@link #of(Class, Objenesis)} to instantiate. */
     private Instantiator(Class<T> type, Objenesis objenesis) {
         this.type = type;
-        this.objenesis = objenesis;
         this.objenesisInstantiator = objenesis.getInstantiatorOf(type);
     }
 
@@ -79,19 +77,25 @@ public final class Instantiator<T> {
     }
 
     /**
-     * Instantiates an anonymous subclass of T. The subclass is generated dynamically.
+     * Generates an anonymous subclass of S. The subclass is generated dynamically.
      *
-     * @return An instance of an anonymous subclass of T.
+     * @param <S>        The class to create a dynamic subclass of.
+     * @param superclass The class to create a dynamic subclass of.
+     * @return An instance of an anonymous subclass of S.
      */
-    public T instantiateAnonymousSubclass() {
-        Class<T> proxyClass = giveDynamicSubclass(type);
-        return objenesis.newInstance(proxyClass);
-    }
-
     public static <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
         return giveDynamicSubclass(superclass, "", b -> b);
     }
 
+    /**
+     * Generates an anonymous subclass of S. The subclass is generated dynamically.
+     *
+     * @param <S>        The class to create a dynamic subclass of.
+     * @param superclass The class to create a dynamic subclass of.
+     * @param nameSuffix A constant that will be appended to the name of the newly generated class.
+     * @param modify     Allows custom modifications to the generated class.
+     * @return An instance of an anonymous subclass of S.
+     */
     @SuppressWarnings("unchecked")
     public static synchronized <S> Class<S> giveDynamicSubclass(
             Class<S> superclass,

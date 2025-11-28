@@ -12,11 +12,12 @@ import net.bytebuddy.description.modifier.Visibility;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.packages.annotated.AnnotatedPackage;
-import nl.jqno.equalsverifier_testhelpers.annotations.*;
+import nl.jqno.equalsverifier_testhelpers.annotations.AnnotationWithValues;
+import nl.jqno.equalsverifier_testhelpers.annotations.FieldAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier_testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.objenesis.ObjenesisStd;
 
 class AnnotationCacheBuilderTest {
 
@@ -269,10 +270,7 @@ class AnnotationCacheBuilderTest {
 
     @Test
     void dynamicClassDoesntGetProcessed_butDoesntThrowEither() {
-        Class<?> type = Instantiator
-                .of(AnnotatedWithRuntime.class, new ObjenesisStd())
-                .instantiateAnonymousSubclass()
-                .getClass();
+        Class<?> type = Instantiator.giveDynamicSubclass(AnnotatedWithRuntime.class);
         build(type);
 
         assertTypeDoesNotHaveAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);

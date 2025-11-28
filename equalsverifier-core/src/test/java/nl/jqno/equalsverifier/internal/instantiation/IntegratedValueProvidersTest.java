@@ -11,7 +11,6 @@ import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -29,8 +28,7 @@ public class IntegratedValueProvidersTest {
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
     private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
-    private ValueProvider sut =
-            ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
+    private ValueProvider sut = ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FieldCache(), new ObjenesisStd());
 
     @Test
     void instantiateAllTypes() {
@@ -115,6 +113,14 @@ public class IntegratedValueProvidersTest {
         prefabs.register(String.class, "x", "y", "x");
         var actual = provide(String.class);
         assertThat(actual).isEqualTo(new Tuple<>("x", "y", "x"));
+    }
+
+    @Test
+    void cachingTwiceOverridesTheFirst() {
+        prefabs.register(String.class, "x", "y", "x");
+        prefabs.register(String.class, "m", "n", "m");
+        var actual = provide(String.class);
+        assertThat(actual).isEqualTo(new Tuple<>("m", "n", "m"));
     }
 
     @Test
