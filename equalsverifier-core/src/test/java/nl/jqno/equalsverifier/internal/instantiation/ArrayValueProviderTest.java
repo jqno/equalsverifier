@@ -11,8 +11,8 @@ public class ArrayValueProviderTest {
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
     private static final TypeTag STRING_ARRAY_TAG = new TypeTag(String[].class);
 
-    private UserPrefabValueProvider underlying = new UserPrefabValueProvider();
-    private ArrayValueProvider sut = new ArrayValueProvider(underlying);
+    private UserPrefabValueCaches underlying = new UserPrefabValueCaches();
+    private ArrayValueProvider sut = new ArrayValueProvider(new UserPrefabValueProvider(underlying));
 
     @BeforeEach
     public void setUp() {

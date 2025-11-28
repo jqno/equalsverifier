@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
  */
 public class CachingValueProvider implements ValueProvider {
 
-    private final CacheDecider decider;
+    private final UserPrefabValueCaches prefabCaches;
     private final FieldCache fieldCache;
     private final ValueProvider fallback;
 
@@ -23,8 +23,8 @@ public class CachingValueProvider implements ValueProvider {
      * @param fieldCache The underlying cache of instances.
      * @param fallback   The ValueProvider that provides instances when there's a cache miss.
      */
-    public CachingValueProvider(CacheDecider decider, FieldCache fieldCache, ValueProvider fallback) {
-        this.decider = decider;
+    public CachingValueProvider(UserPrefabValueCaches decider, FieldCache fieldCache, ValueProvider fallback) {
+        this.prefabCaches = decider;
         this.fieldCache = fieldCache;
         this.fallback = fallback;
     }
@@ -32,13 +32,13 @@ public class CachingValueProvider implements ValueProvider {
     /** {@inheritDoc} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        var fieldName = attributes.fieldName();
+        var fieldName = attributes.cacheKey();
         if (fieldCache.contains(fieldName, tag)) {
             return Optional.of(fieldCache.get(fieldName, tag));
         }
 
-        var result = fallback.<T>provide(tag, attributes);
-        if (decider.canBeCached(tag.getType())) {
+        var result = fallback.<T>provide(tag, attributes.clearCacheKey());
+        if (prefabCaches.canBeCached(tag.getType())) {
             result.ifPresent(tuple -> fieldCache.put(fieldName, tag, tuple));
         }
         return result;

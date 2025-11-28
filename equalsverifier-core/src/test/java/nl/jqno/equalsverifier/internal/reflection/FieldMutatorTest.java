@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 class FieldMutatorTest {
@@ -50,6 +52,19 @@ class FieldMutatorTest {
         assertThat(Container.FINAL_STRING).isEqualTo("FINAL");
     }
 
+    @Test
+    @SuppressWarnings("rawtypes")
+    void throwsReflectionException_whenClassHasASelfReferenceGenericParameter() throws NoSuchFieldException {
+        var obj = new SelfReferringGenericType();
+        p = FieldProbe.of(SelfReferringGenericType.class.getDeclaredField("wrapped"));
+        sut = new FieldMutator(p);
+
+        ExpectedException
+                .when(() -> sut.setNewValue(obj, new Object()))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("try adding a prefab value");
+    }
+
     static class Container {
 
         private static final int FINAL_INT = 42;
@@ -61,5 +76,10 @@ class FieldMutatorTest {
             this.i = 10;
             this.s = "NON-FINAL";
         }
+    }
+
+    @SuppressWarnings("unused")
+    static class SelfReferringGenericType<T extends SelfReferringGenericType<T>> {
+        private T wrapped;
     }
 }

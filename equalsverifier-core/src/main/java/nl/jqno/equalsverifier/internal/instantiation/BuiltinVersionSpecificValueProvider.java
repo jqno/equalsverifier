@@ -7,6 +7,10 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.versionspecific.ScopedValuesValueSupplier;
 import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsValueSupplier;
 
+/**
+ * A ValueProvider for Java API classes that are bundled in Java versions higher than EqualsVerifier's current baseline
+ * version.
+ */
 public class BuiltinVersionSpecificValueProvider implements ValueProvider {
     private final ValueProvider vp;
 
@@ -14,6 +18,7 @@ public class BuiltinVersionSpecificValueProvider implements ValueProvider {
         this.vp = vp;
     }
 
+    /** {@inheritDoc}} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         return new SequencedCollectionsValueSupplier<T>(tag, vp, attributes)

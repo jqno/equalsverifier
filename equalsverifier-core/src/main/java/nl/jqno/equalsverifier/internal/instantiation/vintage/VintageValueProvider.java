@@ -6,8 +6,6 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.FallbackFactory;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -28,8 +26,6 @@ public class VintageValueProvider implements ValueProvider {
     private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
 
     private final ValueProvider prefabs;
-    private final FactoryCache factoryCache;
-    private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
@@ -40,8 +36,6 @@ public class VintageValueProvider implements ValueProvider {
      */
     public VintageValueProvider(ValueProvider prefabs, FactoryCache factoryCache, Objenesis objenesis) {
         this.prefabs = prefabs;
-        this.factoryCache = factoryCache;
-        this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
 
     /** {@inheritDoc} */
@@ -130,14 +124,6 @@ public class VintageValueProvider implements ValueProvider {
             return result;
         }
 
-        Class<T> type = tag.getType();
-        if (factoryCache.contains(type)) {
-            PrefabValueFactory<T> factory = factoryCache.get(type);
-            return factory.createValues(tag, this, typeStack);
-        }
-
-        @SuppressWarnings("unchecked")
-        var result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
-        return result;
+        return null;
     }
 }

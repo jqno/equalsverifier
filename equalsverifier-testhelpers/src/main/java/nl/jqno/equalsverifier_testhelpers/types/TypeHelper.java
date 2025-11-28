@@ -109,7 +109,7 @@ public class TypeHelper {
 
     public abstract static class AbstractClass {
 
-        int field;
+        public int field;
     }
 
     public static class Outer {
@@ -142,6 +142,24 @@ public class TypeHelper {
     public static final class GenericTypeVariableContainer<T> {
 
         public T t = null;
+    }
+
+    public static class Generic1<T> {
+        public final T t;
+
+        public Generic1(T t) {
+            this.t = t;
+        }
+    }
+
+    public static class Generic2<T, U> {
+        public final T t;
+        public final U u;
+
+        public Generic2(T t, U u) {
+            this.t = t;
+            this.u = u;
+        }
     }
 
     public static final class ObjectContainer {

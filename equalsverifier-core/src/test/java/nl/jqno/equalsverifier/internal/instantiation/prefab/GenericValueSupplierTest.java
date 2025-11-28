@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.*;
 
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.OneElementEnum;
@@ -25,7 +23,7 @@ public class GenericValueSupplierTest {
     private static final Object RED_OBJECT = new Object();
     private static final Object BLUE_OBJECT = new Object();
 
-    private UserPrefabValueProvider underlying = new UserPrefabValueProvider();
+    private UserPrefabValueCaches underlying = new UserPrefabValueCaches();
 
     @BeforeEach
     public void setUp() {
@@ -172,7 +170,7 @@ public class GenericValueSupplierTest {
     }
 
     private <T> GenericValueSupplier<T> sut(TypeTag tag) {
-        return new Sut<>(tag, underlying, SOME_ATTRIBUTES);
+        return new Sut<>(tag, new UserPrefabValueProvider(underlying), SOME_ATTRIBUTES);
     }
 
     static class Sut<T> extends GenericValueSupplier<T> {

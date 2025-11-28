@@ -6,13 +6,13 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 @SuppressWarnings("NonApiType")
 public final class Attributes {
+    private final String cacheKey;
     private final String fieldName;
-    private final TypeTag preTypeStack;
     private final LinkedHashSet<TypeTag> typeStack;
 
-    private Attributes(String fieldName, TypeTag preTypeStack, LinkedHashSet<TypeTag> typeStack) {
+    private Attributes(String cacheKey, String fieldName, LinkedHashSet<TypeTag> typeStack) {
+        this.cacheKey = cacheKey;
         this.fieldName = fieldName;
-        this.preTypeStack = preTypeStack;
         this.typeStack = typeStack;
     }
 
@@ -21,26 +21,25 @@ public final class Attributes {
     }
 
     public static Attributes named(String fieldName) {
-        return new Attributes(fieldName, null, new LinkedHashSet<>());
+        return new Attributes(fieldName, fieldName, new LinkedHashSet<>());
+    }
+
+    public String cacheKey() {
+        return cacheKey;
+    }
+
+    public Attributes clearCacheKey() {
+        return new Attributes(null, fieldName, typeStack());
     }
 
     public String fieldName() {
         return fieldName;
     }
 
-    public Attributes clearName() {
-        return new Attributes(null, preTypeStack, typeStack());
-    }
-
     public Attributes addToStack(TypeTag tag) {
-        // In order to work with VintageValueProvider, we can only add the latest typeTag to the stack
-        // _after_ it has been processed. In order to achieve that, we keep it in a separate variable
-        // and push it onto the stack only when a new tag is added.
         var newStack = copyTypeStack();
-        if (preTypeStack != null) {
-            newStack.add(preTypeStack);
-        }
-        return new Attributes(fieldName, tag, newStack);
+        newStack.add(tag);
+        return new Attributes(cacheKey, fieldName, newStack);
     }
 
     public boolean typeStackContains(TypeTag tag) {

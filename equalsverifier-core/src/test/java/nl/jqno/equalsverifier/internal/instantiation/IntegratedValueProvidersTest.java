@@ -1,23 +1,25 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.text.AttributedString;
+import java.util.Objects;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Mode;
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.ValueProviderBuilder;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.NodeArray;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayA;
-import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayB;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AllTypesContainer;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.SimpleEnum;
-import org.junit.jupiter.api.Disabled;
+import nl.jqno.equalsverifier_testhelpers.types.Point;
+import nl.jqno.equalsverifier_testhelpers.types.RecursiveTypeHelper.*;
+import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
@@ -26,16 +28,13 @@ public class IntegratedValueProvidersTest {
     private static final Set<Mode> SKIP_MOCKITO = Set.of(Mode.skipMockito());
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
-    private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
-    private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
-
-    private UserPrefabValueProvider userPrefabs = new UserPrefabValueProvider();
-    private ValueProvider sut = ValueProviderBuilder
-            .build(SKIP_MOCKITO, userPrefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
+    private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
+    private ValueProvider sut =
+            ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
 
     @Test
     void instantiateAllTypes() {
-        var actual = sut.<AllTypesContainer>provide(new TypeTag(AllTypesContainer.class), SOME_ATTRIBUTES).get().red();
+        var actual = provide(AllTypesContainer.class).red();
 
         assertThat(actual._boolean).isTrue();
         assertThat(actual._byte).isEqualTo((byte) 1);
@@ -63,10 +62,7 @@ public class IntegratedValueProvidersTest {
 
     @Test
     void instantiateArrayTypes() {
-        var actual = sut
-                .<AllArrayTypesContainer>provide(new TypeTag(AllArrayTypesContainer.class), SOME_ATTRIBUTES)
-                .get()
-                .red();
+        var actual = provide(AllArrayTypesContainer.class).red();
 
         assertThat(actual.booleans).isEqualTo(new boolean[] { true });
         assertThat(actual.bytes).isEqualTo(new byte[] { 1 });
@@ -93,38 +89,237 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
+    void redIsDifferentFromBlue() {
+        var tuple = provide(Point.class);
+        assertThat(tuple.red()).isNotEqualTo(tuple.blue());
+    }
+
+    @Test
+    void redHasSameValueButIsNotSameObjectAsRedCopy() {
+        var tuple = provide(Point.class);
+        assertThat(tuple.red()).isEqualTo(tuple.redCopy()).isNotSameAs(tuple.redCopy());
+    }
+
+    @Test
+    void doesntTouchStaticFields() {
+        var tuple = provide(IntContainer.class);
+        assertThat(tuple)
+                .isEqualTo(new Tuple<>(new IntContainer(1, 1), new IntContainer(2, 2), new IntContainer(1, 1)));
+        // Assert that static fields are untouched
+        assertThat(IntContainer.staticI).isEqualTo(-100);
+        assertThat(IntContainer.STATIC_FINAL_I).isEqualTo(-10);
+    }
+
+    @Test
+    void instantiateFromCache() {
+        prefabs.register(String.class, "x", "y", "x");
+        var actual = provide(String.class);
+        assertThat(actual).isEqualTo(new Tuple<>("x", "y", "x"));
+    }
+
+    @Test
+    void instantiateFromGenericCache_withArity1() {
+        prefabs.registerGeneric(Generic1.class, Generic1::new);
+        var actual = sut
+                .<Generic1<String>>provideOrThrow(
+                    new TypeTag(Generic1.class, new TypeTag(String.class)),
+                    SOME_ATTRIBUTES);
+        assertThat(actual.red().t).isEqualTo("one");
+    }
+
+    @Test
+    void instantiateFromGenericCache_withArity2() {
+        prefabs.registerGeneric(Generic2.class, Generic2::new);
+        var actual = sut
+                .<Generic2<String, String>>provideOrThrow(
+                    new TypeTag(Generic2.class, new TypeTag(String.class), new TypeTag(String.class)),
+                    SOME_ATTRIBUTES);
+        assertThat(actual.red().t).isEqualTo("one");
+        assertThat(actual.red().u).isEqualTo("one");
+    }
+
+    @Test
+    void instantiateNestedGenerics() {
+        var actual = provide(GenericContainerContainerContainer.class).red();
+
+        assertThat(actual.strings.ts.t).isNotNull();
+        assertThat(actual.strings.ts.t.getClass()).isEqualTo(String.class);
+        assertThat(actual.points.ts.t).isNotNull();
+        assertThat(actual.points.ts.t.getClass()).isEqualTo(Point.class);
+    }
+
+    @Test
+    void instantiateInterfaceField() {
+        var actual = provide(InterfaceContainer.class).red();
+        assertThat(actual.field).isNotNull();
+        assertThat(actual.field.getClass()).isNotEqualTo(Interface.class).isAssignableTo(Interface.class);
+    }
+
+    @Test
+    void instantiateAbstractClassField() {
+        var actual = provide(AbstractClassContainer.class).red();
+        assertThat(actual.field).isNotNull();
+        assertThat(actual.field.getClass()).isNotEqualTo(AbstractClass.class).isAssignableTo(AbstractClass.class);
+    }
+
+    @Test
+    void instantiateSameClassTwiceButNoRecursion() {
+        provide(NotRecursiveA.class);
+    }
+
+    @Test
+    void recursiveWithAnotherFieldFirst() {
+        assertThatThrownBy(() -> provide(RecursiveWithAnotherFieldFirst.class))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+                .doesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
+    }
+
+    @Test
+    void instantiateOneStepRecursiveObject() {
+        prefabs.register(Node.class, new Node(null), new Node(new Node(null)), new Node(null));
+        var actual = provide(Node.class);
+        assertThat(actual.blue()).isEqualTo(new Node(new Node(null)));
+    }
+
+    @Test
+    void throwRecursionException_whenAttemptingToInstantiateOneStepRecursiveObject() {
+        ExpectedException.when(() -> provide(Node.class)).assertThrows(RecursionException.class);
+    }
+
+    @Test
+    void instantiateTwoStepRecursiveObject() {
+        prefabs
+                .register(
+                    TwoStepNodeB.class,
+                    new TwoStepNodeB(null),
+                    new TwoStepNodeB(new TwoStepNodeA(null)),
+                    new TwoStepNodeB(null));
+        var actual = provide(TwoStepNodeA.class);
+        assertThat(actual.red()).isEqualTo(new TwoStepNodeA(new TwoStepNodeB(null)));
+    }
+
+    @Test
+    void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveObject() {
+        ExpectedException.when(() -> provide(TwoStepNodeA.class)).assertThrows(RecursionException.class);
+    }
+
+    @Test
+    void recursionExceptionHasProperErrorMessage() {
+        assertThatThrownBy(() -> provide(TwoStepNodeA.class))
+                .isInstanceOf(RecursionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
+    }
+
+    @Test
     void instantiateOneStepRecursiveArray() {
-        userPrefabs
-                .register(NodeArray.class, new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null));
-        var actual = sut.<NodeArray>provideOrThrow(NODE_ARRAY_TAG, SOME_ATTRIBUTES);
+        prefabs.register(NodeArray.class, new NodeArray(null), new NodeArray(new NodeArray[] {}), new NodeArray(null));
+        var actual = provide(NodeArray.class);
         assertThat(actual.blue()).isEqualTo(new NodeArray(new NodeArray[] {}));
     }
 
     @Test
     void throwRecursionException_whenAttemptingToInstantiateOneStepRecursiveArray() {
-        ExpectedException
-                .when(() -> sut.provide(NODE_ARRAY_TAG, SOME_ATTRIBUTES))
-                .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> provide(NodeArray.class)).assertThrows(RecursionException.class);
     }
 
     @Test
     void instantiateTwoStepRecursiveArray() {
-        userPrefabs
+        prefabs
                 .register(
                     TwoStepNodeArrayB.class,
                     new TwoStepNodeArrayB(null),
                     new TwoStepNodeArrayB(new TwoStepNodeArrayA[] {}),
                     new TwoStepNodeArrayB(null));
-        var actual = sut.<TwoStepNodeArrayA>provideOrThrow(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES);
+        var actual = provide(TwoStepNodeArrayA.class);
         assertThat(actual.red())
                 .isEqualTo(new TwoStepNodeArrayA(new TwoStepNodeArrayB[] { new TwoStepNodeArrayB(null) }));
     }
 
     @Test
-    @Disabled("Restore when FallbackFactory no longer creates new normal object")
     void throwRecursionException_whenAttemptingToInstantiateTwoStepRecursiveArray() {
-        ExpectedException
-                .when(() -> sut.provide(TWOSTEP_NODE_ARRAY_A_TAG, SOME_ATTRIBUTES))
-                .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> provide(TwoStepNodeArrayA.class)).assertThrows(RecursionException.class);
+    }
+
+    @Test
+    void throwModuleException_whenAttemptingToInstantiateSomethingOutOfModule() {
+        ExpectedException.when(() -> provide(AttributedString.class)).assertThrows(ModuleException.class);
+    }
+
+    @Test
+    void throwModuleException_whenAttemptingToInstantiateSomethingThatContainsSomethingOutOfModule() {
+        ExpectedException.when(() -> provide(InaccessibleContainer.class)).assertThrows(ModuleException.class);
+    }
+
+    private <T> Tuple<T> provide(Class<T> type) {
+        return sut.provideOrThrow(new TypeTag(type), SOME_ATTRIBUTES);
+    }
+
+    private static final class IntContainer {
+
+        @SuppressWarnings("unused")
+        private static int staticI = -100;
+
+        private static final int STATIC_FINAL_I = -10;
+
+        @SuppressWarnings("unused")
+        private final int finalI;
+
+        @SuppressWarnings("unused")
+        private int i;
+
+        private IntContainer(int finalI, int i) {
+            this.finalI = finalI;
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof IntContainer other && finalI == other.finalI && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(finalI, i);
+        }
+    }
+
+    static final class GenericContainerContainerContainer {
+
+        private final GenericContainerContainer<String> strings =
+                new GenericContainerContainer<>(new GenericContainer<>(null));
+        private final GenericContainerContainer<Point> points =
+                new GenericContainerContainer<>(new GenericContainer<>(null));
+    }
+
+    static final class GenericContainerContainer<T> {
+
+        private GenericContainer<T> ts;
+
+        public GenericContainerContainer(GenericContainer<T> ts) {
+            this.ts = ts;
+        }
+    }
+
+    static final class GenericContainer<T> {
+        private T t;
+
+        public GenericContainer(T t) {
+            this.t = t;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static final class InaccessibleContainer {
+
+        private AttributedString as;
+
+        public InaccessibleContainer(AttributedString as) {
+            this.as = as;
+        }
     }
 }

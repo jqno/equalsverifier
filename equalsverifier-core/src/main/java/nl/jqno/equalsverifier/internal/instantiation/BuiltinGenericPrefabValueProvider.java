@@ -6,6 +6,9 @@ import nl.jqno.equalsverifier.internal.instantiation.prefab.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
+/**
+ * A ValueProvider for generic Java API classes.
+ */
 public class BuiltinGenericPrefabValueProvider implements ValueProvider {
     private final ValueProvider vp;
 
@@ -13,6 +16,7 @@ public class BuiltinGenericPrefabValueProvider implements ValueProvider {
         this.vp = vp;
     }
 
+    /** {@inheritDoc}} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
