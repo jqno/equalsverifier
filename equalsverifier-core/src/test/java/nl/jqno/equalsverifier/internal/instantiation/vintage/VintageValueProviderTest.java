@@ -2,13 +2,11 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.LinkedHashSet;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,14 +27,6 @@ class VintageValueProviderTest {
     void setUp() {
         prefabs.register(int.class, 42, 1337, 42);
         vp = new VintageValueProvider(prefabValueProvider, objenesis);
-    }
-
-    @Test
-    void sanityTestFactoryIncreasesStringLength() {
-        AppendingStringTestFactory f = new AppendingStringTestFactory();
-        assertThat(f.createValues(null, null, null).red()).isEqualTo("r");
-        assertThat(f.createValues(null, null, null).red()).isEqualTo("rr");
-        assertThat(f.createValues(null, null, null).red()).isEqualTo("rrr");
     }
 
     @Test
@@ -76,28 +66,6 @@ class VintageValueProviderTest {
         @Override
         public int hashCode() {
             return i;
-        }
-    }
-
-    private static final class AppendingStringTestFactory implements PrefabValueFactory<String> {
-
-        private String red;
-        private String blue;
-
-        private AppendingStringTestFactory() {
-            red = "";
-            blue = "";
-        }
-
-        @Override
-        @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
-        public Tuple<String> createValues(
-                TypeTag tag,
-                VintageValueProvider valueProvider,
-                LinkedHashSet<TypeTag> typeStack) {
-            red += "r";
-            blue += "b";
-            return new Tuple<>(red, blue, new String(red));
         }
     }
 
