@@ -1,13 +1,11 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.ChainedValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
@@ -27,10 +25,8 @@ class InPlaceObjectAccessorScramblingTest {
     @BeforeEach
     void setup() {
         var chain = new ChainedValueProvider(new BuiltinPrefabValueProvider());
-        FactoryCache factoryCache = new FactoryCache();
-        factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
-        valueProviderTest = new VintageValueProvider(chain, factoryCache, objenesis);
+        valueProviderTest = new VintageValueProvider(chain, objenesis);
     }
 
     @Test

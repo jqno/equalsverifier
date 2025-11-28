@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Mode;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.ValueProviderBuilder;
@@ -19,8 +18,7 @@ public class IntegratedValueProviderModernFeaturesTest {
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
     private UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
-    private ValueProvider sut =
-            ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FactoryCache(), new FieldCache(), new ObjenesisStd());
+    private ValueProvider sut = ValueProviderBuilder.build(SKIP_MOCKITO, prefabs, new FieldCache(), new ObjenesisStd());
 
     @Test
     void redCopyHasTheSameValuesAsRed_whenSutContainsGenericValueThatNeedsToBeIdenticalInRedAndRedCopy() {

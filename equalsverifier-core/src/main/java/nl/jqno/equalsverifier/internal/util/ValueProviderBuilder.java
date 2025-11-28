@@ -4,7 +4,6 @@ import java.util.Set;
 
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.instantiation.*;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import org.objenesis.Objenesis;
 
@@ -14,7 +13,6 @@ public final class ValueProviderBuilder {
     public static ValueProvider build(
             Set<Mode> modes,
             UserPrefabValueCaches userPrefabCaches,
-            FactoryCache factoryCache,
             FieldCache fieldCache,
             Objenesis objenesis) {
 

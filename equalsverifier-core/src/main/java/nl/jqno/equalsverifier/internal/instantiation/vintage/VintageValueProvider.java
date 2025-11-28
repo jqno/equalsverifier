@@ -30,11 +30,10 @@ public class VintageValueProvider implements ValueProvider {
     /**
      * Constructor.
      *
-     * @param prefabs      Types that are already known and don't need to be constructed here.
-     * @param factoryCache The factories that can be used to create values.
-     * @param objenesis    To instantiate non-record classes.
+     * @param prefabs   Types that are already known and don't need to be constructed here.
+     * @param objenesis To instantiate non-record classes.
      */
-    public VintageValueProvider(ValueProvider prefabs, FactoryCache factoryCache, Objenesis objenesis) {
+    public VintageValueProvider(ValueProvider prefabs, Objenesis objenesis) {
         this.prefabs = prefabs;
     }
 

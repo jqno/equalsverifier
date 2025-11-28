@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.internal;
 
-import static nl.jqno.equalsverifier.internal.instantiation.vintage.factories.Factories.simple;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
 import java.util.function.Supplier;
@@ -9,8 +7,6 @@ import java.util.function.Supplier;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -87,30 +83,19 @@ public final class PrefabValuesApi {
 
     public static <T> void addGenericPrefabValues(
             UserPrefabValueCaches prefabs,
-            FactoryCache factoryCache,
             Class<T> otherType,
             Func1<?, T> factory) {
         Validations.validateNotNull(factory, "factory is null.");
-        addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 1);
+        Validations.validateGenericPrefabValues(otherType, 1);
         prefabs.registerGeneric(otherType, factory);
     }
 
     public static <T> void addGenericPrefabValues(
             UserPrefabValueCaches prefabs,
-            FactoryCache factoryCache,
             Class<T> otherType,
             Func2<?, ?, T> factory) {
         Validations.validateNotNull(factory, "factory is null.");
-        addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 2);
+        Validations.validateGenericPrefabValues(otherType, 2);
         prefabs.registerGeneric(otherType, factory);
-    }
-
-    private static <T> void addGenericPrefabValueFactory(
-            FactoryCache factoryCache,
-            Class<T> otherType,
-            PrefabValueFactory<T> factory,
-            int arity) {
-        Validations.validateGenericPrefabValues(otherType, factory, arity);
-        factoryCache.put(otherType, factory);
     }
 }

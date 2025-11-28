@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -113,7 +112,7 @@ public final class Validations {
         }
     }
 
-    public static <T> void validateGenericPrefabValues(Class<T> type, PrefabValueFactory<T> factory, int arity) {
+    public static <T> void validateGenericPrefabValues(Class<T> type, int arity) {
         validateNotNull(type, "type is null.");
 
         int n = type.getTypeParameters().length;

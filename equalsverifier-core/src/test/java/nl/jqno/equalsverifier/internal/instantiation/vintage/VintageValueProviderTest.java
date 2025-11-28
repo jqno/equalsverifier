@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
@@ -23,15 +22,13 @@ class VintageValueProviderTest {
 
     private final UserPrefabValueCaches prefabs = new UserPrefabValueCaches();
     private final UserPrefabValueProvider prefabValueProvider = new UserPrefabValueProvider(prefabs);
-    private final FactoryCache factoryCache = new FactoryCache();
     private final Objenesis objenesis = new ObjenesisStd();
     private VintageValueProvider vp;
 
     @BeforeEach
     void setUp() {
-        factoryCache.put(String.class, new AppendingStringTestFactory());
         prefabs.register(int.class, 42, 1337, 42);
-        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, objenesis);
     }
 
     @Test
@@ -43,14 +40,9 @@ class VintageValueProviderTest {
     }
 
     @Test
-    void addingNullDoesntBreakAnything() {
-        factoryCache.put((Class<?>) null, new ListTestFactory());
-    }
-
-    @Test
     void addingATypeTwiceOverrulesTheExistingOne() {
         prefabs.register(int.class, -1, -2, -1);
-        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, objenesis);
         assertThat(vp.provideOrThrow(INT_TAG, Attributes.empty())).isEqualTo(new Tuple<>(-1, -2, -1));
     }
 
@@ -58,7 +50,7 @@ class VintageValueProviderTest {
     void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         prefabs.register(Lazy.class, Lazy.X, Lazy.Y, Lazy.X);
-        vp = new VintageValueProvider(prefabValueProvider, factoryCache, objenesis);
+        vp = new VintageValueProvider(prefabValueProvider, objenesis);
         assertThat(vp.<Lazy>provideOrThrow(lazyTag, Attributes.empty())).isEqualTo(new Tuple<>(Lazy.X, Lazy.Y, Lazy.X));
     }
 
@@ -106,21 +98,6 @@ class VintageValueProviderTest {
             red += "r";
             blue += "b";
             return new Tuple<>(red, blue, new String(red));
-        }
-    }
-
-    @SuppressWarnings("rawtypes")
-    private static final class ListTestFactory implements PrefabValueFactory<List> {
-
-        @Override
-        @SuppressWarnings("NonApiType") // LinkedHashSet is needed for its stack properties.
-        public Tuple<List> createValues(
-                TypeTag tag,
-                VintageValueProvider valueProvider,
-                LinkedHashSet<TypeTag> typeStack) {
-            TypeTag subtag = tag.genericTypes().get(0);
-
-            return valueProvider.<Object>provideOrThrow(subtag, Attributes.empty()).map(v -> List.of(v));
         }
     }
 

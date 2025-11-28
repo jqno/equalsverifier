@@ -6,7 +6,6 @@ import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.instantiation.*;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,15 +16,13 @@ class RecordObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private UserPrefabValueCaches prefabs;
-    private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
 
     @BeforeEach
     void setup() throws Exception {
         prefabs = new UserPrefabValueCaches();
         var chain = new ChainedValueProvider(new UserPrefabValueProvider(prefabs), new BuiltinPrefabValueProvider());
-        factoryCache = new FactoryCache();
-        valueProvider = new VintageValueProvider(chain, factoryCache, new ObjenesisStd());
+        valueProvider = new VintageValueProvider(chain, new ObjenesisStd());
     }
 
     @Test

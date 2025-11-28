@@ -11,7 +11,6 @@ import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
@@ -38,7 +37,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private UserPrefabValueCaches userPrefabs = new UserPrefabValueCaches();
-    private FactoryCache factoryCache = new FactoryCache();
     private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -80,7 +78,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
      * @param modes              A set of modes in which {@code EqualsVerifier} should operate.
      * @param userPrefabs        Prefab values provided by the user.
-     * @param factoryCache       Factories that can be used to create values.
      * @param objenesis          To instantiate non-record classes.
      * @param usingGetClass      Whether {@code getClass} is used in the implementation of the {@code equals} method,
      *                               instead of an {@code instanceof} check.
@@ -92,7 +89,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             EnumSet<Warning> warningsToSuppress,
             Set<Mode> modes,
             UserPrefabValueCaches userPrefabs,
-            FactoryCache factoryCache,
             Objenesis objenesis,
             boolean usingGetClass,
             Function<String, String> converter) {
@@ -100,7 +96,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.modesToSet = new HashSet<>(modes);
         this.userPrefabs = userPrefabs;
-        this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
@@ -182,7 +177,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
-        PrefabValuesApi.addGenericPrefabValues(userPrefabs, factoryCache, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(userPrefabs, otherType, factory);
         return this;
     }
 
@@ -190,7 +185,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
-        PrefabValuesApi.addGenericPrefabValues(userPrefabs, factoryCache, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(userPrefabs, otherType, factory);
         return this;
     }
 
@@ -467,7 +462,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        var context = new Context<T>(config, userPrefabs, factoryCache, fieldCache, objenesis);
+        var context = new Context<T>(config, userPrefabs, fieldCache, objenesis);
         Validations
                 .validateProcessedAnnotations(
                     type,
