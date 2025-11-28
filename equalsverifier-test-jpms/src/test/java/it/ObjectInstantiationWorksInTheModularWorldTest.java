@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.jpms.model.Records.RecordPoint;
 import nl.jqno.equalsverifier.jpms.model.Records.RecordPointContainer;
 import org.junit.jupiter.api.Test;
 
-public class VintageWorksInTheModularWorldTest {
+public class ObjectInstantiationWorksInTheModularWorldTest {
 
     private final ConfiguredEqualsVerifier ev = EqualsVerifier.configure().set(Mode.skipMockito());
 
