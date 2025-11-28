@@ -118,6 +118,14 @@ public class IntegratedValueProvidersTest {
     }
 
     @Test
+    void cachingTwiceOverridesTheFirst() {
+        prefabs.register(String.class, "x", "y", "x");
+        prefabs.register(String.class, "m", "n", "m");
+        var actual = provide(String.class);
+        assertThat(actual).isEqualTo(new Tuple<>("m", "n", "m"));
+    }
+
+    @Test
     void instantiateFromGenericCache_withArity1() {
         prefabs.registerGeneric(Generic1.class, Generic1::new);
         var actual = sut

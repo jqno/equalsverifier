@@ -5,7 +5,6 @@ import java.util.Set;
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import org.objenesis.Objenesis;
 
@@ -32,21 +31,6 @@ public final class ValueProviderBuilder {
         var array = new ArrayValueProvider(recursionDetector);
         var object = new ObjectValueProvider(recursionDetector, objenesis);
 
-        var vintageRecursionDetector = new RecursionDetectingValueProvider();
-        var vintageChain = new ChainedValueProvider(userPrefabs,
-                userGenericPrefabs,
-                builtinPrefabs,
-                builtinGenericPrefabs,
-                versionSpecificBuiltinPrefabs,
-                enumeration,
-                array,
-                mockito,
-                object);
-
-        vintageRecursionDetector.setValueProvider(vintageChain);
-
-        var vintage = new VintageValueProvider(vintageRecursionDetector, factoryCache, objenesis);
-
         var mainChain = new ChainedValueProvider(userPrefabs,
                 userGenericPrefabs,
                 builtinPrefabs,
@@ -55,8 +39,7 @@ public final class ValueProviderBuilder {
                 enumeration,
                 array,
                 mockito,
-                object,
-                vintage);
+                object);
         var caching = new CachingValueProvider(userPrefabCaches, fieldCache, mainChain);
 
         recursionDetector.setValueProvider(caching);
