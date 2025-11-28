@@ -92,8 +92,7 @@ class InstantiatorTest {
 
     @Test
     void instantiateSubclass() {
-        Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
-        Point p = instantiator.instantiateAnonymousSubclass();
+        Point p = instantiateSub(Point.class);
         assertThat(p.getClass() == Point.class).isFalse();
         assertThat(Point.class.isAssignableFrom(p.getClass())).isTrue();
     }
@@ -101,28 +100,23 @@ class InstantiatorTest {
     @Test
     void instantiateAnNonToplevelClass() {
         class Something {}
-        Instantiator<Something> instantiator = Instantiator.of(Something.class, objenesis);
-        instantiator.instantiateAnonymousSubclass();
+        instantiateSub(Something.class);
     }
 
     @Test
-    @SuppressWarnings("rawtypes")
     void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
-        Instantiator instantiator = Instantiator.of(List.class, objenesis);
-        instantiator.instantiateAnonymousSubclass();
+        instantiateSub(List.class);
     }
 
     @Test
     void instantiateOrgW3cDomClassWhichHasBootstrapClassLoader() {
-        Instantiator<Element> instantiator = Instantiator.of(Element.class, objenesis);
-        instantiator.instantiateAnonymousSubclass();
+        instantiateSub(Element.class);
     }
 
     @Test
     void instantiateTheSameSubclass() {
-        Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
-        Class<?> expected = instantiator.instantiateAnonymousSubclass().getClass();
-        Class<?> actual = instantiator.instantiateAnonymousSubclass().getClass();
+        Class<?> expected = instantiateSub(Point.class).getClass();
+        Class<?> actual = instantiateSub(Point.class).getClass();
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -148,5 +142,13 @@ class InstantiatorTest {
                 .load(getClass().getClassLoader())
                 .getLoaded();
         Instantiator.giveDynamicSubclass(type, "X", b -> b);
+    }
+
+    private <T> T instantiateSub(Class<T> type) {
+        Class<T> sub = Instantiator.giveDynamicSubclass(type);
+        var object = Instantiator.of(sub, objenesis).instantiate();
+        assertThat(object).isNotNull();
+        assertThat(object.getClass()).isAssignableTo(type);
+        return object;
     }
 }
