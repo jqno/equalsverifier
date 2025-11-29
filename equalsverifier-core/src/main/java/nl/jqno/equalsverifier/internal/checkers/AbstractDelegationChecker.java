@@ -74,7 +74,7 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private <U> Tuple<U> safelyGetTuple(TypeTag tag, String fieldName) {
         try {
-            return valueProvider.provideOrThrow(tag, Attributes.named(fieldName));
+            return valueProvider.<U>provide(tag, Attributes.named(fieldName)).orElse(null);
         }
         catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.

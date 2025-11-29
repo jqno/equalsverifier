@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import static nl.jqno.equalsverifier.internal.instantiation.InstantiationUtil.determineGenericType;
+import static nl.jqno.equalsverifier.internal.instantiation.InstantiationUtil.zip;
 
 import java.util.*;
 
@@ -76,19 +77,16 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return map(WeakHashMap::new);
         }
         if (is(EnumMap.class)) {
-            var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(e -> (Enum) e);
-            var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes);
+            var keys = vp.provide(determineGenericType(tag, 0), attributes).map(tup -> tup.map(e -> (Enum) e));
+            var values = vp.provide(determineGenericType(tag, 1), attributes);
 
-            // Use red for key and blue for value in the Red map to avoid having identical keys and values.
-            // But don't do it in the Blue map, or they may cancel each other out again.
-
-            var tup = keys.map(e -> {
-                var map = new EnumMap(keys.red().getDeclaringClass());
-                map.put(e, values.blue());
+            return zip(keys, values, (k, v) -> k.map(e -> {
+                // Use red for key and blue for value in the Red map to avoid having identical keys and values.
+                // But don't do it in the Blue map, or they may cancel each other out again.
+                var map = new EnumMap(k.red().getDeclaringClass());
+                map.put(e, v.blue());
                 return (T) map;
-            }).swapBlueIfEqualToRed(() -> (T) new EnumMap(keys.red().getDeclaringClass()));
-
-            return Optional.of(tup);
+            }).swapBlueIfEqualToRed(() -> (T) new EnumMap(k.red().getDeclaringClass())));
         }
 
         // Sets
@@ -108,11 +106,12 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
             return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }
         if (is(EnumSet.class)) {
-            var elts = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(e -> (Enum) e);
-            var tup = elts
-                    .map(e -> (T) EnumSet.of(e))
-                    .swapBlueIfEqualToRed(() -> (T) EnumSet.noneOf(elts.blue().getDeclaringClass()));
-            return Optional.of(tup);
+            return vp.provide(determineGenericType(tag, 0), attributes).map(tup -> {
+                var t = tup.map(e -> (Enum) e);
+                return t
+                        .map(e -> (T) EnumSet.of(e))
+                        .swapBlueIfEqualToRed(() -> (T) EnumSet.noneOf(t.blue().getDeclaringClass()));
+            });
         }
 
         // Queues

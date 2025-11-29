@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
+import static nl.jqno.equalsverifier.internal.instantiation.InstantiationUtil.valuesFor;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +40,7 @@ public class ObjectValueProvider implements ValueProvider {
 
         for (var p : FieldIterable.ofIgnoringStatic(actualType)) {
             var field = p.getField();
-            var value = InstantiationUtil.valuesFor(field, tag, vp, attributes);
+            var value = valuesFor(field, tag, vp, attributes);
 
             red.put(field, value.red());
             blue.put(field, value.blue());

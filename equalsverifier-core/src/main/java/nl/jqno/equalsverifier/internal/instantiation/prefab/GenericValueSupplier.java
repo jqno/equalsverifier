@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.prefab;
 
 import static nl.jqno.equalsverifier.internal.instantiation.InstantiationUtil.determineGenericType;
+import static nl.jqno.equalsverifier.internal.instantiation.InstantiationUtil.zip;
 
 import java.util.Collection;
 import java.util.Map;
@@ -43,43 +44,38 @@ public abstract class GenericValueSupplier<T> {
 
     @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(Func1<Object, ?> construct) {
-        var tup = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(val -> (T) construct.supply(val));
-        return Optional.of(tup);
+        return vp
+                .provide(determineGenericType(tag, 0), attributes)
+                .map(tup -> tup.map(val -> (T) construct.supply(val)));
     }
 
     @SuppressWarnings("unchecked")
     protected Optional<Tuple<T>> generic(Func1<Object, ?> construct, Supplier<?> empty) {
-        var tup = vp
-                .provideOrThrow(determineGenericType(tag, 0), attributes)
-                .map(val -> (T) construct.supply(val))
-                .swapBlueIfEqualToRed(() -> (T) empty.get());
-        return Optional.of(tup);
+        return vp
+                .provide(determineGenericType(tag, 0), attributes)
+                .map(tup -> tup.map(val -> (T) construct.supply(val)).swapBlueIfEqualToRed(() -> (T) empty.get()));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> collection(Supplier<? extends Collection> construct) {
-        var tup = vp.provideOrThrow(determineGenericType(tag, 0), attributes).map(e -> {
+        return vp.provide(determineGenericType(tag, 0), attributes).map(tup -> tup.map(e -> {
             var coll = construct.get();
             coll.add(e);
             return (T) coll;
-        }).swapBlueIfEqualToRed(() -> (T) construct.get());
-        return Optional.of(tup);
+        }).swapBlueIfEqualToRed(() -> (T) construct.get()));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Optional<Tuple<T>> map(Supplier<Map> construct) {
-        var keys = vp.provideOrThrow(determineGenericType(tag, 0), attributes);
-        var values = vp.provideOrThrow(determineGenericType(tag, 1), attributes);
+        var keys = vp.provide(determineGenericType(tag, 0), attributes);
+        var values = vp.provide(determineGenericType(tag, 1), attributes);
 
-        // Use red for key and blue for value in the Red map to avoid having identical keys and values.
-        // But don't do it in the Blue map, or they may cancel each other out again.
-
-        var tup = keys.map(e -> {
+        return zip(keys, values, (k, v) -> k.map(e -> {
+            // Use red for key and blue for value in the Red map to avoid having identical keys and values.
+            // But don't do it in the Blue map, or they may cancel each other out again.
             var map = construct.get();
-            map.put(e, values.blue());
+            map.put(e, v.blue());
             return (T) map;
-        }).swapBlueIfEqualToRed(() -> (T) construct.get());
-
-        return Optional.of(tup);
+        }).swapBlueIfEqualToRed(() -> (T) construct.get()));
     }
 }
