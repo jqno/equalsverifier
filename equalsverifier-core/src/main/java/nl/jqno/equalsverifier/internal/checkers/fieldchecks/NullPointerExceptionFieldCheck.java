@@ -30,6 +30,10 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         if (fieldProbe.isAnnotatedNonnull(config.annotationCache())) {
             return;
         }
+        if (fieldProbe.isStatic() && fieldProbe.isFinal()) {
+            // Can't modify static final fields
+            return;
+        }
 
         if (fieldProbe.isStatic()) {
             T reference = subjectCreator.plain();

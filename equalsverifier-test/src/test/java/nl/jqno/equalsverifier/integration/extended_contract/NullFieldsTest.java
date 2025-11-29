@@ -45,6 +45,11 @@ class NullFieldsTest {
     }
 
     @Test
+    void fail_whenEqualsThrowsNpeOnStaticFinalField() {
+        EqualsVerifier.forClass(EqualsThrowsNpeOnStaticFinal.class).verify();
+    }
+
+    @Test
     void fail_whenHashCodeThrowsNpe() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify())
@@ -192,6 +197,25 @@ class NullFieldsTest {
             }
             EqualsThrowsNpeOnStatic p = (EqualsThrowsNpeOnStatic) obj;
             return color.equals(p.color);
+        }
+
+        @Override
+        public int hashCode() {
+            return -1;
+        }
+    }
+
+    static final class EqualsThrowsNpeOnStaticFinal {
+
+        private static final Color COLOR = Color.INDIGO;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof EqualsThrowsNpeOnStaticFinal)) {
+                return false;
+            }
+            EqualsThrowsNpeOnStaticFinal p = (EqualsThrowsNpeOnStaticFinal) obj;
+            return COLOR.equals(p.COLOR);
         }
 
         @Override
