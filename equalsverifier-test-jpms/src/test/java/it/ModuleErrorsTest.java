@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.api.ConfiguredEqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 /*
- * Let's hope nobody needs prefab values for `java.text.AttributedString`, because we need a class here from je Java
+ * Let's hope nobody needs prefab values for `java.text.AttributedString`, because we need a class here from the Java
  * APIs that doesn't already have prefab values.
  */
 public class ModuleErrorsTest {
