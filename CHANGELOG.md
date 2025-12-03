@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved performance: EqualsVerifier will now run slightly faster. ([Issue 1156](https://github.com/jqno/equalsverifier/issues/1156))
+- Refactorings in the internal class instantiation logic.
+
 ## [4.2.4] - 2025-11-25
 
 ### Fixed
