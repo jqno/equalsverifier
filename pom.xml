@@ -74,6 +74,8 @@
         <analysis.spotless.formatter.config>build/eclipse-formatter-config.xml</analysis.spotless.formatter.config>
         <analysis.spotless.importorder.config>build/eclipse-formatter-config.importorder</analysis.spotless.importorder.config>
 
+        <kotlin.compiler.daemon>false</kotlin.compiler.daemon> <!-- The daemon might be faster, but it also breaks my low-power dev box -->
+
         <version.bytebuddy>1.18.2</version.bytebuddy>
         <version.objenesis>3.4</version.objenesis>
 
