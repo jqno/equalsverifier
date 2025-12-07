@@ -10,15 +10,19 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.pool.TypePool;
+import net.bytebuddy.pool.TypePool.Resolution;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 
 public class AnnotationCacheBuilder {
 
     private final List<Annotation> supportedAnnotations;
+    private final List<String> partialAnnotationNames;
     private final Set<String> ignoredAnnotations;
 
     public AnnotationCacheBuilder(Annotation[] supportedAnnotations, Set<String> ignoredAnnotations) {
         this.supportedAnnotations = Arrays.asList(supportedAnnotations);
+        this.partialAnnotationNames =
+                this.supportedAnnotations.stream().flatMap(a -> a.partialClassNames().stream()).toList();
         this.ignoredAnnotations = Collections.unmodifiableSet(ignoredAnnotations);
     }
 
@@ -75,12 +79,10 @@ public class AnnotationCacheBuilder {
 
         String className = pkg.getName() + ".package-info";
 
-        try {
-            TypeDescription typeDescription = pool.describe(className).resolve();
+        Resolution resolution = pool.describe(className);
+        if (resolution.isResolved()) {
+            TypeDescription typeDescription = resolution.resolve();
             visitType(Set.of(type), cache, typeDescription, false);
-        }
-        catch (IllegalStateException e) {
-            // No package object; do nothing.
         }
     }
 
@@ -90,9 +92,9 @@ public class AnnotationCacheBuilder {
             TypeDescription typeDescription,
             boolean inheriting) {
         Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addClassAnnotation(t, a));
-        typeDescription
-                .getDeclaredAnnotations()
-                .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
+        for (AnnotationDescription a : typeDescription.getDeclaredAnnotations()) {
+            cacheSupportedAnnotations(a, types, cache, addToCache, inheriting);
+        }
     }
 
     private void visitFields(
@@ -139,16 +141,33 @@ public class AnnotationCacheBuilder {
         if (ignoredAnnotations.contains(annotation.getAnnotationType().getCanonicalName())) {
             return;
         }
+        if (!matches(annotation)) {
+            return;
+        }
 
         Consumer<Annotation> postProcess = a -> a.postProcess(types, cache);
-
         AnnotationProperties props = buildAnnotationProperties(annotation);
-        supportedAnnotations
-                .stream()
-                .filter(sa -> matches(annotation, sa))
-                .filter(sa -> !inheriting || sa.inherits())
-                .filter(sa -> sa.validate(props, cache, ignoredAnnotations))
-                .forEach(addToCache.andThen(postProcess));
+
+        for (Annotation sa : supportedAnnotations) {
+            if (matches(annotation, sa)
+                    && (!inheriting || sa.inherits())
+                    && sa.validate(props, cache, ignoredAnnotations)) {
+                addToCache.andThen(postProcess).accept(sa);
+            }
+        }
+    }
+
+    private boolean matches(AnnotationDescription foundAnnotation) {
+        String canonicalName = foundAnnotation.getAnnotationType().getCanonicalName();
+        if (canonicalName == null) {
+            return false;
+        }
+        for (String partial : partialAnnotationNames) {
+            if (canonicalName.endsWith(partial)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean matches(AnnotationDescription foundAnnotation, Annotation supportedAnnotation) {
