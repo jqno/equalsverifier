@@ -112,4 +112,19 @@ public final class KotlinProbe {
             Assert.fail(Formatter.of(msg));
         }
     }
+
+    public static boolean isDeclaredInPrimaryConstructor(Field field) {
+        Class<?> declaringClass = field.getDeclaringClass();
+        KClass<?> kType = JvmClassMappingKt.getKotlinClass(declaringClass);
+        if (kType.getConstructors().isEmpty()) {
+            return false;
+        }
+
+        KFunction<?> constructor = KClasses.getPrimaryConstructor(kType);
+        return constructor.getParameters().stream().anyMatch(p -> p.getName().equals(field.getName()));
+    }
+
+    public static <T> boolean isDataClass(Class<T> type) {
+        return JvmClassMappingKt.getKotlinClass(type).isData();
+    }
 }
