@@ -120,7 +120,7 @@ public final class KotlinProbe {
             return false;
         }
 
-        KFunction<?> constructor = KotlinProbeAdditional.getPrimaryConstructor(kType);
+        KFunction<?> constructor = KClasses.getPrimaryConstructor(kType);
         return constructor.getParameters().stream().anyMatch(p -> p.getName().equals(field.getName()));
     }
 
