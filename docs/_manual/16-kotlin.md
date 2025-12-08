@@ -15,6 +15,20 @@ EqualsVerifier.forClass(Foo::class.java)
 
 For most simple classes and data classes, that's enough.
 
+## Data classes
+
+Since data class equality is based on primary constructor parameters, EqualsVerifier ignores other properties in such classes.
+
+For instance, in following code, `isEmpty` property is ignored:
+
+```kotlin
+data class MyDataclass(val value: String) {
+  val isEmpty = value.isEmpty()
+}
+```
+
+This behavior requires `org.jetbrains.kotlin:kotlin-reflect` library to be available, otherwise data classes are treated like any other class.
+
 ## Delegates
 
 Kotlin supports various forms of delegate fields. In a Kotlin class definition, delegates may look like this:
