@@ -82,7 +82,7 @@
         <version.archunit>1.4.1</version.archunit>
         <version.assertj>3.27.6</version.assertj>
         <version.commons-lang3>3.20.0</version.commons-lang3>
-        <version.eclipse-annotation>2.4.0</version.eclipse-annotation>
+        <version.eclipse-annotation>2.4.100</version.eclipse-annotation>
         <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
         <version.jakarta-persistence-api>3.0.0</version.jakarta-persistence-api>
         <version.jakarta-annotation-api>3.0.0</version.jakarta-annotation-api>
@@ -94,7 +94,7 @@
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.checkstyle>12.2.0</version.checkstyle>
 
-        <version.arcmutate>2.3.0</version.arcmutate>
+        <version.arcmutate>2.3.2</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
