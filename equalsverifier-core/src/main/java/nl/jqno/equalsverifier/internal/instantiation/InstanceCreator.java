@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiConsumer;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import org.objenesis.Objenesis;
@@ -79,7 +80,7 @@ public class InstanceCreator<T> {
                 params.add(value);
             }
             catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
+                throw new ReflectionException(e);
             }
         }
         var recordProbe = new RecordProbe<T>(type);
