@@ -70,6 +70,23 @@ class SealedTypesFinderTest {
     non-sealed interface NonSealedAtTheBottomChild extends NonSealedAtTheBottomParent {}
 
     @Test
+    void findSeveral() {
+        var probe = ClassProbe.of(Hierarchy1.class);
+        var actuals = SealedTypesFinder.findInstantiableSubclasses(probe);
+        assertThat(actuals).containsExactly(Hierarchy3a.class, Hierarchy3b.class, Hierarchy2b.class);
+    }
+
+    sealed interface Hierarchy1 {}
+
+    sealed interface Hierarchy2a extends Hierarchy1 {}
+
+    non-sealed interface Hierarchy3a extends Hierarchy2a {}
+
+    static final class Hierarchy3b implements Hierarchy2a {}
+
+    non-sealed interface Hierarchy2b extends Hierarchy1 {}
+
+    @Test
     void notSealed() {
         var probe = ClassProbe.of(Object.class);
         var actual = SealedTypesFinder.findInstantiableSubclass(probe);
