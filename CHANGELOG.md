@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Avoids potential parameter order bug when instantiating records. ([Issue 1160](https://github.com/jqno/equalsverifier/issues/1160); thanks lycoris106!)
+- More performance improvements.
+
 ## [4.2.5] - 2025-12-03
 
 ### Changed
