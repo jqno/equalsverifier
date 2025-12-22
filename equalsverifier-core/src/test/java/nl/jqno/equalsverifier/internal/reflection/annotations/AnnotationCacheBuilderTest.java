@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import net.bytebuddy.description.modifier.Visibility;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.packages.annotated.AnnotatedPackage;
 import nl.jqno.equalsverifier_testhelpers.annotations.AnnotationWithValues;
@@ -270,7 +270,7 @@ class AnnotationCacheBuilderTest {
 
     @Test
     void dynamicClassDoesntGetProcessed_butDoesntThrowEither() {
-        Class<?> type = Instantiator.giveDynamicSubclass(AnnotatedWithRuntime.class);
+        Class<?> type = SubtypeManager.giveDynamicSubclass(AnnotatedWithRuntime.class);
         build(type);
 
         assertTypeDoesNotHaveAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);
@@ -279,7 +279,7 @@ class AnnotationCacheBuilderTest {
     @Test
     void generatedClassWithGeneratedFieldDoesNotThrow() {
         class Super {}
-        Class<?> sub = Instantiator
+        Class<?> sub = SubtypeManager
                 .giveDynamicSubclass(
                     Super.class,
                     "dynamicField",

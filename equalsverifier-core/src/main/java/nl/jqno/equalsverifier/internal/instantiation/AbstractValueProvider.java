@@ -22,15 +22,8 @@ public class AbstractValueProvider implements ValueProvider {
             return Optional.empty();
         }
 
-        if (probe.isSealed()) {
-            Class<T> concrete = SealedTypesFinder.findInstantiableSubclass(probe).get();
-            var concreteTag = new TypeTag(concrete);
-            return vp.provide(concreteTag, attributes);
-        }
-        else {
-            Class<T> concrete = Instantiator.giveDynamicSubclass(tag.getType());
-            var concreteTag = new TypeTag(concrete);
-            return vp.provide(concreteTag, attributes);
-        }
+        Class<T> concrete = SubtypeManager.findInstantiableSubclass(probe).get();
+        var concreteTag = new TypeTag(concrete);
+        return vp.provide(concreteTag, attributes);
     }
 }

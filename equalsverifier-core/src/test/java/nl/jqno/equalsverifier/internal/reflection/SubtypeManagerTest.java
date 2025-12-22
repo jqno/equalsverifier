@@ -2,14 +2,43 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Field;
+
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.junit.jupiter.api.Test;
 
-class SealedTypesFinderTest {
+class SubtypeManagerTest {
+
+    @Test
+    void giveDynamicSubclass() throws Exception {
+        class Super {}
+        Class<?> sub = SubtypeManager
+                .giveDynamicSubclass(
+                    Super.class,
+                    "dynamicField",
+                    b -> b.defineField("dynamicField", int.class, Visibility.PRIVATE));
+        Field f = sub.getDeclaredField("dynamicField");
+        assertThat(f).isNotNull();
+    }
+
+    @Test
+    void giveDynamicSubclassForClassWithNoPackage() {
+        Class<?> type = new ByteBuddy()
+                .with(TypeValidation.DISABLED)
+                .subclass(Object.class)
+                .name("NoPackage")
+                .make()
+                .load(getClass().getClassLoader())
+                .getLoaded();
+        SubtypeManager.giveDynamicSubclass(type, "X", b -> b);
+    }
 
     @Test
     void twoLevels() {
         var probe = ClassProbe.of(TwoLevelParent.class);
-        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(TwoLevelChild.class);
     }
 
@@ -20,7 +49,7 @@ class SealedTypesFinderTest {
     @Test
     void fourLevels() {
         var probe = ClassProbe.of(FourLevelParent.class);
-        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(FourLevelChild.class);
     }
 
@@ -35,7 +64,7 @@ class SealedTypesFinderTest {
     @Test
     void allConcrete() {
         var probe = ClassProbe.of(AllConcreteParent.class);
-        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(AllConcreteParent.class);
     }
 
@@ -48,7 +77,7 @@ class SealedTypesFinderTest {
     @Test
     void abstractTopThreeLevels() {
         var probe = ClassProbe.of(AbstractParent.class);
-        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(AbstractMiddle.class);
     }
 
@@ -61,7 +90,7 @@ class SealedTypesFinderTest {
     @Test
     void nonSealedAtTheBottom() {
         var probe = ClassProbe.of(NonSealedAtTheBottomParent.class);
-        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(NonSealedAtTheBottomChild.class);
     }
 
@@ -72,7 +101,7 @@ class SealedTypesFinderTest {
     @Test
     void findSeveral() {
         var probe = ClassProbe.of(Hierarchy1.class);
-        var actuals = SealedTypesFinder.findInstantiableSubclasses(probe);
+        var actuals = SubtypeManager.findInstantiablePermittedSubclasses(probe);
         assertThat(actuals).containsExactly(Hierarchy3a.class, Hierarchy3b.class, Hierarchy2b.class);
     }
 
@@ -89,7 +118,7 @@ class SealedTypesFinderTest {
     @Test
     void notSealed() {
         var probe = ClassProbe.of(Object.class);
-        var actual = SealedTypesFinder.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe);
         assertThat(actual.get()).isEqualTo(Object.class);
     }
 }

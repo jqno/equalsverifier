@@ -1,17 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
-
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.UnaryOperator;
-
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
-import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.objenesis.Objenesis;
 import org.objenesis.instantiator.ObjectInstantiator;
 
@@ -21,10 +9,6 @@ import org.objenesis.instantiator.ObjectInstantiator;
  * @param <T> {@link Instantiator} instantiates objects of this class, or of an anonymous subclass of this class.
  */
 public final class Instantiator<T> {
-
-    private static final List<String> FORBIDDEN_PACKAGES =
-            Arrays.asList("java.", "javax.", "sun.", "com.sun.", "org.w3c.dom.");
-    private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
     private final Class<T> type;
     private final ObjectInstantiator<T> objenesisInstantiator;
@@ -45,14 +29,8 @@ public final class Instantiator<T> {
      */
     public static <T> Instantiator<T> of(Class<T> type, Objenesis objenesis) {
         ClassProbe<T> probe = ClassProbe.of(type);
-        if (probe.isSealed() && probe.isAbstract()) {
-            Class<T> concrete = SealedTypesFinder.findInstantiableSubclass(probe).get();
-            return Instantiator.of(concrete, objenesis);
-        }
-        if (Modifier.isAbstract(type.getModifiers())) {
-            return new Instantiator<>(giveDynamicSubclass(type, "", b -> b), objenesis);
-        }
-        return new Instantiator<>(type, objenesis);
+        Class<T> concrete = SubtypeManager.findInstantiableSubclass(probe).get();
+        return new Instantiator<>(concrete, objenesis);
     }
 
     /**
@@ -74,79 +52,5 @@ public final class Instantiator<T> {
      */
     public T instantiate() {
         return objenesisInstantiator.newInstance();
-    }
-
-    /**
-     * Generates an anonymous subclass of S. The subclass is generated dynamically.
-     *
-     * @param <S>        The class to create a dynamic subclass of.
-     * @param superclass The class to create a dynamic subclass of.
-     * @return An instance of an anonymous subclass of S.
-     */
-    public static <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
-        return giveDynamicSubclass(superclass, "", b -> b);
-    }
-
-    /**
-     * Generates an anonymous subclass of S. The subclass is generated dynamically.
-     *
-     * @param <S>        The class to create a dynamic subclass of.
-     * @param superclass The class to create a dynamic subclass of.
-     * @param nameSuffix A constant that will be appended to the name of the newly generated class.
-     * @param modify     Allows custom modifications to the generated class.
-     * @return An instance of an anonymous subclass of S.
-     */
-    @SuppressWarnings("unchecked")
-    public static synchronized <S> Class<S> giveDynamicSubclass(
-            Class<S> superclass,
-            String nameSuffix,
-            UnaryOperator<DynamicType.Builder<S>> modify) {
-        boolean isSystemClass = isSystemClass(superclass.getName());
-
-        String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
-        String name = namePrefix + (namePrefix.isEmpty() ? "" : ".") + superclass.getSimpleName() + "$$DynamicSubclass$"
-                + Integer.toHexString(superclass.hashCode()) + "$" + nameSuffix;
-
-        Class<?> context = isSystemClass ? Instantiator.class : superclass;
-        ClassLoader classLoader = context.getClassLoader();
-
-        // `mvn quarkus:dev` does strange classloader stuff. We need to make sure that we
-        // check existence with the correct classloader. I don't know how to unit test this.
-        Class<S> existsAlready = (Class<S>) classForName(classLoader, name);
-        if (existsAlready != null) {
-            return existsAlready;
-        }
-
-        ClassLoadingStrategy<ClassLoader> cs = getClassLoadingStrategy(context);
-        DynamicType.Builder<S> builder = new ByteBuddy().with(TypeValidation.DISABLED).subclass(superclass).name(name);
-
-        builder = modify.apply(builder);
-
-        return (Class<S>) builder.make().load(classLoader, cs).getLoaded();
-    }
-
-    private static String getPackageName(Class<?> type) {
-        String cn = type.getName();
-        int dot = cn.lastIndexOf('.');
-        return dot != -1 ? cn.substring(0, dot).intern() : "";
-    }
-
-    private static <S> ClassLoadingStrategy<ClassLoader> getClassLoadingStrategy(Class<S> context) {
-        try {
-            var lookup = MethodHandles.privateLookupIn(context, MethodHandles.lookup());
-            return ClassLoadingStrategy.UsingLookup.of(lookup);
-        }
-        catch (IllegalAccessException e) {
-            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
-        }
-    }
-
-    private static boolean isSystemClass(String className) {
-        for (String prefix : FORBIDDEN_PACKAGES) {
-            if (className.startsWith(prefix)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
