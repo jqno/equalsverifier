@@ -76,7 +76,7 @@
 
         <kotlin.compiler.daemon>false</kotlin.compiler.daemon> <!-- The daemon might be faster, but it also breaks my low-power dev box -->
 
-        <version.bytebuddy>1.18.2</version.bytebuddy>
+        <version.bytebuddy>1.18.3</version.bytebuddy>
         <version.objenesis>3.4</version.objenesis>
 
         <version.archunit>1.4.1</version.archunit>
@@ -88,7 +88,7 @@
         <version.jakarta-annotation-api>3.0.0</version.jakarta-annotation-api>
         <version.jcip-annotations>1.0</version.jcip-annotations>
         <version.junit-jupiter>6.0.1</version.junit-jupiter>
-        <version.kotlin>2.2.21</version.kotlin>
+        <version.kotlin>2.3.0</version.kotlin>
         <version.slf4j>2.0.17</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
