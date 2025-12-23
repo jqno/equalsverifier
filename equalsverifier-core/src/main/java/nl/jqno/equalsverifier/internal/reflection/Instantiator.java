@@ -28,15 +28,13 @@ public final class Instantiator<T> {
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type, Objenesis objenesis) {
-        ClassProbe<T> probe = ClassProbe.of(type);
-        Class<T> concrete = SubtypeManager.findInstantiableSubclass(probe).get();
-        return new Instantiator<>(concrete, objenesis);
+        return new Instantiator<>(type, objenesis);
     }
 
     /**
-     * The actual type that will be instantiated. Could be a subclass of the requested type.
+     * The type that will be instantiated.
      *
-     * @return The actual type that will be instantiated.
+     * @return The type that will be instantiated.
      */
     public Class<T> getType() {
         return type;
@@ -45,7 +43,6 @@ public final class Instantiator<T> {
     /**
      * Instantiates an object of type T.
      *
-     * <p>
      * All fields will be initialized to their initial values. I.e., 0 for ints, null for objects, etc.
      *
      * @return An object of type T.

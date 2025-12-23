@@ -3,7 +3,9 @@ package nl.jqno.equalsverifier.internal.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -56,7 +58,8 @@ class FormatterTest {
 
     @Test
     void oneAbstractParameter() {
-        Instantiator<Abstract> i = Instantiator.of(Abstract.class, objenesis);
+        var t = SubtypeManager.findInstantiableSubclass(ClassProbe.of(Abstract.class)).get();
+        Instantiator<Abstract> i = Instantiator.of(t, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
         assertThat(f.format()).contains("Abstract: [Abstract x=0]");
     }
@@ -70,7 +73,8 @@ class FormatterTest {
 
     @Test
     void oneDelegatedAbstractParameter() {
-        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
+        var t = SubtypeManager.findInstantiableSubclass(ClassProbe.of(AbstractDelegation.class)).get();
+        Instantiator<AbstractDelegation> i = Instantiator.of(t, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
         assertThat(f.format()).contains("Abstract: [AbstractDelegation y=0]");
     }
@@ -94,7 +98,8 @@ class FormatterTest {
 
     @Test
     void oneAbstractContainerParameter() {
-        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
+        var t = SubtypeManager.findInstantiableSubclass(ClassProbe.of(AbstractDelegation.class)).get();
+        Instantiator<AbstractDelegation> i = Instantiator.of(t, objenesis);
         AbstractContainer ac = new AbstractContainer(i.instantiate());
 
         Formatter f = Formatter.of("AC: %%", ac);
