@@ -5,7 +5,6 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -13,6 +12,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -25,18 +25,15 @@ public final class SubtypeManager {
 
     private SubtypeManager() {}
 
-    public static <T> Optional<Class<T>> findInstantiableSubclass(
-            ClassProbe<T> probe,
-            ValueProvider vp,
-            Attributes attributes) {
+    public static <T> Class<T> findInstantiableSubclass(ClassProbe<T> probe, ValueProvider vp, Attributes attributes) {
         if (probe.isSealed() && probe.isAbstract()) {
             return findInstantiablePermittedSubclass(probe, vp, attributes);
         }
         if (probe.isAbstract()) {
-            return Optional.of(giveDynamicSubclass(probe.getType()));
+            return giveDynamicSubclass(probe.getType());
         }
 
-        return Optional.of(probe.getType());
+        return probe.getType();
     }
 
     /**
@@ -89,14 +86,16 @@ public final class SubtypeManager {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> Optional<Class<T>> findInstantiablePermittedSubclass(
+    private static <T> Class<T> findInstantiablePermittedSubclass(
             ClassProbe<T> probe,
             ValueProvider vp,
             Attributes attributes) {
-        return findInstantiablePermittedSubclasses(probe)
+        return findAllInstantiablePermittedSubclasses(probe)
                 .filter(c -> !isRecursive(c, vp, attributes))
                 .findFirst()
-                .map(c -> (Class<T>) c);
+                .map(c -> (Class<T>) c)
+                .orElseThrow(
+                    () -> new NoValueException("Could not construct a value for " + probe.getType().getSimpleName()));
     }
 
     private static <T> boolean isRecursive(Class<T> type, ValueProvider vp, Attributes attributes) {
@@ -109,7 +108,8 @@ public final class SubtypeManager {
         }
     }
 
-    public static <T> Stream<Class<? extends T>> findInstantiablePermittedSubclasses(ClassProbe<T> probe) {
+    /* package protected for unit test */
+    static <T> Stream<Class<? extends T>> findAllInstantiablePermittedSubclasses(ClassProbe<T> probe) {
         if (!probe.isAbstract() || !probe.isSealed()) {
             return Stream.of(probe.getType());
         }
@@ -122,7 +122,7 @@ public final class SubtypeManager {
         return Arrays.stream(permittedSubclasses).flatMap(permitted -> {
             @SuppressWarnings("unchecked")
             ClassProbe<T> subProbe = (ClassProbe<T>) ClassProbe.of(permitted);
-            return findInstantiablePermittedSubclasses(subProbe);
+            return findAllInstantiablePermittedSubclasses(subProbe);
         });
     }
 

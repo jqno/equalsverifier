@@ -23,12 +23,15 @@ public class AbstractValueProvider implements ValueProvider {
             return Optional.empty();
         }
 
-        var concrete = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        if (concrete.isEmpty()) {
-            throw new NoValueException("Could not construct a value for " + tag.getType().getSimpleName()
-                    + ": it is sealed and no non-recursive subclass could be found. Please add prefab values for this type.");
+        try {
+            var concrete = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
+            var concreteTag = new TypeTag(concrete);
+            return vp.provide(concreteTag, attributes);
         }
-        var concreteTag = new TypeTag(concrete.get());
-        return vp.provide(concreteTag, attributes);
+        catch (NoValueException e) {
+            throw new NoValueException("Could not construct a value for " + tag.getType().getSimpleName()
+                    + ": it is sealed and no non-recursive subclass could be found. Please add prefab values for this type.",
+                    e);
+        }
     }
 }

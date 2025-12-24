@@ -45,7 +45,7 @@ class SubtypeManagerTest {
     void twoLevels() {
         var probe = ClassProbe.of(TwoLevelParent.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual.get()).isEqualTo(TwoLevelChild.class);
+        assertThat(actual).isEqualTo(TwoLevelChild.class);
     }
 
     sealed interface TwoLevelParent {}
@@ -56,7 +56,7 @@ class SubtypeManagerTest {
     void fourLevels() {
         var probe = ClassProbe.of(FourLevelParent.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual.get()).isEqualTo(FourLevelChild.class);
+        assertThat(actual).isEqualTo(FourLevelChild.class);
     }
 
     sealed interface FourLevelParent {}
@@ -71,7 +71,7 @@ class SubtypeManagerTest {
     void allConcrete() {
         var probe = ClassProbe.of(AllConcreteParent.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual.get()).isEqualTo(AllConcreteParent.class);
+        assertThat(actual).isEqualTo(AllConcreteParent.class);
     }
 
     sealed static class AllConcreteParent {}
@@ -84,7 +84,7 @@ class SubtypeManagerTest {
     void abstractTopThreeLevels() {
         var probe = ClassProbe.of(AbstractParent.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual.get()).isEqualTo(AbstractMiddle.class);
+        assertThat(actual).isEqualTo(AbstractMiddle.class);
     }
 
     sealed abstract static class AbstractParent {}
@@ -97,7 +97,7 @@ class SubtypeManagerTest {
     void nonSealedAtTheBottom() {
         var probe = ClassProbe.of(NonSealedAtTheBottomParent.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual.get()).isEqualTo(NonSealedAtTheBottomChild.class);
+        assertThat(actual).isEqualTo(NonSealedAtTheBottomChild.class);
     }
 
     sealed interface NonSealedAtTheBottomParent {}
@@ -107,7 +107,7 @@ class SubtypeManagerTest {
     @Test
     void findSeveral() {
         var probe = ClassProbe.of(Hierarchy1.class);
-        var actuals = SubtypeManager.findInstantiablePermittedSubclasses(probe);
+        var actuals = SubtypeManager.findAllInstantiablePermittedSubclasses(probe);
         assertThat(actuals).containsExactly(Hierarchy3a.class, Hierarchy3b.class, Hierarchy2b.class);
     }
 
@@ -125,6 +125,6 @@ class SubtypeManagerTest {
     void notSealed() {
         var probe = ClassProbe.of(Object.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual.get()).isEqualTo(Object.class);
+        assertThat(actual).isEqualTo(Object.class);
     }
 }

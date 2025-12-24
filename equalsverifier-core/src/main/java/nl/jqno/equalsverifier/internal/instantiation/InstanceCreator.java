@@ -43,7 +43,7 @@ public final class InstanceCreator<T> {
      * @return an {@code InstanceCreator} for the given class (or a subclass of the given class).
      */
     public static <S> InstanceCreator<S> ofAllowSubtype(ClassProbe<S> probe, ValueProvider vp, Objenesis objenesis) {
-        Class<S> type = SubtypeManager.findInstantiableSubclass(probe, vp, Attributes.empty()).get();
+        Class<S> type = SubtypeManager.findInstantiableSubclass(probe, vp, Attributes.empty());
         return new InstanceCreator<>(ClassProbe.of(type), objenesis);
     }
 
