@@ -13,6 +13,9 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 
 public final class SubtypeManager {
 
@@ -22,9 +25,12 @@ public final class SubtypeManager {
 
     private SubtypeManager() {}
 
-    public static <T> Optional<Class<T>> findInstantiableSubclass(ClassProbe<T> probe) {
+    public static <T> Optional<Class<T>> findInstantiableSubclass(
+            ClassProbe<T> probe,
+            ValueProvider vp,
+            Attributes attributes) {
         if (probe.isSealed() && probe.isAbstract()) {
-            return findInstantiablePermittedSubclass(probe);
+            return findInstantiablePermittedSubclass(probe, vp, attributes);
         }
         if (probe.isAbstract()) {
             return Optional.of(giveDynamicSubclass(probe.getType()));
@@ -83,8 +89,24 @@ public final class SubtypeManager {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> Optional<Class<T>> findInstantiablePermittedSubclass(ClassProbe<T> probe) {
-        return findInstantiablePermittedSubclasses(probe).findFirst().map(c -> (Class<T>) c);
+    private static <T> Optional<Class<T>> findInstantiablePermittedSubclass(
+            ClassProbe<T> probe,
+            ValueProvider vp,
+            Attributes attributes) {
+        return findInstantiablePermittedSubclasses(probe)
+                .filter(c -> !isRecursive(c, vp, attributes))
+                .findFirst()
+                .map(c -> (Class<T>) c);
+    }
+
+    private static <T> boolean isRecursive(Class<T> type, ValueProvider vp, Attributes attributes) {
+        try {
+            vp.provide(new TypeTag(type), attributes);
+            return false;
+        }
+        catch (RecursionException ignored) {
+            return true;
+        }
     }
 
     public static <T> Stream<Class<? extends T>> findInstantiablePermittedSubclasses(ClassProbe<T> probe) {

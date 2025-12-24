@@ -14,6 +14,7 @@ import org.objenesis.ObjenesisStd;
 
 class InstanceCreatorTest {
 
+    private final ValueProvider vp = new BuiltinPrefabValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
@@ -29,7 +30,7 @@ class InstanceCreatorTest {
     @Test
     void getActualType_abstract() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, objenesis);
+        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
 
         Class<SomeAbstractClass> actual = sut.getActualType();
 
@@ -39,7 +40,7 @@ class InstanceCreatorTest {
     @Test
     void getActualType_sealedAbstract() {
         var probe = ClassProbe.of(SealedAbstract.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, objenesis);
+        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
 
         Class<SealedAbstract> actual = sut.getActualType();
 
@@ -49,7 +50,7 @@ class InstanceCreatorTest {
     @Test
     void getActualType_sealedNonAbstract() {
         var probe = ClassProbe.of(SealedNonAbstract.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, objenesis);
+        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
 
         Class<SealedNonAbstract> actual = sut.getActualType();
 
@@ -85,7 +86,7 @@ class InstanceCreatorTest {
     @Test
     void instantiate_abstract() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, objenesis);
+        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
         var actual = sut.instantiate(Map.of());
 
         assertThat(actual.getClass()).isNotEqualTo(SomeAbstractClass.class).isAssignableTo(SomeAbstractClass.class);
@@ -94,7 +95,7 @@ class InstanceCreatorTest {
     @Test
     void instantiate_sealedAbstract() {
         var probe = ClassProbe.of(SealedAbstract.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, objenesis);
+        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
         var actual = sut.instantiate(Map.of());
 
         assertThat(actual).isInstanceOf(SealedAbstractSub.class);

@@ -37,17 +37,19 @@ public final class InstanceCreator<T> {
      *
      * @param <S>       Represents the type of the class to instantiate.
      * @param probe     Represents the class to instantiate.
+     * @param vp        To check if a selected subtype of a sealed abstract class or sealed interface can be
+     *                      instantiated.
      * @param objenesis To instantiate non-record classes.
      * @return an {@code InstanceCreator} for the given class (or a subclass of the given class).
      */
-    public static <S> InstanceCreator<S> ofAllowSubtype(ClassProbe<S> probe, Objenesis objenesis) {
-        Class<S> type = SubtypeManager.findInstantiableSubclass(probe).get();
+    public static <S> InstanceCreator<S> ofAllowSubtype(ClassProbe<S> probe, ValueProvider vp, Objenesis objenesis) {
+        Class<S> type = SubtypeManager.findInstantiableSubclass(probe, vp, Attributes.empty()).get();
         return new InstanceCreator<>(ClassProbe.of(type), objenesis);
     }
 
     /**
      * Private constructor. Use {@link #ofExact(ClassProbe, Objenesis)} or
-     * {@link #ofAllowSubtype(ClassProbe, Objenesis)} instead.
+     * {@link #ofAllowSubtype(ClassProbe, ValueProvider, Objenesis)} instead.
      */
     private InstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
         this.type = probe.getType();

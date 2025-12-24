@@ -7,9 +7,15 @@ import java.lang.reflect.Field;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import org.junit.jupiter.api.Test;
 
 class SubtypeManagerTest {
+
+    private final ValueProvider vp = new BuiltinPrefabValueProvider();
+    private final Attributes attributes = Attributes.empty();
 
     @Test
     void giveDynamicSubclass() throws Exception {
@@ -38,7 +44,7 @@ class SubtypeManagerTest {
     @Test
     void twoLevels() {
         var probe = ClassProbe.of(TwoLevelParent.class);
-        var actual = SubtypeManager.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual.get()).isEqualTo(TwoLevelChild.class);
     }
 
@@ -49,7 +55,7 @@ class SubtypeManagerTest {
     @Test
     void fourLevels() {
         var probe = ClassProbe.of(FourLevelParent.class);
-        var actual = SubtypeManager.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual.get()).isEqualTo(FourLevelChild.class);
     }
 
@@ -64,7 +70,7 @@ class SubtypeManagerTest {
     @Test
     void allConcrete() {
         var probe = ClassProbe.of(AllConcreteParent.class);
-        var actual = SubtypeManager.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual.get()).isEqualTo(AllConcreteParent.class);
     }
 
@@ -77,7 +83,7 @@ class SubtypeManagerTest {
     @Test
     void abstractTopThreeLevels() {
         var probe = ClassProbe.of(AbstractParent.class);
-        var actual = SubtypeManager.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual.get()).isEqualTo(AbstractMiddle.class);
     }
 
@@ -90,7 +96,7 @@ class SubtypeManagerTest {
     @Test
     void nonSealedAtTheBottom() {
         var probe = ClassProbe.of(NonSealedAtTheBottomParent.class);
-        var actual = SubtypeManager.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual.get()).isEqualTo(NonSealedAtTheBottomChild.class);
     }
 
@@ -118,7 +124,7 @@ class SubtypeManagerTest {
     @Test
     void notSealed() {
         var probe = ClassProbe.of(Object.class);
-        var actual = SubtypeManager.findInstantiableSubclass(probe);
+        var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual.get()).isEqualTo(Object.class);
     }
 }

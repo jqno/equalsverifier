@@ -38,7 +38,7 @@ public class SubjectCreator<T> {
         this.valueProvider = valueProvider;
         this.classProbe = ClassProbe.of(type);
         this.objenesis = objenesis;
-        this.instanceCreator = InstanceCreator.ofAllowSubtype(classProbe, objenesis);
+        this.instanceCreator = InstanceCreator.ofAllowSubtype(classProbe, valueProvider, objenesis);
         this.actualType = instanceCreator.getActualType();
     }
 
@@ -179,7 +179,7 @@ public class SubjectCreator<T> {
      */
     public Object copyIntoSuperclass(T original) {
         InstanceCreator<? super T> superCreator =
-                InstanceCreator.ofAllowSubtype(ClassProbe.of(type.getSuperclass()), objenesis);
+                InstanceCreator.ofAllowSubtype(ClassProbe.of(type.getSuperclass()), valueProvider, objenesis);
         return superCreator.copy(original);
     }
 
@@ -194,7 +194,8 @@ public class SubjectCreator<T> {
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
-        InstanceCreator<S> subCreator = InstanceCreator.ofAllowSubtype(ClassProbe.of(subType), objenesis);
+        InstanceCreator<S> subCreator =
+                InstanceCreator.ofAllowSubtype(ClassProbe.of(subType), valueProvider, objenesis);
         return subCreator.copy(original);
     }
 

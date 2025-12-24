@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 
 /**
@@ -22,8 +23,12 @@ public class AbstractValueProvider implements ValueProvider {
             return Optional.empty();
         }
 
-        Class<T> concrete = SubtypeManager.findInstantiableSubclass(probe).get();
-        var concreteTag = new TypeTag(concrete);
+        var concrete = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
+        if (concrete.isEmpty()) {
+            throw new NoValueException("Could not construct a value for " + tag.getType().getSimpleName()
+                    + ": it is sealed and no non-recursive subclass could be found. Please add prefab values for this type.");
+        }
+        var concreteTag = new TypeTag(concrete.get());
         return vp.provide(concreteTag, attributes);
     }
 }

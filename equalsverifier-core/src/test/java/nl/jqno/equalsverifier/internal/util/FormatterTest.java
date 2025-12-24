@@ -5,7 +5,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 import java.util.Map;
 
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.objenesis.ObjenesisStd;
 
 class FormatterTest {
 
+    private final ValueProvider vp = new BuiltinPrefabValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
@@ -59,28 +62,28 @@ class FormatterTest {
 
     @Test
     void oneAbstractParameter() {
-        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(Abstract.class), objenesis);
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(Abstract.class), vp, objenesis);
         Formatter f = Formatter.of("Abstract: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Abstract: [Abstract x=0]");
     }
 
     @Test
     void oneConcreteSubclassParameter() {
-        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractImpl.class), objenesis);
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractImpl.class), vp, objenesis);
         Formatter f = Formatter.of("Concrete: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Concrete: something concrete");
     }
 
     @Test
     void oneDelegatedAbstractParameter() {
-        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegation.class), objenesis);
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegation.class), vp, objenesis);
         Formatter f = Formatter.of("Abstract: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Abstract: [AbstractDelegation y=0]");
     }
 
     @Test
     void oneDelegatedConcreteSubclassParameter() {
-        var i = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegationImpl.class), objenesis);
+        var i = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegationImpl.class), vp, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate(Map.of()));
         assertThat(f.format()).contains("Concrete: something concrete");
     }
@@ -97,7 +100,7 @@ class FormatterTest {
 
     @Test
     void oneAbstractContainerParameter() {
-        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegation.class), objenesis);
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegation.class), vp, objenesis);
         var ac = new AbstractContainer(ic.instantiate(Map.of()));
 
         Formatter f = Formatter.of("AC: %%", ac);
