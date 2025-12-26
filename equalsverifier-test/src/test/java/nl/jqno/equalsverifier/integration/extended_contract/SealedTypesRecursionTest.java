@@ -35,7 +35,13 @@ class SealedTypesRecursionTest {
     }
 
     @Test
-    void succeed_whenFirstPermittedRefersBackToContainerButSecondIsOk() {
+    void succeed_whenSutIsSealed_givenFirstPermittedRefersBackToContainerButSecondIsOk() {
+        // A sealed interface. It permits 2 types; the first is a record that refers back to the container, but the second is ok.
+        EqualsVerifier.forClass(SealedAndOrderedInterface.class).verify();
+    }
+
+    @Test
+    void succeed_whenSutContainsSealed_givenFirstPermittedRefersBackToContainerButSecondIsOk() {
         // A container with a field of a sealed interface.
         // The sealed interface permits 2 types; the first is a record that refers back to the container, but the second is ok.
         EqualsVerifier.forClass(SealedAndOrderedContainer.class).verify();
