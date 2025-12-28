@@ -17,14 +17,30 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 
+/**
+ * Can find subtypes that can be instantiated. Useful for abstract classes, interfaces, and sealed types.
+ */
 public final class SubtypeManager {
 
     private static final List<String> FORBIDDEN_PACKAGES =
             Arrays.asList("java.", "javax.", "sun.", "com.sun.", "org.w3c.dom.");
     private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
-    private SubtypeManager() {}
+    private SubtypeManager() {
+        // Do not instantiate
+    }
 
+    /**
+     * Finds a subtype that can be instantiated.
+     *
+     * @param <T>        Represent the class to find an instantiable subtype for.
+     * @param probe      Represents the class to find an instantiable subtype for.
+     * @param vp         Used to test if the subtype of a sealed type can indeed be instantiated.
+     * @param attributes Used by the {@code vp}.
+     * @return An instantiable subtype, or {@code null} if none can be found.
+     * @throws NoValueException if no subtype can be found. This only happens for sealed types, when all permitted
+     *                              subclasses are recursive.
+     */
     public static <T> Class<T> findInstantiableSubclass(ClassProbe<T> probe, ValueProvider vp, Attributes attributes) {
         if (probe.isSealed() && probe.isAbstract()) {
             return findInstantiablePermittedSubclass(probe, vp, attributes);
