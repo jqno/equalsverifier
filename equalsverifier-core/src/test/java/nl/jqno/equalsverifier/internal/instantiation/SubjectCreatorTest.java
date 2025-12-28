@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Configuration;

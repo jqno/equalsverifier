@@ -116,8 +116,7 @@ public final class SubtypeManager {
 
     private static <T> boolean isRecursive(Class<T> type, ValueProvider vp, Attributes attributes) {
         try {
-            vp.provide(new TypeTag(type), attributes);
-            return false;
+            return vp.provide(new TypeTag(type), attributes).isEmpty();
         }
         catch (RecursionException ignored) {
             return true;
@@ -126,8 +125,13 @@ public final class SubtypeManager {
 
     /* package protected for unit test */
     static <T> Stream<Class<? extends T>> findAllInstantiablePermittedSubclasses(ClassProbe<T> probe) {
-        if (!probe.isAbstract() || !probe.isSealed()) {
+        if (!probe.isAbstract()) {
             return Stream.of(probe.getType());
+        }
+
+        if (probe.isAbstract() && !probe.isSealed()) {
+            // Non-sealed interface or non-sealed abstract class
+            return Stream.of(giveDynamicSubclass(probe.getType()));
         }
 
         var permittedSubclasses = probe.getType().getPermittedSubclasses();

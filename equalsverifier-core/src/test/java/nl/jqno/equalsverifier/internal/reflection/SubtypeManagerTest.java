@@ -1,21 +1,32 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
+import nl.jqno.equalsverifier.internal.instantiation.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.ObjenesisStd;
 
 class SubtypeManagerTest {
 
-    private final ValueProvider vp = new BuiltinPrefabValueProvider();
+    private RecursionDetectingValueProvider vp;
     private final Attributes attributes = Attributes.empty();
+
+    @BeforeEach
+    void setUp() {
+        vp = new RecursionDetectingValueProvider();
+        var avp = new AbstractValueProvider(new BuiltinPrefabValueProvider());
+        var ovp = new ObjectValueProvider(vp, new ObjenesisStd());
+        var chain = new ChainedValueProvider(avp, ovp);
+        vp.setValueProvider(chain);
+    }
 
     @Test
     void giveDynamicSubclass() throws Exception {
@@ -94,10 +105,12 @@ class SubtypeManagerTest {
     static final class AbstractChild extends AbstractMiddle {}
 
     @Test
-    void nonSealedAtTheBottom() {
+    void nonSealedInterfaceAtTheBottom() {
         var probe = ClassProbe.of(NonSealedAtTheBottomParent.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
-        assertThat(actual).isEqualTo(NonSealedAtTheBottomChild.class);
+        assertThat(actual)
+                .isNotEqualTo(NonSealedAtTheBottomChild.class)
+                .isAssignableTo(NonSealedAtTheBottomChild.class);
     }
 
     sealed interface NonSealedAtTheBottomParent {}
@@ -108,7 +121,8 @@ class SubtypeManagerTest {
     void findSeveral() {
         var probe = ClassProbe.of(Hierarchy1.class);
         var actuals = SubtypeManager.findAllInstantiablePermittedSubclasses(probe);
-        assertThat(actuals).containsExactly(Hierarchy3a.class, Hierarchy3b.class, Hierarchy2b.class);
+        var hierarchy3a = SubtypeManager.giveDynamicSubclass(Hierarchy3a.class);
+        assertThat(actuals).containsExactly(hierarchy3a, Hierarchy3b.class, Hierarchy2b.class);
     }
 
     sealed interface Hierarchy1 {}
@@ -119,7 +133,22 @@ class SubtypeManagerTest {
 
     static final class Hierarchy3b implements Hierarchy2a {}
 
-    non-sealed interface Hierarchy2b extends Hierarchy1 {}
+    static non-sealed class Hierarchy2b implements Hierarchy1 {}
+
+    @Test
+    void findNothing() {
+        var probe = ClassProbe.of(OnlyRecursiveSubs.class);
+        assertThatThrownBy(() -> SubtypeManager.findInstantiableSubclass(probe, vp, attributes))
+                .isInstanceOf(NoValueException.class);
+    }
+
+    static record RecursiveSubContainer(OnlyRecursiveSubs x) {}
+
+    sealed interface OnlyRecursiveSubs permits RecursiveSub1, RecursiveSub2 {}
+
+    static record RecursiveSub1(RecursiveSubContainer x) implements OnlyRecursiveSubs {}
+
+    static record RecursiveSub2(RecursiveSubContainer x) implements OnlyRecursiveSubs {}
 
     @Test
     void notSealed() {
