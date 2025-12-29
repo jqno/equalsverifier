@@ -31,7 +31,17 @@ class InstanceCreatorTest {
     }
 
     @Test
-    void getActualType_abstract() {
+    void getActualType_abstract_exact() {
+        var probe = ClassProbe.of(SomeAbstractClass.class);
+        var sut = InstanceCreator.ofExact(probe, objenesis);
+
+        Class<SomeAbstractClass> actual = sut.getActualType();
+
+        assertThat(actual).isEqualTo(SomeAbstractClass.class);
+    }
+
+    @Test
+    void getActualType_abstract_allowSubtype() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
         var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
 

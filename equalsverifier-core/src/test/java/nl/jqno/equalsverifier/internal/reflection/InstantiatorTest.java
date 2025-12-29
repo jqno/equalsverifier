@@ -9,7 +9,6 @@ import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.ArrayContainer;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
-import org.w3c.dom.Element;
 
 class InstantiatorTest {
 
@@ -51,25 +50,5 @@ class InstantiatorTest {
         class Something {}
         Something s = Instantiator.of(Something.class, objenesis).instantiate();
         assertThat(s.getClass()).isEqualTo(Something.class);
-    }
-
-    @Test
-    void instantiateOrgW3cDomClassWhichHasBootstrapClassLoader() {
-        instantiateSub(Element.class);
-    }
-
-    @Test
-    void instantiateTheSameSubclass() {
-        Class<?> expected = instantiateSub(Point.class).getClass();
-        Class<?> actual = instantiateSub(Point.class).getClass();
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    private <T> T instantiateSub(Class<T> type) {
-        Class<T> sub = SubtypeManager.giveDynamicSubclass(type);
-        var object = Instantiator.of(sub, objenesis).instantiate();
-        assertThat(object).isNotNull();
-        assertThat(object.getClass()).isAssignableTo(type);
-        return object;
     }
 }

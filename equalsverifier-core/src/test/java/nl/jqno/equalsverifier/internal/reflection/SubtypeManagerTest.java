@@ -13,6 +13,8 @@ import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import org.junit.jupiter.api.Test;
+import org.objenesis.ObjenesisStd;
+import org.w3c.dom.Element;
 
 class SubtypeManagerTest {
 
@@ -41,6 +43,22 @@ class SubtypeManagerTest {
                 .load(getClass().getClassLoader())
                 .getLoaded();
         SubtypeManager.giveDynamicSubclass(type, "X", b -> b);
+    }
+
+    @Test
+    void giveDynamicSybclassIsIdempotent() {
+        class Super {}
+        var sub1 = SubtypeManager.giveDynamicSubclass(Super.class);
+        var sub2 = SubtypeManager.giveDynamicSubclass(Super.class);
+        assertThat(sub1).isEqualTo(sub2);
+    }
+
+    @Test
+    void canInstantiateSubtypeForOrgW3cDomClassWhichHasBootstrapClassLoader() {
+        Class<Element> sub = SubtypeManager.giveDynamicSubclass(Element.class);
+        Element object = Instantiator.of(sub, new ObjenesisStd()).instantiate();
+        assertThat(object).isNotNull();
+        assertThat(object.getClass()).isAssignableTo(Element.class);
     }
 
     @Test
