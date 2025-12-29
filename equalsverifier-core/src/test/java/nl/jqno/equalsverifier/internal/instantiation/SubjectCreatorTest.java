@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -220,6 +219,10 @@ class SubjectCreatorTest {
             }
             if (String.class.equals(tag.getType())) {
                 return Optional.of((Tuple<T>) new Tuple<>(S_RED, S_BLUE, new String(S_RED)));
+            }
+            if (SealedSub.class.equals(tag.getType())) {
+                var red = new SealedSub("1", 1);
+                return Optional.of((Tuple<T>) new Tuple<>(red, new SealedSub("2", 2), red));
             }
             return Optional.empty();
         }

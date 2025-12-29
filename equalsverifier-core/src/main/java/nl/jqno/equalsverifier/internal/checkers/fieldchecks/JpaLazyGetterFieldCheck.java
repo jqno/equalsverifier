@@ -12,9 +12,7 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -118,7 +116,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     }
 
     private Class<T> throwingGetterCreator(String getterName) {
-        return Instantiator
+        return SubtypeManager
                 .giveDynamicSubclass(
                     type,
                     getterName,

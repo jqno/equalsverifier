@@ -1,13 +1,14 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Objects;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.AbstractClass;
-import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.Interface;
 import nl.jqno.equalsverifier_testhelpers.types.TypeHelper.StaticContainer;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
@@ -26,22 +27,10 @@ public class ObjectValueProviderTest {
     }
 
     @Test
-    void instantiatesAbstractClass() {
-        var actual = provide(AbstractClass.class).red();
-        assertThat(actual.getClass()).isNotEqualTo(AbstractClass.class).isAssignableTo(AbstractClass.class);
-        assertThat(actual.field).isEqualTo(1);
-    }
-
-    @Test
-    void instantiatesInterface() {
-        var actual = provide(Interface.class).red();
-        assertThat(actual.getClass()).isNotEqualTo(Interface.class).isAssignableTo(Interface.class);
-    }
-
-    @Test
-    void instantiatesSealedType() {
-        var actual = provide(Sealed.class).red();
-        assertThat(actual.getClass()).isNotEqualTo(Sealed.class).isAssignableTo(Sealed.class);
+    void doesNotInstantiateAbstractClass() {
+        assertThatThrownBy(() -> provide(AbstractClass.class))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessage("Cannot instantiate abstract class " + AbstractClass.class.getName());
     }
 
     @Test

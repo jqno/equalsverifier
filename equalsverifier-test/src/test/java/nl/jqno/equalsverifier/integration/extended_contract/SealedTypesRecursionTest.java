@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class SealedTypesRecursionTest {
@@ -17,10 +16,9 @@ class SealedTypesRecursionTest {
                 .when(() -> EqualsVerifier.forClass(SealedContainer.class).verify())
                 .assertFailure()
                 .assertMessageContains(
-                    "Recursive datastructure",
-                    "Add prefab values for one of the following types",
-                    "SealedContainer",
-                    "SealedInterface");
+                    "Could not construct a value for SealedInterface",
+                    "it is sealed and no non-recursive subclass could be found",
+                    "Please add prefab values for this type");
     }
 
     @Test
@@ -31,17 +29,19 @@ class SealedTypesRecursionTest {
                 .when(() -> EqualsVerifier.forClass(SealedRecordContainer.class).verify())
                 .assertFailure()
                 .assertMessageContains(
-                    "Recursive datastructure",
-                    "Add prefab values for one of the following types",
-                    "SealedRecordContainer",
-                    "SealedRecordInterface");
+                    "Could not construct a value for SealedRecordInterface",
+                    "it is sealed and no non-recursive subclass could be found",
+                    "Please add prefab values for this type");
     }
 
     @Test
-    @Disabled("""
-              See issue 1081: EqualsVerifier should fall back to a second permitted class if the first fails,
-              but current architecture doesn't allow it""")
-    void succeed_whenFirstPermittedRefersBackToContainerButSecondIsOk() {
+    void succeed_whenSutIsSealed_givenFirstPermittedRefersBackToContainerButSecondIsOk() {
+        // A sealed interface. It permits 2 types; the first is a record that refers back to the container, but the second is ok.
+        EqualsVerifier.forClass(SealedAndOrderedInterface.class).verify();
+    }
+
+    @Test
+    void succeed_whenSutContainsSealed_givenFirstPermittedRefersBackToContainerButSecondIsOk() {
         // A container with a field of a sealed interface.
         // The sealed interface permits 2 types; the first is a record that refers back to the container, but the second is ok.
         EqualsVerifier.forClass(SealedAndOrderedContainer.class).verify();

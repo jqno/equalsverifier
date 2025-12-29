@@ -27,6 +27,7 @@ public final class ValueProviderBuilder {
                 new MockitoValueProvider(!ExternalLibs.isMockitoAvailable() || modes.contains(Mode.skipMockito()));
         var enumeration = new EnumValueProvider();
         var array = new ArrayValueProvider(recursionDetector);
+        var abstr = new AbstractValueProvider(recursionDetector);
         var object = new ObjectValueProvider(recursionDetector, objenesis);
 
         var mainChain = new ChainedValueProvider(userPrefabs,
@@ -37,6 +38,7 @@ public final class ValueProviderBuilder {
                 enumeration,
                 array,
                 mockito,
+                abstr,
                 object);
         var caching = new CachingValueProvider(userPrefabCaches, fieldCache, mainChain);
 

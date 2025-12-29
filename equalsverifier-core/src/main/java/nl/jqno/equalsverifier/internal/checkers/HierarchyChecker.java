@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
 
@@ -160,7 +160,7 @@ public class HierarchyChecker<T> implements Checker {
         @SuppressWarnings("unchecked")
         // Don't use type directly, as reference may already be a subclass if type was abstract
         Class<T> realClass = (Class<T>) reference.getClass();
-        Class<T> anonymousSubclass = Instantiator.giveDynamicSubclass(realClass);
+        Class<T> anonymousSubclass = SubtypeManager.giveDynamicSubclass(realClass);
         T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
 
         if (config.usingGetClass()) {

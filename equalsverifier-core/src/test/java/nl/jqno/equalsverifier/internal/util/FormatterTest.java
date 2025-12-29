@@ -3,7 +3,12 @@ package nl.jqno.equalsverifier.internal.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import java.util.Map;
+
+import nl.jqno.equalsverifier.internal.instantiation.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -11,6 +16,7 @@ import org.objenesis.ObjenesisStd;
 
 class FormatterTest {
 
+    private final ValueProvider vp = new BuiltinPrefabValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
@@ -56,36 +62,36 @@ class FormatterTest {
 
     @Test
     void oneAbstractParameter() {
-        Instantiator<Abstract> i = Instantiator.of(Abstract.class, objenesis);
-        Formatter f = Formatter.of("Abstract: %%", i.instantiate());
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(Abstract.class), vp, objenesis);
+        Formatter f = Formatter.of("Abstract: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Abstract: [Abstract x=0]");
     }
 
     @Test
     void oneConcreteSubclassParameter() {
-        Instantiator<AbstractImpl> i = Instantiator.of(AbstractImpl.class, objenesis);
-        Formatter f = Formatter.of("Concrete: %%", i.instantiate());
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractImpl.class), vp, objenesis);
+        Formatter f = Formatter.of("Concrete: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Concrete: something concrete");
     }
 
     @Test
     void oneDelegatedAbstractParameter() {
-        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
-        Formatter f = Formatter.of("Abstract: %%", i.instantiate());
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegation.class), vp, objenesis);
+        Formatter f = Formatter.of("Abstract: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Abstract: [AbstractDelegation y=0]");
     }
 
     @Test
     void oneDelegatedConcreteSubclassParameter() {
-        Instantiator<AbstractDelegationImpl> i = Instantiator.of(AbstractDelegationImpl.class, objenesis);
-        Formatter f = Formatter.of("Concrete: %%", i.instantiate());
+        var i = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegationImpl.class), vp, objenesis);
+        Formatter f = Formatter.of("Concrete: %%", i.instantiate(Map.of()));
         assertThat(f.format()).contains("Concrete: something concrete");
     }
 
     @Test
     void oneThrowingContainerParameter() {
-        Instantiator<Throwing> i = Instantiator.of(Throwing.class, objenesis);
-        ThrowingContainer tc = new ThrowingContainer(i.instantiate());
+        var ic = InstanceCreator.ofExact(ClassProbe.of(Throwing.class), objenesis);
+        ThrowingContainer tc = new ThrowingContainer(ic.instantiate(Map.of()));
         Formatter f = Formatter.of("TC: %%", tc);
         String expected =
                 "TC: \\[ThrowingContainer t=Throwing@.*-throws IllegalStateException\\(msg\\)\\]-throws IllegalStateException\\(msg\\)";
@@ -94,8 +100,8 @@ class FormatterTest {
 
     @Test
     void oneAbstractContainerParameter() {
-        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
-        AbstractContainer ac = new AbstractContainer(i.instantiate());
+        var ic = InstanceCreator.ofAllowSubtype(ClassProbe.of(AbstractDelegation.class), vp, objenesis);
+        var ac = new AbstractContainer(ic.instantiate(Map.of()));
 
         Formatter f = Formatter.of("AC: %%", ac);
         assertThat(f.format()).matches("AC: \\[AbstractContainer ad=AbstractDelegation.*\\]");
