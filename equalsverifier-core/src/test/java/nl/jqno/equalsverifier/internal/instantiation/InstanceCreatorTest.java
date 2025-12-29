@@ -5,16 +5,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 class InstanceCreatorTest {
 
-    private final ValueProvider vp = new BuiltinPrefabValueProvider();
+    private final ValueProvider vp = new InstanceCreatorTestValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
@@ -147,4 +150,20 @@ class InstanceCreatorTest {
     sealed static class SealedNonAbstract permits SealedNonAbstractSub {}
 
     static final class SealedNonAbstractSub extends SealedNonAbstract {}
+
+    static class InstanceCreatorTestValueProvider implements ValueProvider {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+            if (SealedAbstractSub.class.equals(tag.getType())) {
+                return Optional
+                        .of(
+                            (Tuple<T>) new Tuple<>(new SealedAbstractSub(),
+                                    new SealedAbstractSub(),
+                                    new SealedAbstractSub()));
+            }
+            return Optional.empty();
+        }
+    }
 }

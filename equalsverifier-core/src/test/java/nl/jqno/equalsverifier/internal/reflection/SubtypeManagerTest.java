@@ -4,29 +4,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.instantiation.*;
-import org.junit.jupiter.api.BeforeEach;
+import nl.jqno.equalsverifier.internal.instantiation.Attributes;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import org.junit.jupiter.api.Test;
-import org.objenesis.ObjenesisStd;
 
 class SubtypeManagerTest {
 
-    private RecursionDetectingValueProvider vp;
+    private final ValueProvider vp = new SubtypeManagerTestValueProvider();
     private final Attributes attributes = Attributes.empty();
-
-    @BeforeEach
-    void setUp() {
-        vp = new RecursionDetectingValueProvider();
-        var avp = new AbstractValueProvider(new BuiltinPrefabValueProvider());
-        var ovp = new ObjectValueProvider(vp, new ObjenesisStd());
-        var chain = new ChainedValueProvider(avp, ovp);
-        vp.setValueProvider(chain);
-    }
 
     @Test
     void giveDynamicSubclass() throws Exception {
@@ -155,5 +146,33 @@ class SubtypeManagerTest {
         var probe = ClassProbe.of(Object.class);
         var actual = SubtypeManager.findInstantiableSubclass(probe, vp, attributes);
         assertThat(actual).isEqualTo(Object.class);
+    }
+
+    static class SubtypeManagerTestValueProvider implements ValueProvider {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+            if (TwoLevelChild.class.equals(tag.getType())) {
+                return Optional
+                        .of((Tuple<T>) new Tuple<>(new TwoLevelChild(), new TwoLevelChild(), new TwoLevelChild()));
+            }
+            if (AbstractMiddle.class.equals(tag.getType())) {
+                return Optional
+                        .of((Tuple<T>) new Tuple<>(new AbstractMiddle(), new AbstractMiddle(), new AbstractMiddle()));
+            }
+            if (FourLevelChild.class.equals(tag.getType())) {
+                return Optional
+                        .of((Tuple<T>) new Tuple<>(new FourLevelChild(), new FourLevelChild(), new FourLevelChild()));
+            }
+            if (NonSealedAtTheBottomChild.class.isAssignableFrom(tag.getType())) {
+                return Optional
+                        .of(
+                            (Tuple<T>) new Tuple<>(new NonSealedAtTheBottomChild() {},
+                                    new NonSealedAtTheBottomChild() {},
+                                    new NonSealedAtTheBottomChild() {}));
+            }
+            return Optional.empty();
+        }
     }
 }

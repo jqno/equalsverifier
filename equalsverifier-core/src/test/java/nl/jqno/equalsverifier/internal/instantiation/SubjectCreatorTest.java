@@ -220,6 +220,10 @@ class SubjectCreatorTest {
             if (String.class.equals(tag.getType())) {
                 return Optional.of((Tuple<T>) new Tuple<>(S_RED, S_BLUE, new String(S_RED)));
             }
+            if (SealedSub.class.equals(tag.getType())) {
+                var red = new SealedSub("1", 1);
+                return Optional.of((Tuple<T>) new Tuple<>(red, new SealedSub("2", 2), red));
+            }
             return Optional.empty();
         }
     }
