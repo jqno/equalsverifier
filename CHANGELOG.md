@@ -14,9 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
 ## [4.3] - 2026-01-01
+
+### Changed
 
 - Restored original behaviour for multiple predicate-based `ScanOption` exceptions. ([Issue 1167](https://github.com/jqno/equalsverifier/issues/1167); thanks Mark!)
 
