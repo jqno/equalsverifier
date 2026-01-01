@@ -83,6 +83,15 @@ class PackageScannerTest {
 
     @Test
     void happyPathExceptPredicate() {
+        opts = PackageScanOptions.process(ScanOption.except(c -> c.getSimpleName().endsWith("B")));
+        List<Class<?>> classes =
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
+        sort(classes);
+        assertThat(classes).isEqualTo(List.of(A.class, C.class));
+    }
+
+    @Test
+    void happyPathMultipleExceptPredicates() {
         opts = PackageScanOptions
                 .process(
                     ScanOption.except(c -> c.getSimpleName().endsWith("B")),
