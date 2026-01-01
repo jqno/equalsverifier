@@ -44,6 +44,7 @@ public final class PackageScanner {
                 .filter(
                     c -> options.mustExtend() == null
                             || (options.mustExtend().isAssignableFrom(c) && !options.mustExtend().equals(c)))
+                .distinct()
                 .collect(Collectors.toList()); // Need a mutable List for the next validations
 
         Validations.validateTypesAreKnown(options.exceptClasses(), result);

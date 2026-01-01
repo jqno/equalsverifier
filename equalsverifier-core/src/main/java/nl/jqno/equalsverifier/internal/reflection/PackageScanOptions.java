@@ -65,6 +65,8 @@ public class PackageScanOptions {
 
     public static PackageScanOptions process(ScanOption... options) {
         PackageScanOptions result = new PackageScanOptions();
+        boolean predicateDefined = false;
+
         for (ScanOption option : options) {
             if (option.equals(O.RECURSIVE)) {
                 result.scanRecursively = true;
@@ -79,7 +81,13 @@ public class PackageScanOptions {
                 result.exceptClasses.addAll(ec.types);
             }
             if (option instanceof ExclusionPredicate ep) {
-                result.exclusionPredicate = ep.exclusionPredicate;
+                if (predicateDefined) {
+                    result.exclusionPredicate = result.exclusionPredicate.or(ep.exclusionPredicate);
+                }
+                else {
+                    result.exclusionPredicate = ep.exclusionPredicate;
+                    predicateDefined = true;
+                }
             }
         }
         return result;
