@@ -16,5 +16,8 @@ verify:
 format:
     mvn spotless:apply
 
+local-install:
+    mvn install -Prelease
+
 pitest:
     mvn clean test org.pitest:pitest-maven:mutationCoverage
