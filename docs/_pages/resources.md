@@ -11,7 +11,7 @@ permalink: /resources/
 
 The source for this project is hosted on [GitHub](https://github.com/jqno/equalsverifier). You can [submit bug reports or feature requests](/equalsverifier/submit-an-issue) there.
 
-Pull Requests are welcome! Check out [CONTRIBUTING.md](https://github.com/jqno/equalsverifier/blob/main/CONTRIBUTING.md) for more information.
+Pull Requests are welcome! Check out [CONTRIBUTING.md](https://github.com/jqno/equalsverifier/blob/main/CONTRIBUTING.md) and the [code of conduct](https://github.com/jqno/equalsverifier/blob/main/CODE_OF_CONDUCT.md) for more information.
 
 ## Resources on how to write a great `equals` method
 

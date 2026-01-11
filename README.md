@@ -57,9 +57,10 @@ This way, EqualsVerifier will throw less errors at you. However, it's usually be
 
 For more documentation, see:
 
+- The [code of conduct](CODE_OF_CONDUCT.md)
+- The [contribution guidelines](CONTRIBUTING.md) file
 - The [changelog](https://github.com/jqno/equalsverifier/blob/main/CHANGELOG.md)
 - The [project's website](https://jqno.nl/equalsverifier/)
-- The [ARCHITECTURE.md](ARCHITECTURE.md) file
 
 # A note on equality
 

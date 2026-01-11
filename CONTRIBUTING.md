@@ -17,6 +17,10 @@ Thank you for your interest in contributing to EqualsVerifier! We welcome all co
    - For significant changes, update the documentation in the `docs/` directory. Generate the documentation website with `docker compose up` from the `docs/` directory.
    - Open a [pull request](https://github.com/jqno/equalsverifier/pulls) against the `main` branch.
 
+## Code of Conduct
+
+Take a look at the [code of conduct](CODE_OF_CONDUCT.md).
+
 ## Key Technologies
 
 - **Language:** Java 17
