@@ -87,7 +87,7 @@
         <version.jakarta-persistence-api>3.0.0</version.jakarta-persistence-api>
         <version.jakarta-annotation-api>3.0.0</version.jakarta-annotation-api>
         <version.jcip-annotations>1.0</version.jcip-annotations>
-        <version.junit-jupiter>6.0.1</version.junit-jupiter>
+        <version.junit-jupiter>6.0.2</version.junit-jupiter>
         <version.kotlin>2.3.0</version.kotlin>
         <version.slf4j>2.0.17</version.slf4j>
 
@@ -98,7 +98,7 @@
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
-        <version.error-prone>2.45.0</version.error-prone>
+        <version.error-prone>2.46.0</version.error-prone>
         <version.flatten-maven-plugin>1.7.3</version.flatten-maven-plugin>
         <version.jacoco>0.8.14</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
