@@ -16,7 +16,8 @@ class KotlinDataClassTest {
         EqualsVerifier.forClass(DataClassWithComputedProperty::class.java)
           .verify()
       }.isInstanceOf(AssertionError::class.java)
-      .hasMessageContaining("Significant fields: equals does not use isEmpty, or it is stateless")
+      .hasMessageContaining("Significant fields: equals does not use isEmpty, or it is stateless.")
+      .hasMessageContaining("Note: This is a Kotlin class. Import kotlin reflect in the classpath to use the adapted equalsverifier implementation.")
   }
 
   data class DataClassWithSecondaryConstructor(val value: String) {
@@ -30,6 +31,7 @@ class KotlinDataClassTest {
       EqualsVerifier.forClass(DataClassWithSecondaryConstructor::class.java)
         .verify()
     }.isInstanceOf(AssertionError::class.java)
-      .hasMessageContaining("Significant fields: equals does not use isEmpty, or it is stateless")
+      .hasMessageContaining("Significant fields: equals does not use isEmpty, or it is stateless.")
+      .hasMessageContaining("Note: This is a Kotlin class. Import kotlin reflect in the classpath to use the adapted equalsverifier implementation.")
   }
 }
