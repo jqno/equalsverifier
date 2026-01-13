@@ -13,7 +13,7 @@
     <name>EqualsVerifier | test Mockito</name>
 
     <properties>
-        <argline.mockito>-javaagent:${org.mockito:mockito-core:jar}</argline.mockito>
+        <argline.additional>-javaagent:${org.mockito:mockito-core:jar}</argline.additional>
     </properties>
 
     <dependencies>

@@ -66,7 +66,7 @@
 
         <argline.preview />
         <argline.experimental />
-        <argline.mockito />
+        <argline.additional />
         <argline.full>${argline.preview} ${argline.experimental}</argline.full>
 
         <analysis.jacoco.threshold>0.97</analysis.jacoco.threshold>
@@ -152,7 +152,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
                 <configuration>
-                    <argLine>@{argline.full} ${argline.mockito}</argLine>
+                    <argLine>@{argline.full} ${argline.additional}</argLine>
                     <useModulePath>false</useModulePath>
                     <trimStackTrace>false</trimStackTrace>
                     <useSystemClassLoader>false</useSystemClassLoader>
@@ -495,7 +495,7 @@
         <profile>
             <id>modules-jdk17</id>
             <activation>
-                <jdk>[17,</jdk>
+                <jdk>[17,)</jdk>
             </activation>
 
             <modules>
@@ -509,7 +509,7 @@
         <profile>
             <id>modules-jdk21</id>
             <activation>
-                <jdk>[21,</jdk>
+                <jdk>[21,)</jdk>
             </activation>
 
             <modules>
@@ -527,6 +527,17 @@
                 <module>equalsverifier-25</module>
                 <module>equalsverifier-test-kotlin</module>
                 <module>equalsverifier-test-kotlin-noreflect</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk26</id>
+            <activation>
+                <jdk>[26,)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-26</module>
             </modules>
         </profile>
 
