@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import nl.jqno.equalsverifier.internal.instantiators.InstanceCreator;
+import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
@@ -22,7 +22,7 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final Objenesis objenesis;
-    private final InstanceCreator<? extends T> instanceCreator;
+    private final Instantiator<? extends T> instantiator;
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ public class SubjectCreator<T> {
         this.objenesis = objenesis;
         this.actualType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instanceCreator = InstanceCreator.of(ClassProbe.of(actualType), objenesis);
+        this.instantiator = Instantiator.of(ClassProbe.of(actualType), objenesis);
     }
 
     /**
@@ -180,7 +180,7 @@ public class SubjectCreator<T> {
     public Object copyIntoSuperclass(T original) {
         var actualSuperType = SubtypeManager
                 .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
-        InstanceCreator<? super T> superCreator = InstanceCreator.of(ClassProbe.of(actualSuperType), objenesis);
+        Instantiator<? super T> superCreator = Instantiator.of(ClassProbe.of(actualSuperType), objenesis);
         return superCreator.copy(original);
     }
 
@@ -197,13 +197,13 @@ public class SubjectCreator<T> {
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
         var actualSubType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
-        InstanceCreator<S> subCreator = InstanceCreator.of(ClassProbe.of(actualSubType), objenesis);
+        Instantiator<S> subCreator = Instantiator.of(ClassProbe.of(actualSubType), objenesis);
         return subCreator.copy(original);
     }
 
     private T createInstance(Map<Field, Object> givens) {
         Map<Field, Object> values = determineValues(givens);
-        return Rethrow.rethrow(() -> instanceCreator.instantiate(values));
+        return Rethrow.rethrow(() -> instantiator.instantiate(values));
     }
 
     private Map<Field, Object> determineValues(Map<Field, Object> givens) {

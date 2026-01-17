@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class InstanceCreatorTest {
+public class InstantiatorTest {
 
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
     void copy() {
         ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
-        var sut = InstanceCreator.of(probe, objenesis);
+        var sut = Instantiator.of(probe, objenesis);
 
         SomeClass original = new SomeClass(42, 1337, "yeah");
         SomeSubClass copy = sut.copy(original);

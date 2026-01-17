@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-class ReflectionInstanceCreatorTest {
+class ReflectionInstantiatorTest {
 
     private final Objenesis objenesis = new ObjenesisStd();
 
@@ -72,7 +72,7 @@ class ReflectionInstanceCreatorTest {
     @Test
     void failsGracefully_abstract() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.of(probe, objenesis);
+        var sut = Instantiator.of(probe, objenesis);
 
         assertThatThrownBy(() -> sut.instantiate(Map.of()))
                 .isInstanceOf(ReflectionException.class)
@@ -81,7 +81,7 @@ class ReflectionInstanceCreatorTest {
 
     private <T> T instantiate(Class<T> type, Map<Field, Object> values) {
         var probe = ClassProbe.of(type);
-        var sut = InstanceCreator.of(probe, objenesis);
+        var sut = Instantiator.of(probe, objenesis);
         return sut.instantiate(values);
     }
 

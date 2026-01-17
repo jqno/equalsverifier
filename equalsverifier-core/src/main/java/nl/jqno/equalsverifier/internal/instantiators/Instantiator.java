@@ -12,7 +12,7 @@ import org.objenesis.Objenesis;
 /**
  * Creates an instance of a class or record.
  */
-public interface InstanceCreator<T> {
+public interface Instantiator<T> {
 
     /**
      * Factory method for when the given class must be instantiated, and no other. No subclass will be substituted if
@@ -23,8 +23,8 @@ public interface InstanceCreator<T> {
      * @param objenesis To instantiate non-record classes.
      * @return an {@code InstanceCreator} for the given class.
      */
-    static <S> InstanceCreator<S> of(ClassProbe<S> probe, Objenesis objenesis) {
-        return new ReflectionInstanceCreator<>(probe, objenesis);
+    static <S> Instantiator<S> of(ClassProbe<S> probe, Objenesis objenesis) {
+        return new ReflectionInstantiator<>(probe, objenesis);
     }
 
     /**

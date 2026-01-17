@@ -14,19 +14,19 @@ import org.objenesis.instantiator.ObjectInstantiator;
 /**
  * Creates an instance of a class using reflection on potentially final fields.
  */
-public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
+public final class ReflectionInstantiator<T> implements Instantiator<T> {
 
     private final Class<T> type;
     private final ClassProbe<T> probe;
     private final ObjectInstantiator<T> objenesisInstantiator;
 
     /**
-     * Package private constructor. Use {@link InstanceCreator#of(ClassProbe, Objenesis)} instead.
+     * Package private constructor. Use {@link Instantiator#of(ClassProbe, Objenesis)} instead.
      *
      * @param probe     The ClassProbe for the type.
      * @param objenesis The Objenesis instance to use.
      */
-    ReflectionInstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
+    ReflectionInstantiator(ClassProbe<T> probe, Objenesis objenesis) {
         this.type = probe.getType();
         this.probe = ClassProbe.of(type);
         this.objenesisInstantiator = objenesis.getInstantiatorOf(type);

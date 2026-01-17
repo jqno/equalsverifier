@@ -23,10 +23,10 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
 
     public StringFieldCheck(
             SubjectCreator<T> subjectCreator,
-            ValueProvider instanceCreator,
+            ValueProvider valueProvider,
             CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
         this.subjectCreator = subjectCreator;
-        this.valueProvider = instanceCreator;
+        this.valueProvider = valueProvider;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
 
