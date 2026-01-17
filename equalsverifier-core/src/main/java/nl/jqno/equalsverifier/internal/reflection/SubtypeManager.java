@@ -24,7 +24,7 @@ public final class SubtypeManager {
 
     private static final List<String> FORBIDDEN_PACKAGES =
             Arrays.asList("java.", "javax.", "sun.", "com.sun.", "org.w3c.dom.");
-    private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
+    private static final String FALLBACK_PACKAGE_NAME = getPackageName(SubtypeManager.class);
 
     private SubtypeManager() {
         // Do not instantiate
@@ -83,7 +83,7 @@ public final class SubtypeManager {
         String name = namePrefix + (namePrefix.isEmpty() ? "" : ".") + superclass.getSimpleName() + "$$DynamicSubclass$"
                 + Integer.toHexString(superclass.hashCode()) + "$" + nameSuffix;
 
-        Class<?> context = isSystemClass ? Instantiator.class : superclass;
+        Class<?> context = isSystemClass ? SubtypeManager.class : superclass;
         ClassLoader classLoader = context.getClassLoader();
 
         // `mvn quarkus:dev` does strange classloader stuff. We need to make sure that we

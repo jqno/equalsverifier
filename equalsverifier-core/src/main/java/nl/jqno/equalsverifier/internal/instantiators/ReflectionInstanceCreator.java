@@ -1,13 +1,15 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import org.objenesis.Objenesis;
+import org.objenesis.instantiator.ObjectInstantiator;
 
 /**
  * Creates an instance of a class using reflection on potentially final fields.
@@ -16,7 +18,7 @@ public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
 
     private final Class<T> type;
     private final ClassProbe<T> probe;
-    private final Instantiator<T> instantiator;
+    private final ObjectInstantiator<T> objenesisInstantiator;
 
     /**
      * Package private constructor. Use {@link InstanceCreator#of(ClassProbe, Objenesis)} instead.
@@ -26,8 +28,8 @@ public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
      */
     ReflectionInstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
         this.type = probe.getType();
-        this.instantiator = Instantiator.of(this.type, objenesis);
-        this.probe = ClassProbe.of(this.type);
+        this.probe = ClassProbe.of(type);
+        this.objenesisInstantiator = objenesis.getInstantiatorOf(type);
     }
 
     /** {@inheritDoc}} */
@@ -59,7 +61,7 @@ public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
         if (probe.isAbstract()) {
             throw new ReflectionException("Cannot instantiate abstract class " + probe.getType().getName());
         }
-        T instance = instantiator.instantiate();
+        T instance = objenesisInstantiator.newInstance();
         traverseFields(values, (p, v) -> new FieldMutator(p).setNewValue(instance, v));
         return instance;
     }
