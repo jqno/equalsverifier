@@ -33,6 +33,11 @@ jobs:
             java: 25
             dist: temurin
             flags: "-Prelease"
+          - title: "Experimental JDK 26"
+            experimental: true
+            cache-id: "jdk26"
+            java: "26"
+            flags: "-DdisableStaticAnalysis"
           - title: "Experimental JDK EA (simplified)"
             experimental: true
             cache-id: "jdk-ea-simple"
