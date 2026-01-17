@@ -2,9 +2,9 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
 

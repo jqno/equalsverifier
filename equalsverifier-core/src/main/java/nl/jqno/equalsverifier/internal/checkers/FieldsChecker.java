@@ -4,13 +4,13 @@ import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class FieldsChecker<T> implements Checker {
 

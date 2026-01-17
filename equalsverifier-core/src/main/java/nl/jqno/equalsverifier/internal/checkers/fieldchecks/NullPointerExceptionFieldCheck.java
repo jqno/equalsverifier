@@ -4,10 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldMutator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 

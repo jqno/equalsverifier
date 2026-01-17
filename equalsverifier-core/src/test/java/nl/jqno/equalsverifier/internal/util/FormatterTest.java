@@ -5,9 +5,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 import java.util.Map;
 
-import nl.jqno.equalsverifier.internal.instantiation.*;
+import nl.jqno.equalsverifier.internal.instantiators.InstanceCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
+import nl.jqno.equalsverifier.internal.valueproviders.Attributes;
+import nl.jqno.equalsverifier.internal.valueproviders.BuiltinPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;

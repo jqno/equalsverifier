@@ -14,8 +14,8 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.valueproviders.Attributes;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
 
 /**
  * Can find subtypes that can be instantiated. Useful for abstract classes, interfaces, and sealed types.

@@ -4,10 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class ArrayFieldCheck<T> implements FieldCheck<T> {
 

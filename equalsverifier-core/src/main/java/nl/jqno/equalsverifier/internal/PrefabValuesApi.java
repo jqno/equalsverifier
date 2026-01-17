@@ -6,10 +6,10 @@ import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
+import nl.jqno.equalsverifier.internal.instantiators.InstanceCreator;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Validations;
+import nl.jqno.equalsverifier.internal.valueproviders.UserPrefabValueCaches;
 import org.objenesis.Objenesis;
 
 public final class PrefabValuesApi {

@@ -2,11 +2,11 @@ package nl.jqno.equalsverifier.internal.versionspecific;
 
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.prefab.GenericValueSupplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.valueproviders.Attributes;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
+import nl.jqno.equalsverifier.internal.valueproviders.prefab.GenericValueSupplier;
 
 public final class SequencedCollectionsValueSupplier<T> extends GenericValueSupplier<T> {
 

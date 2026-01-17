@@ -7,11 +7,11 @@ import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class HierarchyChecker<T> implements Checker {
 

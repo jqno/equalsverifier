@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 /** Contains a cache for values connected to specific fields, for {@link SubjectCreator}. */
 public class FieldCache {

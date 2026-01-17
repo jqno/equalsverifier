@@ -5,10 +5,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 import java.util.Map;
 import java.util.Objects;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class MapEntryHashCodeRequirementChecker<T> implements Checker {
 

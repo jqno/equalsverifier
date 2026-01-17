@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class ExamplesChecker<T> implements Checker {
 

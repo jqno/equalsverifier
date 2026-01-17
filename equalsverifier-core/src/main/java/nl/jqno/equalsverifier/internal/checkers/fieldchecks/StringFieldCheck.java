@@ -5,13 +5,13 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import java.util.Locale;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.Attributes;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
 
 public class StringFieldCheck<T> implements FieldCheck<T> {
 
