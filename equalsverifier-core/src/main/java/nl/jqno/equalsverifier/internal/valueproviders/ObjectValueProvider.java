@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
@@ -28,7 +28,7 @@ public class ObjectValueProvider implements ValueProvider {
     /** {@inheritDoc}} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        var instantiator = Instantiator.<T>of(ClassProbe.of(tag.getType()), objenesis);
+        var instantiator = InstantiatorFactory.<T>of(ClassProbe.of(tag.getType()), objenesis);
         var values = determineValues(tag.getType(), tag, attributes);
         var tuple = Rethrow.rethrow(() -> values.map(instantiator::instantiate));
         return Optional.of(tuple);

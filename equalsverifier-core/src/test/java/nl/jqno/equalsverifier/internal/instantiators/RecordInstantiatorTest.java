@@ -14,7 +14,7 @@ class RecordInstantiatorTest {
     @Test
     void instanceCreator() throws NoSuchFieldException {
         ClassProbe<SomeRecord> probe = ClassProbe.of(SomeRecord.class);
-        var sut = Instantiator.of(probe, new ObjenesisStd());
+        var sut = InstantiatorFactory.of(probe, new ObjenesisStd());
 
         Field x = SomeRecord.class.getDeclaredField("x");
         Field z = SomeRecord.class.getDeclaredField("z");

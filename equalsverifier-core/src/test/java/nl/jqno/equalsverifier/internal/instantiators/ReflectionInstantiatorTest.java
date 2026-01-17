@@ -72,7 +72,7 @@ class ReflectionInstantiatorTest {
     @Test
     void failsGracefully_abstract() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = Instantiator.of(probe, objenesis);
+        var sut = InstantiatorFactory.of(probe, objenesis);
 
         assertThatThrownBy(() -> sut.instantiate(Map.of()))
                 .isInstanceOf(ReflectionException.class)
@@ -81,7 +81,7 @@ class ReflectionInstantiatorTest {
 
     private <T> T instantiate(Class<T> type, Map<Field, Object> values) {
         var probe = ClassProbe.of(type);
-        var sut = Instantiator.of(probe, objenesis);
+        var sut = InstantiatorFactory.of(probe, objenesis);
         return sut.instantiate(values);
     }
 

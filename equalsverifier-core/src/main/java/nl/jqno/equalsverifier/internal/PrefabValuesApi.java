@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Validations;
 import nl.jqno.equalsverifier.internal.valueproviders.UserPrefabValueCaches;
@@ -31,7 +31,7 @@ public final class PrefabValuesApi {
             try {
                 @SuppressWarnings("unchecked")
                 ClassProbe<T> probe = ClassProbe.of((Class<T>) red.getClass());
-                T redCopy = Instantiator.of(probe, objenesis).copy(red);
+                T redCopy = InstantiatorFactory.of(probe, objenesis).copy(red);
                 prefabs.register(otherType, red, blue, redCopy);
             }
             catch (InaccessibleObjectException ignored) {
@@ -74,7 +74,7 @@ public final class PrefabValuesApi {
             try {
                 @SuppressWarnings("unchecked")
                 ClassProbe<T> probe = ClassProbe.of((Class<T>) red.getClass());
-                T redCopy = Instantiator.of(probe, objenesis).copy(red);
+                T redCopy = InstantiatorFactory.of(probe, objenesis).copy(red);
                 fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, redCopy));
             }
             catch (InaccessibleObjectException ignored) {

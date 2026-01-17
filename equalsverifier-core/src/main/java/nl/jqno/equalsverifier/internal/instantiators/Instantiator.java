@@ -4,28 +4,13 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import org.objenesis.Objenesis;
 
 /**
  * Creates an instance of a class or record.
  */
 public interface Instantiator<T> {
-
-    /**
-     * Factory method for when the given class must be instantiated, and no other. No subclass will be substituted if
-     * the given class is abstract or an interface.
-     *
-     * @param <S>       Represents the type of the class to instantiate.
-     * @param probe     Represents the class to instantiate.
-     * @param objenesis To instantiate non-record classes.
-     * @return an {@code InstanceCreator} for the given class.
-     */
-    static <S> Instantiator<S> of(ClassProbe<S> probe, Objenesis objenesis) {
-        return new ReflectionInstantiator<>(probe, objenesis);
-    }
 
     /**
      * Creates an instance of the given type, with its field set to the given values. If no value is given for a

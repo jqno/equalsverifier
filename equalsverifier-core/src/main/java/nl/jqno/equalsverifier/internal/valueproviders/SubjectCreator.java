@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
@@ -39,7 +40,7 @@ public class SubjectCreator<T> {
         this.objenesis = objenesis;
         this.actualType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instantiator = Instantiator.of(ClassProbe.of(actualType), objenesis);
+        this.instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), objenesis);
     }
 
     /**
@@ -180,7 +181,7 @@ public class SubjectCreator<T> {
     public Object copyIntoSuperclass(T original) {
         var actualSuperType = SubtypeManager
                 .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
-        Instantiator<? super T> superCreator = Instantiator.of(ClassProbe.of(actualSuperType), objenesis);
+        Instantiator<? super T> superCreator = InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis);
         return superCreator.copy(original);
     }
 
@@ -197,7 +198,7 @@ public class SubjectCreator<T> {
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
         var actualSubType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
-        Instantiator<S> subCreator = Instantiator.of(ClassProbe.of(actualSubType), objenesis);
+        Instantiator<S> subCreator = InstantiatorFactory.of(ClassProbe.of(actualSubType), objenesis);
         return subCreator.copy(original);
     }
 
