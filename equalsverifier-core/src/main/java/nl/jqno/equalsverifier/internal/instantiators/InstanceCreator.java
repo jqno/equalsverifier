@@ -1,9 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import org.objenesis.Objenesis;
 
 /**
@@ -25,15 +28,6 @@ public interface InstanceCreator<T> {
     }
 
     /**
-     * Returns the actual type as determined by the Instantiator. The instantiator might defer to a subtype of the given
-     * type, for example if it's a sealed abstract type. The subtype might have additional fields, which need to receive
-     * values too.
-     *
-     * @return The actual type.
-     */
-    Class<T> getActualType();
-
-    /**
      * Creates an instance of the given type, with its field set to the given values. If no value is given for a
      * specific field, the field will be set to its default value: null for object references, 0 for numbers, false for
      * booleans.
@@ -49,5 +43,12 @@ public interface InstanceCreator<T> {
      * @param original The instance to copy.
      * @return A copy of the given original.
      */
-    T copy(Object original);
+    default T copy(Object original) {
+        var values = new HashMap<Field, Object>();
+        for (FieldProbe p : FieldIterable.ofIgnoringStatic(original.getClass())) {
+            Object value = p.getValue(original);
+            values.put(p.getField(), value);
+        }
+        return instantiate(values);
+    }
 }

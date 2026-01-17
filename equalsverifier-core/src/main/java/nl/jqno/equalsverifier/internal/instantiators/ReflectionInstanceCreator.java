@@ -19,7 +19,7 @@ public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
     private final Instantiator<T> instantiator;
 
     /**
-     * Private constructor. Use {@link InstanceCreator#of(ClassProbe, Objenesis)} instead.
+     * Package private constructor. Use {@link InstanceCreator#of(ClassProbe, Objenesis)} instead.
      *
      * @param probe     The ClassProbe for the type.
      * @param objenesis The Objenesis instance to use.
@@ -32,25 +32,8 @@ public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
 
     /** {@inheritDoc}} */
     @Override
-    public Class<T> getActualType() {
-        return type;
-    }
-
-    /** {@inheritDoc}} */
-    @Override
     public T instantiate(Map<Field, Object> values) {
         return probe.isRecord() ? createRecordInstance(values) : createClassInstance(values);
-    }
-
-    /** {@inheritDoc}} */
-    @Override
-    public T copy(Object original) {
-        var values = new HashMap<Field, Object>();
-        for (FieldProbe p : fields(original.getClass())) {
-            Object value = p.getValue(original);
-            values.put(p.getField(), value);
-        }
-        return instantiate(values);
     }
 
     private T createRecordInstance(Map<Field, Object> values) {
@@ -82,16 +65,12 @@ public final class ReflectionInstanceCreator<T> implements InstanceCreator<T> {
     }
 
     private void traverseFields(Map<Field, Object> values, BiConsumer<FieldProbe, Object> setValue) {
-        for (FieldProbe p : fields(type)) {
+        for (FieldProbe p : FieldIterable.ofIgnoringStatic(type)) {
             Object value = values.get(p.getField());
             if (value == null) {
                 value = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(p.getType());
             }
             setValue.accept(p, value);
         }
-    }
-
-    private FieldIterable fields(Class<?> typeWithFields) {
-        return FieldIterable.ofIgnoringStatic(typeWithFields);
     }
 }
