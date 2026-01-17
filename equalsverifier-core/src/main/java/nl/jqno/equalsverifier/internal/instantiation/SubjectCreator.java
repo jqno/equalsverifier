@@ -20,9 +20,8 @@ public class SubjectCreator<T> {
     private final Class<? extends T> actualType;
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
-    private final ClassProbe<T> classProbe;
     private final Objenesis objenesis;
-    private final InstanceCreator<T> instanceCreator;
+    private final InstanceCreator<? extends T> instanceCreator;
 
     /**
      * Constructor.
@@ -36,10 +35,10 @@ public class SubjectCreator<T> {
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;
-        this.classProbe = ClassProbe.of(type);
         this.objenesis = objenesis;
-        this.instanceCreator = InstanceCreator.ofAllowSubtype(classProbe, valueProvider, objenesis);
-        this.actualType = instanceCreator.getActualType();
+        this.actualType =
+                SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
+        this.instanceCreator = InstanceCreator.of(ClassProbe.of(actualType), objenesis);
     }
 
     /**
@@ -178,8 +177,9 @@ public class SubjectCreator<T> {
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
     public Object copyIntoSuperclass(T original) {
-        InstanceCreator<? super T> superCreator =
-                InstanceCreator.ofAllowSubtype(ClassProbe.of(type.getSuperclass()), valueProvider, objenesis);
+        var actualSuperType = SubtypeManager
+                .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
+        InstanceCreator<? super T> superCreator = InstanceCreator.of(ClassProbe.of(actualSuperType), objenesis);
         return superCreator.copy(original);
     }
 
@@ -194,8 +194,9 @@ public class SubjectCreator<T> {
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
-        InstanceCreator<S> subCreator =
-                InstanceCreator.ofAllowSubtype(ClassProbe.of(subType), valueProvider, objenesis);
+        var actualSubType =
+                SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
+        InstanceCreator<S> subCreator = InstanceCreator.of(ClassProbe.of(actualSubType), objenesis);
         return subCreator.copy(original);
     }
 

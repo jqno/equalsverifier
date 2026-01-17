@@ -53,6 +53,15 @@ class SubjectCreatorTest {
     }
 
     @Test
+    void plain_abstract() {
+        var anotherConfig = ConfigurationHelper.emptyConfiguration(Abstract.class);
+        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
+        var anotherActual = anotherSut.plain();
+
+        assertThat(anotherActual.s).isEqualTo(S_RED);
+    }
+
+    @Test
     void plain_sealedAbstract() {
         var anotherConfig = ConfigurationHelper.emptyConfiguration(SealedAbstract.class);
         var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
@@ -335,6 +344,14 @@ class SubjectCreatorTest {
         @Override
         public String toString() {
             return "SomeSub: " + x + "," + i + "," + s + "," + q;
+        }
+    }
+
+    static abstract class Abstract {
+        private final String s;
+
+        public Abstract(String s) {
+            this.s = s;
         }
     }
 

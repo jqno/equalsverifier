@@ -5,25 +5,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Optional;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 class InstanceCreatorTest {
 
-    private final ValueProvider vp = new InstanceCreatorTestValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
     void getActualType() {
         var probe = ClassProbe.of(SomeClass.class);
-        var sut = InstanceCreator.ofExact(probe, objenesis);
+        var sut = InstanceCreator.of(probe, objenesis);
 
         Class<SomeClass> actual = sut.getActualType();
 
@@ -33,7 +29,7 @@ class InstanceCreatorTest {
     @Test
     void getActualType_abstract_exact() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.ofExact(probe, objenesis);
+        var sut = InstanceCreator.of(probe, objenesis);
 
         Class<SomeAbstractClass> actual = sut.getActualType();
 
@@ -41,39 +37,9 @@ class InstanceCreatorTest {
     }
 
     @Test
-    void getActualType_abstract_allowSubtype() {
-        var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
-
-        Class<SomeAbstractClass> actual = sut.getActualType();
-
-        assertThat(actual).isNotEqualTo(SomeAbstractClass.class).isAssignableTo(SomeAbstractClass.class);
-    }
-
-    @Test
-    void getActualType_sealedAbstract() {
-        var probe = ClassProbe.of(SealedAbstract.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
-
-        Class<SealedAbstract> actual = sut.getActualType();
-
-        assertThat(actual).isEqualTo(SealedAbstractSub.class);
-    }
-
-    @Test
-    void getActualType_sealedNonAbstract() {
-        var probe = ClassProbe.of(SealedNonAbstract.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
-
-        Class<SealedNonAbstract> actual = sut.getActualType();
-
-        assertThat(actual).isEqualTo(SealedNonAbstract.class);
-    }
-
-    @Test
     void instantiate() throws NoSuchFieldException {
         ClassProbe<SomeClass> probe = ClassProbe.of(SomeClass.class);
-        var sut = InstanceCreator.ofExact(probe, objenesis);
+        var sut = InstanceCreator.of(probe, objenesis);
 
         Field x = SomeClass.class.getDeclaredField("x");
         Field z = SomeClass.class.getDeclaredField("z");
@@ -89,7 +55,7 @@ class InstanceCreatorTest {
     @Test
     void ofExactFailsGracefully_abstract() {
         var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.ofExact(probe, objenesis);
+        var sut = InstanceCreator.of(probe, objenesis);
 
         assertThatThrownBy(() -> sut.instantiate(Map.of()))
                 .isInstanceOf(ReflectionException.class)
@@ -97,27 +63,9 @@ class InstanceCreatorTest {
     }
 
     @Test
-    void instantiate_abstract() {
-        var probe = ClassProbe.of(SomeAbstractClass.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
-        var actual = sut.instantiate(Map.of());
-
-        assertThat(actual.getClass()).isNotEqualTo(SomeAbstractClass.class).isAssignableTo(SomeAbstractClass.class);
-    }
-
-    @Test
-    void instantiate_sealedAbstract() {
-        var probe = ClassProbe.of(SealedAbstract.class);
-        var sut = InstanceCreator.ofAllowSubtype(probe, vp, objenesis);
-        var actual = sut.instantiate(Map.of());
-
-        assertThat(actual).isInstanceOf(SealedAbstractSub.class);
-    }
-
-    @Test
     void copy() throws NoSuchFieldException {
         ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
-        var sut = InstanceCreator.ofExact(probe, objenesis);
+        var sut = InstanceCreator.of(probe, objenesis);
 
         SomeClass original = new SomeClass(42, 1337, "yeah");
         SomeSubClass copy = sut.copy(original);
@@ -152,28 +100,4 @@ class InstanceCreatorTest {
     }
 
     static abstract class SomeAbstractClass {}
-
-    sealed static abstract class SealedAbstract permits SealedAbstractSub {}
-
-    static final class SealedAbstractSub extends SealedAbstract {}
-
-    sealed static class SealedNonAbstract permits SealedNonAbstractSub {}
-
-    static final class SealedNonAbstractSub extends SealedNonAbstract {}
-
-    static class InstanceCreatorTestValueProvider implements ValueProvider {
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-            if (SealedAbstractSub.class.equals(tag.getType())) {
-                return Optional
-                        .of(
-                            (Tuple<T>) new Tuple<>(new SealedAbstractSub(),
-                                    new SealedAbstractSub(),
-                                    new SealedAbstractSub()));
-            }
-            return Optional.empty();
-        }
-    }
 }

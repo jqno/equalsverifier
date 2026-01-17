@@ -31,7 +31,7 @@ public final class PrefabValuesApi {
             try {
                 @SuppressWarnings("unchecked")
                 ClassProbe<T> probe = ClassProbe.of((Class<T>) red.getClass());
-                T redCopy = InstanceCreator.ofExact(probe, objenesis).copy(red);
+                T redCopy = InstanceCreator.of(probe, objenesis).copy(red);
                 prefabs.register(otherType, red, blue, redCopy);
             }
             catch (InaccessibleObjectException ignored) {
@@ -74,7 +74,7 @@ public final class PrefabValuesApi {
             try {
                 @SuppressWarnings("unchecked")
                 ClassProbe<T> probe = ClassProbe.of((Class<T>) red.getClass());
-                T redCopy = InstanceCreator.ofExact(probe, objenesis).copy(red);
+                T redCopy = InstanceCreator.of(probe, objenesis).copy(red);
                 fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, redCopy));
             }
             catch (InaccessibleObjectException ignored) {

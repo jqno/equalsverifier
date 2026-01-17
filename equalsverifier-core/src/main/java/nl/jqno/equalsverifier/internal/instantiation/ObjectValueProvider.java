@@ -27,7 +27,7 @@ public class ObjectValueProvider implements ValueProvider {
     /** {@inheritDoc}} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        var instanceCreator = InstanceCreator.<T>ofExact(ClassProbe.of(tag.getType()), objenesis);
+        var instanceCreator = InstanceCreator.<T>of(ClassProbe.of(tag.getType()), objenesis);
         var values = determineValues(instanceCreator.getActualType(), tag, attributes);
         var tuple = Rethrow.rethrow(() -> values.map(instanceCreator::instantiate));
         return Optional.of(tuple);
