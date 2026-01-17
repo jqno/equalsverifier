@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 // CHECKSTYLE OFF: ParameterNumber
@@ -55,6 +56,11 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignor
 
         if (isKotlin) {
             for (FieldProbe f : FieldIterable.ofKotlin(type)) {
+                if (KotlinScreen.canProbe()
+                        && KotlinProbe.isDataClass(type)
+                        && !KotlinProbe.isDeclaredInPrimaryConstructor(f.getField())) {
+                    ignoredFields.add(f.getName());
+                }
                 if (KotlinScreen.isSyntheticKotlinDelegate(f.getField())) {
                     nonnullFields.add(f.getName());
                 }
