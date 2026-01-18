@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-class RecordInstantiatorTest {
+class ConstructorInstantiatorTest {
 
     @Test
     void instanceCreator() throws NoSuchFieldException {

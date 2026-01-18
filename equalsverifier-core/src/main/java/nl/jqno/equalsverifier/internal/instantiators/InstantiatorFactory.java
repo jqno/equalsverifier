@@ -21,6 +21,9 @@ public final class InstantiatorFactory {
      * @return an {@code InstanceCreator} for the given class.
      */
     public static <S> Instantiator<S> of(ClassProbe<S> probe, Objenesis objenesis) {
+        if (probe.isRecord()) {
+            return new ConstructorInstantiator<>(probe.getType());
+        }
         return new ReflectionInstantiator<>(probe, objenesis);
     }
 }

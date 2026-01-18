@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -21,43 +20,20 @@ public final class ReflectionInstantiator<T> implements Instantiator<T> {
     private final ObjectInstantiator<T> objenesisInstantiator;
 
     /**
-     * Package private constructor. Use {@link Instantiator#of(ClassProbe, Objenesis)} instead.
+     * Package private constructor. Use {@link InstantiatorFactory#of(ClassProbe, Objenesis)} instead.
      *
      * @param probe     The ClassProbe for the type.
      * @param objenesis The Objenesis instance to use.
      */
     ReflectionInstantiator(ClassProbe<T> probe, Objenesis objenesis) {
         this.type = probe.getType();
-        this.probe = ClassProbe.of(type);
+        this.probe = probe;
         this.objenesisInstantiator = objenesis.getInstantiatorOf(type);
     }
 
-    /** {@inheritDoc}} */
+    /** {@inheritDoc} */
     @Override
     public T instantiate(Map<Field, Object> values) {
-        return probe.isRecord() ? createRecordInstance(values) : createClassInstance(values);
-    }
-
-    private T createRecordInstance(Map<Field, Object> values) {
-        var params = new ArrayList<Object>();
-        for (var component : type.getRecordComponents()) {
-            try {
-                Field f = type.getDeclaredField(component.getName());
-                Object value = values.get(f);
-                if (value == null) {
-                    value = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
-                }
-                params.add(value);
-            }
-            catch (NoSuchFieldException e) {
-                throw new ReflectionException(e);
-            }
-        }
-        var recordProbe = new RecordProbe<T>(type);
-        return recordProbe.callRecordConstructor(params);
-    }
-
-    private T createClassInstance(Map<Field, Object> values) {
         if (probe.isAbstract()) {
             throw new ReflectionException("Cannot instantiate abstract class " + probe.getType().getName());
         }
