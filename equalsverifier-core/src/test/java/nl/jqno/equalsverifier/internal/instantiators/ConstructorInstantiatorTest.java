@@ -13,14 +13,14 @@ class ConstructorInstantiatorTest {
 
     @Test
     void instanceCreator() throws NoSuchFieldException {
-        ClassProbe<SomeRecord> probe = ClassProbe.of(SomeRecord.class);
+        var probe = ClassProbe.of(SomeRecord.class);
         var sut = InstantiatorFactory.of(probe, new ObjenesisStd());
 
-        Field x = SomeRecord.class.getDeclaredField("x");
-        Field z = SomeRecord.class.getDeclaredField("z");
+        var x = SomeRecord.class.getDeclaredField("x");
+        var z = SomeRecord.class.getDeclaredField("z");
         var values = Map.<Field, Object>of(x, 42, z, "42");
 
-        SomeRecord actual = sut.instantiate(values);
+        var actual = sut.instantiate(values);
 
         assertThat(actual.x).isEqualTo(42);
         assertThat(actual.y).isEqualTo(0);

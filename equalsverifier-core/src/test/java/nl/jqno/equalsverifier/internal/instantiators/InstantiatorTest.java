@@ -13,11 +13,11 @@ public class InstantiatorTest {
 
     @Test
     void copy() {
-        ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
+        var probe = ClassProbe.of(SomeSubClass.class);
         var sut = InstantiatorFactory.of(probe, objenesis);
 
-        SomeClass original = new SomeClass(42, 1337, "yeah");
-        SomeSubClass copy = sut.copy(original);
+        var original = new SomeClass(42, 1337, "yeah");
+        var copy = sut.copy(original);
 
         assertThat(copy.x).isEqualTo(original.x);
         assertThat(copy.y).isEqualTo(original.y);

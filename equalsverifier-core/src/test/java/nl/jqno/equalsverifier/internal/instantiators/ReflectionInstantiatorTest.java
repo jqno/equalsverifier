@@ -20,11 +20,11 @@ class ReflectionInstantiatorTest {
 
     @Test
     void instantiateClass() throws NoSuchFieldException {
-        Field x = SomeClass.class.getDeclaredField("x");
-        Field z = SomeClass.class.getDeclaredField("z");
+        var x = SomeClass.class.getDeclaredField("x");
+        var z = SomeClass.class.getDeclaredField("z");
         var values = Map.<Field, Object>of(x, 42, z, "42");
 
-        SomeClass actual = instantiate(SomeClass.class, values);
+        var actual = instantiate(SomeClass.class, values);
 
         assertThat(actual.x).isEqualTo(42);
         assertThat(actual.y).isEqualTo(0);
@@ -33,7 +33,7 @@ class ReflectionInstantiatorTest {
 
     @Test
     void fieldsOfInstantiatedObjectHaveDefaultValues() {
-        SomeClass actual = instantiate(SomeClass.class, Map.of());
+        var actual = instantiate(SomeClass.class, Map.of());
 
         assertThat(actual.x).isEqualTo(0);
         assertThat(actual.z).isNull();
@@ -41,21 +41,21 @@ class ReflectionInstantiatorTest {
 
     @Test
     void instantiateFinalClass() {
-        FinalPoint actual = instantiate(FinalPoint.class, Map.of());
+        var actual = instantiate(FinalPoint.class, Map.of());
 
         assertThat(actual).isNotNull();
     }
 
     @Test
     void instantiateRecord() {
-        SimpleRecord actual = instantiate(SimpleRecord.class, Map.of());
+        var actual = instantiate(SimpleRecord.class, Map.of());
 
         assertThat(actual.getClass()).isEqualTo(SimpleRecord.class);
     }
 
     @Test
     void instantiateArrayContainer() {
-        ArrayContainer actual = instantiate(ArrayContainer.class, Map.of());
+        var actual = instantiate(ArrayContainer.class, Map.of());
 
         assertThat(actual).isNotNull();
     }
@@ -64,7 +64,7 @@ class ReflectionInstantiatorTest {
     void instantiateANonToplevelClass() {
         class Something {}
 
-        Something s = instantiate(Something.class, Map.of());
+        var s = instantiate(Something.class, Map.of());
 
         assertThat(s.getClass()).isEqualTo(Something.class);
     }
