@@ -8,15 +8,15 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.Attributes;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 

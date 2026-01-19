@@ -4,14 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Optional;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.instantiation.Attributes;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
+import nl.jqno.equalsverifier.internal.valueproviders.Attributes;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 import org.w3c.dom.Element;
@@ -56,7 +58,7 @@ class SubtypeManagerTest {
     @Test
     void canInstantiateSubtypeForOrgW3cDomClassWhichHasBootstrapClassLoader() {
         Class<Element> sub = SubtypeManager.giveDynamicSubclass(Element.class);
-        Element object = Instantiator.of(sub, new ObjenesisStd()).instantiate();
+        Element object = InstantiatorFactory.of(ClassProbe.of(sub), new ObjenesisStd()).instantiate(Map.of());
         assertThat(object).isNotNull();
         assertThat(object.getClass()).isAssignableTo(Element.class);
     }

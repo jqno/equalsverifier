@@ -8,12 +8,12 @@ import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.PrefabValuesApi;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.FieldToPrefabValues;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.Validations;
+import nl.jqno.equalsverifier.internal.valueproviders.UserPrefabValueCaches;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 

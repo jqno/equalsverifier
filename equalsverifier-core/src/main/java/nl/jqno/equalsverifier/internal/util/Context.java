@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
+import nl.jqno.equalsverifier.internal.valueproviders.UserPrefabValueCaches;
+import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
 import org.objenesis.Objenesis;
 
 public final class Context<T> {

@@ -8,11 +8,11 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class SignificantFieldCheck<T> implements FieldCheck<T> {
 

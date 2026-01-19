@@ -4,9 +4,9 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import java.util.function.Predicate;
 
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 

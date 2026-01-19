@@ -10,12 +10,12 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.instantiation.UserPrefabValueCaches;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.valueproviders.UserPrefabValueCaches;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 

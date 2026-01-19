@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.internal.util;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Mode;
-import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.valueproviders.*;
 import org.objenesis.Objenesis;
 
 public final class ValueProviderBuilder {
