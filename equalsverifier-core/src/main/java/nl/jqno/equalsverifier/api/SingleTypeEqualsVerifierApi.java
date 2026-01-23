@@ -31,6 +31,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Class<T> type;
     private final Set<String> actualFields;
 
+    private InstanceFactory<T> instanceFactory = null;
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
@@ -108,6 +109,22 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         this(type, new ObjenesisStd());
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
+    }
+
+    /**
+     * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help.
+     *
+     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * @param factory A factory that can instantiate the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory) {
+        this.instanceFactory = factory;
+        return this;
     }
 
     /** {@inheritDoc} */
@@ -479,6 +496,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         return Configuration
                 .build(
                     type,
+                    instanceFactory,
                     allExcludedFields,
                     allIncludedFields,
                     nonnullFields,
