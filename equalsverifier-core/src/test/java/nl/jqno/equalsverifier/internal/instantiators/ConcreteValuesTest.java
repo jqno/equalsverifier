@@ -2,12 +2,29 @@ package nl.jqno.equalsverifier.internal.instantiators;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class ConcreteValuesTest {
 
     private final ConcreteValues sut = new ConcreteValues();
+
+    @Test
+    void of() throws Exception {
+        @SuppressWarnings("unused")
+        class C {
+            private String s;
+            private int i;
+        }
+
+        var map = Map.<Field, Object>of(C.class.getDeclaredField("s"), "string", C.class.getDeclaredField("i"), 42);
+        var actual = ConcreteValues.of(map);
+        assertThat(actual.getString("s")).isEqualTo("string");
+        assertThat(actual.getInt("i")).isEqualTo(42);
+    }
 
     @Test
     void getBoolean_returnsCorrectValue() {
