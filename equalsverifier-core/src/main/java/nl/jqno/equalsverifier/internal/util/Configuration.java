@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -17,8 +18,8 @@ import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinProbe;
 import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 // CHECKSTYLE OFF: ParameterNumber
-public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignoredFields, Set<String> nonnullFields,
-        Set<String> prefabbedFields, AnnotationCache annotationCache,
+public record Configuration<T>(Class<T> type, TypeTag typeTag, InstanceFactory<T> factory, Set<String> ignoredFields,
+        Set<String> nonnullFields, Set<String> prefabbedFields, AnnotationCache annotationCache,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
         Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
         Set<Mode> modes, Function<String, String> fieldnameToGetter, boolean isKotlin, List<T> equalExamples,
@@ -26,6 +27,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignor
 
     public static <T> Configuration<T> build(
             Class<T> type,
+            InstanceFactory<T> factory,
             Set<String> excludedFields,
             Set<String> includedFields,
             Set<String> nonnullFields,
@@ -69,6 +71,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, Set<String> ignor
 
         return new Configuration<>(type,
                 typeTag,
+                factory,
                 ignoredFields,
                 nonnullFields,
                 prefabbedFields,
