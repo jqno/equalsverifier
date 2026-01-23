@@ -19,7 +19,7 @@ public class SubjectCreator<T> {
 
     private final TypeTag typeTag;
     private final Class<T> type;
-    private final Class<? extends T> actualType;
+    private final Class<T> actualType;
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final Objenesis objenesis;
@@ -40,7 +40,7 @@ public class SubjectCreator<T> {
         this.objenesis = objenesis;
         this.actualType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), objenesis);
+        this.instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), config.factory(), objenesis);
     }
 
     /**
