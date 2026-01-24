@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-01-24
+
+### Changed
+
+- EqualsVerifier now respects [Kotlin's data class contract](https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body): properties declared in the class body are assumed not to take part in `equals()` and `hashCode()`. ([Issue 1159](https://github.com/jqno/equalsverifier/issues/1159); thanks [Sogilis Team](https://github.com/sogilis/)!)
+
 ## [4.3] - 2026-01-01
 
 ### Changed
@@ -1534,7 +1540,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3.1...HEAD
+[4.3.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3...equalsverifier-4.3.1
 [4.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.6...equalsverifier-4.3
 [4.2.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.5...equalsverifier-4.2.6
 [4.2.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.4...equalsverifier-4.2.5
