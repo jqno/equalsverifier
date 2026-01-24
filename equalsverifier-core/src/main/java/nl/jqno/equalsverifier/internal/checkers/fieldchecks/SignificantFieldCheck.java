@@ -11,7 +11,12 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
+import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
+import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 
 public class SignificantFieldCheck<T> implements FieldCheck<T> {
@@ -188,6 +193,13 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             message = """
                       Significant fields: equals does not use %%, or it is stateless.
                       Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).""";
+        }
+        else if (KotlinScreen.isKotlin(type)) {
+            message =
+                    """
+                    Significant fields: equals does not use %%, or it is stateless.
+                    Note: This is a Kotlin class. Import kotlin reflect in the classpath to use the adapted equalsverifier implementation.
+                    """;
         }
         else {
             message = "Significant fields: equals does not use %%, or it is stateless.";
