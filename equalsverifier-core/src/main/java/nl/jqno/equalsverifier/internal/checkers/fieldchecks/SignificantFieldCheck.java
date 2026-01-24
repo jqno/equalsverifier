@@ -198,7 +198,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             message =
                     """
                     Significant fields: equals does not use %%, or it is stateless.
-                    Note: This is a Kotlin class. Import kotlin reflect in the classpath to use the adapted equalsverifier implementation.
+                    Note: This is a Kotlin class. Import kotlin-reflect in the classpath to use the adapted EqualsVerifier implementation.
                     """;
         }
         else {
