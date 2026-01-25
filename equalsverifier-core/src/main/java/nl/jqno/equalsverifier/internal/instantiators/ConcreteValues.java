@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.jqno.equalsverifier.Values;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 /**
  * Simple container for primitive and object values used to define a provided instantiator. This implementation of the
@@ -42,7 +43,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public boolean getBoolean(String fieldName) {
-        return (Boolean) values.get(fieldName);
+        return safe(boolean.class, values.get(fieldName));
     }
 
     /**
@@ -50,7 +51,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public byte getByte(String fieldName) {
-        return (Byte) values.get(fieldName);
+        return safe(byte.class, values.get(fieldName));
     }
 
     /**
@@ -58,7 +59,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public char getChar(String fieldName) {
-        return (Character) values.get(fieldName);
+        return safe(char.class, values.get(fieldName));
     }
 
     /**
@@ -66,7 +67,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public double getDouble(String fieldName) {
-        return (Double) values.get(fieldName);
+        return safe(double.class, values.get(fieldName));
     }
 
     /**
@@ -74,7 +75,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public float getFloat(String fieldName) {
-        return (Float) values.get(fieldName);
+        return safe(float.class, values.get(fieldName));
     }
 
     /**
@@ -82,7 +83,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public int getInt(String fieldName) {
-        return (Integer) values.get(fieldName);
+        return safe(int.class, values.get(fieldName));
     }
 
     /**
@@ -90,7 +91,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public long getLong(String fieldName) {
-        return (Long) values.get(fieldName);
+        return safe(long.class, values.get(fieldName));
     }
 
     /**
@@ -98,7 +99,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public short getShort(String fieldName) {
-        return (Short) values.get(fieldName);
+        return safe(short.class, values.get(fieldName));
     }
 
     /**
@@ -106,7 +107,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public String getString(String fieldName) {
-        return (String) values.get(fieldName);
+        return safe(String.class, values.get(fieldName));
     }
 
     /**
@@ -116,5 +117,15 @@ public final class ConcreteValues implements Values {
     @SuppressWarnings({ "unchecked", "TypeParameterUnusedInFormals" })
     public <T> T get(String fieldName) {
         return (T) values.get(fieldName);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T safe(Class<T> type, Object value) {
+        return value != null ? (T) value : (T) PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(type);
+    }
+
+    @Override
+    public String toString() {
+        return "ConcreteValues:[" + values + "]";
     }
 }
