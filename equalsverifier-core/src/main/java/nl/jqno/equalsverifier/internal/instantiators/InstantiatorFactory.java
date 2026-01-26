@@ -1,7 +1,10 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
+import java.util.ArrayList;
+
 import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import org.objenesis.Objenesis;
 
 public final class InstantiatorFactory {
@@ -42,10 +45,27 @@ public final class InstantiatorFactory {
             return new ProvidedFactoryInstantiator<>(factory);
         }
 
-        if (probe.isRecord()) {
-            return new ConstructorInstantiator<>(probe.getType());
+        Class<T> type = probe.getType();
+        if (probe.isRecord() || constructorMatchesFields(type)) {
+            return new ConstructorInstantiator<>(probe);
         }
 
         return new ReflectionInstantiator<>(probe, objenesis);
+    }
+
+    private static boolean constructorMatchesFields(Class<?> type) {
+        var fieldTypes = new ArrayList<Class<?>>();
+        for (var f : FieldIterable.ofIgnoringStatic(type)) {
+            fieldTypes.add(f.getType());
+        }
+        var fields = fieldTypes.toArray(new Class<?>[] {});
+
+        try {
+            type.getDeclaredConstructor(fields);
+            return true;
+        }
+        catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 }
