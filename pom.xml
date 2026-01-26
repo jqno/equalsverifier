@@ -77,10 +77,10 @@
         <kotlin.compiler.daemon>false</kotlin.compiler.daemon> <!-- The daemon might be faster, but it also breaks my low-power dev box -->
 
         <version.bytebuddy>1.18.4</version.bytebuddy>
-        <version.objenesis>3.4</version.objenesis>
+        <version.objenesis>3.5</version.objenesis>
 
         <version.archunit>1.4.1</version.archunit>
-        <version.assertj>3.27.6</version.assertj>
+        <version.assertj>3.27.7</version.assertj>
         <version.commons-lang3>3.20.0</version.commons-lang3>
         <version.eclipse-annotation>2.4.100</version.eclipse-annotation>
         <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
@@ -115,7 +115,7 @@
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.22.0</version.pitest.maven>
         <version.spotbugs>4.9.8</version.spotbugs>
-        <version.spotless>3.1.0</version.spotless>
+        <version.spotless>3.2.0</version.spotless>
     </properties>
 
     <build>
