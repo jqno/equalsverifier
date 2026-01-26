@@ -14,7 +14,7 @@ public class NonfinalReflectionTest {
     @Test
     void succeeds_whenSutHasStaticNonfinalField() {
         assertThat(StaticNonfinalFieldContainer.staticI).isEqualTo(10);
-        EqualsVerifier.forClass(StaticNonfinalFieldContainer.class).suppress(Warning.NONFINAL_FIELDS).verify();
+        EqualsVerifier.forClass(StaticNonfinalFieldContainer.class).verify();
         assertThat(StaticNonfinalFieldContainer.staticI).isEqualTo(10);
     }
 
@@ -29,7 +29,7 @@ public class NonfinalReflectionTest {
     }
 
     static final class StaticNonfinalFieldContainer {
-        private int i;
+        private final int i;
         private static int staticI = 10;
 
         public StaticNonfinalFieldContainer(int i) {
