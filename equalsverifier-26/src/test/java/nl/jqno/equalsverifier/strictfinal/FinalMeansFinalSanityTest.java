@@ -25,6 +25,7 @@ public class FinalMeansFinalSanityTest {
         // Eventually this test should be changed so the exception is not expected.
         assertThatThrownBy(() -> EqualsVerifier.forClass(Uninstantiable.class).verify())
                 .isInstanceOf(AssertionError.class)
-                .hasMessageContaining("cannot set final field");
+                .hasMessageContaining("Not allowed to reflectively set final field Uninstantiable.s")
+                .hasMessageContaining("Use #withFactory()");
     }
 }
