@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 /**
  * Allows for a field in an object reference to be set to another value.
@@ -42,6 +43,19 @@ public class FieldMutator {
     private void safelySetField(Object object, Object newValue) throws IllegalAccessException {
         try {
             field.set(object, newValue);
+        }
+        catch (IllegalAccessException e) {
+            if (e.getMessage().contains("cannot set final field")) {
+                var msg =
+                        """
+                        Not allowed to reflectively set final field %%.%%.
+                           Use #withFactory() so EqualsVerifier can construct %% instances without using reflection.""";
+                var type = field.getDeclaringClass().getSimpleName();
+                throw new ReflectionException(Formatter.of(msg, type, field.getName(), type).format(), e);
+            }
+            else {
+                throw e;
+            }
         }
         catch (IllegalArgumentException e) {
             String msg = e.getMessage();
