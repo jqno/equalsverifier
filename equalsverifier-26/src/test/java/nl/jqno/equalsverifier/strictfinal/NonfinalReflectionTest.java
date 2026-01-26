@@ -1,11 +1,23 @@
 package nl.jqno.equalsverifier.strictfinal;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("unused")
 public class NonfinalReflectionTest {
+
+    @Test
+    void succeeds_whenSutHasStaticNonfinalField() {
+        assertThat(StaticNonfinalFieldContainer.staticI).isEqualTo(10);
+        EqualsVerifier.forClass(StaticNonfinalFieldContainer.class).suppress(Warning.NONFINAL_FIELDS).verify();
+        assertThat(StaticNonfinalFieldContainer.staticI).isEqualTo(10);
+    }
+
     @Test
     void succeedsWithoutFactory_whenSutIsJpaEntity() {
         EqualsVerifier.forClass(JpaEntity.class).verify();
@@ -16,7 +28,25 @@ public class NonfinalReflectionTest {
         EqualsVerifier.forClass(JakartaEntity.class).verify();
     }
 
-    @SuppressWarnings("unused")
+    static final class StaticNonfinalFieldContainer {
+        private int i;
+        private static int staticI = 10;
+
+        public StaticNonfinalFieldContainer(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof StaticNonfinalFieldContainer other && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
+        }
+    }
+
     @nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Entity
     static class JpaEntity {
         @nl.jqno.equalsverifier_testhelpers.annotations.javax.persistence.Id
@@ -36,7 +66,6 @@ public class NonfinalReflectionTest {
         }
     }
 
-    @SuppressWarnings("unused")
     @jakarta.persistence.Entity
     static class JakartaEntity {
         @jakarta.persistence.Id
