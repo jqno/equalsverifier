@@ -23,6 +23,11 @@ public class InstantiatorFactoryTest {
     }
 
     @Test
+    void returnConstructorInstantiator_forClassWhenConstructorMatchesFields() {
+        assertThat(sut(ConstructorMatchesFields.class)).isInstanceOf(ConstructorInstantiator.class);
+    }
+
+    @Test
     void returnsReflectionInstantiator_ifAllElseFails() {
         assertThat(sut(SomeClass.class)).isInstanceOf(ReflectionInstantiator.class);
     }
@@ -40,5 +45,15 @@ public class InstantiatorFactoryTest {
     @SuppressWarnings("unused")
     static class SomeClass {
         private final int i = 10;
+    }
+
+    static final class ConstructorMatchesFields {
+        private final int i;
+        private final String s;
+
+        public ConstructorMatchesFields(int i, String s) {
+            this.i = i;
+            this.s = s;
+        }
     }
 }
