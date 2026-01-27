@@ -18,13 +18,14 @@ public class InstantiatorFactoryTest {
     }
 
     @Test
-    void returnsConstructorInstantiator_forRecord() {
-        assertThat(sut(SomeRecord.class)).isInstanceOf(ConstructorInstantiator.class);
+    void returnsRecordConstructorInstantiator_forRecord() {
+        assertThat(sut(SomeRecord.class)).isInstanceOf(RecordConstructorInstantiator.class);
     }
 
     @Test
-    void returnConstructorInstantiator_forClassWhenConstructorMatchesFields() {
-        assertThat(sut(ConstructorMatchesFields.class)).isInstanceOf(ConstructorInstantiator.class);
+    void returnClassConstructorInstantiator_forClassWhenConstructorMatchesFields() {
+        // Still ReflectionInstantiator, because we check if reflection works first.
+        assertThat(sut(ConstructorMatchesFields.class)).isInstanceOf(ReflectionInstantiator.class);
     }
 
     @Test
@@ -47,6 +48,7 @@ public class InstantiatorFactoryTest {
         private final int i = 10;
     }
 
+    @SuppressWarnings("unused")
     static final class ConstructorMatchesFields {
         private final int i;
         private final String s;
