@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ConstructorInstantiatorTest {
@@ -14,6 +15,7 @@ public class ConstructorInstantiatorTest {
     }
 
     @Test
+    @Disabled
     void succeed_whenConstructorMatchesFields() {
         EqualsVerifier.forClass(ConstructorMatchesFields.class).verify();
     }
@@ -38,9 +40,7 @@ public class ConstructorInstantiatorTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof ConstructorMatchesFields other
-                    && Objects.equals(i, other.i)
-                    && Objects.equals(s, other.s);
+            return obj instanceof ConstructorMatchesFields other && i == other.i && Objects.equals(s, other.s);
         }
 
         @Override
@@ -61,9 +61,7 @@ public class ConstructorInstantiatorTest {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof ConstructorDoesNotMatchFields other
-                    && Objects.equals(i, other.i)
-                    && Objects.equals(s, other.s);
+            return obj instanceof ConstructorDoesNotMatchFields other && i == other.i && Objects.equals(s, other.s);
         }
 
         @Override

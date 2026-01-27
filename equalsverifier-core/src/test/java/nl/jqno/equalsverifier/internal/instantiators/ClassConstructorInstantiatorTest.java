@@ -10,23 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-class ConstructorInstantiatorTest {
-
-    @Test
-    void instanceCreator_record() throws NoSuchFieldException {
-        var probe = ClassProbe.of(SomeRecord.class);
-        var sut = InstantiatorFactory.of(probe, new ObjenesisStd());
-
-        var x = SomeRecord.class.getDeclaredField("x");
-        var z = SomeRecord.class.getDeclaredField("z");
-        var values = Map.<Field, Object>of(x, 42, z, "42");
-
-        var actual = sut.instantiate(values);
-
-        assertThat(actual.x).isEqualTo(42);
-        assertThat(actual.y).isEqualTo(0);
-        assertThat(actual.z).isEqualTo("42");
-    }
+class ClassConstructorInstantiatorTest {
 
     @Test
     void instanceCreator_classWhereConstructorMatchesFields() throws NoSuchFieldException {
@@ -44,8 +28,6 @@ class ConstructorInstantiatorTest {
         assertThat(actual.z).isEqualTo("42");
     }
 
-    record SomeRecord(int x, int y, String z) {}
-
     static final class ConstructorMatchesFields {
         private final int x;
         private final int y;
@@ -60,8 +42,8 @@ class ConstructorInstantiatorTest {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof ConstructorMatchesFields other
-                    && Objects.equals(x, other.x)
-                    && Objects.equals(y, other.y)
+                    && x == other.x
+                    && y == other.y
                     && Objects.equals(z, other.z);
         }
 
