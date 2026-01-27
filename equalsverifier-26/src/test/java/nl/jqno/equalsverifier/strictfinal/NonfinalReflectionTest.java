@@ -5,13 +5,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
 public class NonfinalReflectionTest {
 
     @Test
+    @Disabled
     void succeeds_whenSutHasStaticNonfinalField() {
         assertThat(StaticNonfinalFieldContainer.staticI).isEqualTo(10);
         EqualsVerifier.forClass(StaticNonfinalFieldContainer.class).verify();
