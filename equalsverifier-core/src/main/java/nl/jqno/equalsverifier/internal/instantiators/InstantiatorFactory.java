@@ -1,8 +1,10 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import org.objenesis.Objenesis;
@@ -46,14 +48,36 @@ public final class InstantiatorFactory {
         }
 
         Class<T> type = probe.getType();
-        if (probe.isRecord() || constructorMatchesFields(type)) {
-            return new ConstructorInstantiator<>(probe);
+        if (probe.isRecord()) {
+            return new RecordConstructorInstantiator<>(type);
         }
 
+        var reflectionInstantiator = canReflect(probe, objenesis);
+        if (reflectionInstantiator != null) {
+            return reflectionInstantiator;
+        }
+
+        var constructor = findConstructorMatchingFields(type);
+        if (constructor != null && !probe.isAbstract()) {
+            return new ClassConstructorInstantiator<>(type, constructor);
+        }
+
+        // Fall back to ReflectionInstantiator
         return new ReflectionInstantiator<>(probe, objenesis);
     }
 
-    private static boolean constructorMatchesFields(Class<?> type) {
+    private static <T> ReflectionInstantiator<T> canReflect(ClassProbe<T> probe, Objenesis objenesis) {
+        var result = new ReflectionInstantiator<>(probe, objenesis);
+        try {
+            // result.instantiate(Map.of());
+            return result;
+        }
+        catch (ReflectionException ignored) {
+            return null;
+        }
+    }
+
+    private static <T> Constructor<T> findConstructorMatchingFields(Class<T> type) {
         var fieldTypes = new ArrayList<Class<?>>();
         for (var f : FieldIterable.ofIgnoringStatic(type)) {
             fieldTypes.add(f.getType());
@@ -61,11 +85,10 @@ public final class InstantiatorFactory {
         var fields = fieldTypes.toArray(new Class<?>[] {});
 
         try {
-            type.getDeclaredConstructor(fields);
-            return true;
+            return type.getDeclaredConstructor(fields);
         }
         catch (NoSuchMethodException e) {
-            return false;
+            return null;
         }
     }
 }
