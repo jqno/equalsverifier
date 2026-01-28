@@ -4,9 +4,9 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import nl.jqno.equalsverifier.InstanceFactory;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objenesis.Objenesis;
 
 public final class InstantiatorFactory {
@@ -52,9 +52,8 @@ public final class InstantiatorFactory {
             return new RecordConstructorInstantiator<>(type);
         }
 
-        var reflectionInstantiator = canReflect(probe, objenesis);
-        if (reflectionInstantiator != null) {
-            return reflectionInstantiator;
+        if (!finalMeansFinal() || !hasFinalFields(type)) {
+            return new ReflectionInstantiator<>(probe, objenesis);
         }
 
         var constructor = findConstructorMatchingFields(type);
@@ -62,19 +61,33 @@ public final class InstantiatorFactory {
             return new ClassConstructorInstantiator<>(type, constructor);
         }
 
-        // Fall back to ReflectionInstantiator
-        return new ReflectionInstantiator<>(probe, objenesis);
+        throw failure(probe);
     }
 
-    private static <T> ReflectionInstantiator<T> canReflect(ClassProbe<T> probe, Objenesis objenesis) {
-        var result = new ReflectionInstantiator<>(probe, objenesis);
+    private static boolean finalMeansFinal() {
+        @SuppressWarnings("unused")
+        class C {
+            final Object o = new Object();
+        }
+
         try {
-            // result.instantiate(Map.of());
-            return result;
+            var f = C.class.getDeclaredField("o");
+            f.setAccessible(true);
+            f.set(new C(), new Object());
+            return false;
         }
-        catch (ReflectionException ignored) {
-            return null;
+        catch (IllegalAccessException | NoSuchFieldException ignored) {
+            return true;
         }
+    }
+
+    private static <T> boolean hasFinalFields(Class<T> type) {
+        for (var f : FieldIterable.ofIgnoringStatic(type)) {
+            if (f.isFinal()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static <T> Constructor<T> findConstructorMatchingFields(Class<T> type) {
@@ -90,5 +103,13 @@ public final class InstantiatorFactory {
         catch (NoSuchMethodException e) {
             return null;
         }
+    }
+
+    private static RuntimeException failure(ClassProbe<?> probe) {
+        var msg = """
+                  Cannot instantiate %%.
+                     Use #withFactory() so EqualsVerifier can construct %% instances without using reflection.""";
+        var typeName = probe.getType().getSimpleName();
+        return new IllegalStateException(Formatter.of(msg, typeName, typeName).format());
     }
 }
