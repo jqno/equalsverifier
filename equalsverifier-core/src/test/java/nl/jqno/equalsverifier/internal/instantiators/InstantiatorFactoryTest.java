@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
@@ -14,7 +15,7 @@ public class InstantiatorFactoryTest {
     @Test
     void returnsProvidedFactoryInstantiator_whenFactoryIsProvided() {
         InstanceFactory<SomeClassWithFinalField> factory = v -> new SomeClassWithFinalField();
-        assertThat(sut(SomeClassWithFinalField.class, factory)).isInstanceOf(ProvidedFactoryInstantiator.class);
+        assertThat(sut(SomeClassWithFinalField.class, factory, false)).isInstanceOf(ProvidedFactoryInstantiator.class);
     }
 
     @Test
@@ -33,16 +34,28 @@ public class InstantiatorFactoryTest {
     }
 
     @Test
+    void returnReflectionConstructorInstantiator_forClassWhenItHasNoFinalFields_evenWhenFinalMeansFinal() {
+        assertThat(sut(SomeClassWithoutFinalField.class, null, true)).isInstanceOf(ReflectionInstantiator.class);
+    }
+
+    @Test
+    void returnClassConstructorInstantiator_whenFinalMeansFinal() {
+        assertThat(sut(ConstructorMatchesFields.class, null, true)).isInstanceOf(ClassConstructorInstantiator.class);
+    }
+
+    @Test
     void returnsReflectionInstantiator_ifAllElseFails() {
-        assertThat(sut(SomeClassWithFinalField.class)).isInstanceOf(ReflectionInstantiator.class);
+        assertThatThrownBy(() -> sut(SomeClassWithFinalField.class, null, true))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Use #withFactory");
     }
 
     private <T> Instantiator<T> sut(Class<T> type) {
-        return sut(type, null);
+        return sut(type, null, false);
     }
 
-    private <T> Instantiator<T> sut(Class<T> type, InstanceFactory<T> factory) {
-        return InstantiatorFactory.of(ClassProbe.of(type), factory, objenesis);
+    private <T> Instantiator<T> sut(Class<T> type, InstanceFactory<T> factory, boolean finalMeansFinal) {
+        return InstantiatorFactory.of(ClassProbe.of(type), factory, objenesis, finalMeansFinal);
     }
 
     record SomeRecord(int i) {}
@@ -59,17 +72,6 @@ public class InstantiatorFactoryTest {
 
     @SuppressWarnings("unused")
     static final class ConstructorMatchesFields {
-
-        @SuppressWarnings("unused")
-        static final class ClassWithFinal {
-            private final int i = 1;
-        }
-
-        @SuppressWarnings("unused")
-        static class ClassWithoutFinal {
-            private int i;
-        }
-
         private final int i;
         private final String s;
 

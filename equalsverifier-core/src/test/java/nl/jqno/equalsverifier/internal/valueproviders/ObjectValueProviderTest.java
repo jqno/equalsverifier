@@ -17,7 +17,8 @@ public class ObjectValueProviderTest {
 
     private static final Attributes SOME_ATTRIBUTES = Attributes.named("someFieldName");
 
-    private ObjectValueProvider sut = new ObjectValueProvider(new BuiltinPrefabValueProvider(), new ObjenesisStd());
+    private ObjectValueProvider sut =
+            new ObjectValueProvider(new BuiltinPrefabValueProvider(), new ObjenesisStd(), false);
 
     @Test
     void instantiateSimpleObject() {

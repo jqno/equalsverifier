@@ -19,4 +19,16 @@ public sealed interface Mode permits ModeInstance {
     public static Mode skipMockito() {
         return ModeInstance.SKIP_MOCKITO;
     }
+
+    /**
+     * Forces that reflection on final fields is impossible. This is useful when preparing to migrate to a JDK where JEP
+     * 500 ("final means final") is active.
+     *
+     * @return The finalMeansFinal mode.
+     *
+     * @since 4.4
+     */
+    public static Mode finalMeansFinal() {
+        return ModeInstance.FINAL_MEANS_FINAL;
+    }
 }

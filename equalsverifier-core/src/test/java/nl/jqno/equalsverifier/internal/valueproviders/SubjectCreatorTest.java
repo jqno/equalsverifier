@@ -28,7 +28,7 @@ class SubjectCreatorTest {
     private final Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
     private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis);
+    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis, false);
 
     private Field fieldX;
     private Field fieldI;
@@ -55,7 +55,7 @@ class SubjectCreatorTest {
     @Test
     void plain_abstract() {
         var anotherConfig = ConfigurationHelper.emptyConfiguration(Abstract.class);
-        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
+        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis, false);
         var anotherActual = anotherSut.plain();
 
         assertThat(anotherActual.s).isEqualTo(S_RED);
@@ -64,7 +64,7 @@ class SubjectCreatorTest {
     @Test
     void plain_sealedAbstract() {
         var anotherConfig = ConfigurationHelper.emptyConfiguration(SealedAbstract.class);
-        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
+        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis, false);
         var anotherActual = anotherSut.plain();
 
         assertThat(anotherActual.s).isEqualTo(S_RED);
@@ -207,7 +207,7 @@ class SubjectCreatorTest {
 
     @Test
     void noValueFound() {
-        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
+        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis, false);
 
         assertThatThrownBy(() -> sut.plain())
                 .isInstanceOf(NoValueException.class)
