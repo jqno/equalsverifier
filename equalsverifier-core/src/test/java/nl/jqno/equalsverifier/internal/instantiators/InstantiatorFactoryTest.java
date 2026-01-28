@@ -13,8 +13,8 @@ public class InstantiatorFactoryTest {
 
     @Test
     void returnsProvidedFactoryInstantiator_whenFactoryIsProvided() {
-        InstanceFactory<SomeClass> factory = v -> new SomeClass();
-        assertThat(sut(SomeClass.class, factory)).isInstanceOf(ProvidedFactoryInstantiator.class);
+        InstanceFactory<SomeClassWithFinalField> factory = v -> new SomeClassWithFinalField();
+        assertThat(sut(SomeClassWithFinalField.class, factory)).isInstanceOf(ProvidedFactoryInstantiator.class);
     }
 
     @Test
@@ -23,14 +23,18 @@ public class InstantiatorFactoryTest {
     }
 
     @Test
-    void returnClassConstructorInstantiator_forClassWhenConstructorMatchesFields() {
-        // Still ReflectionInstantiator, because we check if reflection works first.
-        assertThat(sut(ConstructorMatchesFields.class)).isInstanceOf(ReflectionInstantiator.class);
+    void returnReflectionConstructorInstantiator_forClassWhenFinalDoesNotMeanFinal() {
+        assertThat(sut(SomeClassWithFinalField.class)).isInstanceOf(ReflectionInstantiator.class);
+    }
+
+    @Test
+    void returnReflectionConstructorInstantiator_forClassWhenItHasNoFinalFields() {
+        assertThat(sut(SomeClassWithoutFinalField.class)).isInstanceOf(ReflectionInstantiator.class);
     }
 
     @Test
     void returnsReflectionInstantiator_ifAllElseFails() {
-        assertThat(sut(SomeClass.class)).isInstanceOf(ReflectionInstantiator.class);
+        assertThat(sut(SomeClassWithFinalField.class)).isInstanceOf(ReflectionInstantiator.class);
     }
 
     private <T> Instantiator<T> sut(Class<T> type) {
@@ -44,12 +48,28 @@ public class InstantiatorFactoryTest {
     record SomeRecord(int i) {}
 
     @SuppressWarnings("unused")
-    static class SomeClass {
+    static class SomeClassWithFinalField {
         private final int i = 10;
     }
 
     @SuppressWarnings("unused")
+    static class SomeClassWithoutFinalField {
+        private int i = 10;
+    }
+
+    @SuppressWarnings("unused")
     static final class ConstructorMatchesFields {
+
+        @SuppressWarnings("unused")
+        static final class ClassWithFinal {
+            private final int i = 1;
+        }
+
+        @SuppressWarnings("unused")
+        static class ClassWithoutFinal {
+            private int i;
+        }
+
         private final int i;
         private final String s;
 
