@@ -24,6 +24,11 @@ public class FinalMeansFinalTest {
     }
 
     @Test
+    void succeed_whenFinalMeansFinalIsForced_givenClassWhoseConstructorMatchesFields_givenItAbstractSoDynamicSubclassIsGenerated() {
+        EqualsVerifier.forClass(AbstractConstructorMatchesFields.class).set(Mode.finalMeansFinal()).verify();
+    }
+
+    @Test
     void succeed_withSimpleFactory() {
         EqualsVerifier
                 .forClass(FinalPoint.class)
@@ -49,6 +54,24 @@ public class FinalMeansFinalTest {
         @Override
         public int hashCode() {
             return Objects.hash(i, s);
+        }
+    }
+
+    static abstract class AbstractConstructorMatchesFields {
+        private final int i;
+
+        public AbstractConstructorMatchesFields(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            return obj instanceof AbstractConstructorMatchesFields other && i == other.i;
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(i);
         }
     }
 }
