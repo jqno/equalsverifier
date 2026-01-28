@@ -7,4 +7,5 @@ public final class ModeInstance implements Mode {
     private ModeInstance() {}
 
     public static final Mode SKIP_MOCKITO = new ModeInstance();
+    public static final Mode FINAL_MEANS_FINAL = new ModeInstance();
 }

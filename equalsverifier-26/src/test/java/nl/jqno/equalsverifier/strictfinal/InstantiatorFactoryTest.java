@@ -44,7 +44,7 @@ public class InstantiatorFactoryTest {
     }
 
     private <T> Instantiator<T> sut(Class<T> type, InstanceFactory<T> factory) {
-        return InstantiatorFactory.of(ClassProbe.of(type), factory, objenesis);
+        return InstantiatorFactory.of(ClassProbe.of(type), factory, objenesis, true);
     }
 
     @SuppressWarnings("unused")
