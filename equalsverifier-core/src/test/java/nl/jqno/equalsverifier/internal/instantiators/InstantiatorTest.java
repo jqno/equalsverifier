@@ -14,7 +14,7 @@ public class InstantiatorTest {
     @Test
     void copy() {
         var probe = ClassProbe.of(SomeSubClass.class);
-        var sut = InstantiatorFactory.of(probe, objenesis);
+        var sut = InstantiatorFactory.of(probe, objenesis, false);
 
         var original = new SomeClass(42, 1337, "yeah");
         var copy = sut.copy(original);

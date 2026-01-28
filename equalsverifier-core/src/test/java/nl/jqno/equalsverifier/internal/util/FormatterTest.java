@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 
 import java.util.Map;
 
+import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
 import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
@@ -65,7 +66,7 @@ class FormatterTest {
     @Test
     void oneAbstractParameter() {
         var type = SubtypeManager.findInstantiableSubclass(ClassProbe.of(Abstract.class), vp, Attributes.empty());
-        var ic = InstantiatorFactory.of(ClassProbe.of(type), objenesis);
+        var ic = instantiatorFor(type);
         Formatter f = Formatter.of("Abstract: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Abstract: [Abstract x=0]");
     }
@@ -73,7 +74,7 @@ class FormatterTest {
     @Test
     void oneConcreteSubclassParameter() {
         var type = SubtypeManager.findInstantiableSubclass(ClassProbe.of(AbstractImpl.class), vp, Attributes.empty());
-        var ic = InstantiatorFactory.of(ClassProbe.of(type), objenesis);
+        var ic = instantiatorFor(type);
         Formatter f = Formatter.of("Concrete: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Concrete: something concrete");
     }
@@ -82,7 +83,7 @@ class FormatterTest {
     void oneDelegatedAbstractParameter() {
         var type = SubtypeManager
                 .findInstantiableSubclass(ClassProbe.of(AbstractDelegation.class), vp, Attributes.empty());
-        var ic = InstantiatorFactory.of(ClassProbe.of(type), objenesis);
+        var ic = instantiatorFor(type);
         Formatter f = Formatter.of("Abstract: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Abstract: [AbstractDelegation y=0]");
     }
@@ -91,14 +92,14 @@ class FormatterTest {
     void oneDelegatedConcreteSubclassParameter() {
         var type = SubtypeManager
                 .findInstantiableSubclass(ClassProbe.of(AbstractDelegationImpl.class), vp, Attributes.empty());
-        var ic = InstantiatorFactory.of(ClassProbe.of(type), objenesis);
+        var ic = instantiatorFor(type);
         Formatter f = Formatter.of("Concrete: %%", ic.instantiate(Map.of()));
         assertThat(f.format()).contains("Concrete: something concrete");
     }
 
     @Test
     void oneThrowingContainerParameter() {
-        var ic = InstantiatorFactory.of(ClassProbe.of(Throwing.class), objenesis);
+        var ic = instantiatorFor(Throwing.class);
         ThrowingContainer tc = new ThrowingContainer(ic.instantiate(Map.of()));
         Formatter f = Formatter.of("TC: %%", tc);
         String expected =
@@ -110,7 +111,7 @@ class FormatterTest {
     void oneAbstractContainerParameter() {
         var type = SubtypeManager
                 .findInstantiableSubclass(ClassProbe.of(AbstractDelegation.class), vp, Attributes.empty());
-        var ic = InstantiatorFactory.of(ClassProbe.of(type), objenesis);
+        var ic = instantiatorFor(type);
         var ac = new AbstractContainer(ic.instantiate(Map.of()));
 
         Formatter f = Formatter.of("AC: %%", ac);
@@ -163,6 +164,10 @@ class FormatterTest {
                 .when(() -> f.format())
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Too many parameters");
+    }
+
+    private <T> Instantiator<T> instantiatorFor(Class<T> type) {
+        return InstantiatorFactory.of(ClassProbe.of(type), objenesis, false);
     }
 
     static class Simple {

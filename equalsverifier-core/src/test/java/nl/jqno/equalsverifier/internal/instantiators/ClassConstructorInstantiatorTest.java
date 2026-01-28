@@ -15,7 +15,7 @@ class ClassConstructorInstantiatorTest {
     @Test
     void instanceCreator_classWhereConstructorMatchesFields() throws NoSuchFieldException {
         var probe = ClassProbe.of(ConstructorMatchesFields.class);
-        var sut = InstantiatorFactory.of(probe, new ObjenesisStd());
+        var sut = InstantiatorFactory.of(probe, new ObjenesisStd(), false);
 
         var x = ConstructorMatchesFields.class.getDeclaredField("x");
         var z = ConstructorMatchesFields.class.getDeclaredField("z");

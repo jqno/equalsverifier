@@ -19,16 +19,18 @@ public class ObjectValueProvider implements ValueProvider {
 
     private final ValueProvider vp;
     private final Objenesis objenesis;
+    private final boolean forceFinalMeansFinal;
 
-    public ObjectValueProvider(ValueProvider vp, Objenesis objenesis) {
+    public ObjectValueProvider(ValueProvider vp, Objenesis objenesis, boolean forceFinalMeansFinal) {
         this.vp = vp;
         this.objenesis = objenesis;
+        this.forceFinalMeansFinal = forceFinalMeansFinal;
     }
 
     /** {@inheritDoc}} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        var instantiator = InstantiatorFactory.<T>of(ClassProbe.of(tag.getType()), objenesis);
+        var instantiator = InstantiatorFactory.<T>of(ClassProbe.of(tag.getType()), objenesis, forceFinalMeansFinal);
         var values = determineValues(tag.getType(), tag, attributes);
         var tuple = Rethrow.rethrow(() -> values.map(instantiator::instantiate));
         return Optional.of(tuple);
