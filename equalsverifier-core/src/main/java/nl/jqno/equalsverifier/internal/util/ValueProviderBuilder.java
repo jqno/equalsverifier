@@ -28,7 +28,7 @@ public final class ValueProviderBuilder {
         var enumeration = new EnumValueProvider();
         var array = new ArrayValueProvider(recursionDetector);
         var abstr = new AbstractValueProvider(recursionDetector);
-        var object = new ObjectValueProvider(recursionDetector, objenesis);
+        var object = new ObjectValueProvider(recursionDetector, objenesis, modes.contains(Mode.finalMeansFinal()));
 
         var mainChain = new ChainedValueProvider(userPrefabs,
                 userGenericPrefabs,

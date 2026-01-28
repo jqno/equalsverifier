@@ -21,13 +21,14 @@ public final class InstantiatorFactory {
      * Note that the given class is the class that will be instantiated. No subclass will be substituted if the given
      * class is abstract or an interface.
      *
-     * @param <T>       Represents the type of the class to instantiate.
-     * @param probe     Represents the class to instantiate.
-     * @param objenesis To instantiate non-record classes.
+     * @param <T>                  Represents the type of the class to instantiate.
+     * @param probe                Represents the class to instantiate.
+     * @param objenesis            To instantiate non-record classes.
+     * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
      * @return an {@code InstanceCreator} for the given class.
      */
-    public static <T> Instantiator<T> of(ClassProbe<T> probe, Objenesis objenesis) {
-        return of(probe, null, objenesis);
+    public static <T> Instantiator<T> of(ClassProbe<T> probe, Objenesis objenesis, boolean forceFinalMeansFinal) {
+        return of(probe, null, objenesis, forceFinalMeansFinal);
     }
 
     /**
@@ -36,13 +37,18 @@ public final class InstantiatorFactory {
      * Note that the given class is the class that will be instantiated. No subclass will be substituted if the given
      * class is abstract or an interface.
      *
-     * @param <T>       Represents the type of the class to instantiate.
-     * @param probe     Represents the class to instantiate.
-     * @param factory   A factory that can create instances of {@code T}, or null.
-     * @param objenesis To instantiate non-record classes.
+     * @param <T>                  Represents the type of the class to instantiate.
+     * @param probe                Represents the class to instantiate.
+     * @param factory              A factory that can create instances of {@code T}, or null.
+     * @param objenesis            To instantiate non-record classes.
+     * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
      * @return an {@code InstanceCreator} for the given class.
      */
-    public static <T> Instantiator<T> of(ClassProbe<T> probe, InstanceFactory<T> factory, Objenesis objenesis) {
+    public static <T> Instantiator<T> of(
+            ClassProbe<T> probe,
+            InstanceFactory<T> factory,
+            Objenesis objenesis,
+            boolean forceFinalMeansFinal) {
         if (factory != null) {
             return new ProvidedFactoryInstantiator<>(factory);
         }
@@ -52,7 +58,8 @@ public final class InstantiatorFactory {
             return new RecordConstructorInstantiator<>(type);
         }
 
-        if (!finalMeansFinal() || !hasFinalFields(type)) {
+        boolean finalMeansFinal = forceFinalMeansFinal || cantReflectivelyModifyFinal();
+        if (!finalMeansFinal || !hasFinalFields(type)) {
             return new ReflectionInstantiator<>(probe, objenesis);
         }
 
@@ -64,7 +71,7 @@ public final class InstantiatorFactory {
         throw failure(probe);
     }
 
-    private static boolean finalMeansFinal() {
+    private static boolean cantReflectivelyModifyFinal() {
         @SuppressWarnings("unused")
         class C {
             final Object o = new Object();

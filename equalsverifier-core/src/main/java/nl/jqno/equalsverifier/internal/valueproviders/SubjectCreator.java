@@ -24,23 +24,31 @@ public class SubjectCreator<T> {
     private final ValueProvider valueProvider;
     private final Objenesis objenesis;
     private final Instantiator<? extends T> instantiator;
+    private final boolean forceFinalMeansFinal;
 
     /**
      * Constructor.
      *
-     * @param config        A configuration object.
-     * @param valueProvider To provide values for the fields of the subject.
-     * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
+     * @param config               A configuration object.
+     * @param valueProvider        To provide values for the fields of the subject.
+     * @param objenesis            Needed by InstanceCreator to instantiate non-record classes.
+     * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
      */
-    public SubjectCreator(Configuration<T> config, ValueProvider valueProvider, Objenesis objenesis) {
+    public SubjectCreator(
+            Configuration<T> config,
+            ValueProvider valueProvider,
+            Objenesis objenesis,
+            boolean forceFinalMeansFinal) {
         this.typeTag = config.typeTag();
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;
         this.objenesis = objenesis;
+        this.forceFinalMeansFinal = forceFinalMeansFinal;
         this.actualType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), config.factory(), objenesis);
+        this.instantiator =
+                InstantiatorFactory.of(ClassProbe.of(actualType), config.factory(), objenesis, forceFinalMeansFinal);
     }
 
     /**
@@ -181,7 +189,8 @@ public class SubjectCreator<T> {
     public Object copyIntoSuperclass(T original) {
         var actualSuperType = SubtypeManager
                 .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
-        Instantiator<? super T> superCreator = InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis);
+        Instantiator<? super T> superCreator =
+                InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis, forceFinalMeansFinal);
         return superCreator.copy(original);
     }
 
@@ -198,7 +207,8 @@ public class SubjectCreator<T> {
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
         var actualSubType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
-        Instantiator<S> subCreator = InstantiatorFactory.of(ClassProbe.of(actualSubType), objenesis);
+        Instantiator<S> subCreator =
+                InstantiatorFactory.of(ClassProbe.of(actualSubType), objenesis, forceFinalMeansFinal);
         return subCreator.copy(original);
     }
 
