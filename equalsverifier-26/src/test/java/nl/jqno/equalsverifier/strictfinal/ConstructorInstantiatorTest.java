@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
 import org.junit.jupiter.api.Test;
 
 public class ConstructorInstantiatorTest {
@@ -16,6 +17,12 @@ public class ConstructorInstantiatorTest {
     @Test
     void succeed_whenConstructorMatchesFields() {
         EqualsVerifier.forClass(ConstructorMatchesFields.class).verify();
+    }
+
+    @Test
+    void succeed_forFinalPoint() {
+        // An example of constructor matching fields
+        EqualsVerifier.forClass(FinalPoint.class).verify();
     }
 
     @Test
