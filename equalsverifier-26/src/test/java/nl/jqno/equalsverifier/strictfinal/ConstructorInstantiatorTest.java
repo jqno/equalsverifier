@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ConstructorInstantiatorTest {
@@ -15,7 +14,6 @@ public class ConstructorInstantiatorTest {
     }
 
     @Test
-    @Disabled
     void succeed_whenConstructorMatchesFields() {
         EqualsVerifier.forClass(ConstructorMatchesFields.class).verify();
     }
@@ -24,7 +22,7 @@ public class ConstructorInstantiatorTest {
     void fail_whenConstructorDoesNotMatchFields() {
         assertThatThrownBy(() -> EqualsVerifier.forClass(ConstructorDoesNotMatchFields.class).verify())
                 .isInstanceOf(AssertionError.class)
-                .hasMessageContaining("Not allowed to reflectively set final field");
+                .hasMessageContaining("Use #withFactory()");
     }
 
     record SomeRecord(int i) {}
