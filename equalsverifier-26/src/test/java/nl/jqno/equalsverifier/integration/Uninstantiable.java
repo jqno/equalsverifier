@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.strictfinal;
+package nl.jqno.equalsverifier.integration;
 
 import java.util.List;
 import java.util.Objects;

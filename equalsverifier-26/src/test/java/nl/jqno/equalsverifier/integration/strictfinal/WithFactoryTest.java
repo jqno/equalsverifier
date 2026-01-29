@@ -1,8 +1,9 @@
-package nl.jqno.equalsverifier.strictfinal;
+package nl.jqno.equalsverifier.integration.strictfinal;
 
 import java.util.List;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.integration.Uninstantiable;
 import org.junit.jupiter.api.Test;
 
 public class WithFactoryTest {
