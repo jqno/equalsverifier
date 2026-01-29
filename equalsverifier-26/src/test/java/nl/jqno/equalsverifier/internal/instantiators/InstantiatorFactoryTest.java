@@ -1,10 +1,9 @@
-package nl.jqno.equalsverifier.strictfinal;
+package nl.jqno.equalsverifier.internal.instantiators;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.InstanceFactory;
-import nl.jqno.equalsverifier.internal.instantiators.*;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;

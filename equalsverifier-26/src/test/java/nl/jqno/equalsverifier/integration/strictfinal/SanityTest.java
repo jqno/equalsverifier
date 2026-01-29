@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.strictfinal;
+package nl.jqno.equalsverifier.integration.strictfinal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -6,9 +6,10 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.integration.Uninstantiable;
 import org.junit.jupiter.api.Test;
 
-public class FinalMeansFinalSanityTest {
+public class SanityTest {
     @Test
     void sanity() throws Exception {
         var q = new Uninstantiable(List.of("foo"), "bar");
