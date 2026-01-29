@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.strictfinal;
+package nl.jqno.equalsverifier.integration.strictfinal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
 import org.junit.jupiter.api.Test;
 
-public class ConstructorInstantiatorTest {
+public class ConstructorTest {
     @Test
     void succeed_whenSutIsRecord() {
         EqualsVerifier.forClass(SomeRecord.class).verify();
