@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.strictfinal;
+package nl.jqno.equalsverifier.integration.strictfinal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
