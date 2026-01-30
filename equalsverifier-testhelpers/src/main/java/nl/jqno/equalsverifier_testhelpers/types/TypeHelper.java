@@ -69,24 +69,24 @@ public class TypeHelper {
     @SuppressWarnings("unused")
     public static class DifferentAccessModifiersFieldContainer {
 
-        public static final int L = 0;
-        protected static final int K = 0;
-        static final int J = 0;
         private static final int I = 0;
+        static final int J = 0;
+        protected static final int K = 0;
+        public static final int L = 0;
 
-        public final int l = 0;
-        protected final int k = 0;
-        final int j = 0;
         private final int i = 0;
+        final int j = 0;
+        protected final int k = 0;
+        public final int l = 0;
     }
 
     @SuppressWarnings("unused")
     public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
 
-        public final String d = "";
-        protected final String c = "";
-        final String b = "";
         private final String a = "";
+        final String b = "";
+        protected final String c = "";
+        public final String d = "";
     }
 
     public static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}

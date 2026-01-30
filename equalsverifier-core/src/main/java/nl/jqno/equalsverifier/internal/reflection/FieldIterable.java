@@ -100,7 +100,6 @@ public final class FieldIterable implements Iterable<FieldProbe> {
 
     private List<FieldProbe> createJavaFieldList() {
         var result = new ArrayList<FieldProbe>();
-        result.addAll(addFieldsFor(type));
 
         if (includeSuperclasses) {
             for (Class<?> c : SuperclassIterable.of(type)) {
@@ -108,6 +107,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
             }
         }
 
+        result.addAll(addFieldsFor(type));
         return result;
     }
 
