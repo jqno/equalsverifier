@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 
 class FieldIterableTest {
 
-    private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
-    private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS = createNonStaticFieldContainerFields();
-    private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
-    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = createFieldAndSubFieldContainerFields();
+    private static final List<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
+    private static final List<Field> NONSTATIC_FIELD_CONTAINER_FIELDS = createNonStaticFieldContainerFields();
+    private static final List<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
+    private static final List<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = createFieldAndSubFieldContainerFields();
 
     @Test
     void simpleFields() {
-        var actual = new HashSet<Field>();
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.of(DifferentAccessModifiersFieldContainer.class)) {
             actual.add(probe.getField());
         }
@@ -28,7 +28,7 @@ class FieldIterableTest {
 
     @Test
     void simpleFieldsWithoutStatics() {
-        var actual = new HashSet<Field>();
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.ofIgnoringStatic(DifferentAccessModifiersFieldContainer.class)) {
             actual.add(probe.getField());
         }
@@ -37,8 +37,8 @@ class FieldIterableTest {
     }
 
     @Test
-    void subAndSuperClassFields() {
-        var actual = new HashSet<Field>();
+    void subAndSuperClassFields_firstSuperFieldsThenOwnFields() {
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.of(DifferentAccessModifiersSubFieldContainer.class)) {
             actual.add(probe.getField());
         }
@@ -48,7 +48,7 @@ class FieldIterableTest {
 
     @Test
     void onlySubClassFields() {
-        var actual = new HashSet<Field>();
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
             actual.add(probe.getField());
         }
@@ -64,10 +64,10 @@ class FieldIterableTest {
 
     @Test
     void superHasNoFields() throws NoSuchFieldException {
-        var expected = new HashSet<Field>();
+        var expected = new ArrayList<Field>();
         expected.add(NoFieldsSubWithFields.class.getField("field"));
 
-        var actual = new HashSet<Field>();
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.of(NoFieldsSubWithFields.class)) {
             actual.add(probe.getField());
         }
@@ -77,7 +77,7 @@ class FieldIterableTest {
 
     @Test
     void subHasNoFields() {
-        var actual = new HashSet<Field>();
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.of(EmptySubFieldContainer.class)) {
             actual.add(probe.getField());
         }
@@ -87,11 +87,11 @@ class FieldIterableTest {
 
     @Test
     void classInTheMiddleHasNoFields() throws NoSuchFieldException {
-        var expected = new HashSet<Field>();
+        var expected = new ArrayList<Field>();
         expected.addAll(FIELD_CONTAINER_FIELDS);
         expected.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
 
-        var actual = new HashSet<Field>();
+        var actual = new ArrayList<Field>();
         for (FieldProbe probe : FieldIterable.of(SubEmptySubFieldContainer.class)) {
             actual.add(probe.getField());
         }
@@ -149,8 +149,8 @@ class FieldIterableTest {
         assertThat(fields.get(0).getName()).isEqualTo("i");
     }
 
-    private static Set<Field> createFieldContainerFields() {
-        var result = new HashSet<Field>();
+    private static List<Field> createFieldContainerFields() {
+        var result = new ArrayList<Field>();
         Class<DifferentAccessModifiersFieldContainer> type = DifferentAccessModifiersFieldContainer.class;
         try {
             result.add(type.getDeclaredField("i"));
@@ -168,8 +168,8 @@ class FieldIterableTest {
         return result;
     }
 
-    private static Set<Field> createNonStaticFieldContainerFields() {
-        var result = new HashSet<Field>();
+    private static List<Field> createNonStaticFieldContainerFields() {
+        var result = new ArrayList<Field>();
         Class<DifferentAccessModifiersFieldContainer> type = DifferentAccessModifiersFieldContainer.class;
         try {
             result.add(type.getDeclaredField("i"));
@@ -183,8 +183,8 @@ class FieldIterableTest {
         return result;
     }
 
-    private static Set<Field> createSubFieldContainerFields() {
-        var result = new HashSet<Field>();
+    private static List<Field> createSubFieldContainerFields() {
+        var result = new ArrayList<Field>();
         Class<DifferentAccessModifiersSubFieldContainer> type = DifferentAccessModifiersSubFieldContainer.class;
         try {
             result.add(type.getDeclaredField("a"));
@@ -198,8 +198,8 @@ class FieldIterableTest {
         return result;
     }
 
-    private static Set<Field> createFieldAndSubFieldContainerFields() {
-        var result = new HashSet<Field>();
+    private static List<Field> createFieldAndSubFieldContainerFields() {
+        var result = new ArrayList<Field>();
         result.addAll(FIELD_CONTAINER_FIELDS);
         result.addAll(SUB_FIELD_CONTAINER_FIELDS);
         return result;
