@@ -29,7 +29,7 @@ class AnnotationImmutableTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MutableCanEqualColorPoint.class).withRedefinedSuperclass().verify())
                 .assertFailure()
-                .assertMessageContains("Mutability", "equals depends on mutable field", "color");
+                .assertMessageContains("Mutability", "equals depends on mutable field", "x");
     }
 
     @Immutable
