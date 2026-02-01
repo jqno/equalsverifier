@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
@@ -156,12 +157,7 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-
-        @SuppressWarnings("unchecked")
-        // Don't use type directly, as reference may already be a subclass if type was abstract
-        Class<T> realClass = (Class<T>) reference.getClass();
-        Class<T> anonymousSubclass = SubtypeManager.giveDynamicSubclass(realClass);
-        T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
+        T equalSub = getEqualSub(reference);
 
         if (config.usingGetClass()) {
             Formatter formatter =
@@ -182,6 +178,23 @@ public class HierarchyChecker<T> implements Checker {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private <S extends T> T getEqualSub(T reference) {
+        if (config.subclass() != null) {
+            return subjectCreator
+                    .copyIntoSubclass(
+                        reference,
+                        (Class<S>) config.subclass(),
+                        (InstanceFactory<S>) config.subclassFactory());
+        }
+        else {
+            // Don't use type directly, as reference may already be a subclass if type was abstract
+            Class<T> realClass = (Class<T>) reference.getClass();
+            Class<T> anonymousSubclass = SubtypeManager.giveDynamicSubclass(realClass);
+            return subjectCreator.copyIntoSubclass(reference, anonymousSubclass, null);
+        }
+    }
+
     private void checkRedefinedSubclass() {
         if (typeIsFinal || typeIsSealed || !hasRedefinedSubclass) {
             return;
@@ -196,7 +209,7 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        T redefinedSub = subjectCreator.copyIntoSubclass(reference, redefinedSubclass);
+        T redefinedSub = subjectCreator.copyIntoSubclass(reference, redefinedSubclass, null);
         assertFalse(
             Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),
             reference.equals(redefinedSub));

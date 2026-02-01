@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.strictfinal;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class WithFactoryTest {
@@ -9,16 +8,18 @@ public class WithFactoryTest {
     void succeed_whenClassIsFinal() {
         EqualsVerifier
                 .forClass(FinalNonConstructable.class)
-                .withFactory(values -> new FinalNonConstructable("" + values.getInt("i")))
+                .withFactory(v -> new FinalNonConstructable("" + v.getInt("i")))
                 .verify();
     }
 
     @Test
-    @Disabled
     void succeed_whenClassCanBeSubclassed() {
         EqualsVerifier
                 .forClass(SubclassableNonConstructable.class)
-                .withFactory(values -> new SubclassableNonConstructable("" + values.getInt("i")))
+                .withFactory(
+                    v -> new SubclassableNonConstructable("" + v.getInt("i")),
+                    SubclassableNonConstructableSub.class,
+                    v -> new SubclassableNonConstructableSub("" + v.getInt("i")))
                 .verify();
     }
 
@@ -55,6 +56,12 @@ public class WithFactoryTest {
         @Override
         public final int hashCode() {
             return i;
+        }
+    }
+
+    static final class SubclassableNonConstructableSub extends SubclassableNonConstructable {
+        public SubclassableNonConstructableSub(String i) {
+            super(i);
         }
     }
 }
