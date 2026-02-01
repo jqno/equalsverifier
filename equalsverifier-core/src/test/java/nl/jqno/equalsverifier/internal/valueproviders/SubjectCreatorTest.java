@@ -199,7 +199,21 @@ class SubjectCreatorTest {
     void copyIntoSubclass() {
         expected = new SomeSub(I_RED, I_RED, S_RED, null);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
-        actual = sut.copyIntoSubclass(original, SomeSub.class);
+        actual = sut.copyIntoSubclass(original, SomeSub.class, null);
+
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getClass()).isEqualTo(SomeSub.class);
+    }
+
+    @Test
+    void copyIntoSubclassWithFactory() {
+        expected = new SomeSub(I_RED, I_RED, S_RED, null);
+        SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
+        actual = sut
+                .copyIntoSubclass(
+                    original,
+                    SomeSub.class,
+                    v -> new SomeSub(v.getInt("x"), v.getInt("i"), v.getString("s"), v.getString("q")));
 
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.getClass()).isEqualTo(SomeSub.class);
