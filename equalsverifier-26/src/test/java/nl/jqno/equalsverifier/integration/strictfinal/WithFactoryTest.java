@@ -13,13 +13,23 @@ public class WithFactoryTest {
     }
 
     @Test
-    void succeed_whenClassCanBeSubclassed() {
+    void succeed_whenClassCanBeSubclassed_givenConstructableSubclass() {
         EqualsVerifier
-                .forClass(SubclassableNonConstructable.class)
+                .forClass(NonConstructableParent.class)
                 .withFactory(
-                    v -> new SubclassableNonConstructable("" + v.getInt("i")),
-                    SubclassableNonConstructableSub.class,
-                    v -> new SubclassableNonConstructableSub("" + v.getInt("i")))
+                    v -> new NonConstructableParent("" + v.getInt("i")),
+                    ConstructableSubForNonConstructableParent.class)
+                .verify();
+    }
+
+    @Test
+    void succeed_whenClassCanBeSubclassed_givenNonConstructableSubclassAndExtraFactory() {
+        EqualsVerifier
+                .forClass(NonConstructableParent.class)
+                .withFactory(
+                    v -> new NonConstructableParent("" + v.getInt("i")),
+                    NonConstructableSubForNonConstructableParent.class,
+                    v -> new NonConstructableSubForNonConstructableParent("" + v.getInt("i")))
                 .verify();
     }
 
@@ -41,16 +51,16 @@ public class WithFactoryTest {
         }
     }
 
-    static class SubclassableNonConstructable {
+    static class NonConstructableParent {
         private final int i;
 
-        public SubclassableNonConstructable(String i) {
+        public NonConstructableParent(String i) {
             this.i = Integer.valueOf(i);
         }
 
         @Override
         public final boolean equals(Object obj) {
-            return obj instanceof SubclassableNonConstructable other && i == other.i;
+            return obj instanceof NonConstructableParent other && i == other.i;
         }
 
         @Override
@@ -59,8 +69,14 @@ public class WithFactoryTest {
         }
     }
 
-    static final class SubclassableNonConstructableSub extends SubclassableNonConstructable {
-        public SubclassableNonConstructableSub(String i) {
+    static final class ConstructableSubForNonConstructableParent extends NonConstructableParent {
+        public ConstructableSubForNonConstructableParent(int i) {
+            super("" + i);
+        }
+    }
+
+    static final class NonConstructableSubForNonConstructableParent extends NonConstructableParent {
+        public NonConstructableSubForNonConstructableParent(String i) {
             super(i);
         }
     }
