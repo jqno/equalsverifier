@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
 import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
@@ -199,16 +200,17 @@ public class SubjectCreator<T> {
      * class set to the same value as their counterparts from {@code original}. All fields declared in the subclass are
      * set to their {@link #plain()} values.
      *
-     * @param <S>      A subtype of original's type.
-     * @param original The instance to copy.
-     * @param subType  A subtype of original's type.
+     * @param <S>             A subtype of original's type.
+     * @param original        The instance to copy.
+     * @param subType         A subtype of original's type.
+     * @param subclassFactory A factory to instantiate the subtype.
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
-    public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
+    public <S extends T> S copyIntoSubclass(T original, Class<S> subType, InstanceFactory<S> subclassFactory) {
         var actualSubType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
         Instantiator<S> subCreator =
-                InstantiatorFactory.of(ClassProbe.of(actualSubType), objenesis, forceFinalMeansFinal);
+                InstantiatorFactory.of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal);
         return subCreator.copy(original);
     }
 
