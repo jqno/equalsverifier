@@ -131,8 +131,29 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /**
      * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help, as
-     * well as a factory for a subclass for the class under test. Such a factory is needed when the class under test is
-     * non-final and doesn't use {@link #usingGetClass()}, so EqualsVerifier can check the interaction with subclasses.
+     * well as a specified subclass for the class under test. This is needed when the class under test is non-final and
+     * doesn't use {@link #usingGetClass()}, so EqualsVerifier can check the interaction with subclasses.
+     *
+     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * @param <S>      A subclass of the class under test.
+     * @param factory  A factory that can instantiate the class under test.
+     * @param subclass A subclass of the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    public <S extends T> SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory, Class<S> subclass) {
+        this.instanceFactory = factory;
+        this.specificSubclass = subclass;
+        return this;
+    }
+
+    /**
+     * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help, as
+     * well as a specified subclass for the class under test, and a factory for that subclass. This is needed when the
+     * class under test is non-final and doesn't use {@link #usingGetClass()}, so EqualsVerifier can check the
+     * interaction with subclasses.
      *
      * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
      *
