@@ -75,8 +75,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
         Class<? extends T> sub = throwingGetterCreator(getterName);
         T original = subjectCreator.plain();
-        T red1 = subjectCreator.copyIntoSubclass(original, sub);
-        T red2 = subjectCreator.copyIntoSubclass(original, sub);
+        T red1 = subjectCreator.copyIntoSubclass(original, sub, null);
+        T red2 = subjectCreator.copyIntoSubclass(original, sub, null);
 
         boolean equalsExceptionCaught = false;
         try {

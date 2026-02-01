@@ -32,6 +32,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Set<String> actualFields;
 
     private InstanceFactory<T> instanceFactory = null;
+    private Class<? extends T> specificSubclass = null;
+    private InstanceFactory<? extends T> subclassInstanceFactory = null;
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
@@ -124,6 +126,31 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory) {
         this.instanceFactory = factory;
+        return this;
+    }
+
+    /**
+     * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help, as
+     * well as a factory for a subclass for the class under test. Such a factory is needed when the class under test is
+     * non-final and doesn't use {@link #usingGetClass()}, so EqualsVerifier can check the interaction with subclasses.
+     *
+     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * @param <S>             A subclass of the class under test.
+     * @param factory         A factory that can instantiate the class under test.
+     * @param subclass        A subclass of the class under test.
+     * @param subclassFactory A factory that can instantiate a subclass of the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    public <S extends T> SingleTypeEqualsVerifierApi<T> withFactory(
+            InstanceFactory<T> factory,
+            Class<S> subclass,
+            InstanceFactory<S> subclassFactory) {
+        this.instanceFactory = factory;
+        this.specificSubclass = subclass;
+        this.subclassInstanceFactory = subclassFactory;
         return this;
     }
 
@@ -497,6 +524,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                 .build(
                     type,
                     instanceFactory,
+                    specificSubclass,
+                    subclassInstanceFactory,
                     allExcludedFields,
                     allIncludedFields,
                     nonnullFields,
