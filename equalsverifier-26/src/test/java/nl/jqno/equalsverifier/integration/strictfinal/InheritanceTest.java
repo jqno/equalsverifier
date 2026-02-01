@@ -104,7 +104,7 @@ public class InheritanceTest {
             return obj instanceof NonConstructableSub other
                     && other.canEqual(this)
                     && super.equals(other)
-                    && Objects.equals(j, other.j);
+                    && j == other.j;
         }
 
         @Override

@@ -1,19 +1,60 @@
 package nl.jqno.equalsverifier.integration.strictfinal;
 
-import java.util.List;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.integration.Uninstantiable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class WithFactoryTest {
     @Test
-    void simpleClass() {
+    void succeed_whenClassIsFinal() {
         EqualsVerifier
-                .forClass(Uninstantiable.class)
-                .withFactory(
-                    values -> new Uninstantiable(values.getString("s") == null ? null : List.of(values.getString("s")),
-                            values.getString("t")))
+                .forClass(FinalNonConstructable.class)
+                .withFactory(values -> new FinalNonConstructable("" + values.getInt("i")))
                 .verify();
+    }
+
+    @Test
+    @Disabled
+    void succeed_whenClassCanBeSubclassed() {
+        EqualsVerifier
+                .forClass(SubclassableNonConstructable.class)
+                .withFactory(values -> new SubclassableNonConstructable("" + values.getInt("i")))
+                .verify();
+    }
+
+    static final class FinalNonConstructable {
+        private final int i;
+
+        public FinalNonConstructable(String i) {
+            this.i = Integer.valueOf(i);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof FinalNonConstructable other && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
+        }
+    }
+
+    static class SubclassableNonConstructable {
+        private final int i;
+
+        public SubclassableNonConstructable(String i) {
+            this.i = Integer.valueOf(i);
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            return obj instanceof SubclassableNonConstructable other && i == other.i;
+        }
+
+        @Override
+        public final int hashCode() {
+            return i;
+        }
     }
 }
