@@ -15,7 +15,7 @@ public class InstantiatorFactoryTest {
     @Test
     void returnsProvidedFactoryInstantiator_whenFactoryIsProvided() {
         InstanceFactory<SomeClassWithFinalFieldWithNonmatchingConstructor> factory =
-                v -> new SomeClassWithFinalFieldWithNonmatchingConstructor(Integer.valueOf(v.getString("s")));
+                v -> new SomeClassWithFinalFieldWithNonmatchingConstructor("" + v.getInt("i"));
         assertThat(sut(SomeClassWithFinalFieldWithNonmatchingConstructor.class, factory))
                 .isInstanceOf(ProvidedFactoryInstantiator.class);
     }
@@ -53,10 +53,10 @@ public class InstantiatorFactoryTest {
 
     @SuppressWarnings("unused")
     static class SomeClassWithFinalFieldWithNonmatchingConstructor {
-        private final String s;
+        private final int i;
 
-        public SomeClassWithFinalFieldWithNonmatchingConstructor(int i) {
-            this.s = "" + i;
+        public SomeClassWithFinalFieldWithNonmatchingConstructor(String i) {
+            this.i = Integer.valueOf(i);
         }
     }
 
