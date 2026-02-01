@@ -26,13 +26,25 @@ public class InheritanceTest {
 
     @Test
     @Disabled
-    void succeed_whenClassHasRedefinedSubclass_givenClassRequiresFactory() {
+    void succeed_whenClassHasNonConstructableRedefinedSubclass_givenClassRequiresFactory() {
         EqualsVerifier
                 .forClass(NonConstructableSuper.class)
                 .withFactory(
                     v -> new NonConstructableSuper("" + v.getInt("i")),
-                    ConstructableSubForNonConstructableSuper.class,
-                    v -> new ConstructableSubForNonConstructableSuper(v.getInt("i"), v.getInt("j")))
+                    NonConstructableSubForNonConstructableSuper.class,
+                    v -> new NonConstructableSubForNonConstructableSuper("" + v.getInt("i"), v.getInt("j")))
+                .withRedefinedSubclass(ConstructableSubForNonConstructableSuper.class)
+                .verify();
+    }
+
+    @Test
+    @Disabled
+    void succeed_whenClassHasConstructableRedefinedSubclass_givenClassRequiresFactory() {
+        EqualsVerifier
+                .forClass(NonConstructableSuper.class)
+                .withFactory(
+                    v -> new NonConstructableSuper("" + v.getInt("i")),
+                    ConstructableSubForNonConstructableSuper.class)
                 .withRedefinedSubclass(ConstructableSubForNonConstructableSuper.class)
                 .verify();
     }
@@ -135,6 +147,33 @@ public class InheritanceTest {
         @Override
         public int hashCode() {
             return Objects.hash(i);
+        }
+    }
+
+    static final class NonConstructableSubForNonConstructableSuper extends NonConstructableSuper {
+        private final int j;
+
+        public NonConstructableSubForNonConstructableSuper(String i, int j) {
+            super(i);
+            this.j = j;
+        }
+
+        @Override
+        public boolean canEqual(Object obj) {
+            return obj instanceof NonConstructableSubForNonConstructableSuper;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof NonConstructableSubForNonConstructableSuper other
+                    && other.canEqual(this)
+                    && super.equals(other)
+                    && j == other.j;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(super.i, j);
         }
     }
 
