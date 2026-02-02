@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -91,6 +93,30 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, InstanceFactory<T
                 isKotlin,
                 equalExamples,
                 unequalExamples);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends T> subclass() {
+        // We can't set the subclass based on the subclassFactory in the constructor,
+        // because subclassFactory has to be assigned to a field before we can use it to determine the generic parameter.
+
+        if (subclass != null) {
+            return subclass;
+        }
+
+        if (subclassFactory != null) {
+            try {
+                Field subclassFactoryField = Configuration.class.getDeclaredField("subclassFactory");
+                TypeTag tag = TypeTag.of(subclassFactoryField, new TypeTag(Configuration.class));
+                return (Class<? extends T>) tag.genericTypes().get(0).getType();
+            }
+            catch (NoSuchFieldException | ClassCastException e) {
+                throw new ReflectionException("Could not determine generic type of subclassFactory", e);
+            }
+        }
+
+        return null;
     }
 
     private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationClassNames) {
