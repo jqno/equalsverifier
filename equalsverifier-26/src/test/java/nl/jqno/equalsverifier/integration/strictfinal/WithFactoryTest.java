@@ -28,7 +28,6 @@ public class WithFactoryTest {
                 .forClass(NonConstructableParent.class)
                 .withFactory(
                     v -> new NonConstructableParent("" + v.getInt("i")),
-                    NonConstructableSubForNonConstructableParent.class,
                     v -> new NonConstructableSubForNonConstructableParent("" + v.getInt("i")))
                 .verify();
     }
