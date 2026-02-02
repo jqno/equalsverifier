@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
 import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
@@ -209,9 +211,18 @@ public class SubjectCreator<T> {
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType, InstanceFactory<S> subclassFactory) {
         var actualSubType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
-        Instantiator<S> subCreator =
-                InstantiatorFactory.of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal);
-        return subCreator.copy(original);
+        try {
+            Instantiator<S> subCreator = InstantiatorFactory
+                    .of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal);
+            return subCreator.copy(original);
+        }
+        catch (InstantiatorException e) {
+            var msg = """
+                      Cannot instantiate a subclass of %% (attempted subclass: %%).
+                      Use an overload of #withFactory() to specify a subclass.""";
+            throw new InstantiatorException(
+                    Formatter.of(msg, type.getSimpleName(), actualSubType.getSimpleName()).format());
+        }
     }
 
     private T createInstance(Map<Field, Object> givens) {
