@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -46,7 +47,7 @@ public class InstantiatorFactoryTest {
     @Test
     void returnsReflectionInstantiator_ifAllElseFails() {
         assertThatThrownBy(() -> sut(SomeClassWithFinalField.class, null, true))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(InstantiatorException.class)
                 .hasMessageContaining("Use #withFactory");
     }
 

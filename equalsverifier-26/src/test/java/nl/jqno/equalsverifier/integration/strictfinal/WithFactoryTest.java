@@ -1,15 +1,34 @@
 package nl.jqno.equalsverifier.integration.strictfinal;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 public class WithFactoryTest {
     @Test
-    void succeed_whenClassIsFinal() {
+    void fail_whenClassIsFinal() {
+        assertThatThrownBy(() -> EqualsVerifier.forClass(FinalNonConstructable.class).verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Cannot instantiate FinalNonConstructable.")
+                .hasMessageContaining("Use #withFactory()");
+    }
+
+    @Test
+    void succeed_whenClassIsFinal_givenFactory() {
         EqualsVerifier
                 .forClass(FinalNonConstructable.class)
                 .withFactory(v -> new FinalNonConstructable("" + v.getInt("i")))
                 .verify();
+    }
+
+    @Test
+    void fail_whenClassCanBeSubclassed() {
+        assertThatThrownBy(() -> EqualsVerifier.forClass(NonConstructableParent.class).verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Cannot instantiate NonConstructableParent.")
+                .hasMessageContaining("Use #withFactory()");
     }
 
     @Test
@@ -23,12 +42,33 @@ public class WithFactoryTest {
     }
 
     @Test
-    void succeed_whenClassCanBeSubclassed_givenNonConstructableSubclassAndExtraFactory() {
+    void fail_whenClassCanBeSubclassed_givenParentFactoryButNotSubclassFactory() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(NonConstructableParent.class)
+                    .withFactory(v -> new NonConstructableParent("" + v.getInt("i")))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Cannot instantiate a subclass of NonConstructableParent.")
+                .hasMessageContaining("Use an overload of #withFactory() to specify a subclass.");
+    }
+
+    @Test
+    void succeed_whenClassCanBeSubclassed_givenParentAndSubclassFactory() {
         EqualsVerifier
                 .forClass(NonConstructableParent.class)
                 .withFactory(
                     v -> new NonConstructableParent("" + v.getInt("i")),
                     v -> new NonConstructableSubForNonConstructableParent("" + v.getInt("i")))
+                .verify();
+    }
+
+    @Test
+    void succeed_whenClassCanBeSubclassed_givenParentFactoryAndSuppressedWarning() {
+        EqualsVerifier
+                .forClass(NonConstructableParent.class)
+                .withFactory(v -> new NonConstructableParent("" + v.getInt("i")))
+                .suppress(Warning.STRICT_INHERITANCE)
                 .verify();
     }
 
