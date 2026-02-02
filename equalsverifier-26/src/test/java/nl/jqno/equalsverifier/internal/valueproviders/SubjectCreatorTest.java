@@ -1,0 +1,112 @@
+package nl.jqno.equalsverifier.internal.valueproviders;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Optional;
+
+import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
+
+public class SubjectCreatorTest {
+
+    private static final boolean NO_NEED_TO_FORCE = false;
+
+    private final Configuration<NonConstructable> config =
+            buildConfiguration(NonConstructable.class, values -> new NonConstructable("" + values.getInt("i")));
+    private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
+    private final Objenesis objenesis = new ObjenesisStd();
+    private SubjectCreator<NonConstructable> sut =
+            new SubjectCreator<>(config, valueProvider, objenesis, NO_NEED_TO_FORCE);
+
+    @Test
+    void constructSubjectCreator_withoutFactory() {
+        var c = buildConfiguration(NonConstructable.class, null);
+        assertThatThrownBy(() -> new SubjectCreator<>(c, valueProvider, objenesis, NO_NEED_TO_FORCE))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Cannot instantiate NonConstructable.");
+    }
+
+    @Test
+    void copyIntoSubclass_withoutFactory() {
+        var obj = new NonConstructable("42");
+        assertThatThrownBy(() -> sut.copyIntoSubclass(obj, NonConstructableSub.class, null))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Cannot instantiate NonConstructableSub.");
+    }
+
+    @Test
+    void copyIntoSubclass_withFactory() {
+        var obj = new NonConstructable("42");
+        var actual = sut
+                .copyIntoSubclass(
+                    obj,
+                    NonConstructableSub.class,
+                    values -> new NonConstructableSub("" + values.getInt("i")));
+        assertThat(actual).isEqualTo(new NonConstructableSub("42"));
+    }
+
+    static class NonConstructable {
+        private final int i;
+
+        public NonConstructable(String i) {
+            this.i = Integer.valueOf(i);
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            return obj instanceof NonConstructable other && i == other.i;
+        }
+
+        @Override
+        public final int hashCode() {
+            return i;
+        }
+    }
+
+    static final class NonConstructableSub extends NonConstructable {
+        public NonConstructableSub(String i) {
+            super(i);
+        }
+    }
+
+    static class SubjectCreatorTestValueProvider implements ValueProvider {
+
+        @Override
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+            return Optional.empty();
+        }
+    }
+
+    private <T> Configuration<T> buildConfiguration(Class<T> type, InstanceFactory<T> factory) {
+        return Configuration
+                .build(
+                    type,
+                    factory,
+                    null,
+                    null,
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    null,
+                    false,
+                    null,
+                    false,
+                    EnumSet.noneOf(Warning.class),
+                    Collections.emptySet(),
+                    null,
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    Collections.emptyList(),
+                    Collections.emptyList());
+    }
+}
