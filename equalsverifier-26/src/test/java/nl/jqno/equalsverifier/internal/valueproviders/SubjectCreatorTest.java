@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -31,7 +32,7 @@ public class SubjectCreatorTest {
     void constructSubjectCreator_withoutFactory() {
         var c = buildConfiguration(NonConstructable.class, null);
         assertThatThrownBy(() -> new SubjectCreator<>(c, valueProvider, objenesis, NO_NEED_TO_FORCE))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(InstantiatorException.class)
                 .hasMessageContaining("Cannot instantiate NonConstructable.");
     }
 
@@ -39,8 +40,9 @@ public class SubjectCreatorTest {
     void copyIntoSubclass_withoutFactory() {
         var obj = new NonConstructable("42");
         assertThatThrownBy(() -> sut.copyIntoSubclass(obj, NonConstructableSub.class, null))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Cannot instantiate NonConstructableSub.");
+                .isInstanceOf(InstantiatorException.class)
+                .hasMessageContaining(
+                    "Cannot instantiate a subclass of NonConstructable (attempted subclass: NonConstructableSub).");
     }
 
     @Test

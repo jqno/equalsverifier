@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -117,6 +118,6 @@ public final class InstantiatorFactory {
                   Cannot instantiate %%.
                      Use #withFactory() so EqualsVerifier can construct %% instances without using reflection.""";
         var typeName = probe.getType().getSimpleName();
-        return new IllegalStateException(Formatter.of(msg, typeName, typeName).format());
+        return new InstantiatorException(Formatter.of(msg, typeName, typeName).format());
     }
 }
