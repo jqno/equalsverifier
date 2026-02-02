@@ -25,20 +25,19 @@ public class InheritanceTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("TODO")
     void succeed_whenClassHasNonConstructableRedefinedSubclass_givenClassRequiresFactory() {
         EqualsVerifier
                 .forClass(NonConstructableSuper.class)
                 .withFactory(
                     v -> new NonConstructableSuper("" + v.getInt("i")),
-                    NonConstructableSubForNonConstructableSuper.class,
                     v -> new NonConstructableSubForNonConstructableSuper("" + v.getInt("i"), v.getInt("j")))
                 .withRedefinedSubclass(ConstructableSubForNonConstructableSuper.class)
                 .verify();
     }
 
     @Test
-    @Disabled
+    @Disabled("TODO")
     void succeed_whenClassHasConstructableRedefinedSubclass_givenClassRequiresFactory() {
         EqualsVerifier
                 .forClass(NonConstructableSuper.class)
