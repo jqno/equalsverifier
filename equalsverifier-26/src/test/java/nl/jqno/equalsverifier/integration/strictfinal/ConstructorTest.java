@@ -32,6 +32,11 @@ public class ConstructorTest {
                 .hasMessageContaining("Use #withFactory()");
     }
 
+    @Test
+    void succeed_whenOneOfSeveralConstructorsMatchesFields() {
+        EqualsVerifier.forClass(OneConstructorMatchesFields.class).verify();
+    }
+
     record SomeRecord(int i) {}
 
     static final class ConstructorMatchesFields {
@@ -67,6 +72,38 @@ public class ConstructorTest {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof ConstructorDoesNotMatchFields other && i == other.i && Objects.equals(s, other.s);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(i, s);
+        }
+    }
+
+    static final class OneConstructorMatchesFields {
+        private final int i;
+        private final String s;
+
+        public OneConstructorMatchesFields(int i, String s) {
+            this.i = i;
+            this.s = s;
+        }
+
+        public OneConstructorMatchesFields(int i) {
+            this(i, "yes");
+        }
+
+        public OneConstructorMatchesFields() {
+            this(42, "yes");
+        }
+
+        public OneConstructorMatchesFields(int i, int j, String s) {
+            this(i + j, s);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof OneConstructorMatchesFields other && i == other.i && Objects.equals(s, other.s);
         }
 
         @Override
