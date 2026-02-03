@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
-import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
@@ -181,11 +180,18 @@ public class HierarchyChecker<T> implements Checker {
     @SuppressWarnings("unchecked")
     private <S extends T> T getEqualSub(T reference) {
         if (config.subclass() != null) {
-            return subjectCreator
-                    .copyIntoSubclass(
-                        reference,
-                        (Class<S>) config.subclass(),
-                        (InstanceFactory<S>) config.subclassFactory());
+            return subjectCreator.copyIntoSubclass(reference, (Class<S>) config.subclass(), null);
+        }
+        if (config.subclassFactory() != null) {
+            var result = subjectCreator.copyIntoSubclass(reference, null, config.subclassFactory());
+            assertFalse(
+                Formatter
+                        .of(
+                            "Given subclassFactory constructs a %%, but must construct a subclass of %%.",
+                            type.getSimpleName(),
+                            type.getSimpleName()),
+                type.equals(result.getClass()));
+            return result;
         }
         else {
             // Don't use type directly, as reference may already be a subclass if type was abstract

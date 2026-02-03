@@ -212,6 +212,13 @@ public final class Validations {
              if you want to use only the @Id or @EmbeddedId fields in equals.""");
     }
 
+    public static <T> void validateFactorySubclass(Class<T> type, Class<? extends T> subclass) {
+        var name = type.getSimpleName();
+        validate(
+            Objects.equals(type, subclass),
+            "Given subclass is " + name + ", but must be a subclass of " + name + ".");
+    }
+
     public static void validatePackageContainsClasses(String packageName, List<Class<?>> types) {
         validate(types.size() == 0, "package " + packageName + " doesn't contain any (non-Test) types.");
     }

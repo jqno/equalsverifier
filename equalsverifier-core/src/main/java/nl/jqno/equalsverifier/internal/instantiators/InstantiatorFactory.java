@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -52,6 +53,10 @@ public final class InstantiatorFactory {
             boolean forceFinalMeansFinal) {
         if (factory != null) {
             return new ProvidedFactoryInstantiator<>(factory);
+        }
+
+        if (probe == null) {
+            throw new EqualsVerifierInternalBugException("No InstanceFactory given; must provide a type!");
         }
 
         Class<T> type = probe.getType();

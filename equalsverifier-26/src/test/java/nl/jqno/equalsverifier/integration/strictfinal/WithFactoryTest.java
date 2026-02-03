@@ -32,6 +32,18 @@ public class WithFactoryTest {
     }
 
     @Test
+    void fail_whenClassCanBeSubclassed_givenTheSameClassInTheSubclassSlot() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(NonConstructableParent.class)
+                    .withFactory(v -> new NonConstructableParent("" + v.getInt("i")), NonConstructableParent.class)
+                    .verify())
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining(
+                    "Given subclass is NonConstructableParent, but must be a subclass of NonConstructableParent.");
+    }
+
+    @Test
     void succeed_whenClassCanBeSubclassed_givenConstructableSubclass() {
         EqualsVerifier
                 .forClass(NonConstructableParent.class)
@@ -49,8 +61,22 @@ public class WithFactoryTest {
                     .withFactory(v -> new NonConstructableParent("" + v.getInt("i")))
                     .verify())
                 .isInstanceOf(AssertionError.class)
-                .hasMessageContaining("Cannot instantiate a subclass of NonConstructableParent.")
+                .hasMessageContaining("Cannot instantiate a subclass of NonConstructableParent (attempted")
                 .hasMessageContaining("Use an overload of #withFactory() to specify a subclass.");
+    }
+
+    @Test
+    void fail_whenClassCanBeSubclassed_givenParentAndSubclassFactoryAreTheSame() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(NonConstructableParent.class)
+                    .withFactory(
+                        v -> new NonConstructableParent("" + v.getInt("i")),
+                        v -> new NonConstructableParent("" + v.getInt("i")))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining(
+                    "Given subclassFactory constructs a NonConstructableParent, but must construct a subclass of NonConstructableParent.");
     }
 
     @Test
