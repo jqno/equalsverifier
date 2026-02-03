@@ -204,24 +204,30 @@ public class SubjectCreator<T> {
      *
      * @param <S>             A subtype of original's type.
      * @param original        The instance to copy.
-     * @param subType         A subtype of original's type.
-     * @param subclassFactory A factory to instantiate the subtype.
+     * @param subType         A subtype of original's type. May be null if subclassFactory is not.
+     * @param subclassFactory A factory to instantiate the subtype. May be null if subclass is not.
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType, InstanceFactory<S> subclassFactory) {
-        var actualSubType =
-                SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
-        try {
-            Instantiator<S> subCreator = InstantiatorFactory
-                    .of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal);
+        if (subclassFactory != null) {
+            Instantiator<S> subCreator = InstantiatorFactory.of(null, subclassFactory, objenesis, forceFinalMeansFinal);
             return subCreator.copy(original);
         }
-        catch (InstantiatorException e) {
-            var msg = """
-                      Cannot instantiate a subclass of %% (attempted subclass: %%).
-                      Use an overload of #withFactory() to specify a subclass.""";
-            throw new InstantiatorException(
-                    Formatter.of(msg, type.getSimpleName(), actualSubType.getSimpleName()).format());
+        else {
+            var actualSubType =
+                    SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
+            try {
+                Instantiator<S> subCreator = InstantiatorFactory
+                        .of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal);
+                return subCreator.copy(original);
+            }
+            catch (InstantiatorException e) {
+                var msg = """
+                          Cannot instantiate a subclass of %% (attempted subclass: %%).
+                          Use an overload of #withFactory() to specify a subclass.""";
+                throw new InstantiatorException(
+                        Formatter.of(msg, type.getSimpleName(), actualSubType.getSimpleName()).format());
+            }
         }
     }
 

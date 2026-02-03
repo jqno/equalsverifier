@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
@@ -51,12 +52,17 @@ public class InstantiatorFactoryTest {
                 .hasMessageContaining("Use #withFactory");
     }
 
+    @Test
+    void throwEqualsVerifierInternalBugException_whenProbeAndFactoryAreBothNull() {
+        assertThatThrownBy(() -> sut(null, null, true)).isInstanceOf(EqualsVerifierInternalBugException.class);
+    }
+
     private <T> Instantiator<T> sut(Class<T> type) {
         return sut(type, null, false);
     }
 
     private <T> Instantiator<T> sut(Class<T> type, InstanceFactory<T> factory, boolean finalMeansFinal) {
-        return InstantiatorFactory.of(ClassProbe.of(type), factory, objenesis, finalMeansFinal);
+        return InstantiatorFactory.of(type == null ? null : ClassProbe.of(type), factory, objenesis, finalMeansFinal);
     }
 
     record SomeRecord(int i) {}
