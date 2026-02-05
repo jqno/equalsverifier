@@ -34,7 +34,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private InstanceFactory<T> instanceFactory = null;
     private Class<? extends T> specificSubclass = null;
     private InstanceFactory<? extends T> subclassInstanceFactory = null;
-    private InstanceFactory<? super T> redefinedSuperclassInstanceFactory = null;
+    private InstanceFactory<?> redefinedSuperclassInstanceFactory = null;
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
@@ -384,13 +384,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * <p>
      * T itself does not necessarily have to have subclasses that redefine {@code equals} and {@code hashCode}.
      *
-     * @param superclassFactory A factory that can instantiate the superclass of the class under test.
+     * @param superclassFactory A factory that can instantiate the direct superclass of the class under test.
      * @return {@code this}, for easy method chaining.
      *
      * @since 4.4
      */
     @CheckReturnValue
-    public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass(InstanceFactory<? super T> superclassFactory) {
+    public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass(InstanceFactory<?> superclassFactory) {
         this.hasRedefinedSuperclass = true;
         this.redefinedSuperclassInstanceFactory = superclassFactory;
         return this;

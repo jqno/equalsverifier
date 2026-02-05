@@ -190,9 +190,9 @@ public class SubjectCreator<T> {
      * @param superclassFactory A factory to instantiate the supertype. May be null.
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
-    public Object copyIntoSuperclass(T original, InstanceFactory<? super T> superclassFactory) {
+    public Object copyIntoSuperclass(T original, InstanceFactory<?> superclassFactory) {
         if (superclassFactory != null) {
-            Instantiator<? super T> superCreator =
+            Instantiator<?> superCreator =
                     InstantiatorFactory.of(null, superclassFactory, objenesis, forceFinalMeansFinal);
             return superCreator.copy(original);
         }
