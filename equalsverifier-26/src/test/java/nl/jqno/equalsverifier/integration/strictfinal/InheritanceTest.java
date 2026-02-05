@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -55,8 +55,7 @@ public class InheritanceTest {
     void succeed_whenClassHasRedefinedSuperclass_givenSuperclassRequiresFactory() {
         EqualsVerifier
                 .forClass(ConstructableSubForNonConstructableSuper.class)
-                .withRedefinedSuperclass(
-                    (InstanceFactory<NonConstructableSuper>) v -> new NonConstructableSuper("" + v.getInt("i")))
+                .withRedefinedSuperclass(v -> new NonConstructableSuper("" + v.getInt("i")))
                 .verify();
     }
 
@@ -65,10 +64,23 @@ public class InheritanceTest {
         assertThatThrownBy(
             () -> EqualsVerifier
                     .forClass(ConstructableSubForNonConstructableSuper.class)
-                    .withRedefinedSuperclass((InstanceFactory<Object>) v -> new Object())
+                    .withRedefinedSuperclass(v -> new Object())
                     .verify())
                 .isInstanceOf(AssertionError.class)
                 .hasMessageContaining("Given superclassFactory constructs a Object")
+                .hasMessageContaining(
+                    "must construct the direct superclass of ConstructableSubForNonConstructableSuper");
+    }
+
+    @Test
+    void fail_whenClassHasRedefinedSuperclass_givenSuperclassFactoryConstructsSomethingCompletelyDifferent() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(ConstructableSubForNonConstructableSuper.class)
+                    .withRedefinedSuperclass(v -> new FinalPoint(1, 2))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Given superclassFactory constructs a FinalPoint")
                 .hasMessageContaining(
                     "must construct the direct superclass of ConstructableSubForNonConstructableSuper");
     }
