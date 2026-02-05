@@ -147,7 +147,17 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private Object getEqualSuper(T reference) {
-        return subjectCreator.copyIntoSuperclass(reference);
+        var result = subjectCreator.copyIntoSuperclass(reference, config.redefinedSuperclassFactory());
+        assertTrue(
+            Formatter
+                    .of(
+                        "Given superclassFactory constructs a %%, but must construct the direct superclass of %%.",
+                        result.getClass().getSimpleName(),
+                        type.getSimpleName()),
+            result.getClass().equals(type.getSuperclass())
+                    || (type.getSuperclass().isAssignableFrom(result.getClass())
+                            && result.getClass().getSimpleName().contains("$$DynamicSubclass$")));
+        return result;
     }
 
     private void checkSubclass() {

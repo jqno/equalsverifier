@@ -40,8 +40,8 @@ public final class InstantiatorFactory {
      * class is abstract or an interface.
      *
      * @param <T>                  Represents the type of the class to instantiate.
-     * @param probe                Represents the class to instantiate.
-     * @param factory              A factory that can create instances of {@code T}, or null.
+     * @param probe                Represents the class to instantiate. Can be null if a factory is provided.
+     * @param factory              A factory that can create instances of {@code T}. Can be null if a probe is provided.
      * @param objenesis            To instantiate non-record classes.
      * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
      * @return an {@code InstanceCreator} for the given class.
