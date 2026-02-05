@@ -15,6 +15,7 @@ public final class ConfigurationHelper {
                     null,
                     null,
                     null,
+                    null,
                     Collections.emptySet(),
                     Collections.emptySet(),
                     Collections.emptySet(),
@@ -36,6 +37,7 @@ public final class ConfigurationHelper {
         return Configuration
                 .build(
                     type,
+                    null,
                     null,
                     null,
                     null,
@@ -62,6 +64,7 @@ public final class ConfigurationHelper {
         return Configuration
                 .build(
                     type,
+                    null,
                     null,
                     null,
                     null,

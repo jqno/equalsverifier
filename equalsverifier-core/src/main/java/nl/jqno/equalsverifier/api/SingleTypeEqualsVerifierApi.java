@@ -34,6 +34,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private InstanceFactory<T> instanceFactory = null;
     private Class<? extends T> specificSubclass = null;
     private InstanceFactory<? extends T> subclassInstanceFactory = null;
+    private InstanceFactory<? super T> redefinedSuperclassInstanceFactory = null;
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
@@ -377,6 +378,25 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     /**
+     * Signals that T is part of an inheritance hierarchy where {@code equals} is overridden. Call this method if T has
+     * overridden {@code equals} and {@code hashCode}, and one or more of T's superclasses have as well.
+     *
+     * <p>
+     * T itself does not necessarily have to have subclasses that redefine {@code equals} and {@code hashCode}.
+     *
+     * @param superclassFactory A factory that can instantiate the superclass of the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass(InstanceFactory<? super T> superclassFactory) {
+        this.hasRedefinedSuperclass = true;
+        this.redefinedSuperclassInstanceFactory = superclassFactory;
+        return this;
+    }
+
+    /**
      * Supplies a reference to a subclass of T in which {@code equals} is overridden. Calling this method is mandatory
      * if {@code equals} is not final and a strong verification is performed.
      *
@@ -544,6 +564,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                     instanceFactory,
                     specificSubclass,
                     subclassInstanceFactory,
+                    redefinedSuperclassInstanceFactory,
                     allExcludedFields,
                     allIncludedFields,
                     nonnullFields,

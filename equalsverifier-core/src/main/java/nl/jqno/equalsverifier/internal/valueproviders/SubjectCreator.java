@@ -186,15 +186,32 @@ public class SubjectCreator<T> {
      * Creates a new instance of the superclass of the current class, with all fields that exist within that superclass
      * set to the same value as their counterparts from {@code original}.
      *
-     * @param original The instance to copy.
+     * @param original          The instance to copy.
+     * @param superclassFactory A factory to instantiate the supertype. May be null.
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
-    public Object copyIntoSuperclass(T original) {
-        var actualSuperType = SubtypeManager
-                .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
-        Instantiator<? super T> superCreator =
-                InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis, forceFinalMeansFinal);
-        return superCreator.copy(original);
+    public Object copyIntoSuperclass(T original, InstanceFactory<? super T> superclassFactory) {
+        if (superclassFactory != null) {
+            Instantiator<? super T> superCreator =
+                    InstantiatorFactory.of(null, superclassFactory, objenesis, forceFinalMeansFinal);
+            return superCreator.copy(original);
+        }
+        else {
+            var actualSuperType = SubtypeManager
+                    .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
+            try {
+                Instantiator<? super T> superCreator =
+                        InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis, forceFinalMeansFinal);
+                return superCreator.copy(original);
+            }
+            catch (InstantiatorException e) {
+                var msg = """
+                          Cannot instantiate the superclass of %% (attempted superclass: %%).
+                          Use the overload of #withRedefinedSuperclass() to specify a subclass.""";
+                throw new InstantiatorException(
+                        Formatter.of(msg, type.getSimpleName(), actualSuperType.getSimpleName()).format());
+            }
+        }
     }
 
     /**
