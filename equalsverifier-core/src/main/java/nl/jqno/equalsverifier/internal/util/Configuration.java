@@ -19,7 +19,7 @@ import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 // CHECKSTYLE OFF: ParameterNumber
 public record Configuration<T>(Class<T> type, TypeTag typeTag, InstanceFactory<T> factory, Class<? extends T> subclass,
-        InstanceFactory<? extends T> subclassFactory, InstanceFactory<? super T> redefinedSuperclassFactory,
+        InstanceFactory<? extends T> subclassFactory, InstanceFactory<?> redefinedSuperclassFactory,
         Set<String> ignoredFields, Set<String> nonnullFields, Set<String> prefabbedFields,
         AnnotationCache annotationCache, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
         boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, boolean usingGetClass,
@@ -31,7 +31,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, InstanceFactory<T
             InstanceFactory<T> factory,
             Class<? extends T> subclass,
             InstanceFactory<? extends T> subclassFactory,
-            InstanceFactory<? super T> redefinedSuperclassFactory,
+            InstanceFactory<?> redefinedSuperclassFactory,
             Set<String> excludedFields,
             Set<String> includedFields,
             Set<String> nonnullFields,
