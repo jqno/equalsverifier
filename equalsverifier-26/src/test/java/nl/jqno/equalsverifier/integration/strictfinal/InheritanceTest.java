@@ -1,8 +1,11 @@
 package nl.jqno.equalsverifier.integration.strictfinal;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.InstanceFactory;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -49,9 +52,25 @@ public class InheritanceTest {
     }
 
     @Test
-    @Disabled("TODO")
     void succeed_whenClassHasRedefinedSuperclass_givenSuperclassRequiresFactory() {
-        EqualsVerifier.forClass(ConstructableSubForNonConstructableSuper.class).withRedefinedSuperclass().verify();
+        EqualsVerifier
+                .forClass(ConstructableSubForNonConstructableSuper.class)
+                .withRedefinedSuperclass(
+                    (InstanceFactory<NonConstructableSuper>) v -> new NonConstructableSuper("" + v.getInt("i")))
+                .verify();
+    }
+
+    @Test
+    void fail_whenClassHasRedefinedSuperclass_givenSuperclassFactoryConstructsObject() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(ConstructableSubForNonConstructableSuper.class)
+                    .withRedefinedSuperclass((InstanceFactory<Object>) v -> new Object())
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Given superclassFactory constructs a Object")
+                .hasMessageContaining(
+                    "must construct the direct superclass of ConstructableSubForNonConstructableSuper");
     }
 
     static class ConstructableSuper {

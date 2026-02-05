@@ -56,6 +56,26 @@ public class SubjectCreatorTest {
         assertThat(actual).isEqualTo(new NonConstructableSub("42"));
     }
 
+    @Test
+    void copyIntoSuperclass_withoutFactory() {
+        var subSut = new SubjectCreator<>(buildConfiguration(
+            NonConstructableSub.class,
+            values -> new NonConstructableSub("" + values.getInt("i"))), valueProvider, objenesis, NO_NEED_TO_FORCE);
+
+        var obj = new NonConstructableSub("42");
+        assertThatThrownBy(() -> subSut.copyIntoSuperclass(obj, null))
+                .isInstanceOf(InstantiatorException.class)
+                .hasMessageContaining(
+                    "Cannot instantiate the superclass of NonConstructableSub (attempted superclass: NonConstructable).");
+    }
+
+    @Test
+    void copyIntoSuperclass_withFactory() {
+        var obj = new NonConstructableSub("42");
+        var actual = sut.copyIntoSuperclass(obj, values -> new NonConstructable("" + values.getInt("i")));
+        assertThat(actual).isEqualTo(new NonConstructable("42")).isInstanceOf(NonConstructable.class);
+    }
+
     static class NonConstructable {
         private final int i;
 
@@ -93,6 +113,7 @@ public class SubjectCreatorTest {
                 .build(
                     type,
                     factory,
+                    null,
                     null,
                     null,
                     Collections.emptySet(),

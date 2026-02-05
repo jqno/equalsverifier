@@ -19,18 +19,19 @@ import nl.jqno.equalsverifier.internal.reflection.kotlin.KotlinScreen;
 
 // CHECKSTYLE OFF: ParameterNumber
 public record Configuration<T>(Class<T> type, TypeTag typeTag, InstanceFactory<T> factory, Class<? extends T> subclass,
-        InstanceFactory<? extends T> subclassFactory, Set<String> ignoredFields, Set<String> nonnullFields,
-        Set<String> prefabbedFields, AnnotationCache annotationCache,
-        CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
-        Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
-        Set<Mode> modes, Function<String, String> fieldnameToGetter, boolean isKotlin, List<T> equalExamples,
-        List<T> unequalExamples) {
+        InstanceFactory<? extends T> subclassFactory, InstanceFactory<? super T> redefinedSuperclassFactory,
+        Set<String> ignoredFields, Set<String> nonnullFields, Set<String> prefabbedFields,
+        AnnotationCache annotationCache, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
+        boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, boolean usingGetClass,
+        EnumSet<Warning> warningsToSuppress, Set<Mode> modes, Function<String, String> fieldnameToGetter,
+        boolean isKotlin, List<T> equalExamples, List<T> unequalExamples) {
 
     public static <T> Configuration<T> build(
             Class<T> type,
             InstanceFactory<T> factory,
             Class<? extends T> subclass,
             InstanceFactory<? extends T> subclassFactory,
+            InstanceFactory<? super T> redefinedSuperclassFactory,
             Set<String> excludedFields,
             Set<String> includedFields,
             Set<String> nonnullFields,
@@ -77,6 +78,7 @@ public record Configuration<T>(Class<T> type, TypeTag typeTag, InstanceFactory<T
                 factory,
                 subclass,
                 subclassFactory,
+                redefinedSuperclassFactory,
                 ignoredFields,
                 nonnullFields,
                 prefabbedFields,
