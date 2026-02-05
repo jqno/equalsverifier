@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
-import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -200,8 +199,7 @@ class SubjectCreatorTest {
     void copyIntoSuperclassWithFactory() {
         SomeSuper superExpected = new SomeSuper(I_RED);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
-        Object superActual =
-                sut.copyIntoSuperclass(original, (InstanceFactory<SomeSuper>) v -> new SomeSuper(v.getInt("i")));
+        Object superActual = sut.copyIntoSuperclass(original, v -> new SomeSuper(v.getInt("i")));
 
         assertThat(superActual).isEqualTo(superExpected);
         assertThat(superActual.getClass()).isEqualTo(SomeSuper.class);
