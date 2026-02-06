@@ -6,7 +6,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -19,7 +21,6 @@ public class HierarchyChecker<T> implements Checker {
     private final Class<T> type;
     private final SubjectCreator<T> subjectCreator;
     private final ClassProbe<T> classProbe;
-    private final Class<? extends T> redefinedSubclass;
     private final boolean strictnessSuppressed;
     private final boolean versionedEntity;
     private final boolean hasRedefinedSubclass;
@@ -32,7 +33,7 @@ public class HierarchyChecker<T> implements Checker {
 
         this.strictnessSuppressed = config.warningsToSuppress().contains(Warning.STRICT_INHERITANCE);
         this.versionedEntity = config.warningsToSuppress().contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
-        this.hasRedefinedSubclass = config.redefinedSubclass() != null;
+        this.hasRedefinedSubclass = config.redefinedSubclass() != null || config.redefinedSubclassFactory() != null;
         if (strictnessSuppressed && hasRedefinedSubclass) {
             fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
         }
@@ -40,7 +41,6 @@ public class HierarchyChecker<T> implements Checker {
         this.type = context.getType();
         this.subjectCreator = context.getSubjectCreator();
         this.classProbe = context.getClassProbe();
-        this.redefinedSubclass = config.redefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.typeIsSealed = classProbe.isSealed();
         this.cachedHashCodeInitializer = config.cachedHashCodeInitializer();
@@ -146,27 +146,14 @@ public class HierarchyChecker<T> implements Checker {
         assertTrue(superclassFormatter, referenceHashCode == equalSuperHashCode);
     }
 
-    private Object getEqualSuper(T reference) {
-        var result = subjectCreator.copyIntoSuperclass(reference, config.redefinedSuperclassFactory());
-        assertTrue(
-            Formatter
-                    .of(
-                        "Given superclassFactory constructs a %%, but must construct the direct superclass of %%.",
-                        result.getClass().getSimpleName(),
-                        type.getSimpleName()),
-            result.getClass().equals(type.getSuperclass())
-                    || (type.getSuperclass().isAssignableFrom(result.getClass())
-                            && result.getClass().getSimpleName().contains("$$DynamicSubclass$")));
-        return result;
-    }
-
     private void checkSubclass() {
         if (typeIsFinal || typeIsSealed || strictnessSuppressed) {
             return;
         }
 
         T reference = subjectCreator.plain();
-        T equalSub = getEqualSub(reference);
+        Class<? extends T> subclass = determineSubclass(reference, config.subclass(), config.subclassFactory());
+        T equalSub = getEqualSub(reference, subclass, config.subclassFactory());
 
         if (config.usingGetClass()) {
             Formatter formatter =
@@ -187,30 +174,6 @@ public class HierarchyChecker<T> implements Checker {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private <S extends T> T getEqualSub(T reference) {
-        if (config.subclass() != null) {
-            return subjectCreator.copyIntoSubclass(reference, (Class<S>) config.subclass(), null);
-        }
-        if (config.subclassFactory() != null) {
-            var result = subjectCreator.copyIntoSubclass(reference, null, config.subclassFactory());
-            assertFalse(
-                Formatter
-                        .of(
-                            "Given subclassFactory constructs a %%, but must construct a subclass of %%.",
-                            type.getSimpleName(),
-                            type.getSimpleName()),
-                type.equals(result.getClass()));
-            return result;
-        }
-        else {
-            // Don't use type directly, as reference may already be a subclass if type was abstract
-            Class<T> realClass = (Class<T>) reference.getClass();
-            Class<T> anonymousSubclass = SubtypeManager.giveDynamicSubclass(realClass);
-            return subjectCreator.copyIntoSubclass(reference, anonymousSubclass, null);
-        }
-    }
-
     private void checkRedefinedSubclass() {
         if (typeIsFinal || typeIsSealed || !hasRedefinedSubclass) {
             return;
@@ -225,7 +188,7 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        T redefinedSub = subjectCreator.copyIntoSubclass(reference, redefinedSubclass, null);
+        T redefinedSub = getEqualSub(reference, config.redefinedSubclass(), config.redefinedSubclassFactory());
         assertFalse(
             Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),
             reference.equals(redefinedSub));
@@ -261,5 +224,55 @@ public class HierarchyChecker<T> implements Checker {
                                                         if hashCode cannot be final.""");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<? extends T> determineSubclass(
+            T reference,
+            Class<? extends T> subclass,
+            InstanceFactory<? extends T> subclassFactory) {
+        if (subclass != null) {
+            return subclass;
+        }
+        if (subclassFactory != null) {
+            return null;
+        }
+
+        // Don't use type directly, as reference may already be a subclass if type was abstract
+        Class<T> realClass = (Class<T>) reference.getClass();
+        return SubtypeManager.giveDynamicSubclass(realClass);
+    }
+
+    private T getEqualSub(T reference, Class<? extends T> subclass, InstanceFactory<? extends T> subclassFactory) {
+        if (subclass != null) {
+            return subjectCreator.copyIntoSubclass(reference, subclass, null);
+        }
+        if (subclassFactory != null) {
+            var result = subjectCreator.copyIntoSubclass(reference, null, subclassFactory);
+            assertFalse(
+                Formatter
+                        .of(
+                            "Given subclassFactory constructs a %%, but must construct a subclass of %%.",
+                            type.getSimpleName(),
+                            type.getSimpleName()),
+                type.equals(result.getClass()));
+            return result;
+        }
+        throw new EqualsVerifierInternalBugException(
+                "Neither a subclass nor a subclassFactory was given. This should not happen!");
+    }
+
+    private Object getEqualSuper(T reference) {
+        var result = subjectCreator.copyIntoSuperclass(reference, config.redefinedSuperclassFactory());
+        assertTrue(
+            Formatter
+                    .of(
+                        "Given superclassFactory constructs a %%, but must construct the direct superclass of %%.",
+                        result.getClass().getSimpleName(),
+                        type.getSimpleName()),
+            result.getClass().equals(type.getSuperclass())
+                    || (type.getSuperclass().isAssignableFrom(result.getClass())
+                            && result.getClass().getSimpleName().contains("$$DynamicSubclass$")));
+        return result;
     }
 }
