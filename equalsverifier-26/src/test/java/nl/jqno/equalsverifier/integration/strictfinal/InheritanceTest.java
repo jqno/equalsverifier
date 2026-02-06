@@ -24,8 +24,16 @@ public class InheritanceTest {
     }
 
     @Test
-    void succeed_whenClassHasRedefinedSuperclass_givenConstructorsMatchFields() {
-        EqualsVerifier.forClass(ConstructableSub.class).withRedefinedSuperclass().verify();
+    void fail_whenClassHasRedefinedSubclass_givenSubclassFactoryIsIncorrect() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(ConstructableSuper.class)
+                    .withRedefinedSubclass(v -> new NonConstructableSub(42, "42"))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Provided factory is incorrect")
+                .hasMessageContaining("redefined subclass doesn't match")
+                .hasMessageContaining("don't have matching values for field i.");
     }
 
     @Test
@@ -52,11 +60,29 @@ public class InheritanceTest {
     }
 
     @Test
+    void succeed_whenClassHasRedefinedSuperclass_givenConstructorsMatchFields() {
+        EqualsVerifier.forClass(ConstructableSub.class).withRedefinedSuperclass().verify();
+    }
+
+    @Test
     void succeed_whenClassHasRedefinedSuperclass_givenSuperclassRequiresFactory() {
         EqualsVerifier
                 .forClass(ConstructableSubForNonConstructableSuper.class)
                 .withRedefinedSuperclass(v -> new NonConstructableSuper("" + v.getInt("i")))
                 .verify();
+    }
+
+    @Test
+    void fail_whenClassHasRedefinedSuperclass_givenSuperclassFactoryIsIncorrect() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(ConstructableSubForNonConstructableSuper.class)
+                    .withRedefinedSuperclass(v -> new NonConstructableSuper("42"))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Provided factory is incorrect")
+                .hasMessageContaining("redefined superclass doesn't match")
+                .hasMessageContaining("don't have matching values for field i.");
     }
 
     @Test

@@ -24,6 +24,17 @@ public class WithFactoryTest {
     }
 
     @Test
+    void fail_whenClassIsFinal_givenFactoryIsIncorrect() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(FinalNonConstructable.class)
+                    .withFactory(v -> new FinalNonConstructable("42"))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Significant fields");
+    }
+
+    @Test
     void fail_whenClassCanBeSubclassed() {
         assertThatThrownBy(() -> EqualsVerifier.forClass(NonConstructableParent.class).verify())
                 .isInstanceOf(AssertionError.class)
