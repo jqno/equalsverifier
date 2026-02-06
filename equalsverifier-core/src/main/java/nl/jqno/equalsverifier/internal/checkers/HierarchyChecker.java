@@ -160,7 +160,7 @@ public class HierarchyChecker<T> implements Checker {
                     Formatter.of("""
                                  Subclass: object is equal to an instance of a trivial subclass with equal fields:
                                    %%
-                                 This should not happen when using getClass().""", reference);
+                                 This should not happen when using getClass().""", equalSub);
             assertFalse(formatter, reference.equals(equalSub));
         }
         else {
@@ -169,7 +169,7 @@ public class HierarchyChecker<T> implements Checker {
                                  Subclass: object is not equal to an instance of a trivial subclass with equal fields:
                                    %%
                                  Maybe you forgot to add usingGetClass(). Otherwise, consider\
-                                  making the class final or use EqualsVerifier.simple().""", reference);
+                                  making the class final or use EqualsVerifier.simple().""", equalSub);
             assertTrue(formatter, reference.equals(equalSub));
         }
     }
