@@ -4,12 +4,14 @@ import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
@@ -64,6 +66,7 @@ public class HierarchyChecker<T> implements Checker {
         if (config.hasRedefinedSuperclass() || config.usingGetClass()) {
             T reference = subjectCreator.plain();
             Object equalSuper = getEqualSuper(reference);
+            checkMatchingValues(equalSuper, reference, "superclass");
 
             Formatter formatter = Formatter
                     .of(
@@ -189,6 +192,7 @@ public class HierarchyChecker<T> implements Checker {
 
         T reference = subjectCreator.plain();
         T redefinedSub = getEqualSub(reference, config.redefinedSubclass(), config.redefinedSubclassFactory());
+        checkMatchingValues(reference, redefinedSub, "subclass");
         assertFalse(
             Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),
             reference.equals(redefinedSub));
@@ -223,6 +227,21 @@ public class HierarchyChecker<T> implements Checker {
                                                         instance of a redefined subclass using withRedefinedSubclass\
                                                         if hashCode cannot be final.""");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
+        }
+    }
+
+    private <A, B extends A> void checkMatchingValues(A superObject, B subObject, String which) {
+        for (var p : FieldIterable.ofIgnoringStatic(superObject.getClass())) {
+            var superValue = p.getValue(superObject);
+            var subValue = p.getValue(subObject);
+            assertTrue(
+                Formatter.of("""
+                             Provided factory is incorrect; redefined %% doesn't match:
+                               %%
+                             and
+                               %%
+                             don't have matching values for field %%.""", which, superObject, subObject, p.getName()),
+                Objects.equals(superValue, subValue));
         }
     }
 
