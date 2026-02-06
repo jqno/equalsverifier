@@ -137,14 +137,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
      *
-     * @param <S>      A subclass of the class under test.
      * @param factory  A factory that can instantiate the class under test.
      * @param subclass A subclass of the class under test.
      * @return {@code this}, for easy method chaining.
      *
      * @since 4.4
      */
-    public <S extends T> SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory, Class<S> subclass) {
+    public SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory, Class<? extends T> subclass) {
         this.instanceFactory = factory;
         this.specificSubclass = subclass;
         Validations.validateFactorySubclass(type, subclass);
@@ -158,16 +157,15 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
      *
-     * @param <S>             A subclass of the class under test.
      * @param factory         A factory that can instantiate the class under test.
      * @param subclassFactory A factory that can instantiate a subclass of the class under test.
      * @return {@code this}, for easy method chaining.
      *
      * @since 4.4
      */
-    public <S extends T> SingleTypeEqualsVerifierApi<T> withFactory(
+    public SingleTypeEqualsVerifierApi<T> withFactory(
             InstanceFactory<T> factory,
-            InstanceFactory<S> subclassFactory) {
+            InstanceFactory<? extends T> subclassFactory) {
         this.instanceFactory = factory;
         this.subclassInstanceFactory = subclassFactory;
         return this;
