@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class InheritanceTest {
@@ -30,25 +29,24 @@ public class InheritanceTest {
     }
 
     @Test
-    @Disabled("TODO")
     void succeed_whenClassHasNonConstructableRedefinedSubclass_givenClassRequiresFactory() {
         EqualsVerifier
                 .forClass(NonConstructableSuper.class)
                 .withFactory(
                     v -> new NonConstructableSuper("" + v.getInt("i")),
+                    TrivialConstructableSubclassForNonConstructableSuper.class)
+                .withRedefinedSubclass(
                     v -> new NonConstructableSubForNonConstructableSuper("" + v.getInt("i"), v.getInt("j")))
-                .withRedefinedSubclass(ConstructableSubForNonConstructableSuper.class)
                 .verify();
     }
 
     @Test
-    @Disabled("TODO")
     void succeed_whenClassHasConstructableRedefinedSubclass_givenClassRequiresFactory() {
         EqualsVerifier
                 .forClass(NonConstructableSuper.class)
                 .withFactory(
                     v -> new NonConstructableSuper("" + v.getInt("i")),
-                    ConstructableSubForNonConstructableSuper.class)
+                    TrivialConstructableSubclassForNonConstructableSuper.class)
                 .withRedefinedSubclass(ConstructableSubForNonConstructableSuper.class)
                 .verify();
     }
@@ -179,6 +177,12 @@ public class InheritanceTest {
         @Override
         public int hashCode() {
             return Objects.hash(i);
+        }
+    }
+
+    static class TrivialConstructableSubclassForNonConstructableSuper extends NonConstructableSuper {
+        public TrivialConstructableSubclassForNonConstructableSuper(int i) {
+            super("" + i);
         }
     }
 
