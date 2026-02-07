@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Mode;
-import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
+import nl.jqno.equalsverifier_testhelpers.types.*;
 import org.junit.jupiter.api.Test;
 
 public class FinalMeansFinalTest {
@@ -32,28 +32,60 @@ public class FinalMeansFinalTest {
     void succeed_withSimpleFactory() {
         EqualsVerifier
                 .forClass(FinalPoint.class)
+                .set(Mode.finalMeansFinal())
                 .withFactory(values -> new FinalPoint(values.getInt("x"), values.getInt("y")))
                 .verify();
     }
 
-    static final class ConstructorDoesNotMatchFields {
-        // order of fields reversed
-        private final String s;
+    @Test
+    void succeed_withExpandedFactory() {
+        EqualsVerifier
+                .forClass(ConstructorDoesNotMatchFields.class)
+                .set(Mode.finalMeansFinal())
+                .withFactory(
+                    values -> new ConstructorDoesNotMatchFields("" + values.getInt("i")),
+                    values -> new TrivialSubConstructorDoesNotMatchFields("" + values.getInt("i")))
+                .verify();
+    }
+
+    @Test
+    void succeed_withRedefinedSubclass() {
+        EqualsVerifier
+                .forClass(CanEqualPoint.class)
+                .withRedefinedSubclass(
+                    values -> new CanEqualColorPoint(values.getInt("x"), values.getInt("y"), values.get("color")))
+                .verify();
+    }
+
+    @Test
+    void succeed_withRedefinedSuperclass() {
+        EqualsVerifier
+                .forClass(CanEqualColorPoint.class)
+                .withRedefinedSuperclass(values -> new CanEqualPoint(values.getInt("x"), values.getInt("y")))
+                .verify();
+    }
+
+    static class ConstructorDoesNotMatchFields {
         private final int i;
 
-        public ConstructorDoesNotMatchFields(int i, String s) {
-            this.i = i;
-            this.s = s;
+        public ConstructorDoesNotMatchFields(String i) {
+            this.i = Integer.valueOf(i);
         }
 
         @Override
-        public boolean equals(Object obj) {
-            return obj instanceof ConstructorDoesNotMatchFields other && i == other.i && Objects.equals(s, other.s);
+        public final boolean equals(Object obj) {
+            return obj instanceof ConstructorDoesNotMatchFields other && i == other.i;
         }
 
         @Override
-        public int hashCode() {
-            return Objects.hash(i, s);
+        public final int hashCode() {
+            return i;
+        }
+    }
+
+    static class TrivialSubConstructorDoesNotMatchFields extends ConstructorDoesNotMatchFields {
+        public TrivialSubConstructorDoesNotMatchFields(String i) {
+            super(i);
         }
     }
 
