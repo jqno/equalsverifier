@@ -32,7 +32,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Set<String> actualFields;
 
     private InstanceFactory<T> instanceFactory = null;
-    private Class<? extends T> specificSubclass = null;
     private InstanceFactory<? extends T> subclassInstanceFactory = null;
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private Set<Mode> modesToSet = new HashSet<>();
@@ -128,26 +127,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory) {
         this.instanceFactory = factory;
-        return this;
-    }
-
-    /**
-     * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help, as
-     * well as a specified subclass for the class under test. This is needed when the class under test is non-final, so
-     * EqualsVerifier can check the interaction with subclasses.
-     *
-     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
-     *
-     * @param factory  A factory that can instantiate the class under test.
-     * @param subclass A subclass of the class under test.
-     * @return {@code this}, for easy method chaining.
-     *
-     * @since 4.4
-     */
-    public SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory, Class<? extends T> subclass) {
-        this.instanceFactory = factory;
-        this.specificSubclass = subclass;
-        Validations.validateFactorySubclass(type, subclass);
         return this;
     }
 
@@ -590,7 +569,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                 .build(
                     type,
                     instanceFactory,
-                    specificSubclass,
                     subclassInstanceFactory,
                     allExcludedFields,
                     allIncludedFields,
