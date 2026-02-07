@@ -155,7 +155,7 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        Class<? extends T> subclass = determineSubclass(reference, config.subclass(), config.subclassFactory());
+        Class<? extends T> subclass = determineSubclass(reference, config.subclassFactory());
         T equalSub = getEqualSub(reference, subclass, config.subclassFactory());
 
         if (config.usingGetClass()) {
@@ -246,13 +246,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     @SuppressWarnings("unchecked")
-    private Class<? extends T> determineSubclass(
-            T reference,
-            Class<? extends T> subclass,
-            InstanceFactory<? extends T> subclassFactory) {
-        if (subclass != null) {
-            return subclass;
-        }
+    private Class<? extends T> determineSubclass(T reference, InstanceFactory<? extends T> subclassFactory) {
         if (subclassFactory != null) {
             return null;
         }

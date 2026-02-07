@@ -114,7 +114,6 @@ public class SubjectCreatorTest {
                     type,
                     factory,
                     null,
-                    null,
                     Collections.emptySet(),
                     Collections.emptySet(),
                     Collections.emptySet(),
