@@ -42,7 +42,7 @@ public class InheritanceTest {
                 .forClass(NonConstructableSuper.class)
                 .withFactory(
                     v -> new NonConstructableSuper("" + v.getInt("i")),
-                    TrivialConstructableSubclassForNonConstructableSuper.class)
+                    v -> new TrivialConstructableSubclassForNonConstructableSuper(v.getInt("i")))
                 .withRedefinedSubclass(
                     v -> new NonConstructableSubForNonConstructableSuper("" + v.getInt("i"), v.getInt("j")))
                 .verify();
@@ -54,7 +54,7 @@ public class InheritanceTest {
                 .forClass(NonConstructableSuper.class)
                 .withFactory(
                     v -> new NonConstructableSuper("" + v.getInt("i")),
-                    TrivialConstructableSubclassForNonConstructableSuper.class)
+                    v -> new TrivialConstructableSubclassForNonConstructableSuper(v.getInt("i")))
                 .withRedefinedSubclass(ConstructableSubForNonConstructableSuper.class)
                 .verify();
     }
