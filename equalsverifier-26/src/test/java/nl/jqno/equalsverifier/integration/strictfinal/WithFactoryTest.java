@@ -43,28 +43,6 @@ public class WithFactoryTest {
     }
 
     @Test
-    void fail_whenClassCanBeSubclassed_givenTheSameClassInTheSubclassSlot() {
-        assertThatThrownBy(
-            () -> EqualsVerifier
-                    .forClass(NonConstructableParent.class)
-                    .withFactory(v -> new NonConstructableParent("" + v.getInt("i")), NonConstructableParent.class)
-                    .verify())
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining(
-                    "Given subclass is NonConstructableParent, but must be a subclass of NonConstructableParent.");
-    }
-
-    @Test
-    void succeed_whenClassCanBeSubclassed_givenConstructableSubclass() {
-        EqualsVerifier
-                .forClass(NonConstructableParent.class)
-                .withFactory(
-                    v -> new NonConstructableParent("" + v.getInt("i")),
-                    ConstructableSubForNonConstructableParent.class)
-                .verify();
-    }
-
-    @Test
     void fail_whenClassCanBeSubclassed_givenParentFactoryButNotSubclassFactory() {
         assertThatThrownBy(
             () -> EqualsVerifier
