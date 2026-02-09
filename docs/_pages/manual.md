@@ -21,4 +21,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [The Java Platform Module System](/equalsverifier/manual/jpms)
 * [What are these prefab values?](/equalsverifier/manual/prefab-values)
 * [Kotlin support](/equalsverifier/manual/kotlin)
+* [Final means final](/equalsverifier/manual/final-means-final)
 * [Additional resources](/equalsverifier/resources)
