@@ -51,7 +51,7 @@ public class WithFactoryTest {
                     .verify())
                 .isInstanceOf(AssertionError.class)
                 .hasMessageContaining("Cannot instantiate a subclass of NonConstructableParent (attempted")
-                .hasMessageContaining("Use an overload of #withFactory() to specify a subclass.");
+                .hasMessageContaining("Use the overload of #withFactory() to specify a subclass.");
     }
 
     @Test
@@ -69,12 +69,22 @@ public class WithFactoryTest {
     }
 
     @Test
-    void succeed_whenClassCanBeSubclassed_givenParentAndSubclassFactory() {
+    void succeed_whenClassCanBeSubclassed_givenParentAndExplicitSubclassFactory() {
         EqualsVerifier
                 .forClass(NonConstructableParent.class)
                 .withFactory(
                     v -> new NonConstructableParent("" + v.getInt("i")),
                     v -> new NonConstructableSubForNonConstructableParent("" + v.getInt("i")))
+                .verify();
+    }
+
+    @Test
+    void succeed_whenClassCanBeSubclassed_givenParentAndImplicitSubclassFactory() {
+        EqualsVerifier
+                .forClass(NonConstructableParent.class)
+                .withFactory(
+                    v -> new NonConstructableParent("" + v.getInt("i")),
+                    v -> new NonConstructableParent("" + v.getInt("i")) {})
                 .verify();
     }
 

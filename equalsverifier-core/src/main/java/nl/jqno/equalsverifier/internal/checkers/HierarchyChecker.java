@@ -156,7 +156,7 @@ public class HierarchyChecker<T> implements Checker {
 
         T reference = subjectCreator.plain();
         Class<? extends T> subclass = determineSubclass(reference, config.subclassFactory());
-        T equalSub = getEqualSub(reference, subclass, config.subclassFactory());
+        T equalSub = getEqualSub(reference, subclass, config.subclassFactory(), "withFactory");
 
         if (config.usingGetClass()) {
             Formatter formatter =
@@ -191,7 +191,11 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        T redefinedSub = getEqualSub(reference, config.redefinedSubclass(), config.redefinedSubclassFactory());
+        T redefinedSub = getEqualSub(
+            reference,
+            config.redefinedSubclass(),
+            config.redefinedSubclassFactory(),
+            "withRedefinedSubclass");
         checkMatchingValues(reference, redefinedSub, "subclass");
         assertFalse(
             Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),
@@ -256,12 +260,16 @@ public class HierarchyChecker<T> implements Checker {
         return SubtypeManager.giveDynamicSubclass(realClass);
     }
 
-    private T getEqualSub(T reference, Class<? extends T> subclass, InstanceFactory<? extends T> subclassFactory) {
+    private T getEqualSub(
+            T reference,
+            Class<? extends T> subclass,
+            InstanceFactory<? extends T> subclassFactory,
+            String methodName) {
         if (subclass != null) {
-            return subjectCreator.copyIntoSubclass(reference, subclass, null);
+            return subjectCreator.copyIntoSubclass(reference, subclass, null, methodName);
         }
         if (subclassFactory != null) {
-            var result = subjectCreator.copyIntoSubclass(reference, null, subclassFactory);
+            var result = subjectCreator.copyIntoSubclass(reference, null, subclassFactory, methodName);
             assertFalse(
                 Formatter
                         .of(
