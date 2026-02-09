@@ -20,6 +20,7 @@ import org.objenesis.ObjenesisStd;
 public class SubjectCreatorTest {
 
     private static final boolean NO_NEED_TO_FORCE = false;
+    private static final String METHOD_NAME = "foo";
 
     private final Configuration<NonConstructable> config =
             buildConfiguration(NonConstructable.class, values -> new NonConstructable("" + values.getInt("i")));
@@ -39,7 +40,7 @@ public class SubjectCreatorTest {
     @Test
     void copyIntoSubclass_withoutFactory() {
         var obj = new NonConstructable("42");
-        assertThatThrownBy(() -> sut.copyIntoSubclass(obj, NonConstructableSub.class, null))
+        assertThatThrownBy(() -> sut.copyIntoSubclass(obj, NonConstructableSub.class, null, METHOD_NAME))
                 .isInstanceOf(InstantiatorException.class)
                 .hasMessageContaining(
                     "Cannot instantiate a subclass of NonConstructable (attempted subclass: NonConstructableSub).");
@@ -52,7 +53,8 @@ public class SubjectCreatorTest {
                 .copyIntoSubclass(
                     obj,
                     NonConstructableSub.class,
-                    values -> new NonConstructableSub("" + values.getInt("i")));
+                    values -> new NonConstructableSub("" + values.getInt("i")),
+                    METHOD_NAME);
         assertThat(actual).isEqualTo(new NonConstructableSub("42"));
     }
 

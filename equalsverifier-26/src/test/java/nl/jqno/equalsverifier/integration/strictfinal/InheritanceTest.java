@@ -37,6 +37,22 @@ public class InheritanceTest {
     }
 
     @Test
+    void fail_whenClassHasNonConstructableRedefinedSubclass() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(NonConstructableSuper.class)
+                    .withFactory(
+                        v -> new NonConstructableSuper("" + v.getInt("i")),
+                        v -> new TrivialConstructableSubclassForNonConstructableSuper(v.getInt("i")))
+                    .withRedefinedSubclass(NonConstructableSubForNonConstructableSuper.class)
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Cannot instantiate a subclass of NonConstructableSuper")
+                .hasMessageContaining("(attempted subclass: NonConstructableSubForNonConstructableSuper)")
+                .hasMessageContaining("Use the overload of #withRedefinedSubclass() to specify a subclass");
+    }
+
+    @Test
     void succeed_whenClassHasNonConstructableRedefinedSubclass_givenClassRequiresFactory() {
         EqualsVerifier
                 .forClass(NonConstructableSuper.class)
@@ -65,7 +81,20 @@ public class InheritanceTest {
     }
 
     @Test
-    void succeed_whenClassHasRedefinedSuperclass_givenSuperclassRequiresFactory() {
+    void fail_whenClassHasNonConstructableRedefinedSuperclass() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(ConstructableSubForNonConstructableSuper.class)
+                    .withRedefinedSuperclass()
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Cannot instantiate the superclass of ConstructableSubForNonConstructableSuper")
+                .hasMessageContaining("(attempted superclass: NonConstructableSuper)")
+                .hasMessageContaining("Use the overload of #withRedefinedSuperclass() to specify a superclass");
+    }
+
+    @Test
+    void succeed_whenClassHasNonConstructableRedefinedSuperclass_givenSuperclassRequiresFactory() {
         EqualsVerifier
                 .forClass(ConstructableSubForNonConstructableSuper.class)
                 .withRedefinedSuperclass(v -> new NonConstructableSuper("" + v.getInt("i")))
@@ -73,7 +102,7 @@ public class InheritanceTest {
     }
 
     @Test
-    void fail_whenClassHasRedefinedSuperclass_givenSuperclassFactoryIsIncorrect() {
+    void fail_whenClassHasNonConstructableRedefinedSuperclass_givenSuperclassFactoryIsIncorrect() {
         assertThatThrownBy(
             () -> EqualsVerifier
                     .forClass(ConstructableSubForNonConstructableSuper.class)
@@ -86,7 +115,7 @@ public class InheritanceTest {
     }
 
     @Test
-    void fail_whenClassHasRedefinedSuperclass_givenSuperclassFactoryConstructsObject() {
+    void fail_whenClassHasNonConstructableRedefinedSuperclass_givenSuperclassFactoryConstructsObject() {
         assertThatThrownBy(
             () -> EqualsVerifier
                     .forClass(ConstructableSubForNonConstructableSuper.class)
@@ -99,7 +128,7 @@ public class InheritanceTest {
     }
 
     @Test
-    void fail_whenClassHasRedefinedSuperclass_givenSuperclassFactoryConstructsSomethingCompletelyDifferent() {
+    void fail_whenClassHasNonConstructableRedefinedSuperclass_givenSuperclassFactoryConstructsSomethingCompletelyDifferent() {
         assertThatThrownBy(
             () -> EqualsVerifier
                     .forClass(ConstructableSubForNonConstructableSuper.class)

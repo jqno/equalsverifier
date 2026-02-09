@@ -20,6 +20,7 @@ import org.objenesis.ObjenesisStd;
 
 class SubjectCreatorTest {
 
+    private static final String METHOD_NAME = "foo";
     private static final int I_RED = 42;
     private static final int I_BLUE = 1337;
     private static final String S_RED = "abc";
@@ -209,7 +210,7 @@ class SubjectCreatorTest {
     void copyIntoSubclass() {
         expected = new SomeSub(I_RED, I_RED, S_RED, null);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
-        actual = sut.copyIntoSubclass(original, SomeSub.class, null);
+        actual = sut.copyIntoSubclass(original, SomeSub.class, null, METHOD_NAME);
 
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.getClass()).isEqualTo(SomeSub.class);
@@ -223,7 +224,8 @@ class SubjectCreatorTest {
                 .copyIntoSubclass(
                     original,
                     SomeSub.class,
-                    v -> new SomeSub(v.getInt("x"), v.getInt("i"), v.getString("s"), v.getString("q")));
+                    v -> new SomeSub(v.getInt("x"), v.getInt("i"), v.getString("s"), v.getString("q")),
+                    METHOD_NAME);
 
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.getClass()).isEqualTo(SomeSub.class);

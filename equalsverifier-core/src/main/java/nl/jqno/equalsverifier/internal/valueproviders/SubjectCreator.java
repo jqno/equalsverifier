@@ -207,7 +207,7 @@ public class SubjectCreator<T> {
             catch (InstantiatorException e) {
                 var msg = """
                           Cannot instantiate the superclass of %% (attempted superclass: %%).
-                          Use the overload of #withRedefinedSuperclass() to specify a subclass.""";
+                             Use the overload of #withRedefinedSuperclass() to specify a superclass.""";
                 throw new InstantiatorException(
                         Formatter.of(msg, type.getSimpleName(), actualSuperType.getSimpleName()).format());
             }
@@ -223,9 +223,15 @@ public class SubjectCreator<T> {
      * @param original        The instance to copy.
      * @param subType         A subtype of original's type. May be null if subclassFactory is not.
      * @param subclassFactory A factory to instantiate the subtype. May be null if subclass is not.
+     * @param methodName      The name of the method whose overload we need to call to provide a factory. Used in the
+     *                            error message.
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
-    public <S extends T> S copyIntoSubclass(T original, Class<S> subType, InstanceFactory<S> subclassFactory) {
+    public <S extends T> S copyIntoSubclass(
+            T original,
+            Class<S> subType,
+            InstanceFactory<S> subclassFactory,
+            String methodName) {
         if (subclassFactory != null) {
             Instantiator<S> subCreator = InstantiatorFactory.of(null, subclassFactory, objenesis, forceFinalMeansFinal);
             return subCreator.copy(original);
@@ -241,9 +247,9 @@ public class SubjectCreator<T> {
             catch (InstantiatorException e) {
                 var msg = """
                           Cannot instantiate a subclass of %% (attempted subclass: %%).
-                          Use an overload of #withFactory() to specify a subclass.""";
+                             Use the overload of #%%() to specify a subclass.""";
                 throw new InstantiatorException(
-                        Formatter.of(msg, type.getSimpleName(), actualSubType.getSimpleName()).format());
+                        Formatter.of(msg, type.getSimpleName(), actualSubType.getSimpleName(), methodName).format());
             }
         }
     }
