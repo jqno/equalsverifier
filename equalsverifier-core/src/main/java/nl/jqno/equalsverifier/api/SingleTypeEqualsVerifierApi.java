@@ -181,6 +181,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue, S redCopy) {
+        PrefabValuesApi.addPrefabValues(userPrefabs, otherType, red, blue, redCopy);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withResettablePrefabValues(
             Class<S> otherType,
             Supplier<S> red,
@@ -192,6 +200,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /**
      * Adds prefabricated values for instance fields with a given name (and only the fields with the given name) that
      * EqualsVerifier cannot instantiate by itself.
+     *
+     * This overload will attempt to copy {@code red}. If that fails, use the other overload.
      *
      * @param <S>       The class of the prefabricated values.
      * @param fieldName The name of the field that the prefabricated values are linked to.
@@ -211,6 +221,32 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                 : fieldName;
         Validations.validateFieldNamesExist(type, List.of(translated), actualFields);
         PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, translated, red, blue);
+        return withNonnullFields(translated);
+    }
+
+    /**
+     * Adds prefabricated values for instance fields with a given name (and only the fields with the given name) that
+     * EqualsVerifier cannot instantiate by itself.
+     *
+     * @param <S>       The class of the prefabricated values.
+     * @param fieldName The name of the field that the prefabricated values are linked to.
+     * @param red       An instance of {@code S}.
+     * @param blue      Another instance of {@code S}, not equal to {@code red}.
+     * @param redCopy   A copy of {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException     If {@code red} or {@code blue} is null, or if the named field does not exist in
+     *                                      the class.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue, S redCopy) {
+        String translated = KotlinScreen.isKotlin(type) && KotlinScreen.canProbe()
+                ? KotlinProbe.translateKotlinToBytecodeFieldName(type, fieldName)
+                : fieldName;
+        Validations.validateFieldNamesExist(type, List.of(translated), actualFields);
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, type, translated, red, blue, redCopy);
         return withNonnullFields(translated);
     }
 
