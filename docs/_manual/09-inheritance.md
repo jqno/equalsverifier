@@ -51,3 +51,4 @@ Then of course, you also need to test EnhancedColorPoint.
 
 All of this is quite complicated, and often not necessary. This is why EqualsVerifier suggests by default that you [make things final](/equalsverifier/manual/final) instead.
 
+Speaking of things that are final, in Java 26 and above, Java will make it harder or impossible to do reflection on final fields. EqualsVerifier relies on this kind of reflection by default for ``withRedefinedSubclass` and `withRedefinedSuperclass`. In order to deal with that new situation, both methods have an overload to provide a factory that EqualsVerifier can use to instantiate objects. See [the chapter on "final means final"](/equalsverifier/manual/final-means-final) for more information.
