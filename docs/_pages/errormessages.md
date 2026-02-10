@@ -21,6 +21,8 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Abstract delegation](/equalsverifier/errormessages/abstract-delegation)
 * [Add prefab values for one of the following types](/equalsverifier/errormessages/add-prefab-values-for-one-of-the-following-types)
 * [BigDecimal equality](/equalsverifier/errormessages/bigdecimal-equality)
+* [Cannot instantiate Foo. Use #withFactory() …](/equalsverifier/errormessages/cannot-instantiate-use-withfactory)
+* [Cannot instantiate subclass/superclass of Foo. Use the overload …](/equalsverifier/errormessages/cannot-instantiate-subclass-or-superclass)
 * [ClassCastException: java.lang.Object cannot be cast to …](/equalsverifier/errormessages/classcastexception)
 * [Class is not accessible via the Java Module system. Consider opening the module that contains it.](/equalsverifier/errormessages/class-or-field-is-not-accessible-jpms)
 * [Coverage is not 100%](/equalsverifier/errormessages/coverage-is-not-100-percent)
