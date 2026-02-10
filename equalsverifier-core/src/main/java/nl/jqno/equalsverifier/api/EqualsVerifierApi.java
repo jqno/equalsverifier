@@ -40,6 +40,8 @@ public interface EqualsVerifierApi<T> {
     /**
      * Adds prefabricated values for instance fields of classes that EqualsVerifier cannot instantiate by itself.
      *
+     * This overload will attempt to copy {@code red}. If that fails, use the other overload.
+     *
      * @param <S>       The class of the prefabricated values.
      * @param otherType The class of the prefabricated values.
      * @param red       An instance of {@code S}.
@@ -51,6 +53,22 @@ public interface EqualsVerifierApi<T> {
      * @since 0.2
      */
     <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
+
+    /**
+     * Adds prefabricated values for instance fields of classes that EqualsVerifier cannot instantiate by itself.
+     *
+     * @param <S>       The class of the prefabricated values.
+     * @param otherType The class of the prefabricated values.
+     * @param red       An instance of {@code S}.
+     * @param blue      Another instance of {@code S}, not equal to {@code red}.
+     * @param redCopy   A copy of {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException     If either {@code otherType}, {@code red}, or {@code blue} is null.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 4.4
+     */
+    <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue, S redCopy);
 
     /**
      * Adds Suppliers for resettable prefabricated values for instance fields of classes that EqualsVerifier cannot
