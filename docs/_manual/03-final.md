@@ -35,3 +35,4 @@ This is why EqualsVerifier makes such a big deal of this, and why suppressing `W
 
 JPA entities are an exception to this. You can read more about that [here](/equalsverifier/manual/jpa-entities).
 
+See also [the chapter on "final means final"](/equalsverifier/manual/final-means-final), which talks about final _fields_ and how EqualsVerifier deals with those in Java 26 and above.
