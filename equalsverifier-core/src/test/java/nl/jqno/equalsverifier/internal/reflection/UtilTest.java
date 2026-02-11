@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
 
-import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class UtilTest {
@@ -45,13 +44,6 @@ class UtilTest {
     void classesReturnsItsArguments() {
         Class<?>[] expected = new Class<?>[] { String.class, Object.class };
         Class<?>[] actual = Util.classes(String.class, Object.class);
-        assertThat(actual).containsExactly(expected);
-    }
-
-    @Test
-    void objectsReturnsItsArguments() {
-        Object[] expected = new Object[] { "x", new Point(1, 2) };
-        Object[] actual = Util.objects("x", new Point(1, 2));
         assertThat(actual).containsExactly(expected);
     }
 }

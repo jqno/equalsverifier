@@ -67,7 +67,7 @@ public class FieldCache {
         return new HashSet<>(cache.keySet().stream().map(key -> key.fieldName).collect(Collectors.toSet()));
     }
 
-    static class Key {
+    static final class Key {
         private final String fieldName;
         private final TypeTag fieldType;
 

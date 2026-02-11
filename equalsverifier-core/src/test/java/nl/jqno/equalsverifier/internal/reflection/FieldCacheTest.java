@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Collections;
 import java.util.Set;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 class FieldCacheTest {
@@ -76,5 +77,10 @@ class FieldCacheTest {
         cache.put(stringField, stringTag, stringValues);
         var expected = Set.of(stringField);
         assertThat(cache.getFieldNames()).isEqualTo(expected);
+    }
+
+    @Test
+    void equalsAndHashCodeForKey() {
+        EqualsVerifier.forClass(FieldCache.Key.class).verify();
     }
 }

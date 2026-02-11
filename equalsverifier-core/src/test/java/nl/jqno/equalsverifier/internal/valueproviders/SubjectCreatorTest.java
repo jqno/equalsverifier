@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -207,6 +208,17 @@ class SubjectCreatorTest {
     }
 
     @Test
+    void copyIntoSuperclassWithFactory_nonConstructable() {
+        var ncConfig = ConfigurationHelper
+                .emptyConfigurationWithFactory(
+                    NonConstructableSub.class,
+                    v -> new NonConstructableSub(v.getInt("i"), new Object()));
+        var ncSut = new SubjectCreator<>(ncConfig, valueProvider, objenesis, true);
+        NonConstructableSub original = new NonConstructableSub(42, new Object());
+        assertThatThrownBy(() -> ncSut.copyIntoSuperclass(original, null)).isInstanceOf(InstantiatorException.class);
+    }
+
+    @Test
     void copyIntoSubclass() {
         expected = new SomeSub(I_RED, I_RED, S_RED, null);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
@@ -229,6 +241,18 @@ class SubjectCreatorTest {
 
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.getClass()).isEqualTo(SomeSub.class);
+    }
+
+    @Test
+    void copyIntoSubclassWithFactory_nonConstructable() {
+        var ncConfig = ConfigurationHelper
+                .emptyConfigurationWithFactory(
+                    NonConstructableSuper.class,
+                    v -> new NonConstructableSuper(v.getInt("i"), new Object()));
+        var ncSut = new SubjectCreator<>(ncConfig, valueProvider, objenesis, true);
+        NonConstructableSuper original = new NonConstructableSuper(42, new Object());
+        assertThatThrownBy(() -> ncSut.copyIntoSubclass(original, NonConstructableSub.class, null, ""))
+                .isInstanceOf(InstantiatorException.class);
     }
 
     @Test
@@ -395,6 +419,21 @@ class SubjectCreatorTest {
         public SealedSub(String s, int i) {
             super(s);
             this.i = i;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static class NonConstructableSuper {
+        private final int i;
+
+        public NonConstructableSuper(int i, Object discarded) {
+            this.i = i;
+        }
+    }
+
+    static class NonConstructableSub extends NonConstructableSuper {
+        public NonConstructableSub(int i, Object discarded) {
+            super(i, discarded);
         }
     }
 }
