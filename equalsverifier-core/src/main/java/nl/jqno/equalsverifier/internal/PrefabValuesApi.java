@@ -57,6 +57,7 @@ public final class PrefabValuesApi {
             T blue,
             T redCopy) {
         Validations.validateRedAndBluePrefabValues(otherType, red, blue);
+        Validations.validateRedAndRedCopyPrefabValues(otherType, red, redCopy);
         prefabs.register(otherType, red, blue, redCopy);
     }
 
