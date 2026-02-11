@@ -94,6 +94,17 @@ public final class Validations {
         validate(Objects.equals(red, blue), "both prefab values for field " + fieldDescription + " are equal.");
     }
 
+    public static <T> void validateRedAndRedCopyPrefabValues(Class<T> type, T red, T redCopy) {
+        validateNotNull(redCopy, "red copy prefab value of type " + type.getSimpleName() + " is null.");
+        validate(
+            !type.isPrimitive() && red == redCopy,
+            "red and redCopy prefab values of type " + type.getSimpleName()
+                    + " are the same object. They should be equal but not identical.");
+        validate(
+            !Objects.equals(red, redCopy),
+            "red and redCopy prefab values of type " + type.getSimpleName() + " should be equal but are not.");
+    }
+
     public static <T> Field validateFieldTypeMatches(Class<T> container, String fieldName, Class<?> fieldType) {
         Optional<Field> opt = ClassProbe.of(container).findField(fieldName);
         if (opt.isPresent()) {
