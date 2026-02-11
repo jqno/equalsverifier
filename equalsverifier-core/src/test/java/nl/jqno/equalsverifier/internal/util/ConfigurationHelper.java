@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.util;
 
 import java.util.*;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
 
 public final class ConfigurationHelper {
@@ -70,6 +71,31 @@ public final class ConfigurationHelper {
                     Collections.emptySet(),
                     Collections.emptySet(),
                     Set.of(fieldNames),
+                    null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    false,
+                    EnumSet.noneOf(Warning.class),
+                    Collections.emptySet(),
+                    null,
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    Collections.emptyList(),
+                    Collections.emptyList());
+    }
+
+    public static final <T> Configuration<T> emptyConfigurationWithFactory(Class<T> type, InstanceFactory<T> factory) {
+        return Configuration
+                .build(
+                    type,
+                    factory,
+                    null,
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    Collections.emptySet(),
+                    Collections.emptySet(),
                     null,
                     false,
                     null,

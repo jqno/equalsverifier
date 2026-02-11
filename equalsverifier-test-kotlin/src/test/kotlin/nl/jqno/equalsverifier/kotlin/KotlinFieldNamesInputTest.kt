@@ -90,9 +90,23 @@ class KotlinFieldNamesInputTest {
   }
 
   @Test
+  fun `withPrefabValuesForField (overload) - delegate field with its Kotlin name`() {
+    EqualsVerifier.forClass(PreconditionDelegated::class.java)
+      .withPrefabValuesForField(PreconditionDelegated::foo.name, StringContainer("foo1"), StringContainer("foo2"), StringContainer("foo1"))
+      .verify()
+  }
+
+  @Test
   fun `withPrefabValuesForField - delegate field with its bytecode name`() {
     EqualsVerifier.forClass(PreconditionDelegated::class.java)
       .withPrefabValuesForField("foo\$receiver", StringContainer("foo1"), StringContainer("foo2"))
+      .verify()
+  }
+
+  @Test
+  fun `withPrefabValuesForField (overload) - delegate field with its bytecode name`() {
+    EqualsVerifier.forClass(PreconditionDelegated::class.java)
+      .withPrefabValuesForField("foo\$receiver", StringContainer("foo1"), StringContainer("foo2"), StringContainer("foo1"))
       .verify()
   }
 
