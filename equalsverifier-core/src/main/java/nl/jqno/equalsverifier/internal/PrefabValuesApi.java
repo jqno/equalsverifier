@@ -112,6 +112,7 @@ public final class PrefabValuesApi {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> void addPrefabValuesForField(
             FieldCache fieldCache,
             Class<?> type,
@@ -121,6 +122,7 @@ public final class PrefabValuesApi {
             T redCopy) {
         Validations.validateRedAndBluePrefabValues(fieldName, red, blue);
         Field f = Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        Validations.validateRedAndRedCopyPrefabValues((Class<T>) f.getType(), red, redCopy);
         Validations.validateCanProbeKotlinLazyDelegate(type, f);
         TypeTag tag = TypeTag.of(f, new TypeTag(type));
 
