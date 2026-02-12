@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.types.FinalPoint;
+import nl.jqno.equalsverifier_testhelpers.types.PreconditionTypeHelper.StringPrecondition;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("CheckReturnValue")
@@ -24,6 +25,24 @@ class WithPrefabValuesTest {
     void succeed_userPrefabsComeBeforeBuiltinPrefabs_givenThreeValues() {
         ExpectedException.when(() -> EqualsVerifier.forClass(Thrower.class).verify()).assertFailure();
         EqualsVerifier.forClass(Thrower.class).withPrefabValues(int.class, 42, 1337, 42).verify();
+    }
+
+    @Test
+    void succeed_stringUserPrefabsComeBeforeBuiltinPrefabs_givenTwoValues() {
+        ExpectedException.when(() -> EqualsVerifier.forClass(StringPrecondition.class).verify()).assertFailure();
+        EqualsVerifier
+                .forClass(StringPrecondition.class)
+                .withPrefabValues(String.class, "precondition:x", "precondition:y")
+                .verify();
+    }
+
+    @Test
+    void succeed_stringUserPrefabsComeBeforeBuiltinPrefabs_givenThreeValues() {
+        ExpectedException.when(() -> EqualsVerifier.forClass(StringPrecondition.class).verify()).assertFailure();
+        EqualsVerifier
+                .forClass(StringPrecondition.class)
+                .withPrefabValues(String.class, "precondition:x", "precondition:y", "precondition:x")
+                .verify();
     }
 
     @Test
