@@ -97,7 +97,7 @@ public final class Validations {
     public static <T> void validateRedAndRedCopyPrefabValues(Class<T> type, T red, T redCopy) {
         validateNotNull(redCopy, "red copy prefab value of type " + type.getSimpleName() + " is null.");
         validate(
-            !type.isPrimitive() && red == redCopy,
+            !type.isPrimitive() && !type.equals(String.class) && red == redCopy,
             "red and redCopy prefab values of type " + type.getSimpleName()
                     + " are the same object. They should be equal but not identical.");
         validate(
