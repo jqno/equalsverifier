@@ -172,6 +172,7 @@ class WithPrefabValuesForFieldTest {
                 .verify();
     }
 
+    @Test
     void succeed_whenClassHasStringPrecondition_givenPrefabValueForField() {
         EqualsVerifier
                 .forClass(StringPrecondition.class)
@@ -179,6 +180,7 @@ class WithPrefabValuesForFieldTest {
                 .verify();
     }
 
+    @Test
     void succeed_whenClassHasStringPrecondition_givenPrefabValueForField_redCopy() {
         EqualsVerifier
                 .forClass(StringPrecondition.class)
