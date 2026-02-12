@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- For doubles and floats, EqualsVerifier now uses `0.0` and `-0.0` instead of `NaN` to test edge case handling without triggering precondition exceptions. For boxed Double/Float, it now suggests `equals()` over `Double.compare()`/`Float.compare()` (they behave identically).
+
 ## [4.3.1] - 2026-01-24
 
 ### Changed

@@ -33,6 +33,22 @@ class AssertTest {
     }
 
     @Test
+    void assertNotEqualsObjectSuccess() {
+        String red = "one";
+        String blue = "two";
+        Assert.assertNotEquals(FAIL, red, blue);
+    }
+
+    @Test
+    void assertNotEqualsObjectFailure() {
+        assertThatThrownBy(() -> Assert.assertNotEquals(FAIL, new String("text"), new String("text")))
+                .isInstanceOf(AssertionException.class)
+                .extracting(e -> ((MessagingException) e).getDescription())
+                .asString()
+                .contains("fail");
+    }
+
+    @Test
     void assertFalseSuccess() {
         Assert.assertFalse(FAIL, false);
     }

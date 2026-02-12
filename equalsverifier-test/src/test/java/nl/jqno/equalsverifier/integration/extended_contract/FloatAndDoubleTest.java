@@ -10,6 +10,7 @@ class FloatAndDoubleTest {
 
     private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
     private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
+    private static final String REFLEXIVITY = "Reflexivity: == used instead of .equals()";
 
     @Test
     void fail_whenFloatsAreComparedByReference() {
@@ -24,12 +25,17 @@ class FloatAndDoubleTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
                 .assertFailure()
-                .assertMessageContains(FLOAT, "f");
+                .assertMessageContains(REFLEXIVITY, "field: f");
     }
 
     @Test
     void succeed_whenFloatsAreComparedWithFloatCompare() {
         EqualsVerifier.forClass(CompareFloatCorrectly.class).verify();
+    }
+
+    @Test
+    void succeed_whenFloatCannotBeNaN() {
+        EqualsVerifier.forClass(FloatDontAllowNaN.class).verify();
     }
 
     @Test
@@ -45,12 +51,17 @@ class FloatAndDoubleTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify())
                 .assertFailure()
-                .assertMessageContains(DOUBLE, "d");
+                .assertMessageContains(REFLEXIVITY, "field: d");
     }
 
     @Test
     void succeed_whenDoublesAreComparedWithDoubleCompare() {
         EqualsVerifier.forClass(CompareDoubleCorrectly.class).verify();
+    }
+
+    @Test
+    void succeed_whenDoubleCannotBeNaN() {
+        EqualsVerifier.forClass(DoubleDontAllowNaN.class).verify();
     }
 
     static final class ComparePrimitiveFloatsByReference {
@@ -184,6 +195,22 @@ class FloatAndDoubleTest {
         @Override
         public int hashCode() {
             return Objects.hash(d);
+        }
+    }
+
+    record FloatDontAllowNaN(double d, float f) {
+        public FloatDontAllowNaN {
+            if (Float.isNaN(f)) {
+                throw new IllegalArgumentException("f cannot be NaN");
+            }
+        }
+    }
+
+    record DoubleDontAllowNaN(double d, float f) {
+        public DoubleDontAllowNaN {
+            if (Double.isNaN(d)) {
+                throw new IllegalArgumentException("d cannot be NaN");
+            }
         }
     }
 }

@@ -27,6 +27,21 @@ public final class Assert {
     }
 
     /**
+     * Asserts that two Objects are not equal to one another. Does nothing if they aren't; throws an AssertionException
+     * if they are.
+     *
+     * @param message  Message to be included in the {@link AssertionException}.
+     * @param expected Expected value.
+     * @param actual   Actual value.
+     * @throws AssertionException If {@code expected} and {@code actual} are not equal.
+     */
+    public static void assertNotEquals(Formatter message, Object expected, Object actual) {
+        if (expected.equals(actual)) {
+            throw new AssertionException(message);
+        }
+    }
+
+    /**
      * Asserts that an assertion is true. Does nothing if it is; throws an AssertionException if it isn't.
      *
      * @param message   Message to be included in the {@link AssertionException}.
