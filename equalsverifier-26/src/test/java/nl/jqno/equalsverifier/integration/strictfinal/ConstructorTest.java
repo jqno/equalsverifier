@@ -120,6 +120,7 @@ public class ConstructorTest {
     static final class ConstructorIsPrivate {
         private final int i;
 
+        @SuppressWarnings("unused")
         private ConstructorIsPrivate(int i) {
             this.i = i;
         }

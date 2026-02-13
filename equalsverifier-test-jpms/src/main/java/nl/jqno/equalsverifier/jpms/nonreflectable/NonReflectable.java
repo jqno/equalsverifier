@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.jpms.nonreflectable;
 public final class NonReflectable {
     private final int i;
 
+    @SuppressWarnings("unused")
     private NonReflectable(int i) {
         this.i = i;
     }
