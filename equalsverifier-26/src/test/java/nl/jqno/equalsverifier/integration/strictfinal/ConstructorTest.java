@@ -37,6 +37,11 @@ public class ConstructorTest {
         EqualsVerifier.forClass(OneConstructorMatchesFields.class).verify();
     }
 
+    @Test
+    void succeed_whenMatchingConstructorIsPrivate() {
+        EqualsVerifier.forClass(ConstructorIsPrivate.class).verify();
+    }
+
     record SomeRecord(int i) {}
 
     static final class ConstructorMatchesFields {
@@ -109,6 +114,24 @@ public class ConstructorTest {
         @Override
         public int hashCode() {
             return Objects.hash(i, s);
+        }
+    }
+
+    static final class ConstructorIsPrivate {
+        private final int i;
+
+        private ConstructorIsPrivate(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof ConstructorIsPrivate other && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
         }
     }
 }
