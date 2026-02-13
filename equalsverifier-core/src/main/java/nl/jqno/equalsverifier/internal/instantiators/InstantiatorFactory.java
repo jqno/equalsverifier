@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.ArrayList;
 
 import nl.jqno.equalsverifier.InstanceFactory;
@@ -111,9 +112,13 @@ public final class InstantiatorFactory {
         var fields = fieldTypes.toArray(new Class<?>[] {});
 
         try {
-            return type.getDeclaredConstructor(fields);
+            var constructor = type.getDeclaredConstructor(fields);
+            // Calling setAccessible(true) might trigger InaccessibleObjectException when JPMS is active.
+            // In that case, we can't (reflectively) call the constructor, so the constructor isn't usable and we shouldn't return it here.
+            constructor.setAccessible(true);
+            return constructor;
         }
-        catch (NoSuchMethodException e) {
+        catch (NoSuchMethodException | InaccessibleObjectException e) {
             return null;
         }
     }
