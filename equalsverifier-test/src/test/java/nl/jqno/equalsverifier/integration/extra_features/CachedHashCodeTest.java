@@ -34,10 +34,28 @@ class CachedHashCodeTest {
     }
 
     @Test
+    void succeed_whenCachedHashCodeIsValid_butWereUsingWithFactoryInstead() {
+        EqualsVerifier
+                .forClass(ObjectWithValidCachedHashCode.class)
+                .withFactory(v -> new ObjectWithValidCachedHashCode(v.getString("name")))
+                .withIgnoredFields("cachedHashCode")
+                .verify();
+    }
+
+    @Test
     void succeed_whenCachedHashCodeIsValidAndLocatedInSuperclass_givenWithCachedHashCodeIsUsed() {
         EqualsVerifier
                 .forClass(Subclass.class)
                 .withCachedHashCode("cachedHashCode", "calcHashCode", new Subclass(SOME_NAME))
+                .verify();
+    }
+
+    @Test
+    void succeed_whenCachedHashCodeIsValidAndLocatedInSuperclass_butWereUsingWithFactoryInstead() {
+        EqualsVerifier
+                .forClass(Subclass.class)
+                .withFactory(v -> new Subclass(v.getString("name")))
+                .withIgnoredFields("cachedHashCode")
                 .verify();
     }
 
