@@ -22,6 +22,9 @@ public class JavaLangValueSupplier<T> extends ValueSupplier<T> {
             var red = new Exception();
             return val(red, new Exception(), red);
         }
+        if (is(Number.class)) {
+            return val(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3));
+        }
         if (is(RuntimeException.class)) {
             var red = new RuntimeException();
             return val(red, new RuntimeException(), red);

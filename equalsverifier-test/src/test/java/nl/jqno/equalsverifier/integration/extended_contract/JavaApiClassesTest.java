@@ -498,6 +498,7 @@ class JavaApiClassesTest {
 
         private final Object object;
         private final String string;
+        private final Number number;
         private final Integer integer;
         private final BitSet bitset;
         private final Calendar calendar;
@@ -535,6 +536,7 @@ class JavaApiClassesTest {
         public CommonClassesContainer(
                 Object object,
                 String string,
+                Number number,
                 Integer integer,
                 BitSet bitset,
                 Calendar calendar,
@@ -570,6 +572,7 @@ class JavaApiClassesTest {
                 TimeZone timeZone) {
             this.object = object;
             this.string = string;
+            this.number = number;
             this.integer = integer;
             this.bitset = bitset;
             this.calendar = calendar;
@@ -613,6 +616,7 @@ class JavaApiClassesTest {
             CommonClassesContainer other = (CommonClassesContainer) obj;
             return Objects.equals(object, other.object)
                     && Objects.equals(string, other.string)
+                    && Objects.equals(number, other.number)
                     && Objects.equals(integer, other.integer)
                     && Objects.equals(bitset, other.bitset)
                     && Objects.equals(calendar, other.calendar)
@@ -654,6 +658,7 @@ class JavaApiClassesTest {
                     .hash(
                         object,
                         string,
+                        number,
                         integer,
                         bitset,
                         calendar,
