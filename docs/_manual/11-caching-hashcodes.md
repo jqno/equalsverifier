@@ -6,21 +6,7 @@ Normally, a hashCode is calculated every time you call the `hashCode()` method. 
 
 Sometimes, however, a hashCode needs to be cached for performance reasons. Java's own `String` class is a good example where the hashCode is only calculated once, and then cached.
 
-Since EqualsVerifier relies on reflection to change the content of fields and then calling `equals` and `hashCode` to see if they changed, it can't deal with cached hashCodes very well.
-
-You can instruct EqualsVerifier to work with cached hashCodes, but it takes some work, and it only works with immutable classes. There are three things you have to do.
-
-1. First, your class must contain a `private int` field that contains the cached hashCode.
-
-1. Second, the class must have a method that can calculate the hashCode. This method can have no parameters, it cannot be public, and it must return the hashCode as an `int`. That means that the method can't assign to the field that contains the cached hashCode. The assignment has to happen in the constructor. It also means you can't do the calculation in the `hashCode()` method.
-
-1. Finally, you must give EqualsVerifier an example of an object with a correctly initialized hashCode. EqualsVerifier uses this to make sure that your class isn't cheating, and that the method from the second point is actually used to assign to the field from the first point.
-
-These three elements must be passed to EqualsVerifier's `withCachedHashCode` method.
-
-All of this is pretty cumbersome, but it's necessary for technical reasons. There certainly are easier ways to correctly implement cached hashCodes, but EqualsVerifier can only test them if they're implemented in this particular way.
-
-Here is an example of a class which implements a cached hashCode in a way that EqualsVerifier can deal with:
+Here is another example of a class which implements a cached hashCode:
 
 {% highlight java %}
 class ObjectWithCachedHashCode {
@@ -45,7 +31,33 @@ class ObjectWithCachedHashCode {
 }
 {% endhighlight %}
 
-And here is an example of an EqualsVerifier test that exercises this cached hashCode:
+The easiest way to deal with this, is to use `#withFactory()`:
+
+{% highlight java %}
+@Test
+public void testCachedHashCode() {
+    EqualsVerifier.forClass(ObjectWithCachedHashCode.class)
+            .withFactory(v -> new ObjectWithCachedHashCode(v.getString("name")))
+            .withIgnoredFields("cachedHashCode")
+            .verify();
+}
+{% endhighlight %}
+
+Note that you have to ignore the `cachedHashCode` field, since it doesn't participate in `equals` directly.
+
+EqualsVerifier has another, older way of dealing with cached hashCodes too, that hooks into its traditional way of instantiating objects by using reflection. It takes some work, and it only works with immutable classes, so we recommend the above method using `#withFactory()`. In fact, this method may be deprecated in the future. Still, if you want to use it, there are three things you have to do.
+
+1. First, your class must contain a `private int` field that contains the cached hashCode.
+
+1. Second, the class must have a method that can calculate the hashCode. This method can have no parameters, it cannot be public, and it must return the hashCode as an `int`. That means that the method can't assign to the field that contains the cached hashCode. The assignment has to happen in the constructor. It also means you can't do the calculation in the `hashCode()` method.
+
+1. Finally, you must give EqualsVerifier an example of an object with a correctly initialized hashCode. EqualsVerifier uses this to make sure that your class isn't cheating, and that the method from the second point is actually used to assign to the field from the first point.
+
+These three elements must be passed to EqualsVerifier's `withCachedHashCode` method.
+
+All of this is pretty cumbersome, but it's necessary for technical reasons. There certainly are easier ways to correctly implement cached hashCodes, but EqualsVerifier can only test them if they're implemented in this particular way.
+
+Here is an example of an EqualsVerifier test that exercises this cached hashCode:
 
 {% highlight java %}
 @Test
