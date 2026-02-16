@@ -70,7 +70,7 @@ public final class InstantiatorFactory {
             return new ReflectionInstantiator<>(probe, objenesis);
         }
 
-        var constructor = findConstructorMatchingFields(type);
+        var constructor = findConstructorMatchingFields(probe);
         if (constructor != null && !probe.isAbstract()) {
             return new ClassConstructorInstantiator<>(type, constructor);
         }
@@ -104,23 +104,28 @@ public final class InstantiatorFactory {
         return false;
     }
 
-    private static <T> Constructor<T> findConstructorMatchingFields(Class<T> type) {
+    private static <T> Constructor<T> findConstructorMatchingFields(ClassProbe<T> probe) {
+        Class<?> type = probe.getType();
         var fieldTypes = new ArrayList<Class<?>>();
         for (var f : FieldIterable.ofIgnoringStatic(type)) {
             fieldTypes.add(f.getType());
         }
         var fields = fieldTypes.toArray(new Class<?>[] {});
+        var constructor = probe.findConstructor(fields);
 
-        try {
-            var constructor = type.getDeclaredConstructor(fields);
-            // Calling setAccessible(true) might trigger InaccessibleObjectException when JPMS is active.
-            // In that case, we can't (reflectively) call the constructor, so the constructor isn't usable and we shouldn't return it here.
-            constructor.setAccessible(true);
-            return constructor;
+        if (constructor.isPresent()) {
+            try {
+                var c = constructor.get();
+                // Calling setAccessible(true) might trigger InaccessibleObjectException when JPMS is active.
+                // In that case, we can't (reflectively) call the constructor, so the constructor isn't usable and we shouldn't return it here.
+                c.setAccessible(true);
+                return c;
+            }
+            catch (InaccessibleObjectException e) {
+                return null;
+            }
         }
-        catch (NoSuchMethodException | InaccessibleObjectException e) {
-            return null;
-        }
+        return null;
     }
 
     private static RuntimeException failure(ClassProbe<?> probe) {

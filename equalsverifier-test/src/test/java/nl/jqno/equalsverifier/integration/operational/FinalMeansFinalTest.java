@@ -24,7 +24,12 @@ public class FinalMeansFinalTest {
     }
 
     @Test
-    void succeed_whenFinalMeansFinalIsForced_givenClassWhoseConstructorMatchesFields_givenItAbstractSoDynamicSubclassIsGenerated() {
+    void succeed_whenFinalMeansFinalIsForced_givenClassWhoseConstructorMatchesFields_givenConstructorIsPrivate() {
+        EqualsVerifier.forClass(PrivateConstructorMatchesFields.class).set(Mode.finalMeansFinal()).verify();
+    }
+
+    @Test
+    void succeed_whenFinalMeansFinalIsForced_givenClassWhoseConstructorMatchesFields_givenItIsAbstractSoDynamicSubclassIsGenerated() {
         EqualsVerifier.forClass(AbstractConstructorMatchesFields.class).set(Mode.finalMeansFinal()).verify();
     }
 
@@ -86,6 +91,25 @@ public class FinalMeansFinalTest {
     static class TrivialSubConstructorDoesNotMatchFields extends ConstructorDoesNotMatchFields {
         public TrivialSubConstructorDoesNotMatchFields(String i) {
             super(i);
+        }
+    }
+
+    static final class PrivateConstructorMatchesFields {
+        private final int i;
+
+        @SuppressWarnings("unused")
+        private PrivateConstructorMatchesFields(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            return obj instanceof PrivateConstructorMatchesFields other && i == other.i;
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(i);
         }
     }
 
