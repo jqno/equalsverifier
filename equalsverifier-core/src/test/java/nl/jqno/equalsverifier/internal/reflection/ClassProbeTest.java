@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Constructor;
+
 import nl.jqno.equalsverifier_testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier_testhelpers.types.Point3D;
 import nl.jqno.equalsverifier_testhelpers.types.PointContainer;
@@ -206,6 +208,30 @@ class ClassProbeTest {
     }
 
     @Test
+    void findConstructor() {
+        ClassProbe<?> accessor = ClassProbe.of(ConstructorContainer.class);
+        assertThat(accessor.findConstructor(new Class<?>[] { int.class })).containsInstanceOf(Constructor.class);
+    }
+
+    @Test
+    void dontFindConstructorThatDoesntExist() {
+        ClassProbe<?> accessor = ClassProbe.of(ConstructorContainer.class);
+        assertThat(accessor.findConstructor(new Class<?>[] { float.class })).isEmpty();
+    }
+
+    @Test
+    void findPrivateConstructor() {
+        ClassProbe<?> accessor = ClassProbe.of(ConstructorContainer.class);
+        assertThat(accessor.findConstructor(new Class<?>[] { String.class })).containsInstanceOf(Constructor.class);
+    }
+
+    @Test
+    void findPrivateSubConstructor() {
+        ClassProbe<?> accessor = ClassProbe.of(SubConstructorContainer.class);
+        assertThat(accessor.findConstructor(new Class<?>[] { String.class })).containsInstanceOf(Constructor.class);
+    }
+
+    @Test
     void getSuperAccessorForPojo() {
         ClassProbe<? super PointContainer> superAccessor = pointProbe.getSuperProbe();
         assertThat(superAccessor.getType()).isEqualTo(Object.class);
@@ -246,5 +272,18 @@ class ClassProbeTest {
 
         // CHECKSTYLE OFF: MemberName
         protected int f_protected;
+    }
+
+    @SuppressWarnings("unused")
+    static class ConstructorContainer {
+        public ConstructorContainer(int i) {}
+
+        private ConstructorContainer(String s) {}
+    }
+
+    static class SubConstructorContainer extends ConstructorContainer {
+        public SubConstructorContainer(int i) {
+            super(i);
+        }
     }
 }
