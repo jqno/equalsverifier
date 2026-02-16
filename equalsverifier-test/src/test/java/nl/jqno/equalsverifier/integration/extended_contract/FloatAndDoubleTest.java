@@ -34,6 +34,16 @@ class FloatAndDoubleTest {
     }
 
     @Test
+    void succeed_whenObjectFloatsAreComparedWithEquals() {
+        EqualsVerifier.forClass(CompareObjectFloatWithEquals.class).verify();
+    }
+
+    @Test
+    void succeed_whenObjectFloatsAreComparedWithCompare() {
+        EqualsVerifier.forClass(CompareObjectFloatWithCompare.class).verify();
+    }
+
+    @Test
     void succeed_whenFloatCannotBeNaN() {
         EqualsVerifier.forClass(FloatDontAllowNaN.class).verify();
     }
@@ -57,6 +67,16 @@ class FloatAndDoubleTest {
     @Test
     void succeed_whenDoublesAreComparedWithDoubleCompare() {
         EqualsVerifier.forClass(CompareDoubleCorrectly.class).verify();
+    }
+
+    @Test
+    void succeed_whenObjectDoublesAreComparedWithEquals() {
+        EqualsVerifier.forClass(CompareObjectDoubleWithEquals.class).verify();
+    }
+
+    @Test
+    void succeed_whenObjectDoublesAreComparedWithCompare() {
+        EqualsVerifier.forClass(CompareObjectDoubleWithCompare.class).verify();
     }
 
     @Test
@@ -131,6 +151,56 @@ class FloatAndDoubleTest {
         }
     }
 
+    static final class CompareObjectFloatWithEquals {
+
+        private final Float f;
+
+        public CompareObjectFloatWithEquals(Float f) {
+            this.f = f;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof CompareObjectFloatWithEquals other
+                    && (f == null ? other.f == null : f.equals(other.f));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(f);
+        }
+    }
+
+    static final class CompareObjectFloatWithCompare {
+
+        private final Float f;
+
+        public CompareObjectFloatWithCompare(Float f) {
+            this.f = f;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof CompareObjectFloatWithCompare other
+                    && ((f == null || other.f == null)
+                            ? (f == null && other.f == null)
+                            : Float.compare(f, other.f) == 0);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(f);
+        }
+    }
+
+    record FloatDontAllowNaN(double d, float f) {
+        public FloatDontAllowNaN {
+            if (Float.isNaN(f)) {
+                throw new IllegalArgumentException("f cannot be NaN");
+            }
+        }
+    }
+
     static final class ComparePrimitiveDoubleByReference {
 
         private final double d;
@@ -198,11 +268,45 @@ class FloatAndDoubleTest {
         }
     }
 
-    record FloatDontAllowNaN(double d, float f) {
-        public FloatDontAllowNaN {
-            if (Float.isNaN(f)) {
-                throw new IllegalArgumentException("f cannot be NaN");
-            }
+    static final class CompareObjectDoubleWithEquals {
+
+        private final Double d;
+
+        public CompareObjectDoubleWithEquals(Double d) {
+            this.d = d;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof CompareObjectDoubleWithEquals other
+                    && (d == null ? other.d == null : d.equals(other.d));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(d);
+        }
+    }
+
+    static final class CompareObjectDoubleWithCompare {
+
+        private final Double d;
+
+        public CompareObjectDoubleWithCompare(Double d) {
+            this.d = d;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof CompareObjectDoubleWithCompare other
+                    && ((d == null || other.d == null)
+                            ? (d == null && other.d == null)
+                            : Double.compare(d, other.d) == 0);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(d);
         }
     }
 
