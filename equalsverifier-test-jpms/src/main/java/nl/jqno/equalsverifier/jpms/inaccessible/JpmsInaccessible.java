@@ -1,16 +1,16 @@
-package nl.jqno.equalsverifier.jpms.nonreflectable;
+package nl.jqno.equalsverifier.jpms.inaccessible;
 
-public final class NonReflectable {
+public final class JpmsInaccessible {
     private final int i;
 
     @SuppressWarnings("unused")
-    private NonReflectable(int i) {
+    private JpmsInaccessible(int i) {
         this.i = i;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof NonReflectable other && i == other.i;
+        return obj instanceof JpmsInaccessible other && i == other.i;
     }
 
     @Override
