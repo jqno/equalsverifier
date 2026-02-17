@@ -45,6 +45,8 @@ public void testCachedHashCode() {
 
 Note that you have to ignore the `cachedHashCode` field, since it doesn't participate in `equals` directly.
 
+For more information on how to use `#withFactory()`, read [the chapter on "final means final"](/equalsverifier/manual/final-means-final)
+
 EqualsVerifier has another, older way of dealing with cached hashCodes too, that hooks into its traditional way of instantiating objects by using reflection. It takes some work, and it only works with immutable classes, so we recommend the above method using `#withFactory()`. In fact, this method may be deprecated in the future. Still, if you want to use it, there are three things you have to do.
 
 1. First, your class must contain a `private int` field that contains the cached hashCode.
