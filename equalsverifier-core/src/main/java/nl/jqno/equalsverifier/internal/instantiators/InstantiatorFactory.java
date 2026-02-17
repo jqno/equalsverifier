@@ -81,11 +81,12 @@ public final class InstantiatorFactory {
     private static boolean cantReflectivelyModifyFinal() {
         @SuppressWarnings("unused")
         class C {
-            final Object o = new Object();
+            // Long, descriptive name because it will appear in the JDK's "final field mutation" warning
+            final Object equalsVerifierCheckIfReflectionIsAllowed = new Object();
         }
 
         try {
-            var f = C.class.getDeclaredField("o");
+            var f = C.class.getDeclaredField("equalsVerifierCheckIfReflectionIsAllowed");
             f.setAccessible(true);
             f.set(new C(), new Object());
             return false;
