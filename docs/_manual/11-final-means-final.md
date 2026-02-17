@@ -60,6 +60,42 @@ EqualsVerifier.forClass(Foo.class)
 
 In this case, EqualsVerifier will not use reflection on final fields, even if it could. Instead, it will use one of the strategies mentioned above, and if they fail, it will ask for a factory.
 
+## Generics
+
+Sometimes, `#withFactory()` gets confused with generics. Imagine you have a class like this:
+
+```java
+class Foo {
+    private final Bar bar;
+
+    private Foo(Bar bar) {
+        this.bar = bar;
+    }
+
+    private Foo(Baz baz) {
+        this(baz.toBar());
+    }
+
+    // equals and hashCode omitted
+}
+```
+
+You want to use the `values.get()` method to get a value:
+
+```java
+EqualsVerifier.forClass(Foo.class)
+    .withFactory(values -> new Foo(values.get("bar")))
+    .verify();
+```
+
+However, this won't work: Java will complain that "the constructor Foo(Bar) is ambiguous". After all, `Foo` has two constructors with the same number of parameters, and the expression `values.get("bar")` doesn't tell the compiler which one it should use. In cases like this, you have to help the compiler a little bit by specifying the generic you want:
+
+```java
+EqualsVerifier.forClass(Foo.class)
+    .withFactory(values -> new Foo(values.<Bar>get("bar")))
+    .verify();
+```
+
 ## Inheritance
 
 Unless `Foo` is final, EqualsVerifier also wants to run some tests on a subclass of `Foo`. Traditionally, it does that by generating a subclass using [Byte Buddy](https://bytebuddy.net/), a bytecode manipulation library. However, if EqualsVerifier needs a factory to instantiate `Foo`, it won't be able to generate a subclass that it can instantiate without the help of a factory, so in that case, you will need to provide a subclass and a factory as well:
