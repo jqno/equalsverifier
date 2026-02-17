@@ -47,3 +47,4 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Transient field foo should not be included in equals/hashCode contract](/equalsverifier/errormessages/transient-field)
 * [Unable to make field foo accessible: module bar does not "opens bar" to baz](/equalsverifier/errormessages/unable-to-make-field-accessible)
 * [Unsupported class file major version _x_](/equalsverifier/errormessages/unsupported-class-file-major-version)
+* [WARNING: Final field equalsVerifierCheckIfReflectionIsAllowed…](/equalsverifier/errormessages/warning-final-field-equalsverifiercheckifreflectionisallowed)
