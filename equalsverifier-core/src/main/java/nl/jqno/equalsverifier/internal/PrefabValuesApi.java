@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InaccessibleObjectException;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -36,7 +36,7 @@ public final class PrefabValuesApi {
                 T redCopy = InstantiatorFactory.of(probe, objenesis, false).copy(red);
                 prefabs.register(otherType, red, blue, redCopy);
             }
-            catch (InaccessibleObjectException ignored) {
+            catch (ModuleException ignored) {
                 prefabs.register(otherType, red, blue, red);
             }
             catch (InstantiatorException ignored) {
@@ -98,7 +98,7 @@ public final class PrefabValuesApi {
                 T redCopy = InstantiatorFactory.of(probe, objenesis, false).copy(red);
                 fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, redCopy));
             }
-            catch (InaccessibleObjectException ignored) {
+            catch (ModuleException ignored) {
                 fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, red));
             }
             catch (InstantiatorException ignored) {

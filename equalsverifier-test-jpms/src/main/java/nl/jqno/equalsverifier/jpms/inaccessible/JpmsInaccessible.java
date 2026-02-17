@@ -4,7 +4,7 @@ public final class JpmsInaccessible {
     private final int i;
 
     @SuppressWarnings("unused")
-    private JpmsInaccessible(int i) {
+    public JpmsInaccessible(int i) {
         this.i = i;
     }
 

@@ -52,8 +52,10 @@ public final class FieldProbe {
      * @throws ReflectionException If the operation fails.
      */
     public Object getValue(Object object) {
-        field.setAccessible(true);
-        return rethrow(() -> field.get(object));
+        return rethrow(() -> {
+            field.setAccessible(true);
+            return field.get(object);
+        });
     }
 
     /**
