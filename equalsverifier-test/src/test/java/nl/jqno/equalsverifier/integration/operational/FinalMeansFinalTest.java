@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -70,6 +71,35 @@ public class FinalMeansFinalTest {
                 .verify();
     }
 
+    @Test
+    void fail_whenSutHasPrecondition() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(Preconditioned.class)
+                    .withFactory(values -> new Preconditioned(values.getString("s")))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("s should start with precondition:");
+    }
+
+    @Test
+    void succeed_whenSutHasPrecondition_givenPrefabValues() {
+        EqualsVerifier
+                .forClass(Preconditioned.class)
+                .withFactory(values -> new Preconditioned(values.getString("s")))
+                .withPrefabValues(String.class, "precondition:red", "precondition:blue")
+                .verify();
+    }
+
+    @Test
+    void succeed_whenSutHasPrecondition_givenPrefabValuesForField() {
+        EqualsVerifier
+                .forClass(Preconditioned.class)
+                .withFactory(values -> new Preconditioned(values.getString("s")))
+                .withPrefabValuesForField("s", "precondition:red", "precondition:blue")
+                .verify();
+    }
+
     static class ConstructorDoesNotMatchFields {
         private final int i;
 
@@ -128,6 +158,27 @@ public class FinalMeansFinalTest {
         @Override
         public final int hashCode() {
             return Objects.hash(i);
+        }
+    }
+
+    static final class Preconditioned {
+        private final String s;
+
+        public Preconditioned(String s) {
+            if (s != null && !s.toLowerCase(Locale.getDefault()).startsWith("precondition:")) {
+                throw new IllegalArgumentException("s should start with precondition:");
+            }
+            this.s = s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Preconditioned other && Objects.equals(s, other.s);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(s);
         }
     }
 }
