@@ -10,8 +10,8 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -22,17 +22,14 @@ public class SubjectCreatorTest {
     private static final boolean NO_NEED_TO_FORCE = false;
     private static final String METHOD_NAME = "foo";
 
-    private final Configuration<NonConstructable> config =
-            buildConfiguration(NonConstructable.class, values -> new NonConstructable("" + values.getInt("i")));
     private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
     private SubjectCreator<NonConstructable> sut =
-            new SubjectCreator<>(config, valueProvider, objenesis, NO_NEED_TO_FORCE);
+            createSut(NonConstructable.class, values -> new NonConstructable("" + values.getInt("i")));
 
     @Test
     void constructSubjectCreator_withoutFactory() {
-        var c = buildConfiguration(NonConstructable.class, null);
-        assertThatThrownBy(() -> new SubjectCreator<>(c, valueProvider, objenesis, NO_NEED_TO_FORCE))
+        assertThatThrownBy(() -> createSut(NonConstructable.class, null))
                 .isInstanceOf(InstantiatorException.class)
                 .hasMessageContaining("Cannot instantiate NonConstructable.");
     }
@@ -60,9 +57,7 @@ public class SubjectCreatorTest {
 
     @Test
     void copyIntoSuperclass_withoutFactory() {
-        var subSut = new SubjectCreator<>(buildConfiguration(
-            NonConstructableSub.class,
-            values -> new NonConstructableSub("" + values.getInt("i"))), valueProvider, objenesis, NO_NEED_TO_FORCE);
+        var subSut = createSut(NonConstructableSub.class, values -> new NonConstructableSub("" + values.getInt("i")));
 
         var obj = new NonConstructableSub("42");
         assertThatThrownBy(() -> subSut.copyIntoSuperclass(obj, null))
@@ -108,6 +103,14 @@ public class SubjectCreatorTest {
         public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
             return Optional.empty();
         }
+    }
+
+    private <T> SubjectCreator<T> createSut(Class<T> type, InstanceFactory<T> factory) {
+        var config = buildConfiguration(type, factory);
+        var actualType =
+                SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
+        var instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), factory, objenesis, NO_NEED_TO_FORCE);
+        return new SubjectCreator<>(actualType, config, valueProvider, objenesis, instantiator, NO_NEED_TO_FORCE);
     }
 
     private <T> Configuration<T> buildConfiguration(Class<T> type, InstanceFactory<T> factory) {

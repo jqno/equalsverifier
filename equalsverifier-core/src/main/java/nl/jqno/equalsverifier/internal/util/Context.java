@@ -1,11 +1,13 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import nl.jqno.equalsverifier.Mode;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FieldCache;
-import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
-import nl.jqno.equalsverifier.internal.valueproviders.UserPrefabValueCaches;
-import nl.jqno.equalsverifier.internal.valueproviders.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
+import nl.jqno.equalsverifier.internal.instantiators.ProvidedFactoryInstantiator;
+import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.valueproviders.*;
 import org.objenesis.Objenesis;
 
 public final class Context<T> {
@@ -28,10 +30,29 @@ public final class Context<T> {
         var modes = configuration.modes();
 
         this.valueProvider = ValueProviderBuilder.build(modes, userPrefabs, fieldCache, objenesis);
-        this.subjectCreator = new SubjectCreator<>(configuration,
+        var actualType =
+                SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
+        var forceFinalMeansFinal = configuration.modes().contains(Mode.finalMeansFinal());
+        var instantiator = InstantiatorFactory
+                .of(ClassProbe.of(actualType), configuration.factory(), objenesis, forceFinalMeansFinal);
+        this.subjectCreator = new SubjectCreator<>(actualType,
+                configuration,
                 this.valueProvider,
                 objenesis,
-                configuration.modes().contains(Mode.finalMeansFinal()));
+                instantiator,
+                forceFinalMeansFinal);
+
+        if (configuration.factory() != null && instantiator instanceof ProvidedFactoryInstantiator<T> pfi) {
+            Set<String> fieldNames = new HashSet<>();
+            for (var fp : FieldIterable.ofIgnoringStatic(type)) {
+                fieldNames.add(fp.getName());
+            }
+
+            // TO DO once this works, move this to Configuration but call from Context.
+            subjectCreator.plain(); // trigger the factory
+            fieldNames.removeAll(pfi.getLastRequestedFields());
+            configuration.ignoredFields().addAll(fieldNames);
+        }
     }
 
     public Class<T> getType() {

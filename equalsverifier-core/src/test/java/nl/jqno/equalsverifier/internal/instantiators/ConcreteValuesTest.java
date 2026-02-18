@@ -27,6 +27,19 @@ class ConcreteValuesTest {
     }
 
     @Test
+    void getRequestedFieldNames() {
+        sut.put("a", "a");
+        sut.put("b", "b");
+        sut.put("c", "c");
+
+        sut.getString("a");
+        sut.getString("c");
+        var actual = sut.getRequestedFields();
+
+        assertThat(actual).containsExactly("a", "c");
+    }
+
+    @Test
     void getBoolean_returnsSameValue() {
         sut.put("bool", true);
         assertThat(sut.getBoolean("bool")).isTrue();

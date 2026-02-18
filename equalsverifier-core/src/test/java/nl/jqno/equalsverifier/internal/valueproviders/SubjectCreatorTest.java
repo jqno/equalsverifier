@@ -7,12 +7,12 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,10 +27,8 @@ class SubjectCreatorTest {
     private static final String S_RED = "abc";
     private static final String S_BLUE = "xyz";
 
-    private final Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
-    private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis, false);
+    private SubjectCreator<SomeClass> sut = createSut(SomeClass.class);
 
     private Field fieldX;
     private Field fieldI;
@@ -56,8 +54,7 @@ class SubjectCreatorTest {
 
     @Test
     void plain_abstract() {
-        var anotherConfig = ConfigurationHelper.emptyConfiguration(Abstract.class);
-        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis, false);
+        var anotherSut = createSut(Abstract.class);
         var anotherActual = anotherSut.plain();
 
         assertThat(anotherActual.s).isEqualTo(S_RED);
@@ -65,8 +62,7 @@ class SubjectCreatorTest {
 
     @Test
     void plain_sealedAbstract() {
-        var anotherConfig = ConfigurationHelper.emptyConfiguration(SealedAbstract.class);
-        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis, false);
+        var anotherSut = createSut(SealedAbstract.class);
         var anotherActual = anotherSut.plain();
 
         assertThat(anotherActual.s).isEqualTo(S_RED);
@@ -209,11 +205,11 @@ class SubjectCreatorTest {
 
     @Test
     void copyIntoSuperclassWithFactory_nonConstructable() {
-        var ncConfig = ConfigurationHelper
-                .emptyConfigurationWithFactory(
-                    NonConstructableSub.class,
-                    v -> new NonConstructableSub(v.getInt("i"), new Object()));
-        var ncSut = new SubjectCreator<>(ncConfig, valueProvider, objenesis, true);
+        var ncSut = createSut(
+            NonConstructableSub.class,
+            new SubjectCreatorTestValueProvider(),
+            v -> new NonConstructableSub(v.getInt("i"), new Object()),
+            true);
         NonConstructableSub original = new NonConstructableSub(42, new Object());
         assertThatThrownBy(() -> ncSut.copyIntoSuperclass(original, null)).isInstanceOf(InstantiatorException.class);
     }
@@ -245,11 +241,11 @@ class SubjectCreatorTest {
 
     @Test
     void copyIntoSubclassWithFactory_nonConstructable() {
-        var ncConfig = ConfigurationHelper
-                .emptyConfigurationWithFactory(
-                    NonConstructableSuper.class,
-                    v -> new NonConstructableSuper(v.getInt("i"), new Object()));
-        var ncSut = new SubjectCreator<>(ncConfig, valueProvider, objenesis, true);
+        var ncSut = createSut(
+            NonConstructableSuper.class,
+            new SubjectCreatorTestValueProvider(),
+            v -> new NonConstructableSuper(v.getInt("i"), new Object()),
+            true);
         NonConstructableSuper original = new NonConstructableSuper(42, new Object());
         assertThatThrownBy(() -> ncSut.copyIntoSubclass(original, NonConstructableSub.class, null, ""))
                 .isInstanceOf(InstantiatorException.class);
@@ -257,7 +253,7 @@ class SubjectCreatorTest {
 
     @Test
     void noValueFound() {
-        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis, false);
+        sut = createSut(SomeClass.class, new NoValueProvider(), null, false);
 
         assertThatThrownBy(() -> sut.plain())
                 .isInstanceOf(NoValueException.class)
@@ -266,6 +262,22 @@ class SubjectCreatorTest {
                 .contains("int");
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    private <T> SubjectCreator<T> createSut(Class<T> type) {
+        return createSut(type, new SubjectCreatorTestValueProvider(), null, false);
+    }
+
+    private <T> SubjectCreator<T> createSut(
+            Class<T> type,
+            ValueProvider valueProvider,
+            InstanceFactory<T> factory,
+            boolean forceFinalMeansFinal) {
+        var config = ConfigurationHelper.emptyConfigurationWithFactory(type, factory);
+        var actualType =
+                SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
+        var instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), factory, objenesis, forceFinalMeansFinal);
+        return new SubjectCreator<>(actualType, config, valueProvider, objenesis, instantiator, forceFinalMeansFinal);
     }
 
     static class SubjectCreatorTestValueProvider implements ValueProvider {

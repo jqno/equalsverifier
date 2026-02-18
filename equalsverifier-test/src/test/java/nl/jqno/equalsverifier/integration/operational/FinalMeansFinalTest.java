@@ -72,6 +72,14 @@ public class FinalMeansFinalTest {
     }
 
     @Test
+    void succeed_whenUnusedFieldIsImplicitlyIgnoredByWithFactory() {
+        EqualsVerifier
+                .forClass(OneUnusedField.class)
+                .withFactory(values -> new OneUnusedField(values.getInt("i")))
+                .verify();
+    }
+
+    @Test
     void fail_whenSutHasPrecondition() {
         assertThatThrownBy(
             () -> EqualsVerifier
@@ -158,6 +166,27 @@ public class FinalMeansFinalTest {
         @Override
         public final int hashCode() {
             return Objects.hash(i);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static final class OneUnusedField {
+        private final int i;
+        private final Object unused;
+
+        public OneUnusedField(int i) {
+            this.i = i;
+            this.unused = new Object();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof OneUnusedField other && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
         }
     }
 

@@ -32,26 +32,29 @@ public class SubjectCreator<T> {
     /**
      * Constructor.
      *
-     * @param config               A configuration object.
+     * @param actualType           The resolved, instantiable type that should be instantiated. May not be abstract.
+     * @param config               A configuration object for the nominal type that should be instantiated. Can be
+     *                                 abstract.
      * @param valueProvider        To provide values for the fields of the subject.
      * @param objenesis            Needed by InstanceCreator to instantiate non-record classes.
+     * @param instantiator         An instantiator that can instantiate the `actualType`.
      * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
      */
     public SubjectCreator(
+            Class<T> actualType,
             Configuration<T> config,
             ValueProvider valueProvider,
             Objenesis objenesis,
+            Instantiator<? extends T> instantiator,
             boolean forceFinalMeansFinal) {
         this.typeTag = config.typeTag();
         this.type = typeTag.getType();
+        this.actualType = actualType;
         this.config = config;
         this.valueProvider = valueProvider;
         this.objenesis = objenesis;
+        this.instantiator = instantiator;
         this.forceFinalMeansFinal = forceFinalMeansFinal;
-        this.actualType =
-                SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instantiator =
-                InstantiatorFactory.of(ClassProbe.of(actualType), config.factory(), objenesis, forceFinalMeansFinal);
     }
 
     /**

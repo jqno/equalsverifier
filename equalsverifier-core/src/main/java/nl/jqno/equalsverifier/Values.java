@@ -1,9 +1,19 @@
 package nl.jqno.equalsverifier;
 
+import java.util.Set;
+
 /**
  * Simple container for primitive and object values used to define a provided instantiator.
  */
 public interface Values {
+
+    /**
+     * Returns the field names that were requested so far.
+     *
+     * @return The field names thar were requested so far.
+     */
+    Set<String> getRequestedFields();
+
     /**
      * Returns the {@code boolean} value stored under the given field name.
      *
