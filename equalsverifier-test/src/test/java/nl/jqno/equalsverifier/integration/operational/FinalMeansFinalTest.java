@@ -100,6 +100,17 @@ public class FinalMeansFinalTest {
                 .verify();
     }
 
+    @Test
+    void fail_whenFactoryGetsNonExistingField() {
+        assertThatThrownBy(
+            () -> EqualsVerifier
+                    .forClass(FinalPoint.class)
+                    .withFactory(values -> new FinalPoint(values.getInt("doesnotexist"), values.getInt("y")))
+                    .verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Attempted to get non-existing field doesnotexist.");
+    }
+
     static class ConstructorDoesNotMatchFields {
         private final int i;
 

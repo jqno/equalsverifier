@@ -62,7 +62,8 @@ public class InstantiatorFactoryTest {
     }
 
     private <T> Instantiator<T> sut(Class<T> type, InstanceFactory<T> factory, boolean finalMeansFinal) {
-        return InstantiatorFactory.of(type == null ? null : ClassProbe.of(type), factory, objenesis, finalMeansFinal);
+        return InstantiatorFactory
+                .of(type == null ? null : ClassProbe.of(type), factory, objenesis, finalMeansFinal, true);
     }
 
     record SomeRecord(int i) {}

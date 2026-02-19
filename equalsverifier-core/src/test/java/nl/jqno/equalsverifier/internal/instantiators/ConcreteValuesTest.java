@@ -1,16 +1,19 @@
 package nl.jqno.equalsverifier.internal.instantiators;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier_testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 class ConcreteValuesTest {
 
-    private final ConcreteValues sut = new ConcreteValues();
+    private final ConcreteValues sut = ConcreteValues.of(Map.of(), false);
+    private final ConcreteValues throwingSut = ConcreteValues.of(Map.of(), true);
 
     @Test
     void of() throws Exception {
@@ -21,7 +24,7 @@ class ConcreteValuesTest {
         }
 
         var map = Map.<Field, Object>of(C.class.getDeclaredField("s"), "string", C.class.getDeclaredField("i"), 42);
-        var actual = ConcreteValues.of(map);
+        var actual = ConcreteValues.of(map, false);
         assertThat(actual.getString("s")).isEqualTo("string");
         assertThat(actual.getInt("i")).isEqualTo(42);
     }
@@ -38,6 +41,13 @@ class ConcreteValuesTest {
     }
 
     @Test
+    void getBoolean_throws() {
+        assertThatThrownBy(() -> throwingSut.getBoolean("bool"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field bool.");
+    }
+
+    @Test
     void getByte_returnsSameValue() {
         sut.put("byte", (byte) 9);
         assertThat(sut.getByte("byte")).isEqualTo((byte) 9);
@@ -46,6 +56,13 @@ class ConcreteValuesTest {
     @Test
     void getByte_returnsDefault() {
         assertThat(sut.getByte("byte")).isEqualTo((byte) 0);
+    }
+
+    @Test
+    void getByte_throws() {
+        assertThatThrownBy(() -> throwingSut.getByte("byte"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field byte.");
     }
 
     @Test
@@ -60,6 +77,13 @@ class ConcreteValuesTest {
     }
 
     @Test
+    void getChar_throws() {
+        assertThatThrownBy(() -> throwingSut.getChar("char"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field char.");
+    }
+
+    @Test
     void getDouble_returnsSameValue() {
         sut.put("double", 2.718);
         assertThat(sut.getDouble("double")).isEqualTo(2.718);
@@ -68,6 +92,13 @@ class ConcreteValuesTest {
     @Test
     void getDouble_returnsDefault() {
         assertThat(sut.getDouble("double")).isEqualTo(0.0);
+    }
+
+    @Test
+    void getDouble_throws() {
+        assertThatThrownBy(() -> throwingSut.getDouble("double"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field double.");
     }
 
     @Test
@@ -82,6 +113,13 @@ class ConcreteValuesTest {
     }
 
     @Test
+    void getFloat_throws() {
+        assertThatThrownBy(() -> throwingSut.getFloat("float"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field float.");
+    }
+
+    @Test
     void getInt_returnsSameValue() {
         sut.put("int", 42);
         assertThat(sut.getInt("int")).isEqualTo(42);
@@ -90,6 +128,13 @@ class ConcreteValuesTest {
     @Test
     void getInt_returnsDefault() {
         assertThat(sut.getInt("int")).isEqualTo(0);
+    }
+
+    @Test
+    void getInt_throws() {
+        assertThatThrownBy(() -> throwingSut.getInt("int"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field int.");
     }
 
     @Test
@@ -104,6 +149,13 @@ class ConcreteValuesTest {
     }
 
     @Test
+    void getLong_throws() {
+        assertThatThrownBy(() -> throwingSut.getLong("long"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field long.");
+    }
+
+    @Test
     void getShort_returnsSameValue() {
         sut.put("short", (short) 7);
         assertThat(sut.getShort("short")).isEqualTo((short) 7);
@@ -112,6 +164,13 @@ class ConcreteValuesTest {
     @Test
     void getShort_returnsDefault() {
         assertThat(sut.getShort("short")).isEqualTo((short) 0);
+    }
+
+    @Test
+    void getShort_throws() {
+        assertThatThrownBy(() -> throwingSut.getShort("short"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field short.");
     }
 
     @Test
@@ -126,6 +185,13 @@ class ConcreteValuesTest {
     }
 
     @Test
+    void getString_throws() {
+        assertThatThrownBy(() -> throwingSut.getString("string"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field string.");
+    }
+
+    @Test
     void getGeneric_returnsCorrectType() {
         Point p = new Point(42, 1337);
         sut.put("p", p);
@@ -133,7 +199,14 @@ class ConcreteValuesTest {
     }
 
     @Test
-    void getObject_returnsDefault() {
+    void getGeneric_returnsDefault() {
         assertThat(sut.<Point>get("p")).isNull();
+    }
+
+    @Test
+    void getGeneric_throws() {
+        assertThatThrownBy(() -> throwingSut.<Point>get("p"))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Attempted to get non-existing field p.");
     }
 }

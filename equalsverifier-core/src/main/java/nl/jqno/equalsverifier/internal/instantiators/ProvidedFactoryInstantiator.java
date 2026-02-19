@@ -12,20 +12,23 @@ import nl.jqno.equalsverifier.internal.util.Context;
 public final class ProvidedFactoryInstantiator<T> implements Instantiator<T> {
 
     private final InstanceFactory<? extends T> instanceFactory;
+    private final boolean throwing;
 
     /**
      * Package private constructor. Use {@link InstantiatorFactory#of(Context)} instead.
      *
      * @param instanceFactory The factory to use.
+     * @param throwing        Whether or not to throw an exception when the factory asks for an unknown field.
      */
-    ProvidedFactoryInstantiator(InstanceFactory<? extends T> instanceFactory) {
+    ProvidedFactoryInstantiator(InstanceFactory<? extends T> instanceFactory, boolean throwing) {
         this.instanceFactory = instanceFactory;
+        this.throwing = throwing;
     }
 
     /** {@inheritDoc} */
     @Override
     public T instantiate(Map<Field, Object> values) {
-        var v = ConcreteValues.of(values);
+        var v = ConcreteValues.of(values, throwing);
         return instanceFactory.create(v);
     }
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.jqno.equalsverifier.Values;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 /**
@@ -13,19 +15,25 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  */
 public final class ConcreteValues implements Values {
     private final Map<String, Object> values = new HashMap<>();
+    private final boolean throwing;
 
     /**
      * Creates an instance of {@link ConcreteValues} from a Map.
      *
-     * @param values The values to add to the new instance.
+     * @param values   The values to add to the new instance.
+     * @param throwing Whether or not to throw when an unknown value is requested.
      * @return An instance of {@link ConcreteValues} with the given values.
      */
-    public static ConcreteValues of(Map<Field, Object> values) {
-        var result = new ConcreteValues();
+    public static ConcreteValues of(Map<Field, Object> values, boolean throwing) {
+        var result = new ConcreteValues(throwing);
         for (var f : values.keySet()) {
             result.values.put(f.getName(), values.get(f));
         }
         return result;
+    }
+
+    private ConcreteValues(boolean throwing) {
+        this.throwing = throwing;
     }
 
     /**
@@ -43,7 +51,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public boolean getBoolean(String fieldName) {
-        return safe(boolean.class, values.get(fieldName));
+        return safe(boolean.class, fieldName);
     }
 
     /**
@@ -51,7 +59,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public byte getByte(String fieldName) {
-        return safe(byte.class, values.get(fieldName));
+        return safe(byte.class, fieldName);
     }
 
     /**
@@ -59,7 +67,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public char getChar(String fieldName) {
-        return safe(char.class, values.get(fieldName));
+        return safe(char.class, fieldName);
     }
 
     /**
@@ -67,7 +75,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public double getDouble(String fieldName) {
-        return safe(double.class, values.get(fieldName));
+        return safe(double.class, fieldName);
     }
 
     /**
@@ -75,7 +83,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public float getFloat(String fieldName) {
-        return safe(float.class, values.get(fieldName));
+        return safe(float.class, fieldName);
     }
 
     /**
@@ -83,7 +91,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public int getInt(String fieldName) {
-        return safe(int.class, values.get(fieldName));
+        return safe(int.class, fieldName);
     }
 
     /**
@@ -91,7 +99,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public long getLong(String fieldName) {
-        return safe(long.class, values.get(fieldName));
+        return safe(long.class, fieldName);
     }
 
     /**
@@ -99,7 +107,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public short getShort(String fieldName) {
-        return safe(short.class, values.get(fieldName));
+        return safe(short.class, fieldName);
     }
 
     /**
@@ -107,7 +115,7 @@ public final class ConcreteValues implements Values {
      */
     @Override
     public String getString(String fieldName) {
-        return safe(String.class, values.get(fieldName));
+        return safe(String.class, fieldName);
     }
 
     /**
@@ -116,11 +124,15 @@ public final class ConcreteValues implements Values {
     @Override
     @SuppressWarnings({ "unchecked", "TypeParameterUnusedInFormals" })
     public <T> T get(String fieldName) {
+        if (!values.containsKey(fieldName) && throwing) {
+            throw new ReflectionException(Formatter.of("Attempted to get non-existing field %%.", fieldName).format());
+        }
         return (T) values.get(fieldName);
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T safe(Class<T> type, Object value) {
+    private <T> T safe(Class<T> type, String fieldName) {
+        var value = get(fieldName);
         return value != null ? (T) value : (T) PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(type);
     }
 

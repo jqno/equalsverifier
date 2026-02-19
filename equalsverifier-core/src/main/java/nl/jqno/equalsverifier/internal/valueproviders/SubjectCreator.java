@@ -50,8 +50,8 @@ public class SubjectCreator<T> {
         this.forceFinalMeansFinal = forceFinalMeansFinal;
         this.actualType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instantiator =
-                InstantiatorFactory.of(ClassProbe.of(actualType), config.factory(), objenesis, forceFinalMeansFinal);
+        this.instantiator = InstantiatorFactory
+                .of(ClassProbe.of(actualType), config.factory(), objenesis, forceFinalMeansFinal, true);
     }
 
     /**
@@ -193,7 +193,7 @@ public class SubjectCreator<T> {
     public Object copyIntoSuperclass(T original, InstanceFactory<?> superclassFactory) {
         if (superclassFactory != null) {
             Instantiator<?> superCreator =
-                    InstantiatorFactory.of(null, superclassFactory, objenesis, forceFinalMeansFinal);
+                    InstantiatorFactory.of(null, superclassFactory, objenesis, forceFinalMeansFinal, true);
             return superCreator.copy(original);
         }
         else {
@@ -233,7 +233,8 @@ public class SubjectCreator<T> {
             InstanceFactory<S> subclassFactory,
             String methodName) {
         if (subclassFactory != null) {
-            Instantiator<S> subCreator = InstantiatorFactory.of(null, subclassFactory, objenesis, forceFinalMeansFinal);
+            Instantiator<S> subCreator =
+                    InstantiatorFactory.of(null, subclassFactory, objenesis, forceFinalMeansFinal, false);
             return subCreator.copy(original);
         }
         else {
@@ -241,7 +242,7 @@ public class SubjectCreator<T> {
                     SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
             try {
                 Instantiator<S> subCreator = InstantiatorFactory
-                        .of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal);
+                        .of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal, false);
                 return subCreator.copy(original);
             }
             catch (InstantiatorException e) {

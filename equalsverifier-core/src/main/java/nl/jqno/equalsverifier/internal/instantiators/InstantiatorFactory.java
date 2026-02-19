@@ -31,7 +31,7 @@ public final class InstantiatorFactory {
      * @return an {@code InstanceCreator} for the given class.
      */
     public static <T> Instantiator<T> of(ClassProbe<T> probe, Objenesis objenesis, boolean forceFinalMeansFinal) {
-        return of(probe, null, objenesis, forceFinalMeansFinal);
+        return of(probe, null, objenesis, forceFinalMeansFinal, true);
     }
 
     /**
@@ -45,15 +45,19 @@ public final class InstantiatorFactory {
      * @param factory              A factory that can create instances of {@code T}. Can be null if a probe is provided.
      * @param objenesis            To instantiate non-record classes.
      * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
+     * @param throwOnUnknown       Throw when `factory` asks for a field that doesn't exist in the type. This is useful
+     *                                 for copying into subclasses, where the subclass may hold fields unknown in the
+     *                                 super.
      * @return an {@code InstanceCreator} for the given class.
      */
     public static <T> Instantiator<T> of(
             ClassProbe<T> probe,
             InstanceFactory<T> factory,
             Objenesis objenesis,
-            boolean forceFinalMeansFinal) {
+            boolean forceFinalMeansFinal,
+            boolean throwOnUnknown) {
         if (factory != null) {
-            return new ProvidedFactoryInstantiator<>(factory);
+            return new ProvidedFactoryInstantiator<>(factory, throwOnUnknown);
         }
 
         if (probe == null) {
