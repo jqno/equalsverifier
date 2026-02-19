@@ -6,7 +6,8 @@ By default, EqualsVerifier assumes that all (non-static) fields of your class pa
 
 This is great, because it ensures that if you add a field, you can't forget to update your `equals` and `hashCode` methods. If you do, EqualsVerifier will fail the test.
 
-### Ignoring fields
+## Ignoring fields
+
 Sometimes you don't want this, though. In that case, you can configure EqualsVerifier to ignore certain fields, like this:
 
 {% highlight java %}
@@ -21,8 +22,8 @@ If you do this, EqualsVerifier assumes that the fields `bar` and `baz` don't par
 
 Note that this doesn't mean that EqualsVerifier doesn't need values for these fields: it does! This is counter-intuitive, but EqualsVerifier still wants to check that these fields can't cause NullPointerExceptions, and it wants to check that the field indeed doesn't participate in `equals`. For that, it needs values. Like with other fields, it will try to create them, but if it can't, EqualsVerifier _will_ ask for prefab values for these fields.
 
+## Including fields
 
-### Including fields
 If your class has a lot of fields, but it determines equality based on only a few of them, you can also turn it around and specify precisely the fields you want:
 
 {% highlight java %}
@@ -35,14 +36,14 @@ Now only `bar` and `baz` can participate in `equals`. EqualsVerifier fails the t
 
 Like `withIgnoredFields`, `withOnlyTheseFields` accepts a varargs argument, so you can specify as few or as many fields as you need. Again, EqualsVerifier throws an exception if any of the fields doesn't exist.
 
+## Transient fields
 
-### Transient fields
 Java has the `transient` keyword to exclude fields from serialization, and [JPA](/equalsverifier/manual/jpa-entities) has the `@Transient` annotation to exclude fields from being persisted. In both cases, these fields should not participate in `equals`. EqualsVerifier acknowledges this, and will ignore these fields. This means you don't have to call `withIgnoredFields` for these fields.
 
 If these fields do participate in `equals`, EqualsVerifier fails the test. This behavior can be avoided by suppressing `Warning.TRANSIENT_FIELDS`.
 
+## Non-final fields
 
-### Non-final fields
 If the state of your class is defined by final fields, and you also have one or more non-final fields in your class (for instance because you need to cache something), you can tell EqualsVerifier to ignore the non-final fields:
 
 {% highlight java %}
@@ -51,8 +52,8 @@ EqualsVerifier.forClass(Foo.class)
     .verify();
 {% endhighlight %}
 
+## Disable it all
 
-### Disable it all
 If you don't care whether all fields are used in `equals` or not, you can also disable the checks altogether:
 
 {% highlight java %}
@@ -60,4 +61,3 @@ EqualsVerifier.forClass(Foo.class)
     .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
     .verify();
 {% endhighlight %}
-

@@ -20,4 +20,3 @@ For these situations, there are several types of warnings that you can suppress:
 * `Warning.BIGDECIMAL_EQUALITY`: disables the check that equality of `BigDecimal` fields is implemented using `compareTo` rather than `equals`. Read more about this topic on the [page about BigDecimal equality](/equalsverifier/errormessages/bigdecimal-equality).
 
 Of course, once you have sufficient test coverage, you _will_ come back and fix these issues, right? 😉
-

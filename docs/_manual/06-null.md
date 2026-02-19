@@ -12,14 +12,16 @@ Adding a null check is easy: instead of `x.equals(other.x)`, you write `Objects.
 
 However, you might not want to add a null check, for example because your class is immutable and you check for null in the constructor. There are several things you can do.
 
-### Annotations
+## Annotations
+
 You can mark your fields with a `@Nonnull` annotation. EqualsVerifier recognizes annotations named `@Nonnull`, `@NonNull` and `@NotNull`. This should cover the annotations from all the popular annotations providers, like FindBugs and Eclipse.
 
 In addition, EqualsVerifier supports FindBugs's deprecated `@DefaultAnnotation` and [JSR305's default annotations](http://stackoverflow.com/questions/11776302/how-to-indicate-that-member-fields-are-nonnull-by-default). In these two cases, EqualsVerifier also supports the `@CheckForNull` annotation to reverse the process for a single field.
 
 If you already use these annotations for static analysis purposes, this is obviously the preferred way to deal with nulls in EqualsVerifier as well.
 
-### Configuring EqualsVerifier
+## Configuring EqualsVerifier
+
 If annotations are not an option, you can configure EqualsVerifier to skip the null checks. There are two ways to do that. First, you can use `withNonnullFields` on individual fields:
 
 {% highlight java %}

@@ -43,4 +43,3 @@ As you can see, you have to give EqualsVerifier some example objects for your cl
 Second, you should give an example that's unequal to the objects you gave before. In this case, we give <sup>1</sup>/<sub>3</sub>. You can give more than one example, if you need to. EqualsVerifier does the obvious sanity checks: no duplications are allowed.
 
 That's all there is to it!
-

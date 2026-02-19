@@ -59,8 +59,8 @@ public void testCachedHashCode() {
 
 Note that EqualsVerifier will fail the test if `cachedHashCode` or `calcHashCode` can't be found in the class.
 
+## When a class is hard to construct
 
-### When a class is hard to construct
 Sometimes it's hard to construct a one-off instance of a class to serve as an example (see the third point, above). The class may have a lot of dependencies, or might be part of an elaborate inhertiance hierarchy. If this is the case, and you have other ways to test that the hashCode is indeed initialized when the object is constructed, there is a way to bypass the example:
 
 {% highlight java %}
