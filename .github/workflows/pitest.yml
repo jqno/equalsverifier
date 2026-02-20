@@ -16,7 +16,6 @@ jobs:
   pitest-store-feedback:
     name: Gather PITest feedback
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout project
         uses: actions/checkout@v6
@@ -30,10 +29,10 @@ jobs:
           key: ${{ runner.os }}-mvn-pitest-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-mvn-pitest
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: oracle-actions/setup-java@v1
         with:
-          distribution: temurin
-          java-version: 25
+            website: jdk.java.net
+            release: 26
       - name: run pitest
         # pitest has been bound to a profile called pitest for normal running
         # we add config to analyse only changes made within a PR and treat surviving mutants as check errors
