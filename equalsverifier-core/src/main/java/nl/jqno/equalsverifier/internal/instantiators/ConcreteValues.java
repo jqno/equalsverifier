@@ -135,9 +135,4 @@ public final class ConcreteValues implements Values {
         var value = get(fieldName);
         return value != null ? (T) value : (T) PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(type);
     }
-
-    @Override
-    public String toString() {
-        return "ConcreteValues:[" + values + "]";
-    }
 }

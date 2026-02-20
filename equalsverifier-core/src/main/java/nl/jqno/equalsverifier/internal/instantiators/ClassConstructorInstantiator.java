@@ -39,7 +39,7 @@ public class ClassConstructorInstantiator<T> implements Instantiator<T> {
             params.add(value);
         }
         try {
-            constructor.setAccessible(true);
+            constructor.setAccessible(true); // Not strictly needed: already made accessible in InstantiatorFactory. But we'll leave it just in case.
             return constructor.newInstance(params.toArray());
         }
         catch (ReflectiveOperationException e) {

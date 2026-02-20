@@ -78,6 +78,19 @@ class ConfiguredEqualsVerifierMultipleTest {
     }
 
     @Test
+    void succeed_whenTypeIsRecursive_givenThreePrefabValuesArePreconfigured() {
+        EqualsVerifier
+                .configure()
+                .withPrefabValues(
+                    RecursiveType.class,
+                    new RecursiveType(null),
+                    new RecursiveType(new RecursiveType(null)),
+                    new RecursiveType(null))
+                .forClasses(RecursiveTypeContainer.class, A.class)
+                .verify();
+    }
+
+    @Test
     void sanity_fail_whenSingleGenericTypeIsRecursive() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClasses(SingleGenericContainerContainer.class, A.class).verify())
@@ -147,6 +160,27 @@ class ConfiguredEqualsVerifierMultipleTest {
                     RecursiveType.class,
                     new RecursiveType(null),
                     new RecursiveType(new RecursiveType(null)))
+                .verify();
+
+        // PrefabValues are not added to configuration, so should fail
+        ExpectedException
+                .when(() -> ev.forClasses(RecursiveTypeContainer.class, A.class).verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
+    }
+
+    @Test
+    void individuallyAddedThreePrefabValuesAreNotAddedGlobally() {
+        ConfiguredEqualsVerifier ev = EqualsVerifier.configure();
+
+        // should succeed
+        ev
+                .forClasses(RecursiveTypeContainer.class, A.class)
+                .withPrefabValues(
+                    RecursiveType.class,
+                    new RecursiveType(null),
+                    new RecursiveType(new RecursiveType(null)),
+                    new RecursiveType(null))
                 .verify();
 
         // PrefabValues are not added to configuration, so should fail
