@@ -252,6 +252,17 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void throw_whenTheThreePrefabValuesAreTheSame() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, pRed, pRed))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
+    }
+
+    @Test
     void throw_whenThePrefabValuesAreEqual() {
         FinalPoint red1 = new FinalPoint(3, 4);
         FinalPoint red2 = new FinalPoint(3, 4);
@@ -261,6 +272,20 @@ class WithPrefabValuesForFieldTest {
                     () -> EqualsVerifier
                             .forClass(SinglePrecondition.class)
                             .withPrefabValuesForField("point", red1, red2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
+    }
+
+    @Test
+    void throw_whenTheThreePrefabValuesAreEqual() {
+        FinalPoint red1 = new FinalPoint(3, 4);
+        FinalPoint red2 = new FinalPoint(3, 4);
+
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", red1, red2, red1))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
     }
