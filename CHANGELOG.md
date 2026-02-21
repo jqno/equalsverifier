@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4] - 2026-02-21
+
 ### Added
 
 - Proper support for [JEP 500: "Prepare to Make Final Mean Final"](https://openjdk.org/jeps/500), where the JDK emits a warning (or, if so configured, throws an exception) when final fields are mutated.
@@ -1554,7 +1556,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4...HEAD
+[4.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3.1...equalsverifier-4.4
 [4.3.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3...equalsverifier-4.3.1
 [4.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.6...equalsverifier-4.3
 [4.2.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.2.5...equalsverifier-4.2.6
