@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Proper support for [JEP 500: "Prepare to Make Final Mean Final"](https://openjdk.org/jeps/500), where the JDK emits a warning (or, if so configured, throws an exception) when final fields are mutated.
+  - `#withFactory()` method to provide instances to EqualsVerifier so it doesn't have to mutate final fields;
+  - Overloads for `#withRedefinedSuperclass()` and `#withRedefinedSubclass()` to do the same;
+  - Overloads for `#withPrefabValues()` and `#withPrefabValuesForField()` where you explicitly provide a copy of the "red" value, because EqualsVerifier will not be able to make a copy of that value without using final field mutation.
+  - `.set(Mode.finalMeansFinal()` so EqualsVerifier refuses to mutate final fields even when still possible: this is useful when migrating to a newer JDK where this is an issue.
+  - Documentation: see [the chapter on this subject in the manual](https://jqno.nl/equalsverifier/manual/final-means-final/).
 - Prefab values for `java.lang.Number`.
 
 ### Changed
@@ -222,7 +228,7 @@ If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](ht
 ### Fixed
 
 - Exception when superclass of class under test has field with the same name but different type. ([Issue 1056](https://github.com/jqno/equalsverifier/issues/1056))
-- Bug in `withPrefabValueForField` where fields in the superclass of the class under test is ignored.
+- Bug in `withPrefabValuesForField` where fields in the superclass of the class under test is ignored.
 
 ## [3.19.1] - 2025-02-17
 
@@ -232,7 +238,7 @@ If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](ht
 
 ### Fixed
 
-- Bug in `withPrefabValueForField` where in some cases the prefab value is not used.
+- Bug in `withPrefabValuesForField` where in some cases the prefab value is not used.
 
 <a name="ScanOption"/>
 
@@ -321,7 +327,7 @@ If you're upgrading from EqualsVerifier 3.x, please see the [migration guide](ht
 
 ### Added
 
-- #withPrefabValuesForField method, where you can assign prefab values to a field instead of to a class. The values will then be used for that field only. ([Issue 747](https://github.com/jqno/equalsverifier/issues/747))
+- `#withPrefabValuesForField` method, where you can assign prefab values to a field instead of to a class. The values will then be used for that field only. ([Issue 747](https://github.com/jqno/equalsverifier/issues/747))
 
 ### Changed
 
