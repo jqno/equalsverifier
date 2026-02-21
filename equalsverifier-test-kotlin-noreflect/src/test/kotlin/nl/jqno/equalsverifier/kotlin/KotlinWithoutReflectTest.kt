@@ -152,10 +152,11 @@ class KotlinWithoutReflectTest {
 
   @Test
   fun `Gives clear error message with lazy delegate withPrefabValuesForField (overload) by bytecode name`() {
+    val red = lazy { 42 }
     ExpectedException
       .`when` {
         EqualsVerifier.forClass(LazyDelegation::class.java)
-          .withPrefabValuesForField("foo\$delegate", lazy { 42 }, lazy { 1337 }, lazy { 42 })
+          .withPrefabValuesForField("foo\$delegate", red, lazy { 1337 }, red)
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)

@@ -122,8 +122,8 @@ public final class PrefabValuesApi {
             T redCopy) {
         Validations.validateRedAndBluePrefabValues(fieldName, red, blue);
         Field f = Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
-        Validations.validateRedAndRedCopyPrefabValues((Class<T>) f.getType(), red, redCopy);
         Validations.validateCanProbeKotlinLazyDelegate(type, f);
+        Validations.validateRedAndRedCopyPrefabValues((Class<T>) f.getType(), red, redCopy);
         TypeTag tag = TypeTag.of(f, new TypeTag(type));
 
         fieldCache.put(f.getName(), tag, new Tuple<>(red, blue, redCopy));
