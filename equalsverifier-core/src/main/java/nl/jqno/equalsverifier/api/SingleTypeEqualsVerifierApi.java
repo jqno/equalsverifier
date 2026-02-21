@@ -31,11 +31,15 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Class<T> type;
     private final Set<String> actualFields;
 
+    private InstanceFactory<T> instanceFactory = null;
+    private InstanceFactory<? extends T> subclassInstanceFactory = null;
     private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private Set<Mode> modesToSet = new HashSet<>();
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
+    private InstanceFactory<?> redefinedSuperclassInstanceFactory = null;
     private Class<? extends T> redefinedSubclass = null;
+    private InstanceFactory<? extends T> redefinedSubclassInstanceFactory = null;
     private UserPrefabValueCaches userPrefabs = new UserPrefabValueCaches();
     private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
@@ -110,6 +114,43 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         this.unequalExamples = unequalExamples;
     }
 
+    /**
+     * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help.
+     *
+     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * @param factory A factory that can instantiate the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> withFactory(InstanceFactory<T> factory) {
+        this.instanceFactory = factory;
+        return this;
+    }
+
+    /**
+     * Provides a factory for the class under test, in case EqualsVerifier is unable to instantiate it without help, as
+     * well as a factory for a subclass of the class under test. This is needed when the class under test is non-final,
+     * so EqualsVerifier can check the interaction with subclasses.
+     *
+     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * @param factory         A factory that can instantiate the class under test.
+     * @param subclassFactory A factory that can instantiate a subclass of the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    public SingleTypeEqualsVerifierApi<T> withFactory(
+            InstanceFactory<T> factory,
+            InstanceFactory<? extends T> subclassFactory) {
+        this.instanceFactory = factory;
+        this.subclassInstanceFactory = subclassFactory;
+        return this;
+    }
+
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
@@ -140,6 +181,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     @CheckReturnValue
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue, S redCopy) {
+        PrefabValuesApi.addPrefabValues(userPrefabs, otherType, red, blue, redCopy);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withResettablePrefabValues(
             Class<S> otherType,
             Supplier<S> red,
@@ -151,6 +200,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /**
      * Adds prefabricated values for instance fields with a given name (and only the fields with the given name) that
      * EqualsVerifier cannot instantiate by itself.
+     *
+     * This overload will attempt to copy {@code red}. If that fails, use the other overload.
      *
      * @param <S>       The class of the prefabricated values.
      * @param fieldName The name of the field that the prefabricated values are linked to.
@@ -170,6 +221,32 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
                 : fieldName;
         Validations.validateFieldNamesExist(type, List.of(translated), actualFields);
         PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, translated, red, blue);
+        return withNonnullFields(translated);
+    }
+
+    /**
+     * Adds prefabricated values for instance fields with a given name (and only the fields with the given name) that
+     * EqualsVerifier cannot instantiate by itself.
+     *
+     * @param <S>       The class of the prefabricated values.
+     * @param fieldName The name of the field that the prefabricated values are linked to.
+     * @param red       An instance of {@code S}.
+     * @param blue      Another instance of {@code S}, not equal to {@code red}.
+     * @param redCopy   A copy of {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException     If {@code red} or {@code blue} is null, or if the named field does not exist in
+     *                                      the class.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue, S redCopy) {
+        String translated = KotlinScreen.isKotlin(type) && KotlinScreen.canProbe()
+                ? KotlinProbe.translateKotlinToBytecodeFieldName(type, fieldName)
+                : fieldName;
+        Validations.validateFieldNamesExist(type, List.of(translated), actualFields);
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, type, translated, red, blue, redCopy);
         return withNonnullFields(translated);
     }
 
@@ -315,6 +392,29 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     /**
+     * Signals that T is part of an inheritance hierarchy where {@code equals} is overridden. Call this method if T has
+     * overridden {@code equals} and {@code hashCode}, and one or more of T's superclasses have as well.
+     *
+     * <p>
+     * Provides a factory for the superclass, in case EqualsVerifier is unable to instantiate it without help. This
+     * becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * <p>
+     * T itself does not necessarily have to have subclasses that redefine {@code equals} and {@code hashCode}.
+     *
+     * @param superclassFactory A factory that can instantiate the direct superclass of the class under test.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass(InstanceFactory<?> superclassFactory) {
+        this.hasRedefinedSuperclass = true;
+        this.redefinedSuperclassInstanceFactory = superclassFactory;
+        return this;
+    }
+
+    /**
      * Supplies a reference to a subclass of T in which {@code equals} is overridden. Calling this method is mandatory
      * if {@code equals} is not final and a strong verification is performed.
      *
@@ -331,6 +431,31 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
         this.redefinedSubclass = subclass;
+        return this;
+    }
+
+    /**
+     * Supplies a factory for a subclass of T in which {@code equals} is overridden. Calling this method is mandatory if
+     * {@code equals} is not final and a strong verification is performed.
+     *
+     * <p>
+     * This becomes useful in Java 26 where JEP 500 ("final means final") is active.
+     *
+     * <p>
+     * Note that, for each subclass that overrides {@code equals}, {@link EqualsVerifier} should be used as well to
+     * verify its adherence to the contracts.
+     *
+     * @param subclassFactory A factory that can instantiate a subclass of T for which no instance can be equal to any
+     *                            instance of T.
+     *
+     * @return {@code this}, for easy method chaining.
+     * @see Warning#STRICT_INHERITANCE
+     *
+     * @since 4.4
+     */
+    @CheckReturnValue
+    public SingleTypeEqualsVerifierApi<T> withRedefinedSubclass(InstanceFactory<? extends T> subclassFactory) {
+        this.redefinedSubclassInstanceFactory = subclassFactory;
         return this;
     }
 
@@ -479,13 +604,17 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         return Configuration
                 .build(
                     type,
+                    instanceFactory,
+                    subclassInstanceFactory,
                     allExcludedFields,
                     allIncludedFields,
                     nonnullFields,
                     fieldCache.getFieldNames(),
                     cachedHashCodeInitializer,
                     hasRedefinedSuperclass,
+                    redefinedSuperclassInstanceFactory,
                     redefinedSubclass,
+                    redefinedSubclassInstanceFactory,
                     usingGetClass,
                     warningsToSuppress,
                     modesToSet,

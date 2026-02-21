@@ -25,10 +25,10 @@ jobs:
 
     steps:
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: oracle-actions/setup-java@v1
         with:
-          distribution: 'temurin'
-          java-version: 25
+            website: jdk.java.net
+            release: 26
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v14
         with:

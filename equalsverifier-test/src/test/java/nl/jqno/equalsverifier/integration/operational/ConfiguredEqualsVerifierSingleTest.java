@@ -49,6 +49,19 @@ class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
+    void succeed_whenTypeIsRecursive_givenThreePrefabValuesArePreconfigured() {
+        EqualsVerifier
+                .configure()
+                .withPrefabValues(
+                    RecursiveType.class,
+                    new RecursiveType(null),
+                    new RecursiveType(new RecursiveType(null)),
+                    new RecursiveType(null))
+                .forClass(RecursiveTypeContainer.class)
+                .verify();
+    }
+
+    @Test
     void succeed_whenTypeIsRecursive_givenResettablePrefabValuesArePreconfigured() {
         EqualsVerifier
                 .configure()

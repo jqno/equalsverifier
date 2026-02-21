@@ -58,7 +58,7 @@ class SubtypeManagerTest {
     @Test
     void canInstantiateSubtypeForOrgW3cDomClassWhichHasBootstrapClassLoader() {
         Class<Element> sub = SubtypeManager.giveDynamicSubclass(Element.class);
-        Element object = InstantiatorFactory.of(ClassProbe.of(sub), new ObjenesisStd()).instantiate(Map.of());
+        Element object = InstantiatorFactory.of(ClassProbe.of(sub), new ObjenesisStd(), false).instantiate(Map.of());
         assertThat(object).isNotNull();
         assertThat(object.getClass()).isAssignableTo(Element.class);
     }

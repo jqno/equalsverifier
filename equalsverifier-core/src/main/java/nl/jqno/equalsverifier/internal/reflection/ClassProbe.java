@@ -2,9 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Optional;
 
 /**
@@ -204,6 +202,34 @@ public final class ClassProbe<T> {
     private static Method getMethod(Class<?> type, String name, Class<?>... parameterTypes) {
         try {
             return type.getDeclaredMethod(name, parameterTypes);
+        }
+        catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Finds a constructor (no matter its accessibility) in T or its superclasses.
+     *
+     * @param params The types of the parameters of the constructor that should be found.
+     * @return The field wrapped in an Optional, or an empty Optional if the field could not be found.
+     */
+    @SuppressWarnings("unchecked")
+    public Optional<Constructor<T>> findConstructor(Class<?>[] params) {
+        Class<?> t = type;
+        while (t != null) {
+            Constructor<T> f = (Constructor<T>) getConstructor(t, params);
+            if (f != null) {
+                return Optional.of(f);
+            }
+            t = t.getSuperclass();
+        }
+        return Optional.empty();
+    }
+
+    private static <T> Constructor<T> getConstructor(Class<T> type, Class<?>[] params) {
+        try {
+            return type.getDeclaredConstructor(params);
         }
         catch (NoSuchMethodException e) {
             return null;

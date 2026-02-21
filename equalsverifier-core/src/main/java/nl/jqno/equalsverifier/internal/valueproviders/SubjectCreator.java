@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import nl.jqno.equalsverifier.InstanceFactory;
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.instantiators.Instantiator;
 import nl.jqno.equalsverifier.internal.instantiators.InstantiatorFactory;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
@@ -19,28 +22,36 @@ public class SubjectCreator<T> {
 
     private final TypeTag typeTag;
     private final Class<T> type;
-    private final Class<? extends T> actualType;
+    private final Class<T> actualType;
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final Objenesis objenesis;
     private final Instantiator<? extends T> instantiator;
+    private final boolean forceFinalMeansFinal;
 
     /**
      * Constructor.
      *
-     * @param config        A configuration object.
-     * @param valueProvider To provide values for the fields of the subject.
-     * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
+     * @param config               A configuration object.
+     * @param valueProvider        To provide values for the fields of the subject.
+     * @param objenesis            Needed by InstanceCreator to instantiate non-record classes.
+     * @param forceFinalMeansFinal Force "final means final" (JEP 500) mode.
      */
-    public SubjectCreator(Configuration<T> config, ValueProvider valueProvider, Objenesis objenesis) {
+    public SubjectCreator(
+            Configuration<T> config,
+            ValueProvider valueProvider,
+            Objenesis objenesis,
+            boolean forceFinalMeansFinal) {
         this.typeTag = config.typeTag();
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;
         this.objenesis = objenesis;
+        this.forceFinalMeansFinal = forceFinalMeansFinal;
         this.actualType =
                 SubtypeManager.findInstantiableSubclass(ClassProbe.of(type), valueProvider, Attributes.empty());
-        this.instantiator = InstantiatorFactory.of(ClassProbe.of(actualType), objenesis);
+        this.instantiator = InstantiatorFactory
+                .of(ClassProbe.of(actualType), config.factory(), objenesis, forceFinalMeansFinal, true);
     }
 
     /**
@@ -175,14 +186,32 @@ public class SubjectCreator<T> {
      * Creates a new instance of the superclass of the current class, with all fields that exist within that superclass
      * set to the same value as their counterparts from {@code original}.
      *
-     * @param original The instance to copy.
+     * @param original          The instance to copy.
+     * @param superclassFactory A factory to instantiate the supertype. May be null.
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
-    public Object copyIntoSuperclass(T original) {
-        var actualSuperType = SubtypeManager
-                .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
-        Instantiator<? super T> superCreator = InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis);
-        return superCreator.copy(original);
+    public Object copyIntoSuperclass(T original, InstanceFactory<?> superclassFactory) {
+        if (superclassFactory != null) {
+            Instantiator<?> superCreator =
+                    InstantiatorFactory.of(null, superclassFactory, objenesis, forceFinalMeansFinal, true);
+            return superCreator.copy(original);
+        }
+        else {
+            var actualSuperType = SubtypeManager
+                    .findInstantiableSubclass(ClassProbe.of(type.getSuperclass()), valueProvider, Attributes.empty());
+            try {
+                Instantiator<? super T> superCreator =
+                        InstantiatorFactory.of(ClassProbe.of(actualSuperType), objenesis, forceFinalMeansFinal);
+                return superCreator.copy(original);
+            }
+            catch (InstantiatorException e) {
+                var msg = """
+                          Cannot instantiate the superclass of %% (attempted superclass: %%).
+                             Use the overload of #withRedefinedSuperclass() to specify a superclass.""";
+                throw new InstantiatorException(
+                        Formatter.of(msg, type.getSimpleName(), actualSuperType.getSimpleName()).format());
+            }
+        }
     }
 
     /**
@@ -190,16 +219,40 @@ public class SubjectCreator<T> {
      * class set to the same value as their counterparts from {@code original}. All fields declared in the subclass are
      * set to their {@link #plain()} values.
      *
-     * @param <S>      A subtype of original's type.
-     * @param original The instance to copy.
-     * @param subType  A subtype of original's type.
+     * @param <S>             A subtype of original's type.
+     * @param original        The instance to copy.
+     * @param subType         A subtype of original's type. May be null if subclassFactory is not.
+     * @param subclassFactory A factory to instantiate the subtype. May be null if subclass is not.
+     * @param methodName      The name of the method whose overload we need to call to provide a factory. Used in the
+     *                            error message.
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
-    public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
-        var actualSubType =
-                SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
-        Instantiator<S> subCreator = InstantiatorFactory.of(ClassProbe.of(actualSubType), objenesis);
-        return subCreator.copy(original);
+    public <S extends T> S copyIntoSubclass(
+            T original,
+            Class<S> subType,
+            InstanceFactory<S> subclassFactory,
+            String methodName) {
+        if (subclassFactory != null) {
+            Instantiator<S> subCreator =
+                    InstantiatorFactory.of(null, subclassFactory, objenesis, forceFinalMeansFinal, false);
+            return subCreator.copy(original);
+        }
+        else {
+            var actualSubType =
+                    SubtypeManager.findInstantiableSubclass(ClassProbe.of(subType), valueProvider, Attributes.empty());
+            try {
+                Instantiator<S> subCreator = InstantiatorFactory
+                        .of(ClassProbe.of(actualSubType), subclassFactory, objenesis, forceFinalMeansFinal, false);
+                return subCreator.copy(original);
+            }
+            catch (InstantiatorException e) {
+                var msg = """
+                          Cannot instantiate a subclass of %% (attempted subclass: %%).
+                             Use the overload of #%%() to specify a subclass.""";
+                throw new InstantiatorException(
+                        Formatter.of(msg, type.getSimpleName(), actualSubType.getSimpleName(), methodName).format());
+            }
+        }
     }
 
     private T createInstance(Map<Field, Object> givens) {

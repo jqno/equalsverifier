@@ -18,6 +18,7 @@ class WithPrefabValuesForFieldTest {
 
     private final FinalPoint pRed = new FinalPoint(3, 42);
     private final FinalPoint pBlue = new FinalPoint(3, 1337);
+    private final FinalPoint pRedCopy = new FinalPoint(3, 42);
     private final int iRed = 111;
     private final int iBlue = 142;
 
@@ -48,8 +49,24 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField_redCopy() {
+        EqualsVerifier
+                .forClass(SinglePrecondition.class)
+                .withPrefabValuesForField("point", pRed, pBlue, pRedCopy)
+                .verify();
+    }
+
+    @Test
     void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField_record() {
         EqualsVerifier.forClass(SinglePreconditionRecord.class).withPrefabValuesForField("i", iRed, iBlue).verify();
+    }
+
+    @Test
+    void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField_record_redCopy() {
+        EqualsVerifier
+                .forClass(SinglePreconditionRecord.class)
+                .withPrefabValuesForField("i", iRed, iBlue, iRed)
+                .verify();
     }
 
     @Test
@@ -82,12 +99,37 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField_redCopy() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(DualPrecondition.class)
+                            .withPrefabValuesForField("x", iRed, iBlue, iRed)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("y must be between");
+    }
+
+    @Test
     void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField_record() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
                             .forClass(DualPreconditionRecord.class)
                             .withPrefabValuesForField("x", iRed, iBlue)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Record: failed to run constructor for record")
+                .assertCauseMessageContains("y must be between");
+    }
+
+    @Test
+    void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField_record_redCopy() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(DualPreconditionRecord.class)
+                            .withPrefabValuesForField("x", iRed, iBlue, iRed)
                             .verify())
                 .assertFailure()
                 .assertMessageContains("Record: failed to run constructor for record")
@@ -104,6 +146,15 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields_redCopy() {
+        EqualsVerifier
+                .forClass(DualPrecondition.class)
+                .withPrefabValuesForField("x", iRed, iBlue, iRed)
+                .withPrefabValuesForField("y", 505, 555, 505)
+                .verify();
+    }
+
+    @Test
     void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields_record() {
         EqualsVerifier
                 .forClass(DualPreconditionRecord.class)
@@ -112,10 +163,28 @@ class WithPrefabValuesForFieldTest {
                 .verify();
     }
 
+    @Test
+    void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields_record_redCopy() {
+        EqualsVerifier
+                .forClass(DualPreconditionRecord.class)
+                .withPrefabValuesForField("x", iRed, iBlue, iRed)
+                .withPrefabValuesForField("y", 505, 555, 505)
+                .verify();
+    }
+
+    @Test
     void succeed_whenClassHasStringPrecondition_givenPrefabValueForField() {
         EqualsVerifier
                 .forClass(StringPrecondition.class)
                 .withPrefabValuesForField("s", "precondition:red", "precondition:blue")
+                .verify();
+    }
+
+    @Test
+    void succeed_whenClassHasStringPrecondition_givenPrefabValueForField_redCopy() {
+        EqualsVerifier
+                .forClass(StringPrecondition.class)
+                .withPrefabValuesForField("s", "precondition:red", "precondition:blue", "precondition:red")
                 .verify();
     }
 
@@ -126,6 +195,17 @@ class WithPrefabValuesForFieldTest {
                     () -> EqualsVerifier
                             .forClass(SinglePrecondition.class)
                             .withPrefabValuesForField("doesnt_exist", 1, 2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition:", "does not contain field doesnt_exist");
+    }
+
+    @Test
+    void throw_whenFieldDoesNotExistInClass_redCopy() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("doesnt_exist", 1, 2, 1))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition:", "does not contain field doesnt_exist");
     }
@@ -151,12 +231,33 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void throw_whenThirdPrefabValueIsNull() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, pBlue, null))
+                .assertThrows(NullPointerException.class);
+    }
+
+    @Test
     void throw_whenThePrefabValuesAreTheSame() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
                             .forClass(SinglePrecondition.class)
                             .withPrefabValuesForField("point", pRed, pRed))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
+    }
+
+    @Test
+    void throw_whenTheThreePrefabValuesAreTheSame() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, pRed, pRed))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
     }
@@ -176,6 +277,46 @@ class WithPrefabValuesForFieldTest {
     }
 
     @Test
+    void throw_whenTheThreePrefabValuesAreEqual() {
+        FinalPoint red1 = new FinalPoint(3, 4);
+        FinalPoint red2 = new FinalPoint(3, 4);
+
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", red1, red2, red1))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values for field `FinalPoint point` are equal");
+    }
+
+    @Test
+    void throw_whenRedCopyIsDifferentFromRed() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, pBlue, pBlue))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition",
+                    "red and redCopy prefab values of type FinalPoint should be equal but are not");
+    }
+
+    @Test
+    void throw_whenRedCopyIsSameInstanceAsRed() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, pBlue, pRed))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition",
+                    "red and redCopy prefab values of type FinalPoint are the same object");
+    }
+
+    @Test
     void throw_whenFieldsDontMatch() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("point", 1, 2))
@@ -188,6 +329,18 @@ class WithPrefabValuesForFieldTest {
         EqualsVerifier
                 .forClass(OtherModuleContainer.class)
                 .withPrefabValuesForField("date", LocalDate.of(2024, 9, 18), LocalDate.of(2024, 9, 19))
+                .verify();
+    }
+
+    @Test
+    void dontThrow_whenAddingPrefabValuesFromAnotherModuleWithAnExplicitRedCopy() {
+        EqualsVerifier
+                .forClass(OtherModuleContainer.class)
+                .withPrefabValuesForField(
+                    "date",
+                    LocalDate.of(2024, 9, 18),
+                    LocalDate.of(2024, 9, 19),
+                    LocalDate.of(2024, 9, 18))
                 .verify();
     }
 
@@ -220,6 +373,14 @@ class WithPrefabValuesForFieldTest {
     @Test
     void succeed_whenClassHasSinglePrecondition_givenFieldExistsInSuperclass() {
         EqualsVerifier.forClass(SubPrecondition.class).withPrefabValuesForField("point", pRed, pBlue).verify();
+    }
+
+    @Test
+    void succeed_whenClassHasSinglePrecondition_givenFieldExistsInSuperclass_redCopy() {
+        EqualsVerifier
+                .forClass(SubPrecondition.class)
+                .withPrefabValuesForField("point", pRed, pBlue, pRedCopy)
+                .verify();
     }
 
     static final class OtherModuleContainer {

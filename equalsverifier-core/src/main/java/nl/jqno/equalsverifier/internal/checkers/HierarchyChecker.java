@@ -4,10 +4,14 @@ import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 import java.util.function.Predicate;
 
+import nl.jqno.equalsverifier.InstanceFactory;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
@@ -19,7 +23,6 @@ public class HierarchyChecker<T> implements Checker {
     private final Class<T> type;
     private final SubjectCreator<T> subjectCreator;
     private final ClassProbe<T> classProbe;
-    private final Class<? extends T> redefinedSubclass;
     private final boolean strictnessSuppressed;
     private final boolean versionedEntity;
     private final boolean hasRedefinedSubclass;
@@ -32,7 +35,7 @@ public class HierarchyChecker<T> implements Checker {
 
         this.strictnessSuppressed = config.warningsToSuppress().contains(Warning.STRICT_INHERITANCE);
         this.versionedEntity = config.warningsToSuppress().contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
-        this.hasRedefinedSubclass = config.redefinedSubclass() != null;
+        this.hasRedefinedSubclass = config.redefinedSubclass() != null || config.redefinedSubclassFactory() != null;
         if (strictnessSuppressed && hasRedefinedSubclass) {
             fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
         }
@@ -40,7 +43,6 @@ public class HierarchyChecker<T> implements Checker {
         this.type = context.getType();
         this.subjectCreator = context.getSubjectCreator();
         this.classProbe = context.getClassProbe();
-        this.redefinedSubclass = config.redefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.typeIsSealed = classProbe.isSealed();
         this.cachedHashCodeInitializer = config.cachedHashCodeInitializer();
@@ -64,6 +66,7 @@ public class HierarchyChecker<T> implements Checker {
         if (config.hasRedefinedSuperclass() || config.usingGetClass()) {
             T reference = subjectCreator.plain();
             Object equalSuper = getEqualSuper(reference);
+            checkMatchingValues(equalSuper, reference, "superclass");
 
             Formatter formatter = Formatter
                     .of(
@@ -146,29 +149,21 @@ public class HierarchyChecker<T> implements Checker {
         assertTrue(superclassFormatter, referenceHashCode == equalSuperHashCode);
     }
 
-    private Object getEqualSuper(T reference) {
-        return subjectCreator.copyIntoSuperclass(reference);
-    }
-
     private void checkSubclass() {
         if (typeIsFinal || typeIsSealed || strictnessSuppressed) {
             return;
         }
 
         T reference = subjectCreator.plain();
-
-        @SuppressWarnings("unchecked")
-        // Don't use type directly, as reference may already be a subclass if type was abstract
-        Class<T> realClass = (Class<T>) reference.getClass();
-        Class<T> anonymousSubclass = SubtypeManager.giveDynamicSubclass(realClass);
-        T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
+        Class<? extends T> subclass = determineSubclass(reference, config.subclassFactory());
+        T equalSub = getEqualSub(reference, subclass, config.subclassFactory(), "withFactory");
 
         if (config.usingGetClass()) {
             Formatter formatter =
                     Formatter.of("""
                                  Subclass: object is equal to an instance of a trivial subclass with equal fields:
                                    %%
-                                 This should not happen when using getClass().""", reference);
+                                 This should not happen when using getClass().""", equalSub);
             assertFalse(formatter, reference.equals(equalSub));
         }
         else {
@@ -177,7 +172,7 @@ public class HierarchyChecker<T> implements Checker {
                                  Subclass: object is not equal to an instance of a trivial subclass with equal fields:
                                    %%
                                  Maybe you forgot to add usingGetClass(). Otherwise, consider\
-                                  making the class final or use EqualsVerifier.simple().""", reference);
+                                  making the class final or use EqualsVerifier.simple().""", equalSub);
             assertTrue(formatter, reference.equals(equalSub));
         }
     }
@@ -196,7 +191,12 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        T redefinedSub = subjectCreator.copyIntoSubclass(reference, redefinedSubclass);
+        T redefinedSub = getEqualSub(
+            reference,
+            config.redefinedSubclass(),
+            config.redefinedSubclassFactory(),
+            "withRedefinedSubclass");
+        checkMatchingValues(reference, redefinedSub, "subclass");
         assertFalse(
             Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),
             reference.equals(redefinedSub));
@@ -232,5 +232,68 @@ public class HierarchyChecker<T> implements Checker {
                                                         if hashCode cannot be final.""");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
+    }
+
+    private <A, B extends A> void checkMatchingValues(A superObject, B subObject, String which) {
+        for (var p : FieldIterable.ofIgnoringStatic(superObject.getClass())) {
+            var superValue = p.getValue(superObject);
+            var subValue = p.getValue(subObject);
+            assertTrue(
+                Formatter.of("""
+                             Provided factory is incorrect; redefined %% doesn't match:
+                               %%
+                             and
+                               %%
+                             don't have matching values for field %%.""", which, superObject, subObject, p.getName()),
+                Objects.equals(superValue, subValue));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<? extends T> determineSubclass(T reference, InstanceFactory<? extends T> subclassFactory) {
+        if (subclassFactory != null) {
+            return null;
+        }
+
+        // Don't use type directly, as reference may already be a subclass if type was abstract
+        Class<T> realClass = (Class<T>) reference.getClass();
+        return SubtypeManager.giveDynamicSubclass(realClass);
+    }
+
+    private T getEqualSub(
+            T reference,
+            Class<? extends T> subclass,
+            InstanceFactory<? extends T> subclassFactory,
+            String methodName) {
+        if (subclass != null) {
+            return subjectCreator.copyIntoSubclass(reference, subclass, null, methodName);
+        }
+        if (subclassFactory != null) {
+            var result = subjectCreator.copyIntoSubclass(reference, null, subclassFactory, methodName);
+            assertFalse(
+                Formatter
+                        .of(
+                            "Given subclassFactory constructs a %%, but must construct a subclass of %%.",
+                            type.getSimpleName(),
+                            type.getSimpleName()),
+                type.equals(result.getClass()));
+            return result;
+        }
+        throw new EqualsVerifierInternalBugException(
+                "Neither a subclass nor a subclassFactory was given. This should not happen!");
+    }
+
+    private Object getEqualSuper(T reference) {
+        var result = subjectCreator.copyIntoSuperclass(reference, config.redefinedSuperclassFactory());
+        assertTrue(
+            Formatter
+                    .of(
+                        "Given superclassFactory constructs a %%, but must construct the direct superclass of %%.",
+                        result.getClass().getSimpleName(),
+                        type.getSimpleName()),
+            result.getClass().equals(type.getSuperclass())
+                    || (type.getSuperclass().isAssignableFrom(result.getClass())
+                            && result.getClass().getSimpleName().contains("$$DynamicSubclass$")));
+        return result;
     }
 }

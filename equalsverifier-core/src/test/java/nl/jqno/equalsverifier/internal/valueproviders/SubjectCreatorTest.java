@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.exceptions.InstantiatorException;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -20,6 +21,7 @@ import org.objenesis.ObjenesisStd;
 
 class SubjectCreatorTest {
 
+    private static final String METHOD_NAME = "foo";
     private static final int I_RED = 42;
     private static final int I_BLUE = 1337;
     private static final String S_RED = "abc";
@@ -28,7 +30,7 @@ class SubjectCreatorTest {
     private final Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
     private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
     private final Objenesis objenesis = new ObjenesisStd();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis);
+    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis, false);
 
     private Field fieldX;
     private Field fieldI;
@@ -55,7 +57,7 @@ class SubjectCreatorTest {
     @Test
     void plain_abstract() {
         var anotherConfig = ConfigurationHelper.emptyConfiguration(Abstract.class);
-        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
+        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis, false);
         var anotherActual = anotherSut.plain();
 
         assertThat(anotherActual.s).isEqualTo(S_RED);
@@ -64,7 +66,7 @@ class SubjectCreatorTest {
     @Test
     void plain_sealedAbstract() {
         var anotherConfig = ConfigurationHelper.emptyConfiguration(SealedAbstract.class);
-        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis);
+        var anotherSut = new SubjectCreator<>(anotherConfig, valueProvider, objenesis, false);
         var anotherActual = anotherSut.plain();
 
         assertThat(anotherActual.s).isEqualTo(S_RED);
@@ -189,25 +191,73 @@ class SubjectCreatorTest {
     void copyIntoSuperclass() {
         SomeSuper superExpected = new SomeSuper(I_RED);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
-        Object superActual = sut.copyIntoSuperclass(original);
+        Object superActual = sut.copyIntoSuperclass(original, null);
 
         assertThat(superActual).isEqualTo(superExpected);
         assertThat(superActual.getClass()).isEqualTo(SomeSuper.class);
     }
 
     @Test
+    void copyIntoSuperclassWithFactory() {
+        SomeSuper superExpected = new SomeSuper(I_RED);
+        SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
+        Object superActual = sut.copyIntoSuperclass(original, v -> new SomeSuper(v.getInt("i")));
+
+        assertThat(superActual).isEqualTo(superExpected);
+        assertThat(superActual.getClass()).isEqualTo(SomeSuper.class);
+    }
+
+    @Test
+    void copyIntoSuperclassWithFactory_nonConstructable() {
+        var ncConfig = ConfigurationHelper
+                .emptyConfigurationWithFactory(
+                    NonConstructableSub.class,
+                    v -> new NonConstructableSub(v.getInt("i"), new Object()));
+        var ncSut = new SubjectCreator<>(ncConfig, valueProvider, objenesis, true);
+        NonConstructableSub original = new NonConstructableSub(42, new Object());
+        assertThatThrownBy(() -> ncSut.copyIntoSuperclass(original, null)).isInstanceOf(InstantiatorException.class);
+    }
+
+    @Test
     void copyIntoSubclass() {
         expected = new SomeSub(I_RED, I_RED, S_RED, null);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
-        actual = sut.copyIntoSubclass(original, SomeSub.class);
+        actual = sut.copyIntoSubclass(original, SomeSub.class, null, METHOD_NAME);
 
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.getClass()).isEqualTo(SomeSub.class);
     }
 
     @Test
+    void copyIntoSubclassWithFactory() {
+        expected = new SomeSub(I_RED, I_RED, S_RED, null);
+        SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
+        actual = sut
+                .copyIntoSubclass(
+                    original,
+                    SomeSub.class,
+                    v -> new SomeSub(v.getInt("x"), v.getInt("i"), v.getString("s"), v.getString("q")),
+                    METHOD_NAME);
+
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getClass()).isEqualTo(SomeSub.class);
+    }
+
+    @Test
+    void copyIntoSubclassWithFactory_nonConstructable() {
+        var ncConfig = ConfigurationHelper
+                .emptyConfigurationWithFactory(
+                    NonConstructableSuper.class,
+                    v -> new NonConstructableSuper(v.getInt("i"), new Object()));
+        var ncSut = new SubjectCreator<>(ncConfig, valueProvider, objenesis, true);
+        NonConstructableSuper original = new NonConstructableSuper(42, new Object());
+        assertThatThrownBy(() -> ncSut.copyIntoSubclass(original, NonConstructableSub.class, null, ""))
+                .isInstanceOf(InstantiatorException.class);
+    }
+
+    @Test
     void noValueFound() {
-        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
+        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis, false);
 
         assertThatThrownBy(() -> sut.plain())
                 .isInstanceOf(NoValueException.class)
@@ -369,6 +419,21 @@ class SubjectCreatorTest {
         public SealedSub(String s, int i) {
             super(s);
             this.i = i;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static class NonConstructableSuper {
+        private final int i;
+
+        public NonConstructableSuper(int i, Object discarded) {
+            this.i = i;
+        }
+    }
+
+    static class NonConstructableSub extends NonConstructableSuper {
+        public NonConstructableSub(int i, Object discarded) {
+            super(i, discarded);
         }
     }
 }

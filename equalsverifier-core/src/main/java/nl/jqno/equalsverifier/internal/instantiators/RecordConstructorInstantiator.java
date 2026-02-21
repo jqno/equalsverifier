@@ -11,9 +11,9 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import org.objenesis.Objenesis;
 
 /**
- * Creates an instance of a class by calling the constructor.
+ * Creates an instance of a record by calling the constructor.
  */
-public class ConstructorInstantiator<T> implements Instantiator<T> {
+public class RecordConstructorInstantiator<T> implements Instantiator<T> {
     private final Class<T> type;
 
     /**
@@ -21,7 +21,7 @@ public class ConstructorInstantiator<T> implements Instantiator<T> {
      *
      * @param type The type to instantiate.
      */
-    ConstructorInstantiator(Class<T> type) {
+    RecordConstructorInstantiator(Class<T> type) {
         this.type = type;
     }
 
@@ -32,6 +32,7 @@ public class ConstructorInstantiator<T> implements Instantiator<T> {
         for (var component : type.getRecordComponents()) {
             try {
                 Field f = type.getDeclaredField(component.getName());
+
                 Object value = values.get(f);
                 if (value == null) {
                     value = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
@@ -45,5 +46,4 @@ public class ConstructorInstantiator<T> implements Instantiator<T> {
         var recordProbe = new RecordProbe<T>(type);
         return recordProbe.callRecordConstructor(params);
     }
-
 }

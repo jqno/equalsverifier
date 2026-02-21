@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import nl.jqno.equalsverifier.Mode;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
@@ -27,7 +28,10 @@ public final class Context<T> {
         var modes = configuration.modes();
 
         this.valueProvider = ValueProviderBuilder.build(modes, userPrefabs, fieldCache, objenesis);
-        this.subjectCreator = new SubjectCreator<>(configuration, this.valueProvider, objenesis);
+        this.subjectCreator = new SubjectCreator<>(configuration,
+                this.valueProvider,
+                objenesis,
+                configuration.modes().contains(Mode.finalMeansFinal()));
     }
 
     public Class<T> getType() {

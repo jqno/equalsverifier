@@ -40,6 +40,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
             FieldMutator fieldMutator = new FieldMutator(fieldProbe);
             Object saved = fieldProbe.getValue(reference);
 
+            // Safe, because we already checked the field is non-final
             fieldMutator.setNewValue(reference, PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(fieldProbe.getType()));
             performTests(fieldProbe.getField(), subjectCreator.plain(), subjectCreator.plain());
             fieldMutator.setNewValue(reference, saved);

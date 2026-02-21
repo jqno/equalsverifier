@@ -103,6 +103,18 @@ class KotlinWithoutReflectTest {
   }
 
   @Test
+  fun `Gives clear error message with lazy delegate withPrefabValuesForField overload`() {
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withPrefabValuesForField("foo", lazy { 42 }, lazy { 1337 }, lazy { 42 })
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
+  }
+
+  @Test
   fun `Gives clear error message with lazy delegate excluded by bytecode name via withIgnoredFields`() {
     ExpectedException
       .`when` {
@@ -132,6 +144,19 @@ class KotlinWithoutReflectTest {
       .`when` {
         EqualsVerifier.forClass(LazyDelegation::class.java)
           .withPrefabValuesForField("foo\$delegate", lazy { 42 }, lazy { 1337 })
+          .verify()
+      }
+      .assertThrows(IllegalStateException::class.java)
+      .assertMessageContains(KotlinScreen.ERROR_MESSAGE)
+  }
+
+  @Test
+  fun `Gives clear error message with lazy delegate withPrefabValuesForField (overload) by bytecode name`() {
+    val red = lazy { 42 }
+    ExpectedException
+      .`when` {
+        EqualsVerifier.forClass(LazyDelegation::class.java)
+          .withPrefabValuesForField("foo\$delegate", red, lazy { 1337 }, red)
           .verify()
       }
       .assertThrows(IllegalStateException::class.java)

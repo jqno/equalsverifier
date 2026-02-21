@@ -37,7 +37,6 @@ jobs:
             experimental: true
             cache-id: "jdk26"
             java: "26"
-            flags: "-DdisableStaticAnalysis"
           - title: "Experimental JDK EA (simplified)"
             experimental: true
             cache-id: "jdk-ea-simple"

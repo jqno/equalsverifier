@@ -65,6 +65,15 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     @Override
     @CheckReturnValue
     @SuppressWarnings("CheckReturnValue")
+    public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue, S redCopy) {
+        ev.withPrefabValues(otherType, red, blue, redCopy);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
+    @SuppressWarnings("CheckReturnValue")
     public <S> MultipleTypeEqualsVerifierApi withResettablePrefabValues(
             Class<S> otherType,
             Supplier<S> red,
