@@ -39,7 +39,7 @@ public class FieldsChecker<T> implements Checker {
         final Predicate<FieldProbe> isCachedHashCodeField = p -> p.getName().equals(cachedHashCodeFieldName);
 
         this.arrayFieldCheck = new ArrayFieldCheck<>(subjectCreator, config.cachedHashCodeInitializer());
-        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
+        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator, config.ignoredFields());
         this.mutableStateFieldCheck = new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(context);
         this.significantFieldCheck = new SignificantFieldCheck<>(context, isCachedHashCodeField);

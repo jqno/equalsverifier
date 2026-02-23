@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- A regression where floats and doubles are checked (and throw an exception) that are static ([Issue 1183](https://github.com/jqno/equalsverifier/issues/1183)), transient ([Issue 1184](https://github.com/jqno/equalsverifier/issues/1184)) or ignored with `#withIgnoredFields()`.
+
 ## [4.4] - 2026-02-21
 
 ### Added

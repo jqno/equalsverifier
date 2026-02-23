@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.assertNotEquals;
 
+import java.util.Set;
+
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
@@ -9,13 +11,18 @@ import nl.jqno.equalsverifier.internal.valueproviders.SubjectCreator;
 public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
+    private final Set<String> ignoredFields;
 
-    public FloatAndDoubleFieldCheck(SubjectCreator<T> subjectCreator) {
+    public FloatAndDoubleFieldCheck(SubjectCreator<T> subjectCreator, Set<String> ignoredFields) {
         this.subjectCreator = subjectCreator;
+        this.ignoredFields = ignoredFields;
     }
 
     @Override
     public void execute(FieldProbe fieldProbe) {
+        if (fieldProbe.isTransient() || fieldProbe.isStatic() || ignoredFields.contains(fieldProbe.getName())) {
+            return;
+        }
         Class<?> type = fieldProbe.getType();
         if (isFloat(type)) {
             T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), 0.0F);

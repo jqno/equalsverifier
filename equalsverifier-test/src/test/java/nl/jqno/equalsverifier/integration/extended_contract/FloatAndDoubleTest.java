@@ -44,6 +44,11 @@ class FloatAndDoubleTest {
     }
 
     @Test
+    void succeed_whenVariousFloatFieldsShouldBeDisregarded() {
+        EqualsVerifier.forClass(DisregardFloatFields.class).withIgnoredFields("ignored").verify();
+    }
+
+    @Test
     void succeed_whenFloatCannotBeNaN() {
         EqualsVerifier.forClass(FloatDontAllowNaN.class).verify();
     }
@@ -77,6 +82,11 @@ class FloatAndDoubleTest {
     @Test
     void succeed_whenObjectDoublesAreComparedWithCompare() {
         EqualsVerifier.forClass(CompareObjectDoubleWithCompare.class).verify();
+    }
+
+    @Test
+    void succeed_whenVariousDoubleFieldsShouldBeDisregarded() {
+        EqualsVerifier.forClass(DisregardDoubleFields.class).withIgnoredFields("ignored").verify();
     }
 
     @Test
@@ -193,7 +203,31 @@ class FloatAndDoubleTest {
         }
     }
 
-    record FloatDontAllowNaN(double d, float f) {
+    @SuppressWarnings("unused")
+    static final class DisregardFloatFields {
+        private final int i;
+        private final float ignored;
+        private final transient float transientFloat;
+        private static float staticFloat = 0.0F;
+
+        public DisregardFloatFields(int i, float ignored, float transientFloat) {
+            this.i = i;
+            this.ignored = ignored;
+            this.transientFloat = transientFloat;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof DisregardFloatFields other && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
+        }
+    }
+
+    record FloatDontAllowNaN(float d, float f) {
         public FloatDontAllowNaN {
             if (Float.isNaN(f)) {
                 throw new IllegalArgumentException("f cannot be NaN");
@@ -307,6 +341,30 @@ class FloatAndDoubleTest {
         @Override
         public int hashCode() {
             return Objects.hash(d);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static final class DisregardDoubleFields {
+        private final int i;
+        private final double ignored;
+        private final transient double transientDouble;
+        private static double staticDouble = 0.0D;
+
+        public DisregardDoubleFields(int i, double ignored, double transientDouble) {
+            this.i = i;
+            this.ignored = ignored;
+            this.transientDouble = transientDouble;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof DisregardDoubleFields other && i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
         }
     }
 
