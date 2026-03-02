@@ -76,7 +76,7 @@
 
         <kotlin.compiler.daemon>false</kotlin.compiler.daemon> <!-- The daemon might be faster, but it also breaks my low-power dev box -->
 
-        <version.bytebuddy>1.18.5</version.bytebuddy>
+        <version.bytebuddy>1.18.7</version.bytebuddy>
         <version.objenesis>3.5</version.objenesis>
 
         <version.archunit>1.4.1</version.archunit>
@@ -92,13 +92,13 @@
         <version.slf4j>2.0.17</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>13.2.0</version.checkstyle>
+        <version.checkstyle>13.3.0</version.checkstyle>
 
         <version.arcmutate>2.3.2</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
-        <version.error-prone>2.47.0</version.error-prone>
+        <version.error-prone>2.48.0</version.error-prone>
         <version.flatten-maven-plugin>1.7.3</version.flatten-maven-plugin>
         <version.jacoco>0.8.14</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
@@ -111,7 +111,7 @@
         <version.maven-shade-plugin>3.6.1</version.maven-shade-plugin>
         <version.maven-source-plugin>3.4.0</version.maven-source-plugin>
         <version.maven-surefire-plugin>3.5.5</version.maven-surefire-plugin>
-        <version.mockito>5.21.0</version.mockito>
+        <version.mockito>5.22.0</version.mockito>
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.22.1</version.pitest.maven>
         <version.spotbugs>4.9.8</version.spotbugs>
