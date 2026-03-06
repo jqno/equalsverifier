@@ -4,7 +4,7 @@ permalink: /migration3to4/
 ---
 When migrating from EqualsVerifier 3 to 4, there are a few things you should be aware of. (See also the [changelog](https://github.com/jqno/equalsverifier/blob/main/CHANGELOG.md#4.x)).
 
-* EqualsVerifier 3 no longer supports Java 8. Don't upgrade if you're still using Java 8 or 11. The new minimal Java version is 17.
+* EqualsVerifier 4 no longer supports Java 8. Don't upgrade if you're still using Java 8 or 11. The new minimal Java version is 17.
 * EqualsVerifier is now fully modularized. If you run your tests on the modulepath, see [the manual entry on JPMS](/equalsverifier/manual/jpms).
 * A number of previously deprecated methods have now been removed:
   * `#withResetCaches()`: you can simply remove this; caches are always reset automatically.
