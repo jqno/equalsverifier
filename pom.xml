@@ -108,14 +108,14 @@
         <version.maven-enforcer-plugin>3.6.2</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.5.0</version.maven-jar-plugin>
         <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
-        <version.maven-shade-plugin>3.6.1</version.maven-shade-plugin>
+        <version.maven-shade-plugin>3.6.2</version.maven-shade-plugin>
         <version.maven-source-plugin>3.4.0</version.maven-source-plugin>
         <version.maven-surefire-plugin>3.5.5</version.maven-surefire-plugin>
         <version.mockito>5.22.0</version.mockito>
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.22.1</version.pitest.maven>
         <version.spotbugs>4.9.8</version.spotbugs>
-        <version.spotless>3.2.1</version.spotless>
+        <version.spotless>3.3.0</version.spotless>
     </properties>
 
     <build>
