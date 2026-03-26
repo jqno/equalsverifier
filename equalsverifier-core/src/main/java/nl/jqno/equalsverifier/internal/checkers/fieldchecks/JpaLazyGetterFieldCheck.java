@@ -65,8 +65,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                     .of(
                         """
                         Getter method %% in JPA entity class %% is final.
-                           EqualsVerifier cannot determine if %% calls getters instead of referencing field %% directly.
-                           Please make the method non-final, or suppress Warning.JPA_GETTER to disable the check.""",
+                        EqualsVerifier cannot determine if %% calls getters instead of referencing field %% directly.
+                        Please make the method non-final, or suppress Warning.JPA_GETTER to disable the check.""",
                         getterName,
                         classProbe.getType().getSimpleName(),
                         classProbe.getType().getSimpleName(),

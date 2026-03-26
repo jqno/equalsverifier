@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Multi-line error messages now align better.
+
 ## [4.4.1] - 2026-02-23
 
 ### Fixed

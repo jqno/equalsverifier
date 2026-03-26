@@ -572,8 +572,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     private String buildErrorMessage(String description, boolean showUrl) {
         String message = description == null ? "<no message>" : description;
+        String indented = message.replace("\n", "\n   ");
         String result =
-                Formatter.of("EqualsVerifier found a problem in class %%.\n-> %%", type.getName(), message).format();
+                Formatter.of("EqualsVerifier found a problem in class %%.\n-> %%", type.getName(), indented).format();
         if (showUrl) {
             result += "\n\n" + ErrorMessage.suffix();
         }

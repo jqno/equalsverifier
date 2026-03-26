@@ -31,7 +31,7 @@ public final class Validations {
     public static void validateFieldNameExists(Class<?> type, String field, Set<String> actualFields) {
         String msg = "class " + type.getSimpleName() + " does not contain field " + field + ".";
         if (KotlinScreen.isKotlin(type) && !KotlinScreen.canProbe()) {
-            msg += "\n           -> " + field + " may be a Kotlin delegate field. " + KotlinScreen.ERROR_MESSAGE;
+            msg += "\n" + field + " may be a Kotlin delegate field. " + KotlinScreen.ERROR_MESSAGE;
         }
         validate(!actualFields.contains(field), msg);
     }

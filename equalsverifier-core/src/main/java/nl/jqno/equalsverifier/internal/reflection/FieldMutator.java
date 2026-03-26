@@ -51,10 +51,9 @@ public class FieldMutator {
                 // - ReflectionInstantiator which is only used if it's confirmed that it _can_ be used,
                 // - NullPointerExceptionFieldCheck, which checks that the field is non-final first.
                 // Still, it's good to throw an informative exception instead of the default IllegalAccessException.
-                var msg =
-                        """
-                        Not allowed to reflectively set final field %%.%%.
-                           Use #withFactory() so EqualsVerifier can construct %% instances without using reflection.""";
+                var msg = """
+                          Not allowed to reflectively set final field %%.%%.
+                          Use #withFactory() so EqualsVerifier can construct %% instances without using reflection.""";
                 var type = field.getDeclaringClass().getSimpleName();
                 throw new EqualsVerifierInternalBugException(Formatter.of(msg, type, field.getName(), type).format(),
                         e);

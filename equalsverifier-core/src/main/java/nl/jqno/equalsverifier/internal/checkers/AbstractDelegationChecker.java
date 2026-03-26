@@ -136,7 +136,7 @@ public class AbstractDelegationChecker<T> implements Checker {
         Formatter prefabFormatter = Formatter.of("\n\nAdd prefab values for %%.", prefabbable);
         return Formatter
                 .of(
-                    "Abstract delegation: %%'s %% method delegates to an abstract method:\n   %%%%",
+                    "Abstract delegation: %%'s %% method delegates to an abstract method:\n%%%%",
                     c.getSimpleName(),
                     method,
                     originalMessage,
