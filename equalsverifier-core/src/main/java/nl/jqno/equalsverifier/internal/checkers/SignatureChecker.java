@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -29,7 +30,7 @@ public class SignatureChecker<T> implements Checker {
     public void check() {
         List<Method> equalsMethods = getEqualsMethods();
         if (equalsMethods.size() > 1) {
-            failOverloaded("More than one equals method found");
+            throw failOverloaded("More than one equals method found");
         }
         if (equalsMethods.size() == 1) {
             checkEquals(equalsMethods.get(0));
@@ -49,24 +50,25 @@ public class SignatureChecker<T> implements Checker {
         return result;
     }
 
-    private void failOverloaded(String message) {
-        fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
+    private AssertionException failOverloaded(String message) {
+        return new AssertionException(
+                Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
     }
 
     private void checkEquals(Method equals) {
         Class<?>[] parameterTypes = equals.getParameterTypes();
         if (parameterTypes.length > 1) {
-            failOverloaded("Too many parameters");
+            throw failOverloaded("Too many parameters");
         }
         if (parameterTypes.length == 0) {
-            failOverloaded("No parameter");
+            throw failOverloaded("No parameter");
         }
         Class<?> parameterType = parameterTypes[0];
         if (parameterType == type) {
-            failOverloaded("Parameter should be an Object, not " + type.getSimpleName());
+            throw failOverloaded("Parameter should be an Object, not " + type.getSimpleName());
         }
         if (parameterType != Object.class) {
-            failOverloaded("Parameter should be an Object");
+            throw failOverloaded("Parameter should be an Object");
         }
     }
 
