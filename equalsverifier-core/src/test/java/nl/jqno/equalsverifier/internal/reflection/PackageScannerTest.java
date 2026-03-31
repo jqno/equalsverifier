@@ -2,6 +2,10 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 import nl.jqno.equalsverifier.ScanOption;
@@ -130,6 +134,30 @@ class PackageScannerTest {
         opts = PackageScanOptions.process(ScanOption.recursive());
         List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.nonexistentpackage", opts);
         assertThat(classes).isEqualTo(Collections.emptyList());
+    }
+
+    @Test
+    void nonExistentDirectoryInClasspathReturnsEmptyResult() throws Exception {
+        Path tempDir = Files.createTempDirectory("packscan-test-");
+        Files.delete(tempDir);
+        URL nonExistentUrl = tempDir.toUri().toURL();
+
+        ClassLoader fakeLoader = new URLClassLoader(new URL[0]) {
+            @Override
+            public Enumeration<URL> getResources(String name) {
+                return Collections.enumeration(List.of(nonExistentUrl));
+            }
+        };
+
+        ClassLoader savedCL = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(fakeLoader);
+        try {
+            List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.fake", opts);
+            assertThat(classes).isEmpty();
+        }
+        finally {
+            Thread.currentThread().setContextClassLoader(savedCL);
+        }
     }
 
     @Test

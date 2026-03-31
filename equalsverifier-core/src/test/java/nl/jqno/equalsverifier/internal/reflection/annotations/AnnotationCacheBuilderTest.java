@@ -8,7 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
+import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.reflection.SubtypeManager;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.packages.annotated.AnnotatedPackage;
@@ -274,6 +277,26 @@ class AnnotationCacheBuilderTest {
         build(type);
 
         assertTypeDoesNotHaveAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);
+    }
+
+    @Test
+    void buildingTheSameTypeTwiceIsIdempotent() {
+        build(AnnotatedWithRuntime.class);
+        build(AnnotatedWithRuntime.class);
+
+        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);
+    }
+
+    @Test
+    void classInDefaultPackageDoesNotThrow() {
+        Class<?> noPackageClass = new ByteBuddy()
+                .with(TypeValidation.DISABLED)
+                .subclass(Object.class)
+                .name("DefaultPackageClass")
+                .make()
+                .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
+                .getLoaded();
+        build(noPackageClass);
     }
 
     @Test

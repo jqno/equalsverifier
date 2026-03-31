@@ -50,6 +50,15 @@ class NullFieldsTest {
     }
 
     @Test
+    void fail_whenEqualsThrowsOtherExceptionOnNullField() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(OtherExceptionWhenFieldIsNull.class).verify())
+                .assertFailure()
+                .assertCause(IllegalStateException.class)
+                .assertMessageContains("equals", "throws", "IllegalStateException", "when field", "is null");
+    }
+
+    @Test
     void fail_whenHashCodeThrowsNpe() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify())
@@ -332,6 +341,31 @@ class NullFieldsTest {
         @Override
         public int hashCode() {
             return Objects.hash(o);
+        }
+    }
+
+    static final class OtherExceptionWhenFieldIsNull {
+
+        private final String value;
+
+        OtherExceptionWhenFieldIsNull(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof OtherExceptionWhenFieldIsNull other)) {
+                return false;
+            }
+            if (value == null) {
+                throw new IllegalStateException("value is null");
+            }
+            return value.equals(other.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
         }
     }
 
