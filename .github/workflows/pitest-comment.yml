@@ -24,11 +24,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up JDK
-        uses: oracle-actions/setup-java@v1
+      - name: 'Set up JDK'
+        uses: actions/setup-java@v5
         with:
-            website: jdk.java.net
-            release: 26
+          java-version: 26
+          distribution: temurin
+          cache: maven
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v19
         with:
