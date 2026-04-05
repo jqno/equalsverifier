@@ -96,7 +96,7 @@ class TypeTagTest {
     }
 
     @Test
-    void correctnessOfBoundedTypeVariable() throws NoSuchFieldException {
+    void typeVariableWithBoundResolvesToBound() throws NoSuchFieldException {
         Field field = BoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Point.class);
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
@@ -104,7 +104,7 @@ class TypeTagTest {
     }
 
     @Test
-    void correctnessOfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
+    void typeVariableWithRecursiveBoundIsShortCircuitedToObject() throws NoSuchFieldException {
         Field field = RecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
@@ -112,7 +112,7 @@ class TypeTagTest {
     }
 
     @Test
-    void correctnessOfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
+    void typeVariableWithRecursiveWildcardBoundIsShortCircuitedToObject() throws NoSuchFieldException {
         Field field = RecursiveBoundedWildcardTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
@@ -120,7 +120,7 @@ class TypeTagTest {
     }
 
     @Test
-    void correctnessOfWildcardFieldWithBoundedType() throws NoSuchFieldException {
+    void unboundedWildcardResolvesToTypeParameterBound() throws NoSuchFieldException {
         Field field = WildcardBoundedTypeVariableContainer.class.getDeclaredField("wildcard");
         TypeTag expected = new TypeTag(BoundedTypeVariable.class, new TypeTag(Point.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
@@ -128,7 +128,7 @@ class TypeTagTest {
     }
 
     @Test
-    void correctnessOfSelfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
+    void typeVariableWithSelfReferentialBoundIsShortCircuitedToObject() throws NoSuchFieldException {
         Field field = SelfRecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(SelfRecursiveBoundedTypeVariable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
@@ -136,9 +136,17 @@ class TypeTagTest {
     }
 
     @Test
-    void correctnessOfSelfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
+    void typeVariableWithSelfReferentialWildcardBoundIsShortCircuitedToObject() throws NoSuchFieldException {
         Field field = SelfRecursiveBoundedWildcardTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(SelfRecursiveBoundedWildcardTypeVariable.class, new TypeTag(Object.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void unboundedWildcardWithSelfReferentialTypeParameterBoundIsShortCircuitedToObject() throws NoSuchFieldException {
+        Field field = EnumContainer.class.getDeclaredField("anEnum");
+        TypeTag expected = new TypeTag(Enum.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
         assertThat(actual).isEqualTo(expected);
     }
@@ -192,5 +200,35 @@ class TypeTagTest {
     static class SelfRecursiveBoundedWildcardTypeVariable<T extends SelfRecursiveBoundedWildcardTypeVariable<?>> {
 
         private T fieldWithBoundedTypeVariable;
+    }
+
+    @Test
+    void wildcardWithUpperBoundResolvesToUpperBound() throws NoSuchFieldException {
+        Field field = UpperBoundWildcardContainer.class.getDeclaredField("field");
+        TypeTag expected = new TypeTag(List.class, new TypeTag(Point.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void wildcardWithLowerBoundResolvesToLowerBound() throws NoSuchFieldException {
+        Field field = LowerBoundWildcardContainer.class.getDeclaredField("field");
+        TypeTag expected = new TypeTag(List.class, new TypeTag(String.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    static class EnumContainer {
+        Enum<?> anEnum;
+    }
+
+    @SuppressWarnings("unused")
+    static class UpperBoundWildcardContainer {
+        private List<? extends Point> field;
+    }
+
+    @SuppressWarnings("unused")
+    static class LowerBoundWildcardContainer {
+        private List<? super String> field;
     }
 }

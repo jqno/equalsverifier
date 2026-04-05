@@ -133,7 +133,13 @@ public final record TypeTag(Class<?> type, List<TypeTag> genericTypes) {
         for (TypeVariable<?> tv : typeAsClass.getTypeParameters()) {
             for (Type b : tv.getBounds()) {
                 if (!shortCircuitRecursiveTypeBound) {
-                    return resolve(b, typeAsClass, enclosingType, true);
+                    TypeTag result = resolve(b, typeAsClass, enclosingType, true);
+                    // The result fills a slot inside typeAsClass, so if it equals typeAsClass,
+                    // we have a self-referential cycle (e.g. Enum<E extends Enum<E>>): use Object.
+                    if (result.getType().equals(typeAsClass)) {
+                        return new TypeTag(Object.class);
+                    }
+                    return result;
                 }
             }
         }
