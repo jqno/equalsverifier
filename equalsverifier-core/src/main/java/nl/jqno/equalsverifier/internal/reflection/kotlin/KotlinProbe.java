@@ -59,8 +59,12 @@ public final class KotlinProbe {
             return Optional.empty();
         }
         String kFieldName = optKFieldName.get();
-        KCallable<?> kField = kType.getMembers().stream().filter(m -> kFieldName.equals(m.getName())).findAny().get();
-        KType kReturnType = kField.getReturnType();
+        Optional<? extends KCallable<?>> kField =
+                kType.getMembers().stream().filter(m -> kFieldName.equals(m.getName())).findAny();
+        if (kField.isEmpty()) {
+            return Optional.empty();
+        }
+        KType kReturnType = kField.get().getReturnType();
 
         TypeTag tag = createTypeTag(kReturnType);
         return Optional.of(new TypeTag(KotlinScreen.LAZY, tag));

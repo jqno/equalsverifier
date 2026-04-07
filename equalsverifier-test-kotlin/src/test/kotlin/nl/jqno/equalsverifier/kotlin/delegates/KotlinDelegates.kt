@@ -210,3 +210,24 @@ class ReflectionDelegation(seed: Int) {
   override fun hashCode(): Int = foo.hashCode()
 }
 
+/*
+ * Issue 1170: subclass inheriting a private lazy field from parent
+ */
+
+open class ParentWithPrivateLazy(val x: Int) {
+  @Suppress("unused")
+  private val hiddenLazy: String by lazy { "computed from $x" }
+
+  // override fun equals(other: Any?): Boolean =
+  //   other != null && other.javaClass == javaClass && (other as ParentWithPrivateLazy).x == x
+  //
+  // override fun hashCode(): Int = x
+}
+
+class SubclassWithInheritedPrivateLazy(x: Int) : ParentWithPrivateLazy(x) {
+  override fun equals(other: Any?): Boolean =
+    (other is SubclassWithInheritedPrivateLazy) && x == other.x
+
+  override fun hashCode(): Int = x
+}
+

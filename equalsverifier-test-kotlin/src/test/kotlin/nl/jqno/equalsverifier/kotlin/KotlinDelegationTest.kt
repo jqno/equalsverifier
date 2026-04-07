@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.kotlin
 
 import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import nl.jqno.equalsverifier.kotlin.delegates.*
 import nl.jqno.equalsverifier_testhelpers.ExpectedException
 import org.junit.jupiter.api.Test
@@ -160,5 +161,12 @@ class KotlinDelegationTest {
   @Test
   fun `succeed when class uses reflection delegation`() {
     EqualsVerifier.forClass(ReflectionDelegation::class.java).verify()
+  }
+
+  @Test
+  fun `issue 1170 - succeed when subclass inherits private lazy field from parent`() {
+    EqualsVerifier.forClass(SubclassWithInheritedPrivateLazy::class.java)
+      .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+      .verify()
   }
 }
