@@ -503,6 +503,7 @@ class JavaApiClassesTest {
         private final BitSet bitset;
         private final Calendar calendar;
         private final Date date;
+        private final Enum<?> anEnum;
         private final File file;
         private final GregorianCalendar gregorianCalendar;
         private final Pattern pattern;
@@ -541,6 +542,7 @@ class JavaApiClassesTest {
                 BitSet bitset,
                 Calendar calendar,
                 Date date,
+                Enum<?> anEnum,
                 File file,
                 GregorianCalendar gregorianCalendar,
                 Pattern pattern,
@@ -577,6 +579,7 @@ class JavaApiClassesTest {
             this.bitset = bitset;
             this.calendar = calendar;
             this.date = date;
+            this.anEnum = anEnum;
             this.file = file;
             this.gregorianCalendar = gregorianCalendar;
             this.pattern = pattern;
@@ -621,6 +624,7 @@ class JavaApiClassesTest {
                     && Objects.equals(bitset, other.bitset)
                     && Objects.equals(calendar, other.calendar)
                     && Objects.equals(date, other.date)
+                    && Objects.equals(anEnum, other.anEnum)
                     && Objects.equals(file, other.file)
                     && Objects.equals(gregorianCalendar, other.gregorianCalendar)
                     && Objects.equals(pattern, other.pattern)
@@ -663,6 +667,7 @@ class JavaApiClassesTest {
                         bitset,
                         calendar,
                         date,
+                        anEnum,
                         file,
                         gregorianCalendar,
                         pattern,
