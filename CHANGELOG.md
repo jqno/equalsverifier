@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.2] - 2026-04-07
+
 ### Changed
 
 - Multi-line error messages now align better.
@@ -1572,7 +1574,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4.2...HEAD
+[4.4.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4.1...equalsverifier-4.4.2
 [4.4.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4...equalsverifier-4.4.1
 [4.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3.1...equalsverifier-4.4
 [4.3.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.3...equalsverifier-4.3.1
