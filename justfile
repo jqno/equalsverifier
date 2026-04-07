@@ -22,9 +22,9 @@ verify:
 format:
     mvn spotless:apply
 
-# Installs EqualsVerifier in local Maven cache, after running all tests and static analysis
+# Installs EqualsVerifier in local Maven cache, skipping tests and static analysis
 local-install:
-    mvn install -Prelease
+    mvn install -Prelease -DskipTests=true -DdisableStaticAnalysis
 
 # Runs mutation tests
 pitest:
