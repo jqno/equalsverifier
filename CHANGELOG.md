@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Multi-line error messages now align better.
+
+### Fixed
+
+- Fixes a bug where static fields of certain types (e.g., `BigDecimal` and boxed `Float`) were not restored to their original value after EqualsVerifier threw a `NullPointerException` while null-checking them.
 - Fixes a bug where an `Enum<?>` field resolved to `Enum<Enum<Object>>` (because Enum has a self-referential type bound).
 
 ## [4.4.1] - 2026-02-23

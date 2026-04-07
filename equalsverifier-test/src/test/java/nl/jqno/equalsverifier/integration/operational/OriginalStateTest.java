@@ -1,8 +1,9 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -40,19 +41,27 @@ class OriginalStateTest {
     }
 
     @Test
-    void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() {
-        try {
-            EqualsVerifier.forClass(FailingEqualsContainerContainer.class).verify();
-            fail("EqualsVerifier should have failed on FailingEqualsContainerContainer.");
-        }
-        catch (AssertionError e) {
-            // Make sure EV fails on a check that actually mutates fields.
-            assertThat(e.getMessage()).contains("Mutability");
-        }
-        catch (Throwable ignored) {
-            fail("EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
-        }
+    void staticBigDecimalValueReturnsToOriginalState_whenEqualsVerifierFailsWithNpe() {
+        assertThatThrownBy(() -> EqualsVerifier.forClass(CorrectEqualsWithStaticBigDecimal.class).verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Non-nullity");
+        assertThat(CorrectEqualsWithStaticBigDecimal.staticValue).isEqualTo(BigDecimal.TEN);
+    }
 
+    @Test
+    void staticFloatValueReturnsToOriginalState_whenEqualsVerifierFailsWithNpe() {
+        assertThatThrownBy(() -> EqualsVerifier.forClass(CorrectEqualsWithStaticFloat.class).verify())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Non-nullity");
+        assertThat(CorrectEqualsWithStaticFloat.staticValue).isEqualTo(2.0f);
+    }
+
+    @Test
+    void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() {
+        assertThatThrownBy(() -> EqualsVerifier.forClass(FailingEqualsContainerContainer.class).verify())
+                .isInstanceOf(AssertionError.class)
+                // Make sure EV fails on a check that actually mutates fields.
+                .hasMessageContaining("Mutability");
         assertThat(CorrectEquals.STATIC_FINAL_VALUE).isEqualTo(STATIC_FINAL);
         assertThat(CorrectEquals.staticValue).isEqualTo(STATIC);
     }
@@ -146,6 +155,52 @@ class OriginalStateTest {
 
         public SubContainer(CorrectEquals foo) {
             super(foo);
+        }
+    }
+
+    static final class CorrectEqualsWithStaticBigDecimal {
+
+        static BigDecimal staticValue = BigDecimal.TEN;
+        private final String instanceValue;
+
+        public CorrectEqualsWithStaticBigDecimal(String instanceValue) {
+            this.instanceValue = instanceValue;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof CorrectEqualsWithStaticBigDecimal other)) {
+                return false;
+            }
+            return staticValue.compareTo(BigDecimal.ZERO) >= 0 && Objects.equals(instanceValue, other.instanceValue);
+        }
+
+        @Override
+        public int hashCode() {
+            return staticValue.intValue() + Objects.hash(instanceValue);
+        }
+    }
+
+    static final class CorrectEqualsWithStaticFloat {
+
+        static Float staticValue = 2.0f;
+        private final float instanceValue;
+
+        public CorrectEqualsWithStaticFloat(float instanceValue) {
+            this.instanceValue = instanceValue;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof CorrectEqualsWithStaticFloat other)) {
+                return false;
+            }
+            return Float.compare(instanceValue * staticValue, other.instanceValue * staticValue) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Float.hashCode(instanceValue * staticValue);
         }
     }
 
