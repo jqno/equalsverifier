@@ -265,7 +265,9 @@ class GenericTypesTest {
             }
             ListContainer other = (ListContainer) obj;
             if (list == null || other.list == null) {
-                return list == other.list;
+                @SuppressWarnings("ReferenceEquality")
+                var result = list == other.list;
+                return result;
             }
             if (list.size() != other.list.size()) {
                 return false;
@@ -306,7 +308,9 @@ class GenericTypesTest {
             }
             SetContainer other = (SetContainer) obj;
             if (set == null || other.set == null) {
-                return set == other.set;
+                @SuppressWarnings("ReferenceEquality")
+                var result = set == other.set;
+                return result;
             }
             if (set.size() != other.set.size()) {
                 return false;
@@ -345,7 +349,9 @@ class GenericTypesTest {
             }
             MapContainer other = (MapContainer) obj;
             if (map == null || other.map == null) {
-                return map == other.map;
+                @SuppressWarnings("ReferenceEquality")
+                var result = map == other.map;
+                return result;
             }
             if (map.size() != other.map.size()) {
                 return false;
