@@ -20,7 +20,7 @@ public final class ReflectionInstantiator<T> implements Instantiator<T> {
     private final ObjectInstantiator<T> objenesisInstantiator;
 
     /**
-     * Package private constructor. Use {@link InstantiatorFactory#of(ClassProbe, Objenesis)} instead.
+     * Package private constructor. Use {@link InstantiatorFactory#of(ClassProbe, Objenesis, boolean)} instead.
      *
      * @param probe     The ClassProbe for the type.
      * @param objenesis The Objenesis instance to use.

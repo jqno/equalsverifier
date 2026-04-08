@@ -18,7 +18,7 @@ public class ClassConstructorInstantiator<T> implements Instantiator<T> {
     private final Constructor<T> constructor;
 
     /**
-     * Package private constructor. Use {@link InstantiatorFactory#of(ClassProbe, Objenesis)} instead.
+     * Package private constructor. Use {@link InstantiatorFactory#of(ClassProbe, Objenesis, boolean)} instead.
      *
      * @param type The type to instantiate.
      */
