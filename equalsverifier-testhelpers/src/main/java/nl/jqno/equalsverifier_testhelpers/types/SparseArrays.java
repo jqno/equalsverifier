@@ -82,7 +82,9 @@ public class SparseArrays {
                 return sparseArray == other.sparseArray;
             }
             if (sparseArray.items == null || other.sparseArray.items == null) {
-                return sparseArray.items == other.sparseArray.items;
+                @SuppressWarnings("ReferenceEquality")
+                var result = sparseArray.items == other.sparseArray.items;
+                return result;
             }
             if (sparseArray.items.size() != other.sparseArray.items.size()) {
                 return false;

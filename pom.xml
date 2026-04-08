@@ -98,7 +98,7 @@
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
-        <version.error-prone>2.48.0</version.error-prone>
+        <version.error-prone>2.49.0</version.error-prone>
         <version.flatten-maven-plugin>1.7.3</version.flatten-maven-plugin>
         <version.jacoco>0.8.14</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
