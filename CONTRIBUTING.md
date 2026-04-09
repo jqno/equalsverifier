@@ -85,14 +85,4 @@ There are several Maven profiles that can be enabled or disabled:
 
 ## Signed JAR
 
-The `lib/` folder in the `equalsverifier-test-core` module contains a local Maven repository containing a signed JAR, used to test potential ClassLoader issues. Here's how to install a JAR into it:
-
-```sh
-mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
-                        -Dfile=&lt;path-to-file> -DgroupId=&lt;myGroup> \
-                        -DartifactId=&lt;myArtifactId> -Dversion=&lt;myVersion> \
-                        -Dpackaging=&lt;myPackaging> -DcreateChecksum=true \
-                        -DlocalRepositoryPath=equalsverifier-test-core/lib
-```
-
-The signed JAR itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
+The `equalsverifier-test-signedjar` module builds and signs a small JAR containing a single class, used to test that EqualsVerifier handles signed JARs without ClassLoader issues. It is built automatically as part of the normal Maven build. The module uses `maven-jarsigner-plugin` with a test-only keystore (`.keystore`) committed to that module. The keystore credentials are intentionally public — they are throwaway test credentials, not production secrets.
