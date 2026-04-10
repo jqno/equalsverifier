@@ -24,12 +24,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Cache Maven repository
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          # run_id always misses, so restore-keys restores the previous run's cache and the
+          # updated cache (including any newly downloaded plugin versions) is always saved back.
+          key: ${{ runner.os }}-mvn-pitest-comment-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-mvn-pitest-comment-
       - name: 'Set up JDK'
         uses: actions/setup-java@v5
         with:
           java-version: 26
           distribution: temurin
-          cache: maven
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v20
         with:
