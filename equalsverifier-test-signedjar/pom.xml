@@ -73,6 +73,16 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!-- PITest would try to run SignedJarIT directly, but it needs signedjar.path
+                     which is only set by Failsafe, not by PITest. SignedJarPoint is covered
+                     via crossModule from equalsverifier-test. -->
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
