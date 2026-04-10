@@ -83,7 +83,6 @@
         <version.assertj>3.27.7</version.assertj>
         <version.commons-lang3>3.20.0</version.commons-lang3>
         <version.eclipse-annotation>2.4.100</version.eclipse-annotation>
-        <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
         <version.jakarta-persistence-api>3.0.0</version.jakarta-persistence-api>
         <version.jakarta-annotation-api>3.0.0</version.jakarta-annotation-api>
         <version.jcip-annotations>1.0</version.jcip-annotations>
@@ -503,6 +502,7 @@
                 <module>equalsverifier-testhelpers</module>
                 <module>equalsverifier-test</module>
                 <module>equalsverifier-test-mockito</module>
+                <module>equalsverifier-test-signedjar</module>
             </modules>
         </profile>
 
