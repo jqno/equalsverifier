@@ -76,4 +76,4 @@ Pull requests are welcome! If you plan to open one, please also [register an iss
 
 # Disclaimer
 
-Copyright 2009-2025 Jan Ouwens
+Copyright 2009-2026 Jan Ouwens
