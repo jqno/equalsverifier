@@ -20,7 +20,7 @@ class UrlTest {
     @Test
     void fail_whenEqualsUsesUrlDirectly() {
         ExpectedException
-                .when(() -> EqualsVerifier.forClass(UrlWithDirectEquals.class).verify())
+                .when(() -> EqualsVerifier.forClass(UrlWithDirectEqualsButUriHashCode.class).verify())
                 .assertFailure()
                 .assertMessageContains(UrlFieldCheck.ERROR_DOC_TITLE, "url", Warning.URL_EQUALITY.toString());
     }
@@ -35,7 +35,7 @@ class UrlTest {
 
     @Test
     void succeed_whenUrlEqualityWarningIsSuppressed() {
-        EqualsVerifier.forClass(UrlWithDirectEquals.class).suppress(Warning.URL_EQUALITY).verify();
+        EqualsVerifier.forClass(UrlWithDirectEqualsButUriHashCode.class).suppress(Warning.URL_EQUALITY).verify();
     }
 
     @Test
@@ -44,22 +44,22 @@ class UrlTest {
     }
 
     @SuppressWarnings("unused")
-    private static final class UrlWithDirectEquals {
+    private static final class UrlWithDirectEqualsButUriHashCode {
 
         private final URL url;
 
-        private UrlWithDirectEquals(URL url) {
+        private UrlWithDirectEqualsButUriHashCode(URL url) {
             this.url = url;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof UrlWithDirectEquals other && Objects.equals(url, other.url);
+            return obj instanceof UrlWithDirectEqualsButUriHashCode other && Objects.equals(url, other.url);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(url);
+            return Objects.hash(uriOf(url));
         }
     }
 
