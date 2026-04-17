@@ -26,6 +26,7 @@ public class FieldsChecker<T> implements Checker {
     private final TransitivityFieldCheck<T> transitivityFieldCheck;
     private final StringFieldCheck<T> stringFieldCheck;
     private final BigDecimalFieldCheck<T> bigDecimalFieldCheck;
+    private final UrlFieldCheck<T> urlFieldCheck;
     private final JpaLazyGetterFieldCheck<T> jpaLazyGetterFieldCheck;
 
     public FieldsChecker(Context<T> context) {
@@ -49,6 +50,7 @@ public class FieldsChecker<T> implements Checker {
         this.stringFieldCheck =
                 new StringFieldCheck<>(subjectCreator, context.getValueProvider(), config.cachedHashCodeInitializer());
         this.bigDecimalFieldCheck = new BigDecimalFieldCheck<>(subjectCreator, config.cachedHashCodeInitializer());
+        this.urlFieldCheck = new UrlFieldCheck<>(subjectCreator, config.cachedHashCodeInitializer());
         this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(context);
     }
 
@@ -77,6 +79,10 @@ public class FieldsChecker<T> implements Checker {
 
         if (!config.warningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
             inspector.check(bigDecimalFieldCheck);
+        }
+
+        if (!config.warningsToSuppress().contains(Warning.URL_EQUALITY)) {
+            inspector.check(urlFieldCheck);
         }
 
         AnnotationCache cache = config.annotationCache();

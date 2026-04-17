@@ -67,7 +67,7 @@ class JavaApiClassesTest {
 
     @Test
     void succeed_whenClassContainsACommonJavaApiClass() {
-        EqualsVerifier.forClass(CommonClassesContainer.class).verify();
+        EqualsVerifier.forClass(CommonClassesContainer.class).suppress(Warning.URL_EQUALITY).verify();
     }
 
     @Test

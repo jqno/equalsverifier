@@ -254,4 +254,22 @@ public enum Warning {
      * @since 3.8
      */
     BIGDECIMAL_EQUALITY,
+
+    /**
+     * Disables the check that {@code java.net.URL} fields are not compared using {@code URL.equals()} or {@code
+     * URL.hashCode()}.
+     *
+     * <p>
+     * {@code URL.equals()} and {@code URL.hashCode()} perform DNS resolution to compare hosts, making equality checks
+     * and hash codes network-dependent and non-deterministic. Consider using {@code java.net.URI} instead:
+     * {@code URI.create(url.toString()).equals(URI.create(other.url.toString()))}.
+     *
+     * <p>
+     * {@code EqualsVerifier} checks for this by default but it can be disabled by suppressing this warning, for example
+     * if the {@code URL} was constructed with a custom {@link java.net.URLStreamHandler} that overrides {@code equals}
+     * and {@code hashCode} to avoid DNS resolution.
+     *
+     * @since 4.5
+     */
+    URL_EQUALITY,
 }
