@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- EqualsVerifier now detects when `java.net.URL` fields are used in `equals` or `hashCode`, since `URL.equals()` and `URL.hashCode()` perform DNS resolution, making them network-dependent and non-deterministic. Consider using `URI.create(url.toString())` instead. This check can be suppressed with `Warning.URL_EQUALITY`. (Issue [#1203](https://github.com/jqno/equalsverifier/issues/1203))
+
 ## [4.4.2] - 2026-04-07
 
 ### Changed
