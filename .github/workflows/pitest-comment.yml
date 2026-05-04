@@ -38,7 +38,7 @@ jobs:
           java-version: 26
           distribution: temurin
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v20
+        uses: dawidd6/action-download-artifact@v21
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           name: pitest
