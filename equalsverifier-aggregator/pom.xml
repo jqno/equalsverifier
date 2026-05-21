@@ -77,8 +77,12 @@
                 <plugins>
                     <plugin>
                         <!--
-                            Unfortunately AntRun plugin is still needed because Maven plugin doesn't support
-                            `check` goal over multiple modules. See also:
+                            AntRun is still needed here because jacoco-maven-plugin's `report` and
+                            `check` goals can only analyze the current module's own output directory.
+                            We need two separate coverage structures pointing at class files from
+                            different modules (equalsverifier-core's main classes and
+                            equalsverifier-test's coverage package), which requires the lower-level
+                            Ant API's arbitrary fileset support. See also:
                             https://groups.google.com/g/jacoco/c/V58UApeNA0s
                         -->
                         <groupId>org.apache.maven.plugins</groupId>
@@ -137,7 +141,7 @@
                                                     </fileset>
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.basedir}/../equalsverifier-core/src/test/java" />
+                                                    <fileset dir="${project.basedir}/../equalsverifier-test/src/test/java" />
                                                 </sourcefiles>
                                             </structure>
                                             <check failonviolation="true" violationsproperty="violation">
