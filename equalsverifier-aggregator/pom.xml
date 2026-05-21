@@ -12,6 +12,11 @@
     <name>EqualsVerifier | aggregator</name>
 
     <dependencies>
+        <!--
+            type:pom establishes build ordering without putting JARs on any classpath.
+            Maven schedules modules by declared dependencies, not by <modules> list order,
+            so without these the aggregator might run before jacoco.exec files exist.
+        -->
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier-core</artifactId>
@@ -36,6 +41,13 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier-25</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-26</artifactId>
             <version>${project.version}</version>
             <type>pom</type>
             <scope>test</scope>

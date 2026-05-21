@@ -38,7 +38,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jarsigner-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${version.maven-jarsigner-plugin}</version>
                 <executions>
                     <execution>
                         <id>sign</id>
@@ -78,13 +78,6 @@
                      via crossModule from equalsverifier-test. -->
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

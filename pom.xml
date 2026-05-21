@@ -67,7 +67,7 @@
         <argline.preview />
         <argline.experimental />
         <argline.additional />
-        <argline.full>${argline.preview} ${argline.experimental}</argline.full>
+        <argline.base>${argline.preview} ${argline.experimental}</argline.base>
 
         <analysis.jacoco.threshold>0.98</analysis.jacoco.threshold>
         <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
@@ -104,8 +104,10 @@
         <version.maven-antrun-plugin>3.2.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.8.0</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.15.0</version.maven-compiler-plugin>
+        <version.maven-deploy-plugin>3.1.4</version.maven-deploy-plugin>
         <version.maven-enforcer-plugin>3.6.3</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.5.0</version.maven-jar-plugin>
+        <version.maven-jarsigner-plugin>3.1.0</version.maven-jarsigner-plugin>
         <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
         <version.maven-shade-plugin>3.6.2</version.maven-shade-plugin>
         <version.maven-source-plugin>3.4.0</version.maven-source-plugin>
@@ -151,7 +153,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
                 <configuration>
-                    <argLine>@{argline.full} ${argline.additional}</argLine>
+                    <argLine>@{argline.base} ${argline.additional}</argLine>
                     <useModulePath>false</useModulePath>
                     <trimStackTrace>false</trimStackTrace>
                     <useSystemClassLoader>false</useSystemClassLoader>
@@ -175,7 +177,6 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${version.maven-javadoc-plugin}</version>
                 <configuration>
-                    <source>${version.java.base}</source>
                     <doclint>all,-missing</doclint>
                 </configuration>
                 <executions>
@@ -219,7 +220,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.4</version>
+                <version>${version.maven-deploy-plugin}</version>
             </plugin>
         </plugins>
     </build>
@@ -286,7 +287,7 @@
                                     <goal>prepare-agent</goal>
                                 </goals>
                                 <configuration>
-                                    <propertyName>argline.full</propertyName>
+                                    <propertyName>argline.base</propertyName>
                                 </configuration>
                             </execution>
                         </executions>
@@ -316,23 +317,6 @@
                     </plugin>
 
                     <plugin>
-                        <!--
-                            provides the pitest-git:aggregate goal to aggregate json files to be
-                            stored as artifact when accepting PRs from untrusted forks
-                        -->
-                        <groupId>com.arcmutate</groupId>
-                        <artifactId>pitest-git-maven-plugin</artifactId>
-                        <version>${version.arcmutate}</version>
-                    </plugin>
-                    <plugin>
-                        <!--
-                            provides direct integration with github when accepting PRs from trusted branches
-                        -->
-                        <groupId>com.arcmutate</groupId>
-                        <artifactId>pitest-github-maven-plugin</artifactId>
-                        <version>${version.arcmutate}</version>
-                    </plugin>
-                    <plugin>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-maven</artifactId>
                         <version>${version.pitest.maven}</version>
@@ -361,6 +345,7 @@
                             <failWhenNoMutations>false</failWhenNoMutations>
                         </configuration>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>
@@ -474,6 +459,23 @@
 
             <build>
                 <plugins>
+                    <plugin>
+                        <!--
+                            provides the pitest-git:aggregate goal to aggregate json files to be
+                            stored as artifact when accepting PRs from untrusted forks
+                        -->
+                        <groupId>com.arcmutate</groupId>
+                        <artifactId>pitest-git-maven-plugin</artifactId>
+                        <version>${version.arcmutate}</version>
+                    </plugin>
+                    <plugin>
+                        <!--
+                            provides direct integration with github when accepting PRs from trusted branches
+                        -->
+                        <groupId>com.arcmutate</groupId>
+                        <artifactId>pitest-github-maven-plugin</artifactId>
+                        <version>${version.arcmutate}</version>
+                    </plugin>
                     <plugin>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-maven</artifactId>

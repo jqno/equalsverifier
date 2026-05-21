@@ -15,7 +15,6 @@
     <name>EqualsVerifier | core</name>
 
     <properties>
-        <maven.compiler.release>17</maven.compiler.release>
         <maven.javadoc.skip>false</maven.javadoc.skip>
         <maven.source.skip>false</maven.source.skip>
         <argline.additional>-javaagent:${org.mockito:mockito-core:jar}</argline.additional>
