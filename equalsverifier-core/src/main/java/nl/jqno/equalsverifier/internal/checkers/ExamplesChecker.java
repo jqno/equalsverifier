@@ -71,6 +71,7 @@ public class ExamplesChecker<T> implements Checker {
         }
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private void checkEqualButNotIdentical(T reference, T other) {
         assertFalse(Formatter.of("Precondition: the same object appears twice:\n  %%", reference), reference == other);
         assertFalse(

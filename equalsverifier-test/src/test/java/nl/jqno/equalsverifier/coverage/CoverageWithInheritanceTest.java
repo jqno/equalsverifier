@@ -39,7 +39,7 @@ public class CoverageWithInheritanceTest {
         classes.endpointType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
     }
 
-    private static final class Classes<T> {
+    static final class Classes<T> {
 
         private final Class<?> containerType;
         private final Class<? super T> superType;

@@ -199,7 +199,7 @@ class AbstractDelegationTest {
                 .verify();
     }
 
-    private abstract static class AbstractClass {
+    abstract static class AbstractClass {
 
         private int i;
 

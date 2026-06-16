@@ -430,6 +430,7 @@ class GenericTypesTest {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object obj) {
             if (!(obj instanceof ArrayOfTContainer)) {
                 return false;

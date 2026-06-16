@@ -94,6 +94,7 @@ public final class Validations {
         validate(Objects.equals(red, blue), "both prefab values for field " + fieldDescription + " are equal.");
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public static <T> void validateRedAndRedCopyPrefabValues(Class<T> type, T red, T redCopy) {
         validateNotNull(redCopy, "red copy prefab value of type " + type.getSimpleName() + " is null.");
         validate(
