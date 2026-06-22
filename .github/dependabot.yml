@@ -16,3 +16,19 @@ updates:
       dependencies:
         patterns:
           - "*"
+
+  # Suppress all Dependabot PRs (including security updates) for the docs site, since it's statically generated
+  - package-ecosystem: "bundler"
+    directory: "/docs"
+    schedule:
+      interval: "yearly"
+    open-pull-requests-limit: 0
+    ignore:
+      - dependency-name: "*"
+  - package-ecosystem: "docker"
+    directory: "/docs"
+    schedule:
+      interval: "yearly"
+    open-pull-requests-limit: 0
+    ignore:
+      - dependency-name: "*"
