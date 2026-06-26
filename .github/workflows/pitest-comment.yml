@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Cache Maven repository
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.m2/repository
           # run_id always misses, so restore-keys restores the previous run's cache and the
