@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier_testhelpers.types.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests, among other things, the following approaches to inheritance with added fields:
+ * Tests, among other things, the following approaches to inheritance with added fields.
  *
  * <p>
  * 1. "blindly equals", as described by Tal Cohen in Dr. Dobb's Journal, May 2002. See also
