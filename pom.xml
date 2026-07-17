@@ -86,12 +86,12 @@
         <version.jakarta-persistence-api>3.0.0</version.jakarta-persistence-api>
         <version.jakarta-annotation-api>3.0.0</version.jakarta-annotation-api>
         <version.jcip-annotations>1.0</version.jcip-annotations>
-        <version.junit-jupiter>6.1.1</version.junit-jupiter>
-        <version.kotlin>2.4.0</version.kotlin>
+        <version.junit-jupiter>6.1.2</version.junit-jupiter>
+        <version.kotlin>2.4.10</version.kotlin>
         <version.slf4j>2.0.18</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>13.7.0</version.checkstyle>
+        <version.checkstyle>13.8.0</version.checkstyle>
 
         <version.arcmutate>2.3.3</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
@@ -115,7 +115,7 @@
         <version.mockito>5.23.0</version.mockito>
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.25.7</version.pitest.maven>
-        <version.spotbugs>4.10.2</version.spotbugs>
+        <version.spotbugs>4.10.3</version.spotbugs>
         <version.spotless>3.8.0</version.spotless>
     </properties>
 
