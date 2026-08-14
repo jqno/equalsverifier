@@ -102,6 +102,9 @@ public class GenericJavaUtilValueSupplier<T> extends GenericValueSupplier<T> {
         if (is(HashSet.class)) {
             return collection(HashSet::new);
         }
+        if (is(LinkedHashSet.class)) {
+            return collection(LinkedHashSet::new);
+        }
         if (is(TreeSet.class)) {
             return collection(() -> new TreeSet<>(OBJECT_COMPARATOR));
         }

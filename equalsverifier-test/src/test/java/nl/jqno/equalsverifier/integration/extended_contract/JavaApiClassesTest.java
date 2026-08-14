@@ -200,6 +200,7 @@ class JavaApiClassesTest {
         private final NavigableSet<String> navigableSet;
         private final CopyOnWriteArraySet<String> copyOnWriteArraySet;
         private final HashSet<String> hashSet;
+        private final LinkedHashSet<String> linkedHashSet;
         private final TreeSet<String> treeSet;
         private final EnumSet<TypeHelper.SimpleEnum> enumSet;
 
@@ -209,6 +210,7 @@ class JavaApiClassesTest {
                 NavigableSet<String> navigableSet,
                 CopyOnWriteArraySet<String> copyOnWriteArraySet,
                 HashSet<String> hashSet,
+                LinkedHashSet<String> linkedHashSet,
                 TreeSet<String> treeSet,
                 EnumSet<TypeHelper.SimpleEnum> enumSet) {
             this.set = set;
@@ -216,6 +218,7 @@ class JavaApiClassesTest {
             this.navigableSet = navigableSet;
             this.copyOnWriteArraySet = copyOnWriteArraySet;
             this.hashSet = hashSet;
+            this.linkedHashSet = linkedHashSet;
             this.treeSet = treeSet;
             this.enumSet = enumSet;
         }
@@ -231,6 +234,7 @@ class JavaApiClassesTest {
                     && Objects.equals(navigableSet, other.navigableSet)
                     && Objects.equals(copyOnWriteArraySet, other.copyOnWriteArraySet)
                     && Objects.equals(hashSet, other.hashSet)
+                    && Objects.equals(linkedHashSet, other.linkedHashSet)
                     && Objects.equals(treeSet, other.treeSet)
                     && Objects.equals(enumSet, other.enumSet);
         }
@@ -238,9 +242,10 @@ class JavaApiClassesTest {
         @Override
         public int hashCode() {
             callIterator(set, sortedSet, navigableSet);
-            callIterator(copyOnWriteArraySet, hashSet, treeSet);
+            callIterator(copyOnWriteArraySet, hashSet, linkedHashSet, treeSet);
             callIterator(enumSet);
-            return Objects.hash(set, sortedSet, navigableSet, copyOnWriteArraySet, hashSet, treeSet, enumSet);
+            return Objects
+                    .hash(set, sortedSet, navigableSet, copyOnWriteArraySet, hashSet, linkedHashSet, treeSet, enumSet);
         }
     }
 
