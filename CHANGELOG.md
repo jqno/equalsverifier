@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Prefab values for `LinkedHashSet` so fields of that type no longer require `--add-opens java.base/java.util` or `withPrefabValues`. ([Issue 1231](https://github.com/jqno/equalsverifier/issues/1231))
+- Adds prefab values for `java.util.LinkedHashSet`. ([Issue 1231](https://github.com/jqno/equalsverifier/issues/1231))
 
 ## [4.5] - 2026-04-17
 

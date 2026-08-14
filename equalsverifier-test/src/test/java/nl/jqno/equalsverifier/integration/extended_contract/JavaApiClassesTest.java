@@ -244,8 +244,8 @@ class JavaApiClassesTest {
             callIterator(set, sortedSet, navigableSet);
             callIterator(copyOnWriteArraySet, hashSet, linkedHashSet, treeSet);
             callIterator(enumSet);
-            return Objects.hash(
-                    set, sortedSet, navigableSet, copyOnWriteArraySet, hashSet, linkedHashSet, treeSet, enumSet);
+            return Objects
+                    .hash(set, sortedSet, navigableSet, copyOnWriteArraySet, hashSet, linkedHashSet, treeSet, enumSet);
         }
     }
 
