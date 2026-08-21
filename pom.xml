@@ -91,7 +91,7 @@
         <version.slf4j>2.0.18</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>13.10.0</version.checkstyle>
+        <version.checkstyle>13.11.0</version.checkstyle>
 
         <version.arcmutate>2.3.3</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
@@ -116,7 +116,7 @@
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.25.9</version.pitest.maven>
         <version.spotbugs>4.10.3</version.spotbugs>
-        <version.spotless>3.9.0</version.spotless>
+        <version.spotless>3.10.0</version.spotless>
     </properties>
 
     <build>
