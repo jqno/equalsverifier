@@ -30,7 +30,8 @@ public class AbstractValueProvider implements ValueProvider {
         }
         catch (NoValueException e) {
             throw new NoValueException("Could not construct a value for " + tag.getType().getSimpleName()
-                    + ": it is sealed and no non-recursive subclass could be found. Please add prefab values for this type.",
+                    + ": it is sealed and no instantiatable subclass could be found "
+                    + "(they were recursive, or enums with only one value). Please add prefab values for this type.",
                     e);
         }
     }

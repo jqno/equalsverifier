@@ -107,11 +107,15 @@ public final class SubtypeManager {
             ValueProvider vp,
             Attributes attributes) {
         return findAllInstantiablePermittedSubclasses(probe)
-                .filter(c -> !isRecursive(c, vp, attributes))
+                .filter(c -> isUsable(c, vp, attributes))
                 .findFirst()
                 .map(c -> (Class<T>) c)
                 .orElseThrow(
                     () -> new NoValueException("Could not construct a value for " + probe.getType().getSimpleName()));
+    }
+
+    private static <T> boolean isUsable(Class<T> type, ValueProvider vp, Attributes attributes) {
+        return !isRecursive(type, vp, attributes) && !ClassProbe.of(type).isEmptyOrSingleValueEnum();
     }
 
     private static <T> boolean isRecursive(Class<T> type, ValueProvider vp, Attributes attributes) {

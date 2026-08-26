@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Significant fields error when first implementation of a sealed interface is a single-value enum. ([Issue 1236](https://github.com/jqno/equalsverifier/issues/1236))
+
 ## [4.5.1] - 2026-08-21
 
 ### Fixed

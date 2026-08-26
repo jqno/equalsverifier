@@ -65,6 +65,15 @@ public final class ClassProbe<T> {
     }
 
     /**
+     * Returns whether T is a single-value enum.
+     *
+     * @return Whether T is an enum with a single value.
+     */
+    public boolean isEmptyOrSingleValueEnum() {
+        return type.isEnum() && type.getEnumConstants().length <= 1;
+    }
+
+    /**
      * Determines whether T has an {@code equals} method.
      *
      * @return True if T has an {@code equals} method.

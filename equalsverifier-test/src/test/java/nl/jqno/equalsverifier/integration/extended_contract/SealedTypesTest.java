@@ -96,6 +96,23 @@ class SealedTypesTest {
                 .verify();
     }
 
+    @Test
+    void succeed_whenFirstChildIsSingletonEnumWhenFallbackExists() {
+        EqualsVerifier.forClass(SingletonEnumWithFallback.Container.class).verify();
+    }
+
+    @Test
+    void succeed_whenFirstChildIsSingletonEnumWhenRecursiveFallbackExists() {
+        EqualsVerifier.forClass(SingletonEnumWithRecursiveFallback.Container.class).verify();
+    }
+
+    @Test
+    void fail_whenFirstChildIsSingletonEnumWhenNoFallbackExists() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(SingletonEnumWithoutFallback.Container.class).verify())
+                .assertFailure();
+    }
+
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {
 
         private final int i;
@@ -302,5 +319,43 @@ class SealedTypesTest {
             hashCode = 31 * hashCode + i.hashCode();
             return hashCode;
         }
+    }
+
+    public sealed interface SingletonEnumWithFallback {
+
+        enum Singleton implements SingletonEnumWithFallback {
+            INSTANCE
+        }
+
+        // Note: fallback must be alphabetically _after_ the singleton, because
+        // Class#getPermittedSubclasses() is alphabetic.
+        // (Actually, it's unspecified, but on my JVM it's alphabetic. It might also be
+        // order-based, so we'll also place it after the Singleton.)
+        record XFallback(int i) implements SingletonEnumWithFallback {}
+
+        public record Container(SingletonEnumWithFallback x) {}
+    }
+
+    public sealed interface SingletonEnumWithRecursiveFallback {
+
+        enum Singleton implements SingletonEnumWithRecursiveFallback {
+            INSTANCE
+        }
+
+        // Again, let's put it after the singleton both literally and alphabetically.
+        sealed interface XSub extends SingletonEnumWithRecursiveFallback {}
+
+        record SubImpl(int i) implements XSub {}
+
+        public record Container(SingletonEnumWithRecursiveFallback x) {}
+    }
+
+    public sealed interface SingletonEnumWithoutFallback {
+
+        enum Singleton implements SingletonEnumWithoutFallback {
+            INSTANCE
+        }
+
+        public record Container(SingletonEnumWithoutFallback x) {}
     }
 }

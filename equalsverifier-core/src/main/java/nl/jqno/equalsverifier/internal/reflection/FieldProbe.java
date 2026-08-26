@@ -139,8 +139,7 @@ public final class FieldProbe {
      * @return Whether the field is an enum with a single value.
      */
     public boolean isEmptyOrSingleValueEnum() {
-        Class<?> type = field.getType();
-        return type.isEnum() && type.getEnumConstants().length <= 1;
+        return ClassProbe.of(field.getType()).isEmptyOrSingleValueEnum();
     }
 
     /**

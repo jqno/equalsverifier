@@ -75,6 +75,37 @@ class ClassProbeTest {
     }
 
     @Test
+    void isEmptyEnum() {
+        enum EmptyEnum {}
+        var probe = ClassProbe.of(EmptyEnum.class);
+        assertThat(probe.isEmptyOrSingleValueEnum()).isTrue();
+    }
+
+    @Test
+    void isSingleValueEnum() {
+        enum Singleton {
+            INSTANCE
+        }
+        var probe = ClassProbe.of(Singleton.class);
+        assertThat(probe.isEmptyOrSingleValueEnum()).isTrue();
+    }
+
+    @Test
+    void isMultiValueEnum() {
+        enum Letters {
+            A, B, C
+        }
+        var probe = ClassProbe.of(Letters.class);
+        assertThat(probe.isEmptyOrSingleValueEnum()).isFalse();
+    }
+
+    @Test
+    void isNoEnum() {
+        var probe = ClassProbe.of(Empty.class);
+        assertThat(probe.isEmptyOrSingleValueEnum()).isFalse();
+    }
+
+    @Test
     void declaresEquals() {
         assertThat(pointProbe.declaresEquals()).isTrue();
         assertThat(abstractProbe.declaresEquals()).isTrue();

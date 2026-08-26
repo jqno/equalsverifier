@@ -16,8 +16,7 @@ class SealedTypesRecursionTest {
                 .when(() -> EqualsVerifier.forClass(SealedContainer.class).verify())
                 .assertFailure()
                 .assertMessageContains(
-                    "Could not construct a value for SealedInterface",
-                    "it is sealed and no non-recursive subclass could be found",
+                    "Could not construct a value for SealedInterface: it is sealed",
                     "Please add prefab values for this type");
     }
 
@@ -29,8 +28,7 @@ class SealedTypesRecursionTest {
                 .when(() -> EqualsVerifier.forClass(SealedRecordContainer.class).verify())
                 .assertFailure()
                 .assertMessageContains(
-                    "Could not construct a value for SealedRecordInterface",
-                    "it is sealed and no non-recursive subclass could be found",
+                    "Could not construct a value for SealedRecordInterface: it is sealed",
                     "Please add prefab values for this type");
     }
 
