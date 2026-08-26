@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Adds prefab values for `java.util.LinkedHashSet`. ([Issue 1231](https://github.com/jqno/equalsverifier/issues/1231); thanks kalayciburak!)
+- Adds prefab values for `java.util.LinkedHashSet`. ([Issue 1231](https://github.com/jqno/equalsverifier/issues/1231), [Issue 1232](https://github.com/jqno/equalsverifier/issues/1232); thanks kalayciburak!)
 
 ## [4.5] - 2026-04-17
 
