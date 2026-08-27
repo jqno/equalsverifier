@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.2] - 2026-08-27
+
 ### Fixed
 
 - Significant fields error when first implementation of a sealed interface is a single-value enum. ([Issue 1236](https://github.com/jqno/equalsverifier/issues/1236))
@@ -1590,7 +1592,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.5.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.5.2...HEAD
+[4.5.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.5.1...equalsverifier-4.5.2
 [4.5.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.5...equalsverifier-4.5.1
 [4.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4.2...equalsverifier-4.5
 [4.4.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-4.4.1...equalsverifier-4.4.2
