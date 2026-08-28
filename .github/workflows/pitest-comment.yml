@@ -33,12 +33,12 @@ jobs:
           key: ${{ runner.os }}-mvn-pitest-comment-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-mvn-pitest-comment-
       - name: 'Set up JDK'
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           java-version: 26
           distribution: temurin
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v23
+        uses: dawidd6/action-download-artifact@v24
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           name: pitest
