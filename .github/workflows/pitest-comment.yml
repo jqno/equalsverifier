@@ -1,4 +1,5 @@
 # Part two of two stage process for updating PRs with pitest results when accepting PRs from untrusted forks.
+# cache-jdk: true
 #
 # The version of this file that runs is the version in the main/master branch, NOT the version in the PR. It must therefore
 # be committed to main/master before the process can run for the first time.
@@ -37,6 +38,7 @@ jobs:
         with:
           java-version: 26
           distribution: temurin
+          cache-jdk: true
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v24
         with:
