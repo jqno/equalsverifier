@@ -94,7 +94,7 @@
         <version.checkstyle>14.1.0</version.checkstyle>
 
         <version.arcmutate>2.3.4</version.arcmutate>
-        <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
+        <version.build-helper-maven-plugin>3.6.2</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
         <version.error-prone>2.50.0</version.error-prone>
@@ -104,7 +104,7 @@
         <version.maven-antrun-plugin>3.2.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.8.0</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.16.0</version.maven-compiler-plugin>
-        <version.maven-deploy-plugin>3.1.4</version.maven-deploy-plugin>
+        <version.maven-deploy-plugin>3.2.0</version.maven-deploy-plugin>
         <version.maven-enforcer-plugin>3.6.3</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.5.1</version.maven-jar-plugin>
         <version.maven-jarsigner-plugin>3.1.0</version.maven-jarsigner-plugin>
