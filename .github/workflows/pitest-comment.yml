@@ -40,7 +40,7 @@ jobs:
           distribution: temurin
           cache-jdk: true
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v24
+        uses: dawidd6/action-download-artifact@v27
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           name: pitest
