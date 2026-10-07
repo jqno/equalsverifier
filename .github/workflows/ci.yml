@@ -15,28 +15,28 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - title: "Supported JDK 17"
+          - title: "Supported LTS JDK 17"
             experimental: false
             cache-id: "jdk17"
             java: 17
             dist: temurin
             flags: "-DdisableStaticAnalysis"
-          - title: "Supported JDK 21"
+          - title: "Supported LTS JDK 21"
             experimental: false
             cache-id: "jdk21"
             java: 21
             dist: temurin
             flags: "-DdisableStaticAnalysis"
-          - title: "Supported JDK 25"
+          - title: "Supported LTS JDK 25"
             experimental: false
             cache-id: "jdk25"
             java: 25
             dist: temurin
             flags: "-DdisableStaticAnalysis"
-          - title: "Supported JDK 26 (with static analysis)"
+          - title: "Supported current JDK 27 (with static analysis)"
             experimental: false
-            cache-id: "jdk26"
-            java: 26
+            cache-id: "jdk27"
+            java: 27
             dist: temurin
             flags: "-Prelease"
           - title: "Experimental JDK EA (simplified)"
