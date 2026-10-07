@@ -15,7 +15,8 @@ public final record Tuple<T>(T red, T blue, T redCopy) {
     /**
      * Returns a new Tuple with the given function applied to each element.
      *
-     * @param fn The function to apply to all values.
+     * @param fn  The function to apply to all values.
+     * @param <U> The type of the values in the returned Tuple.
      * @return A new Tuple with the given function applied to each element.
      */
     public <U> Tuple<U> map(Function<T, U> fn) {
