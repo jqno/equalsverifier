@@ -544,6 +544,17 @@
         </profile>
 
         <profile>
+            <id>modules-jdk28</id>
+            <activation>
+                <jdk>[28,)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-28</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>release</id>
 
             <modules>
