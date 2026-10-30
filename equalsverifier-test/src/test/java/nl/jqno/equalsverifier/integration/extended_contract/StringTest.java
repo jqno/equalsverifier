@@ -65,7 +65,7 @@ class StringTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(caseInsensitiveString);
+            return Objects.hashCode(caseInsensitiveString);
         }
     }
 
@@ -92,7 +92,8 @@ class StringTest {
         @Override
         public int hashCode() {
             return Objects
-                    .hash(caseInsensitiveString == null ? "" : caseInsensitiveString.toUpperCase(Locale.getDefault()));
+                    .hashCode(
+                        caseInsensitiveString == null ? "" : caseInsensitiveString.toUpperCase(Locale.getDefault()));
         }
     }
 
@@ -123,7 +124,7 @@ class StringTest {
         }
 
         private int calcHashCode() {
-            return Objects.hash(caseInsensitiveString);
+            return Objects.hashCode(caseInsensitiveString);
         }
     }
 }

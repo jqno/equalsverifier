@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import java.util.Objects;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
 import nl.jqno.equalsverifier_testhelpers.annotations.Immutable;
@@ -48,7 +46,7 @@ class AnnotationImmutableTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 }

@@ -70,7 +70,7 @@ class AnnotationNullMarkedTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -96,7 +96,7 @@ class AnnotationNullMarkedTest {
 
             @Override
             public int hashCode() {
-                return Objects.hash(o);
+                return Objects.hashCode(o);
             }
         }
 
@@ -121,7 +121,7 @@ class AnnotationNullMarkedTest {
 
                 @Override
                 public int hashCode() {
-                    return Objects.hash(o);
+                    return Objects.hashCode(o);
                 }
             }
         }
@@ -148,7 +148,7 @@ class AnnotationNullMarkedTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -174,7 +174,7 @@ class AnnotationNullMarkedTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 }

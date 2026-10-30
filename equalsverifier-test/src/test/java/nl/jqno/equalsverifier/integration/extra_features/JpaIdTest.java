@@ -462,7 +462,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -497,7 +497,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -629,7 +629,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -662,7 +662,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -698,7 +698,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -783,7 +783,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -853,7 +853,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -883,7 +883,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Long.hashCode(id);
         }
     }
 
@@ -930,7 +930,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -954,7 +954,7 @@ class JpaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 

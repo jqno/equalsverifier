@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.jpms.model;
 
-import java.util.Objects;
-
 public class NonFinal {
     private final int i;
 
@@ -16,6 +14,6 @@ public class NonFinal {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(i);
+        return Integer.hashCode(i);
     }
 }

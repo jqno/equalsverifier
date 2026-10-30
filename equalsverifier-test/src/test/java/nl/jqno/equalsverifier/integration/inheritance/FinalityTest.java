@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import java.util.Objects;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
@@ -104,7 +102,7 @@ class FinalityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -127,7 +125,7 @@ class FinalityTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 

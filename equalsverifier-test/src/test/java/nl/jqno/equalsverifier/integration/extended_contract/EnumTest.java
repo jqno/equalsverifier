@@ -141,7 +141,7 @@ class EnumTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(singleton);
+            return Objects.hashCode(singleton);
         }
     }
 
@@ -199,7 +199,7 @@ class EnumTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(singletonSet);
+            return Objects.hashCode(singletonSet);
         }
     }
 
@@ -218,7 +218,7 @@ class EnumTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(singletonSet);
+            return Objects.hashCode(singletonSet);
         }
     }
 
@@ -238,7 +238,7 @@ class EnumTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(singletonKeyMap);
+            return Objects.hashCode(singletonKeyMap);
         }
     }
 
@@ -258,7 +258,7 @@ class EnumTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(singletonKeyMap);
+            return Objects.hashCode(singletonKeyMap);
         }
     }
 
@@ -278,7 +278,7 @@ class EnumTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(singletonOptional);
+            return Objects.hashCode(singletonOptional);
         }
     }
 }

@@ -318,7 +318,7 @@ class SubjectCreatorTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(x);
+            return Integer.hashCode(x);
         }
 
         @Override

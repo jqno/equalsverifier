@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import java.util.Objects;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier_testhelpers.ExpectedException;
@@ -98,7 +96,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -134,7 +132,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Integer.hashCode(foo);
         }
     }
 
@@ -160,7 +158,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Integer.hashCode(foo);
         }
     }
 
@@ -185,7 +183,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Integer.hashCode(foo);
         }
     }
 
@@ -206,7 +204,7 @@ class BalancedAbstractnessTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Integer.hashCode(foo);
         }
     }
 }

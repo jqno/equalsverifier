@@ -21,7 +21,7 @@ public final class SubA2 extends SuperA {
 
     @Override
     public int hashCode() {
-        return Objects.hash(s);
+        return Objects.hashCode(s);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class ObjectValueProviderTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 

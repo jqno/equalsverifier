@@ -151,7 +151,7 @@ public class SparseArrays {
 
         @Override
         public int hashCode() {
-            return Objects.hash(sparseArray);
+            return Objects.hashCode(sparseArray);
         }
 
         @Override

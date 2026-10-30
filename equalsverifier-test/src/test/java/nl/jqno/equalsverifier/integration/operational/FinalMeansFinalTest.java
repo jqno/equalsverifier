@@ -150,7 +150,7 @@ public class FinalMeansFinalTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -168,7 +168,7 @@ public class FinalMeansFinalTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -189,7 +189,7 @@ public class FinalMeansFinalTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 }

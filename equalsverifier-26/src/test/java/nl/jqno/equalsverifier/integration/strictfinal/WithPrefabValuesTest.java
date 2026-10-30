@@ -58,6 +58,7 @@ public class WithPrefabValuesTest {
                 .verify();
     }
 
+    @SuppressWarnings("HashCodeInObjectsHash")
     static final class Node {
         private final Node node;
 

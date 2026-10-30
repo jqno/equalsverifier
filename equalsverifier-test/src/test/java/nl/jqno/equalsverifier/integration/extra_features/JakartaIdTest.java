@@ -454,7 +454,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -489,7 +489,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -625,7 +625,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -658,7 +658,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -747,7 +747,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -784,7 +784,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -814,7 +814,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Long.hashCode(id);
         }
     }
 
@@ -861,7 +861,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(socialSecurity);
+            return Objects.hashCode(socialSecurity);
         }
     }
 
@@ -885,7 +885,7 @@ class JakartaIdTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 

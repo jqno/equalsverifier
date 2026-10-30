@@ -61,7 +61,7 @@ public class NonfinalReflectionTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 
@@ -80,7 +80,7 @@ public class NonfinalReflectionTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 }

@@ -297,7 +297,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -324,7 +324,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(somethingElse);
+            return Objects.hashCode(somethingElse);
         }
     }
 
@@ -349,7 +349,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -375,7 +375,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(basic);
+            return Objects.hashCode(basic);
         }
     }
 
@@ -400,7 +400,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -425,7 +425,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getOneToOne());
+            return Objects.hashCode(getOneToOne());
         }
     }
 
@@ -450,7 +450,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getOneToMany());
+            return Objects.hashCode(getOneToMany());
         }
     }
 
@@ -475,7 +475,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getManyToOne());
+            return Objects.hashCode(getManyToOne());
         }
     }
 
@@ -500,7 +500,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getManyToMany());
+            return Objects.hashCode(getManyToMany());
         }
     }
 
@@ -526,7 +526,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getElementCollection());
+            return Objects.hashCode(getElementCollection());
         }
     }
 
@@ -553,7 +553,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getS());
+            return Objects.hashCode(getS());
         }
     }
 
@@ -663,7 +663,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId());
+            return Objects.hashCode(getId());
         }
     }
 
@@ -689,7 +689,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId());
+            return Objects.hashCode(getId());
         }
     }
 
@@ -714,7 +714,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -739,7 +739,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId());
+            return Integer.hashCode(getId());
         }
     }
 
@@ -767,7 +767,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -792,7 +792,7 @@ class JakartaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getGenerated());
+            return Objects.hashCode(getGenerated());
         }
     }
 }

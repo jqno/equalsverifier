@@ -109,7 +109,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -133,7 +133,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -159,7 +159,7 @@ class AnnotationNonnullEclipseTest {
 
             @Override
             public int hashCode() {
-                return Objects.hash(o);
+                return Objects.hashCode(o);
             }
         }
 
@@ -184,7 +184,7 @@ class AnnotationNonnullEclipseTest {
 
                 @Override
                 public int hashCode() {
-                    return Objects.hash(o);
+                    return Objects.hashCode(o);
                 }
             }
         }
@@ -211,7 +211,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -237,7 +237,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -262,7 +262,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -286,7 +286,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -310,7 +310,7 @@ class AnnotationNonnullEclipseTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 }

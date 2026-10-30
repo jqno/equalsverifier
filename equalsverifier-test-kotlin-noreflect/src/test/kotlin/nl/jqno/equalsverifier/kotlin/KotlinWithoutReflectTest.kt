@@ -291,7 +291,7 @@ class KotlinWithoutReflectTest {
     override fun equals(other: Any?): Boolean =
       (other is NormalWithIgnoredField) && bar == other.bar
 
-    override fun hashCode(): Int = Objects.hash(bar)
+    override fun hashCode(): Int = Objects.hashCode(bar)
   }
 
   interface Interface {
@@ -313,7 +313,7 @@ class KotlinWithoutReflectTest {
     override fun equals(other: Any?): Boolean =
       (other is InterfaceDelegationWithIgnoredField) && bar == other.bar
 
-    override fun hashCode(): Int = Objects.hash(bar)
+    override fun hashCode(): Int = Objects.hashCode(bar)
   }
 
   class LazyDelegation(fooValue: Int, val bar: String) {
@@ -342,7 +342,7 @@ class KotlinWithoutReflectTest {
     override fun equals(other: Any?): Boolean =
       (other is ObjectDelegationWithIgnoredField) && bar == other.bar
 
-    override fun hashCode(): Int = Objects.hash(bar)
+    override fun hashCode(): Int = Objects.hashCode(bar)
   }
 
   class ObjectDelegationWithOnlyThisField(container: IntContainer, val bar: String) {
@@ -351,7 +351,7 @@ class KotlinWithoutReflectTest {
     override fun equals(other: Any?): Boolean =
       (other is ObjectDelegationWithOnlyThisField) && foo == other.foo
 
-    override fun hashCode(): Int = Objects.hash(foo)
+    override fun hashCode(): Int = Objects.hashCode(foo)
   }
 
   class MemberDelegation(val fooValue: Int, val bar: String) {

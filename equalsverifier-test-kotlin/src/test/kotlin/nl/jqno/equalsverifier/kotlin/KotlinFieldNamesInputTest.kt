@@ -133,7 +133,7 @@ class KotlinFieldNamesInputTest {
     override fun equals(other: Any?): Boolean =
       (other is UnusedFoo) && bar == other.bar
 
-    override fun hashCode(): Int = Objects.hash(bar)
+    override fun hashCode(): Int = Objects.hashCode(bar)
   }
 
   class UnusedDelegatedFoo(stringContainer: StringContainer, intContainer: IntContainer) {
@@ -143,7 +143,7 @@ class KotlinFieldNamesInputTest {
     override fun equals(other: Any?): Boolean =
       (other is UnusedDelegatedFoo) && bar == other.bar
 
-    override fun hashCode(): Int = Objects.hash(bar)
+    override fun hashCode(): Int = Objects.hashCode(bar)
   }
 
   class UnusedDelegatedDouble(container: DoubleContainer) {
@@ -153,7 +153,7 @@ class KotlinFieldNamesInputTest {
     override fun equals(other: Any?): Boolean =
       (other is UnusedDelegatedDouble) && quux == other.quux
 
-    override fun hashCode(): Int = Objects.hash(quux)
+    override fun hashCode(): Int = Objects.hashCode(quux)
   }
 
   class Precondition(val foo: String) {
@@ -163,7 +163,7 @@ class KotlinFieldNamesInputTest {
       return (other is Precondition) && foo == other.foo
     }
 
-    override fun hashCode(): Int = Objects.hash(foo)
+    override fun hashCode(): Int = Objects.hashCode(foo)
   }
 
   class PreconditionDelegated(container: StringContainer) {
@@ -174,7 +174,7 @@ class KotlinFieldNamesInputTest {
       return (other is PreconditionDelegated) && foo == other.foo
     }
 
-    override fun hashCode(): Int = Objects.hash(foo)
+    override fun hashCode(): Int = Objects.hashCode(foo)
   }
 
   class PreconditionLazy(fooValue: String) {
@@ -185,6 +185,6 @@ class KotlinFieldNamesInputTest {
       return (other is PreconditionLazy) && foo == other.foo
     }
 
-    override fun hashCode(): Int = Objects.hash(foo)
+    override fun hashCode(): Int = Objects.hashCode(foo)
   }
 }

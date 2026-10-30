@@ -71,7 +71,7 @@ public class IntegratedValueProviderModernFeaturesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 

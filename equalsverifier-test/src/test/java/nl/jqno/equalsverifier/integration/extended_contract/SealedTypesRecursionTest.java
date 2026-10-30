@@ -55,7 +55,7 @@ class SealedTypesRecursionTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(sealed);
+            return Objects.hashCode(sealed);
         }
 
         @Override
@@ -83,7 +83,7 @@ class SealedTypesRecursionTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(container);
+            return Objects.hashCode(container);
         }
 
         @Override
@@ -109,7 +109,7 @@ class SealedTypesRecursionTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(sealed);
+            return Objects.hashCode(sealed);
         }
 
         @Override

@@ -154,7 +154,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(b);
+            return Objects.hashCode(b);
         }
     }
 
@@ -176,7 +176,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(g);
+            return Objects.hashCode(g);
         }
     }
 
@@ -200,7 +200,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(t);
+            return Objects.hashCode(t);
         }
     }
 
@@ -284,7 +284,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(list);
+            return Objects.hashCode(list);
         }
 
         @Override
@@ -325,7 +325,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(set);
+            return Objects.hashCode(set);
         }
 
         @Override
@@ -369,7 +369,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(map);
+            return Objects.hashCode(map);
         }
 
         @Override
@@ -412,7 +412,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(list);
+            return Objects.hashCode(list);
         }
 
         @Override
@@ -508,7 +508,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -529,7 +529,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -641,7 +641,7 @@ class GenericTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(rg);
+            return Objects.hashCode(rg);
         }
     }
 

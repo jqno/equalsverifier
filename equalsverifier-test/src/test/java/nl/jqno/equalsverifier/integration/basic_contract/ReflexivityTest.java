@@ -166,7 +166,7 @@ class ReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(a);
+            return Objects.hashCode(a);
         }
     }
 
@@ -193,7 +193,7 @@ class ReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Integer.hashCode(foo);
         }
     }
 

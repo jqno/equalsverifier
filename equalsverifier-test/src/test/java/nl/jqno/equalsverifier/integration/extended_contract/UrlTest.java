@@ -59,7 +59,7 @@ class UrlTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(uriOf(url));
+            return Objects.hashCode(uriOf(url));
         }
     }
 
@@ -80,7 +80,7 @@ class UrlTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(url);
+            return Objects.hashCode(url);
         }
     }
 
@@ -100,7 +100,7 @@ class UrlTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(uriOf(url));
+            return Objects.hashCode(uriOf(url));
         }
     }
 

@@ -104,7 +104,7 @@ public class MockitoWorksInTheModularWorldTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
 
         @Override

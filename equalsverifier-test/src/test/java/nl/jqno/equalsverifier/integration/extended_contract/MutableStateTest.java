@@ -132,7 +132,7 @@ class MutableStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(field);
+            return Objects.hashCode(field);
         }
     }
 
@@ -155,7 +155,7 @@ class MutableStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(field);
+            return Objects.hashCode(field);
         }
     }
 

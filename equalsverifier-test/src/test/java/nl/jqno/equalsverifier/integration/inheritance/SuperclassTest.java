@@ -187,7 +187,7 @@ class SuperclassTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(color);
+            return Objects.hashCode(color);
         }
     }
 
@@ -211,7 +211,7 @@ class SuperclassTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(color);
+            return Objects.hashCode(color);
         }
     }
 
@@ -235,7 +235,7 @@ class SuperclassTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(color);
+            return Objects.hashCode(color);
         }
     }
 
@@ -266,7 +266,7 @@ class SuperclassTest {
 
         @Override
         public int hashCode() {
-            return 53 * super.hashCode() + Objects.hash(color);
+            return 53 * super.hashCode() + Objects.hashCode(color);
         }
     }
 

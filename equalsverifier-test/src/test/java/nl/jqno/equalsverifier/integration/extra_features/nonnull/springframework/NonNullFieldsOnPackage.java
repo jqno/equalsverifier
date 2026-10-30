@@ -21,6 +21,6 @@ public final class NonNullFieldsOnPackage {
 
     @Override
     public int hashCode() {
-        return Objects.hash(o);
+        return Objects.hashCode(o);
     }
 }

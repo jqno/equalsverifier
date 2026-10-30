@@ -72,7 +72,7 @@ class BigDecimalTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(bd);
+            return Objects.hashCode(bd);
         }
     }
 
@@ -157,7 +157,7 @@ class BigDecimalTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(bd);
+            return Objects.hashCode(bd);
         }
     }
 

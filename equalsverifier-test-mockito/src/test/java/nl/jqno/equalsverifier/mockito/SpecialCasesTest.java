@@ -31,7 +31,7 @@ public class SpecialCasesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(map);
+            return Objects.hashCode(map);
         }
     }
 }
