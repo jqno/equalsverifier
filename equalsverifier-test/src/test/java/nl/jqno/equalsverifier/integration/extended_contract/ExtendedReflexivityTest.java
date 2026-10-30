@@ -126,7 +126,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 
@@ -149,7 +149,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(stringField);
+            return Objects.hashCode(stringField);
         }
     }
 
@@ -172,7 +172,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(characterField);
+            return Objects.hashCode(characterField);
         }
     }
 
@@ -195,7 +195,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(integerField);
+            return Objects.hashCode(integerField);
         }
     }
 
@@ -218,7 +218,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(longField);
+            return Objects.hashCode(longField);
         }
     }
 
@@ -241,7 +241,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(shortField);
+            return Objects.hashCode(shortField);
         }
     }
 
@@ -260,7 +260,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(field);
+            return Objects.hashCode(field);
         }
 
         static final class NoEquals {}
@@ -281,7 +281,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(field);
+            return Objects.hashCode(field);
         }
 
         interface Interface {}
@@ -302,7 +302,7 @@ class ExtendedReflexivityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(field);
+            return Objects.hashCode(field);
         }
 
         interface InterfaceWithEquals {

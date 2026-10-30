@@ -21,7 +21,7 @@ public final class RecursiveA {
 
     @Override
     public int hashCode() {
-        return Objects.hash(b);
+        return Objects.hashCode(b);
     }
 
     @Override

@@ -23,7 +23,7 @@ public final class SubA3 extends SuperA {
 
     @Override
     public int hashCode() {
-        return Objects.hash(s);
+        return Objects.hashCode(s);
     }
 
     @Override

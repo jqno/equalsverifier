@@ -59,7 +59,7 @@ class SyntheticFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 
@@ -83,7 +83,7 @@ class SyntheticFieldsTest {
 
             @Override
             public int hashCode() {
-                return Objects.hash(foo);
+                return Integer.hashCode(foo);
             }
         }
 
@@ -98,7 +98,7 @@ class SyntheticFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(inner);
+            return Objects.hashCode(inner);
         }
     }
 
@@ -154,7 +154,7 @@ class SyntheticFieldsTest {
         @Override
         public int hashCode() {
             __cobertura_counters[0] += 1;
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -182,7 +182,7 @@ class SyntheticFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 }

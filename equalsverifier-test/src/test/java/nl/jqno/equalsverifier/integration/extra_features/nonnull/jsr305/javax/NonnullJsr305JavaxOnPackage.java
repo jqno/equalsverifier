@@ -21,6 +21,6 @@ public final class NonnullJsr305JavaxOnPackage {
 
     @Override
     public int hashCode() {
-        return Objects.hash(o);
+        return Objects.hashCode(o);
     }
 }

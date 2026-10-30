@@ -27,7 +27,7 @@ public final class PreconditionTypeHelper {
 
         @Override
         public int hashCode() {
-            return Objects.hash(point);
+            return Objects.hashCode(point);
         }
     }
 
@@ -103,7 +103,7 @@ public final class PreconditionTypeHelper {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 }

@@ -73,7 +73,7 @@ class AnnotationParametersAreNonnullByDefaultTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -99,7 +99,7 @@ class AnnotationParametersAreNonnullByDefaultTest {
 
             @Override
             public int hashCode() {
-                return Objects.hash(o);
+                return Objects.hashCode(o);
             }
         }
 
@@ -124,7 +124,7 @@ class AnnotationParametersAreNonnullByDefaultTest {
 
                 @Override
                 public int hashCode() {
-                    return Objects.hash(o);
+                    return Objects.hashCode(o);
                 }
             }
         }
@@ -152,7 +152,7 @@ class AnnotationParametersAreNonnullByDefaultTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -178,7 +178,7 @@ class AnnotationParametersAreNonnullByDefaultTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 }

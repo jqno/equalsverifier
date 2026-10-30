@@ -82,7 +82,7 @@ public class ShadowingTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getA());
+            return Objects.hashCode(getA());
         }
     }
 }

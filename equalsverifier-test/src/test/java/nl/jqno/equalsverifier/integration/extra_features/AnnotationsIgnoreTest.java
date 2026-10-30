@@ -77,7 +77,7 @@ class AnnotationsIgnoreTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -101,7 +101,7 @@ class AnnotationsIgnoreTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -125,7 +125,7 @@ class AnnotationsIgnoreTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 }

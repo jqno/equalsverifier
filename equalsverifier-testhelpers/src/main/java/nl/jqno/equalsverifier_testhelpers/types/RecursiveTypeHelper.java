@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("HashCodeInObjectsHash")
 public class RecursiveTypeHelper {
 
     public static class Node {
@@ -73,7 +74,7 @@ public class RecursiveTypeHelper {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(innerTrees);
+            return Objects.hashCode(innerTrees);
         }
     }
 
@@ -92,7 +93,7 @@ public class RecursiveTypeHelper {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(tree);
+            return Objects.hashCode(tree);
         }
     }
 
@@ -113,7 +114,7 @@ public class RecursiveTypeHelper {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -151,7 +152,7 @@ public class RecursiveTypeHelper {
 
         @Override
         public int hashCode() {
-            return Objects.hash(node);
+            return Objects.hashCode(node);
         }
     }
 
@@ -170,7 +171,7 @@ public class RecursiveTypeHelper {
 
         @Override
         public int hashCode() {
-            return Objects.hash(node);
+            return Objects.hashCode(node);
         }
     }
 

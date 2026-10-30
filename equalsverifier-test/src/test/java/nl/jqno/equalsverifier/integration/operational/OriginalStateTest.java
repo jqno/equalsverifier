@@ -83,7 +83,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(instanceValue);
+            return Objects.hashCode(instanceValue);
         }
     }
 
@@ -102,7 +102,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Objects.hashCode(foo);
         }
     }
 
@@ -121,7 +121,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Objects.hashCode(foo);
         }
     }
 
@@ -147,7 +147,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Objects.hashCode(foo);
         }
     }
 
@@ -177,7 +177,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return staticValue.intValue() + Objects.hash(instanceValue);
+            return staticValue.intValue() + Objects.hashCode(instanceValue);
         }
     }
 
@@ -219,7 +219,7 @@ class OriginalStateTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Objects.hashCode(foo);
         }
     }
 }

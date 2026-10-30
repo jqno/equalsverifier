@@ -139,7 +139,7 @@ class AbstractHierarchyTest {
 
         @Override
         public int hashCode() {
-            return 53 * super.hashCode() + Objects.hash(color);
+            return 53 * super.hashCode() + Objects.hashCode(color);
         }
     }
 
@@ -161,7 +161,7 @@ class AbstractHierarchyTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(color);
+            return Objects.hashCode(color);
         }
     }
 

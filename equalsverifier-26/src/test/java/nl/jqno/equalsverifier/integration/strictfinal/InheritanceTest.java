@@ -231,7 +231,7 @@ public class InheritanceTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 

@@ -25,7 +25,7 @@ public class ScopedValuesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(scopedValue);
+            return Objects.hashCode(scopedValue);
         }
     }
 }

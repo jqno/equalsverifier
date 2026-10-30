@@ -112,7 +112,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(f);
+            return Float.hashCode(f);
         }
     }
 
@@ -135,7 +135,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(f);
+            return Objects.hashCode(f);
         }
     }
 
@@ -157,7 +157,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(f);
+            return Float.hashCode(f);
         }
     }
 
@@ -177,7 +177,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(f);
+            return Objects.hashCode(f);
         }
     }
 
@@ -199,7 +199,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(f);
+            return Objects.hashCode(f);
         }
     }
 
@@ -253,7 +253,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(d);
+            return Double.hashCode(d);
         }
     }
 
@@ -276,7 +276,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(d);
+            return Objects.hashCode(d);
         }
     }
 
@@ -298,7 +298,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(d);
+            return Double.hashCode(d);
         }
     }
 
@@ -318,7 +318,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(d);
+            return Objects.hashCode(d);
         }
     }
 
@@ -340,7 +340,7 @@ class FloatAndDoubleTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(d);
+            return Objects.hashCode(d);
         }
     }
 

@@ -405,7 +405,7 @@ class WithPrefabValuesForFieldTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(date);
+            return Objects.hashCode(date);
         }
     }
 
@@ -454,7 +454,7 @@ class WithPrefabValuesForFieldTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(list);
+            return Objects.hashCode(list);
         }
     }
 
@@ -477,7 +477,7 @@ class WithPrefabValuesForFieldTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(list);
+            return Objects.hashCode(list);
         }
     }
 
@@ -510,7 +510,7 @@ class WithPrefabValuesForFieldTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(point);
+            return Objects.hashCode(point);
         }
     }
 }

@@ -75,7 +75,7 @@ class NullFieldsWithExceptionsTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(foo);
+            return Objects.hashCode(foo);
         }
     }
 

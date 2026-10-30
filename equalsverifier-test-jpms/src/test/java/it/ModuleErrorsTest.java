@@ -58,7 +58,7 @@ public class ModuleErrorsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(x);
+            return Objects.hashCode(x);
         }
     }
 }

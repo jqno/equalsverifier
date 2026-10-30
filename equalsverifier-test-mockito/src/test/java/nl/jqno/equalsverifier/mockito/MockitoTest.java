@@ -108,7 +108,7 @@ public class MockitoTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(methodCaller.getI());
+            return Integer.hashCode(methodCaller.getI());
         }
     }
 
@@ -126,7 +126,7 @@ public class MockitoTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 

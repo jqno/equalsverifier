@@ -284,7 +284,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(basic);
+            return Objects.hashCode(basic);
         }
     }
 
@@ -309,7 +309,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -336,7 +336,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(somethingElse);
+            return Objects.hashCode(somethingElse);
         }
     }
 
@@ -361,7 +361,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -386,7 +386,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(basic);
+            return Objects.hashCode(basic);
         }
     }
 
@@ -411,7 +411,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -436,7 +436,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getOneToOne());
+            return Objects.hashCode(getOneToOne());
         }
     }
 
@@ -461,7 +461,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getOneToMany());
+            return Objects.hashCode(getOneToMany());
         }
     }
 
@@ -486,7 +486,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getManyToOne());
+            return Objects.hashCode(getManyToOne());
         }
     }
 
@@ -511,7 +511,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getManyToMany());
+            return Objects.hashCode(getManyToMany());
         }
     }
 
@@ -537,7 +537,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getElementCollection());
+            return Objects.hashCode(getElementCollection());
         }
     }
 
@@ -564,7 +564,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getS());
+            return Objects.hashCode(getS());
         }
     }
 
@@ -674,7 +674,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId());
+            return Objects.hashCode(getId());
         }
     }
 
@@ -700,7 +700,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId());
+            return Objects.hashCode(getId());
         }
     }
 
@@ -725,7 +725,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -750,7 +750,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId());
+            return Integer.hashCode(getId());
         }
     }
 
@@ -778,7 +778,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getBasic());
+            return Objects.hashCode(getBasic());
         }
     }
 
@@ -803,7 +803,7 @@ class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(getGenerated());
+            return Objects.hashCode(getGenerated());
         }
     }
 }

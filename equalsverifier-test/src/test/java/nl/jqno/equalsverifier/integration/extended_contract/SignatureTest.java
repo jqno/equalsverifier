@@ -87,7 +87,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -106,7 +106,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -125,7 +125,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -144,7 +144,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -174,7 +174,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -189,7 +189,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -215,7 +215,7 @@ class SignatureTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 }

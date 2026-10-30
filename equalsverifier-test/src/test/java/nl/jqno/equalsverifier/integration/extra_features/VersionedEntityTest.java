@@ -199,7 +199,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Long.hashCode(id);
         }
     }
 
@@ -231,7 +231,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Long.hashCode(id);
         }
     }
 
@@ -263,7 +263,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -294,7 +294,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Long.hashCode(id);
         }
     }
 
@@ -352,7 +352,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(s);
+            return Objects.hashCode(s);
         }
     }
 
@@ -383,7 +383,7 @@ class VersionedEntityTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 
@@ -425,7 +425,7 @@ class VersionedEntityTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 

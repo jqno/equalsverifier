@@ -168,7 +168,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(color);
+            return Objects.hashCode(color);
         }
     }
 
@@ -191,7 +191,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(color);
+            return Objects.hashCode(color);
         }
     }
 
@@ -273,7 +273,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(b);
+            return Objects.hashCode(b);
         }
     }
 
@@ -296,7 +296,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(b);
+            return Objects.hashCode(b);
         }
     }
 
@@ -319,7 +319,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -340,7 +340,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(o);
+            return Objects.hashCode(o);
         }
     }
 
@@ -365,7 +365,7 @@ class NullFieldsTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(value);
+            return Objects.hashCode(value);
         }
     }
 

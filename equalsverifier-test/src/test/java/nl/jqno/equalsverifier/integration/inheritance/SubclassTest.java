@@ -157,7 +157,7 @@ class SubclassTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(x);
+            return Integer.hashCode(x);
         }
     }
 
@@ -247,7 +247,7 @@ class SubclassTest {
 
         @Override
         public int hashCode() {
-            return 53 * super.hashCode() + Objects.hash(color);
+            return 53 * super.hashCode() + Objects.hashCode(color);
         }
     }
 }

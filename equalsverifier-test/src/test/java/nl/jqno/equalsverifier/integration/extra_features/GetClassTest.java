@@ -130,7 +130,7 @@ class GetClassTest {
 
         @Override
         public int hashCode() {
-            return 53 * super.hashCode() + Objects.hash(color);
+            return 53 * super.hashCode() + Objects.hashCode(color);
         }
     }
 
@@ -154,7 +154,7 @@ class GetClassTest {
 
         @Override
         public int hashCode() {
-            return 53 * super.hashCode() + Objects.hash(color);
+            return 53 * super.hashCode() + Objects.hashCode(color);
         }
     }
 }

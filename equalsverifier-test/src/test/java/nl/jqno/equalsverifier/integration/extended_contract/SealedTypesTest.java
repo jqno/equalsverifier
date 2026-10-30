@@ -128,7 +128,7 @@ class SealedTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -167,7 +167,7 @@ class SealedTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -231,7 +231,7 @@ class SealedTypesTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 

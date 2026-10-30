@@ -16,6 +16,6 @@ public final class ClassPointContainer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(cp);
+        return Objects.hashCode(cp);
     }
 }

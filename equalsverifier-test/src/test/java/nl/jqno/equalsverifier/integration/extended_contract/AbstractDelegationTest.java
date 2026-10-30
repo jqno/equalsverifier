@@ -216,7 +216,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -239,7 +239,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(foo);
+            return Objects.hashCode(foo);
         }
     }
 
@@ -270,7 +270,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -310,7 +310,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -385,7 +385,7 @@ class AbstractDelegationTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
 
         @Override
@@ -433,7 +433,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -466,7 +466,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -584,7 +584,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(delegator);
+            return Objects.hashCode(delegator);
         }
     }
 
@@ -624,7 +624,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(delegator);
+            return Objects.hashCode(delegator);
         }
 
         @Override
@@ -648,7 +648,7 @@ class AbstractDelegationTest {
 
         @Override
         public int hashCode() {
-            return Objects.hash(i);
+            return Integer.hashCode(i);
         }
     }
 
@@ -673,7 +673,7 @@ class AbstractDelegationTest {
 
         @Override
         public final int hashCode() {
-            return Objects.hash(id);
+            return Objects.hashCode(id);
         }
     }
 }

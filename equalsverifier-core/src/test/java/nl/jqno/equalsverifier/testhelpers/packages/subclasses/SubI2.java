@@ -21,7 +21,7 @@ public final class SubI2 implements SuperI {
 
     @Override
     public int hashCode() {
-        return Objects.hash(s);
+        return Objects.hashCode(s);
     }
 
     @Override
