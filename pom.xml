@@ -91,13 +91,13 @@
         <version.slf4j>2.0.20</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>14.3.0</version.checkstyle>
+        <version.checkstyle>14.4.0</version.checkstyle>
 
         <version.arcmutate>2.4.0</version.arcmutate>
         <version.build-helper-maven-plugin>3.6.2</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
-        <version.error-prone>2.51.0</version.error-prone>
+        <version.error-prone>2.52.0</version.error-prone>
         <version.flatten-maven-plugin>1.8.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.16</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
@@ -105,7 +105,7 @@
         <version.maven-assembly-plugin>3.8.0</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.16.0</version.maven-compiler-plugin>
         <version.maven-deploy-plugin>3.2.0</version.maven-deploy-plugin>
-        <version.maven-enforcer-plugin>3.6.3</version.maven-enforcer-plugin>
+        <version.maven-enforcer-plugin>3.7.0</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.5.1</version.maven-jar-plugin>
         <version.maven-jarsigner-plugin>3.1.0</version.maven-jarsigner-plugin>
         <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
@@ -116,7 +116,7 @@
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.30.1</version.pitest.maven>
         <version.spotbugs>4.10.5</version.spotbugs>
-        <version.spotless>3.10.4</version.spotless>
+        <version.spotless>3.11.0</version.spotless>
     </properties>
 
     <build>
