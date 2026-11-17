@@ -14,6 +14,7 @@
 
     <properties>
         <maven.compiler.release>28</maven.compiler.release>
+        <maven.compiler.enablePreview>true</maven.compiler.enablePreview>
         <argline.preview>--enable-preview</argline.preview>
     </properties>
 
