@@ -446,8 +446,8 @@
 
         <profile>
             <!--
-                Byte Buddy often supports new class file versions for current EA releases
-                if its experimental flag is set to true
+                - Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true.
+                - For JDK28-EA, a flag is needed temporarily for Objenesis: see https://github.com/easymock/objenesis/issues/555
             -->
             <id>argline-experimental</id>
             <activation>
@@ -457,7 +457,7 @@
             </activation>
 
             <properties>
-                <argline.experimental>-Dnet.bytebuddy.experimental=true</argline.experimental>
+                <argline.experimental>-Dnet.bytebuddy.experimental=true -Djdk.reflect.allowNonSerializableConstruction=true</argline.experimental>
             </properties>
         </profile>
 
