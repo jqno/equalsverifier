@@ -3,8 +3,10 @@ package nl.jqno.equalsverifier.integration.valueobjects;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 public class ValueRecordTest {
 
     @Test

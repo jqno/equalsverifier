@@ -16,6 +16,11 @@
         <maven.compiler.release>28</maven.compiler.release>
         <maven.compiler.enablePreview>true</maven.compiler.enablePreview>
         <argline.preview>--enable-preview</argline.preview>
+
+        <!-- Checkstyle and Spotless can't parse value classes yet -->
+        <checkstyle.skip>true</checkstyle.skip>
+        <spotless.check.skip>true</spotless.check.skip>
+        <spotless.apply.skip>true</spotless.apply.skip>
     </properties>
 
     <dependencies>
