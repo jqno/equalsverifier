@@ -11,69 +11,53 @@ public class ValueRecordTest {
 
     @Test
     void succeed_whenValueRecordHasDefaultEquals() {
-        EqualsVerifier.forClass(Point.class).verify();
-    }
-
-    @Test
-    void succeed_whenValueRecordHasSingleStringField() {
         // String is an identity class, even under JEP 401.
-        EqualsVerifier.forClass(Name.class).verify();
+        EqualsVerifier.forClass(SimpleValueRecord.class).verify();
     }
 
     @Test
     void succeed_whenValueRecordHasFloatField() {
         // A value record's default equals treats all NaN values as interchangeable,
         // while == distinguishes them by their raw bit patterns.
-        EqualsVerifier.forClass(Length.class).verify();
+        EqualsVerifier.forClass(FloatValueRecord.class).verify();
     }
 
     @Test
     void succeed_whenValueRecordHasDoubleField() {
-        EqualsVerifier.forClass(Area.class).verify();
+        EqualsVerifier.forClass(DoubleValueRecord.class).verify();
     }
 
     @Test
     void succeed_whenValueRecordContainsAnotherValueRecord() {
-        EqualsVerifier.forClass(Measurement.class).verify();
+        EqualsVerifier.forClass(NestedValueRecord.class).verify();
     }
 
     @Test
     void succeed_whenValueRecordIsDeeplyNested() {
         // Exercises the recursive nature of == and equals for value objects.
-        EqualsVerifier.forClass(DeepBox.class).verify();
-    }
-
-    @Test
-    void succeed_whenValueRecordContainsIdentityObject() {
-        EqualsVerifier.forClass(Labeled.class).verify();
+        EqualsVerifier.forClass(DeeplyNestedValueRecord.class).verify();
     }
 
     @Test
     void fail_whenValueRecordEqualsIgnoresField() {
-        assertThatThrownBy(() -> EqualsVerifier.forClass(BrokenPoint.class).verify())
+        assertThatThrownBy(() -> EqualsVerifier.forClass(NotAllFieldsValueRecord.class).verify())
                 .isInstanceOf(AssertionError.class);
     }
 
-    value record Point(int x, int y) {}
+    value record SimpleValueRecord(int i, String s) {}
 
-    value record Name(String name) {}
+    value record FloatValueRecord(float f) {}
 
-    value record Length(float val) {}
+    value record DoubleValueRecord(double d) {}
 
-    value record Area(double val) {}
+    value record NestedValueRecord(FloatValueRecord r) {}
 
-    value record Measurement(Length length) {}
+    value record DeeplyNestedValueRecord(NestedValueRecord r) {}
 
-    value record Box(Length length) {}
-
-    value record DeepBox(Box box) {}
-
-    value record Labeled(String label, int index) {}
-
-    value record BrokenPoint(int x, int y) {
+    value record NotAllFieldsValueRecord(int i, int j) {
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof BrokenPoint other && x == other.x;
+            return obj instanceof NotAllFieldsValueRecord other && i == other.i;
         }
     }
 }

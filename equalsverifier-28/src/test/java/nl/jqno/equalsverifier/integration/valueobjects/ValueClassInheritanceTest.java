@@ -13,203 +13,146 @@ public class ValueClassInheritanceTest {
 
     @Test
     void succeed_whenValueClassExtendsAbstractValueClass() {
-        EqualsVerifier.forClass(Circle.class).verify();
+        EqualsVerifier.forClass(ExtendsEmptyAbstractValue.class).verify();
     }
 
     @Test
     void succeed_whenValueClassExtendsAbstractValueClassWithFields() {
-        EqualsVerifier.forClass(Dog.class).verify();
+        EqualsVerifier.forClass(ExtendsAbstractValueWithField.class).verify();
     }
 
     @Test
-    void succeed_forEmailID() {
-        EqualsVerifier.forClass(EmailID.class).verify();
-    }
-
-    @Test
-    void succeed_forPhoneID() {
-        EqualsVerifier.forClass(PhoneID.class).verify();
-    }
-
-    @Test
-    void succeed_forUsernameID() {
-        EqualsVerifier.forClass(UsernameID.class).verify();
+    void succeed_whenValueClassExtendsSealedAbstractValueClass() {
+        EqualsVerifier.forClass(ExtendsSealedAbstractValue.class).verify();
     }
 
     @Test
     void succeed_whenValueClassImplementsInterface() {
-        EqualsVerifier.forClass(Person.class).verify();
+        EqualsVerifier.forClass(ImplementsInterfaceValue.class).verify();
     }
 
     @Test
     void fail_whenValueClassInHierarchyIgnoresSuperclassField() {
-        assertThatThrownBy(() -> EqualsVerifier.forClass(BrokenCat.class).verify())
+        assertThatThrownBy(() -> EqualsVerifier.forClass(IgnoresSuperclassFieldValue.class).verify())
                 .isInstanceOf(AssertionError.class);
     }
 
-    static abstract value class Shape {
-        public abstract double area();
-    }
+    static abstract value class EmptyAbstractValue {}
 
-    static value class Circle extends Shape {
-        private final double radius;
+    static value class ExtendsEmptyAbstractValue extends EmptyAbstractValue {
+        private final int i;
 
-        public Circle(double radius) {
-            this.radius = radius;
-        }
-
-        @Override
-        public double area() {
-            return Math.PI * radius * radius;
+        public ExtendsEmptyAbstractValue(int i) {
+            this.i = i;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Circle other && Double.compare(radius, other.radius) == 0;
+            return obj instanceof ExtendsEmptyAbstractValue other && i == other.i;
         }
 
         @Override
         public int hashCode() {
-            return Double.hashCode(radius);
+            return Integer.hashCode(i);
         }
     }
 
-    static abstract value class Animal {
-        private final String species;
+    static abstract value class AbstractValueWithField {
+        private final String s;
 
-        public Animal(String species) {
-            this.species = species;
+        public AbstractValueWithField(String s) {
+            this.s = s;
         }
 
-        public String species() {
-            return species;
+        public String s() {
+            return s;
         }
     }
 
-    static value class Dog extends Animal {
-        private final String name;
+    static value class ExtendsAbstractValueWithField extends AbstractValueWithField {
+        private final String t;
 
-        public Dog(String species, String name) {
-            this.name = name;
-            super(species);
+        public ExtendsAbstractValueWithField(String s, String t) {
+            this.t = t;
+            super(s);
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Dog other
-                    && Objects.equals(species(), other.species())
-                    && Objects.equals(name, other.name);
+            return obj instanceof ExtendsAbstractValueWithField other
+                    && Objects.equals(s(), other.s())
+                    && Objects.equals(t, other.t);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(species(), name);
+            return Objects.hash(s(), t);
         }
     }
 
-    sealed static abstract value class UserID permits EmailID, PhoneID, UsernameID {}
+    sealed static abstract value class SealedAbstractValue permits ExtendsSealedAbstractValue {}
 
-    static value class EmailID extends UserID {
-        private final String name;
-        private final String domain;
+    static value class ExtendsSealedAbstractValue extends SealedAbstractValue {
+        private final String s;
 
-        public EmailID(String name, String domain) {
-            this.name = name;
-            this.domain = domain;
+        public ExtendsSealedAbstractValue(String s) {
+            this.s = s;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof EmailID other
-                    && Objects.equals(name, other.name)
-                    && Objects.equals(domain, other.domain);
+            return obj instanceof ExtendsSealedAbstractValue other && Objects.equals(s, other.s);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(name, domain);
+            return Objects.hashCode(s);
         }
     }
 
-    static value class PhoneID extends UserID {
-        private final String digits;
+    interface SomeInterface {
+        String s();
+    }
 
-        public PhoneID(String digits) {
-            this.digits = digits;
+    static value class ImplementsInterfaceValue implements SomeInterface {
+        private final String s;
+
+        public ImplementsInterfaceValue(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public String s() {
+            return s;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof PhoneID other && Objects.equals(digits, other.digits);
+            return obj instanceof ImplementsInterfaceValue other && Objects.equals(s, other.s);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(digits);
+            return Objects.hashCode(s);
         }
     }
 
-    static value class UsernameID extends UserID {
-        private final String name;
+    static value class IgnoresSuperclassFieldValue extends AbstractValueWithField {
+        private final String t;
 
-        public UsernameID(String name) {
-            this.name = name;
+        public IgnoresSuperclassFieldValue(String s, String t) {
+            this.t = t;
+            super(s);
         }
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof UsernameID other && Objects.equals(name, other.name);
+            return obj instanceof IgnoresSuperclassFieldValue other && Objects.equals(t, other.t);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(name);
-        }
-    }
-
-    interface Named {
-        String name();
-    }
-
-    static value class Person implements Named {
-        private final String name;
-
-        public Person(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String name() {
-            return name;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof Person other && Objects.equals(name, other.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(name);
-        }
-    }
-
-    static value class BrokenCat extends Animal {
-        private final String name;
-
-        public BrokenCat(String species, String name) {
-            this.name = name;
-            super(species);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof BrokenCat other && Objects.equals(name, other.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(name);
+            return Objects.hashCode(t);
         }
     }
 }
