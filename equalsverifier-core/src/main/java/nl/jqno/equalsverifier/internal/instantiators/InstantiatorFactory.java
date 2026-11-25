@@ -70,7 +70,7 @@ public final class InstantiatorFactory {
         }
 
         boolean finalMeansFinal = forceFinalMeansFinal || cantReflectivelyModifyFinal();
-        if (!finalMeansFinal || !hasFinalFields(type)) {
+        if (!probe.isValue() && (!finalMeansFinal || !hasFinalFields(type))) {
             return new ReflectionInstantiator<>(probe, objenesis);
         }
 

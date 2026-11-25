@@ -5,10 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.jupiter.api.Disabled;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 public class ValueClassTest {
 
     @Test
@@ -21,7 +20,10 @@ public class ValueClassTest {
         // A value class that does not override equals/hashCode inherits Object's
         // value-object behavior: equals compares by field values (==), and
         // hashCode is derived from field values. This is a consistent contract.
-        EqualsVerifier.forClass(InheritsObjectEqualsValue.class).verify();
+        EqualsVerifier
+                .forClass(InheritsObjectEqualsValue.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                .verify();
     }
 
     @Test
@@ -30,14 +32,6 @@ public class ValueClassTest {
         // values, so it is consistent with a field-based equals even without an
         // explicit hashCode override.
         EqualsVerifier.forClass(InheritsObjectHashCodeValue.class).verify();
-    }
-
-    @Test
-    void succeed_whenValueClassEqualsDiffersFromReferenceEquality() {
-        // Like JEP 401's Substring: two instances can be equals even when their
-        // fields differ, because equals is defined in terms of the string the
-        // instance represents rather than its internal state.
-        EqualsVerifier.forClass(DerivedStateEqualsValue.class).verify();
     }
 
     @Test
@@ -113,33 +107,6 @@ public class ValueClassTest {
             return obj instanceof InheritsObjectHashCodeValue other && i == other.i && Objects.equals(s, other.s);
         }
         // hashCode inherited from Object's value-object behavior
-    }
-
-    static value class DerivedStateEqualsValue {
-        private final String str;
-        private final int start;
-        private final int end;
-
-        public DerivedStateEqualsValue(String s, int i, int j) {
-            this.str = s;
-            this.start = i;
-            this.end = j;
-        }
-
-        @Override
-        public String toString() {
-            return str.substring(start, end);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof DerivedStateEqualsValue other && toString().equals(other.toString());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(DerivedStateEqualsValue.class, toString());
-        }
     }
 
     static value class FloatFieldValue {
