@@ -30,6 +30,11 @@ class ClassProbeTest {
     }
 
     @Test
+    void isNotValueClass() {
+        assertThat(ClassProbe.of(Integer.class).isValue()).isFalse();
+    }
+
+    @Test
     void isNotRecord() {
         assertThat(pointProbe.isRecord()).isFalse();
     }

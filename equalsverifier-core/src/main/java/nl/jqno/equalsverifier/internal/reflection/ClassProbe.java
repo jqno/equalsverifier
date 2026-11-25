@@ -5,6 +5,8 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import java.lang.reflect.*;
 import java.util.Optional;
 
+import nl.jqno.equalsverifier.internal.versionspecific.ValueClassHelper;
+
 /**
  * Provides read-only reflective access to a class.
  */
@@ -35,6 +37,15 @@ public final class ClassProbe<T> {
      */
     public Class<T> getType() {
         return type;
+    }
+
+    /**
+     * Determines whether T is a value class.
+     *
+     * @return true if T is a value class.
+     */
+    public boolean isValue() {
+        return ValueClassHelper.isValueClass(type);
     }
 
     /**
