@@ -162,6 +162,7 @@ class BalancedAbstractnessTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     abstract static class AbstractHashCodeButNotEquals {
 
         @Override

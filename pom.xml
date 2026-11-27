@@ -97,8 +97,8 @@
         <version.build-helper-maven-plugin>3.8.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
-        <version.error-prone>2.52.0</version.error-prone>
-        <version.flatten-maven-plugin>1.9.0</version.flatten-maven-plugin>
+        <version.error-prone>2.53.0</version.error-prone>
+        <version.flatten-maven-plugin>1.10.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.16</version.jacoco>
         <version.jsr305>3.0.2</version.jsr305>
         <version.maven-antrun-plugin>3.2.0</version.maven-antrun-plugin>
@@ -116,7 +116,7 @@
         <version.pitest.junit5>1.2.3</version.pitest.junit5>
         <version.pitest.maven>1.30.2</version.pitest.maven>
         <version.spotbugs>4.10.5</version.spotbugs>
-        <version.spotless>3.11.0</version.spotless>
+        <version.spotless>3.12.0</version.spotless>
     </properties>
 
     <build>

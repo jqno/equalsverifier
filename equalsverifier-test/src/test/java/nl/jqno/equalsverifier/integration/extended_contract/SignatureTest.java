@@ -69,6 +69,7 @@ class SignatureTest {
                 .assertMessageContains(OVERLOADED, SIGNATURE_SHOULD_BE, SIGNATURE, extraMessage);
     }
 
+    @SuppressWarnings("EqualsHashCode")
     static final class OverloadedWithOwnType {
 
         private final int i;
@@ -91,6 +92,7 @@ class SignatureTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     static final class OverloadedWithTwoParameters {
 
         @SuppressWarnings("unused")
@@ -110,6 +112,7 @@ class SignatureTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     static final class OverloadedWithNoParameter {
 
         @SuppressWarnings("unused")
@@ -129,6 +132,7 @@ class SignatureTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     static final class OverloadedWithUnrelatedParameter {
 
         private final int i;
@@ -178,6 +182,7 @@ class SignatureTest {
         }
     }
 
+    @SuppressWarnings("EqualsHashCode")
     static final class NoEqualsMethod {
 
         @SuppressWarnings("unused")

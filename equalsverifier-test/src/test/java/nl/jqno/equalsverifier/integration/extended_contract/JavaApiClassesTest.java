@@ -498,7 +498,8 @@ class JavaApiClassesTest {
         }
     }
 
-    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    @SuppressWarnings({ "unused", // because of the use of defaultEquals and defaultHashCode
+            "URLEqualsHashCode" })
     static final class CommonClassesContainer {
 
         private final Object object;
