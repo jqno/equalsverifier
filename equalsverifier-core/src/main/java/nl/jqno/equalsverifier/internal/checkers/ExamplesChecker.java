@@ -176,6 +176,7 @@ public class ExamplesChecker<T> implements Checker {
         });
     }
 
+    @SuppressWarnings("EqualsHashCode")
     private static final class SomethingElse {
 
         @Override

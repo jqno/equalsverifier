@@ -43,7 +43,7 @@ class UrlTest {
         EqualsVerifier.forClass(UrlWithUriEqualsButDirectHashCode.class).suppress(Warning.URL_EQUALITY).verify();
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({ "unused", "URLEqualsHashCode" })
     private static final class UrlWithDirectEqualsButUriHashCode {
 
         private final URL url;
